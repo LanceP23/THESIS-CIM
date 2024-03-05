@@ -1,0 +1,201 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #333; /* Dark gray */
+  background-color: #f5f5dc; /* Beige (off-white) */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #9acd32; /* Yellow-green */
+  text-decoration: none;
+}
+
+a:hover {
+  color: #6b8e23; /* Olive drab */
+}
+
+body {
+  margin: 0;
+  background-color: #fafad2; /* Light goldenrod yellow */
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f0e68c; /* Khaki */
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #bdb76b; /* Dark khaki */
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+nav {
+  background-color: #556b2f; /* Dark olive green */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+nav a:first-child {
+  margin-left: 0;
+}
+
+nav a:last-child {
+  margin-right: 0;
+}
+
+nav a:hover {
+  background-color: #8fbc8f; /* Dark sea green */
+}
+
+.register-form,
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffe0; /* Light yellow */
+}
+
+.register-form label,
+.login-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.register-form input[type="text"],
+.register-form input[type="password"],
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.register-form button,
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f0e68c; /* Khaki */
+  color: #fff;
+  cursor: pointer;
+}
+
+.register-form button:hover,
+.login-form button:hover {
+  background-color: #bdb76b; /* Dark khaki */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: -250px; /* Initially hide the sidebar */
+  background-color: #333;
+  padding-top: 20px;
+  color: #fff;
+  transition: left 0.3s ease; /* Smooth transition for opening and closing */
+}
+
+.sidebar.open {
+  left: 0; /* Slide in the sidebar when it's open */
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  font-size: 20px;
+  background-color: #222; /* Darker background color */
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+.sidebar-content ul {
+  list-style-type: none; /* Remove bullets */
+  padding: 0;
+  margin: 0; /* Optional: Remove default margin */
+}
+
+.sidebar-content ul li {
+  padding: 10px 0;
+}
+
+.sidebar-content ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+.logout-container {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+}
+
+.logout-container a {
+  color: #fff;
+  text-decoration: none;
+}
