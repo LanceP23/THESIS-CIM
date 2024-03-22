@@ -24,34 +24,32 @@ const Dashboard = () => {
             case 'School Owner':
                 return (
                     <div>
-                        <h2>This is the School Owner dashboard content</h2>
-                        <Sidebar />
+                        <h2>This is the School Owner dashboard content</h2> 
                     </div>
                 );
             case 'President':
                 return <div>
                         <h2>This is the President dashboard content</h2>
-                        <Sidebar/>
                         </div>;
             case 'School Executive Admin':
                 return <div>
                         <h2>This is the School Executive Admin dashboard content</h2>
-                        <Sidebar/>
                         </div>;
             case 'School Executive Dean':
                 return <div>
                         <h2>This is the School Executive Dean dashboard content</h2>
-                        <Sidebar/>
                         </div>;
             case 'Program Head':
                 return <div>
                         <h2>This is the Program Head Content</h2>
-                        <Sidebar/>
                         </div>;
             case 'Student Government':
                 return <div>
                         <h2>This is the Student Government Content</h2>
-                        <Sidebar/>
+                        </div>;
+            case 'Organization Officer':
+                return <div>
+                        <h2>This is the Organization Officer Content</h2>
                         </div>;
             default:
                 return <div>No dashboard content available for this role</div>;

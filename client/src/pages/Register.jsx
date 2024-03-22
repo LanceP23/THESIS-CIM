@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -10,13 +10,30 @@ export default function Register() {
     name: '',
     studentemail: '',
     password: '',
-    adminType: 'School Owner', 
+    adminType: 'School Owner',
+    organization: '', // New field for organization name
+    position: '', // New field for position in the organization
   });
+  const [organizations, setOrganizations] = useState([]);
+
+  useEffect(() => {
+    fetchOrganizations();
+  }, []);
+
+  const fetchOrganizations = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/organization');
+      setOrganizations(response.data);
+    } catch (error) {
+      console.error('Error fetching organizations:', error);
+      toast.error('Failed to fetch organizations');
+    }
+  };
 
   const registerAdmin = async (e) => {
     e.preventDefault();
 
-    const { name, studentemail, password, adminType } = data;
+    const { name, studentemail, password, adminType, organization, position } = data;
 
     try {
       const { data } = await axios.post('/register', {
@@ -24,6 +41,8 @@ export default function Register() {
         studentemail,
         password,
         adminType,
+        organization,
+        position,
       });
       if (data.error) {
         toast.error(data.error);
@@ -32,7 +51,9 @@ export default function Register() {
           name: '',
           studentemail: '',
           password: '',
-          adminType: '', 
+          adminType: 'School Owner',
+          organization: '',
+          position: '',
         });
         toast.success('Registration Successful!');
         navigate('/login');
@@ -48,7 +69,7 @@ export default function Register() {
 
   return (
     <div className='register-form'>
-      <Navbar/>
+      <Navbar />
       <form onSubmit={registerAdmin}>
         <label>Name</label>
         <input
@@ -79,7 +100,42 @@ export default function Register() {
           <option value='School Executive Dean'>School Executive Dean</option>
           <option value='Program Head'>Program Head</option>
           <option value='Student Government'>Student Government</option>
+          <option value='Organization Officer'>Organization Officer</option>
         </select>
+        {data.adminType === 'Organization Officer' && (
+          <>
+            <label>Organization Name</label>
+            <select
+              value={data.organization}
+              onChange={(e) => setData({ ...data, organization: e.target.value })}
+            >
+              <option value=''>Select Organization</option>
+              {organizations.map((org) => (
+                <option key={org._id} value={org.name}>
+                  {org.name}
+                </option>
+              ))}
+            </select>
+            <label>Position</label>
+            <select
+              value={data.position}
+              onChange={(e) => setData({ ...data, position: e.target.value })}
+            >
+              <option value=''>Select Position</option>
+              <option value='President'>President</option>
+              <option value='Vice President'>Vice President</option>
+              <option value='Secretary'>Secretary</option>
+              <option value='Treasurer'>Treasurer</option>
+              <option value='Public Relations Officer'>Public Relations Officer</option>
+              <option value='Auditor'>Auditor</option>
+              <option value='1st Year Representative'>1st Year Representative</option>
+              <option value='2nd Year Representative'>2nd Year Representative</option>
+              <option value='3rd Year Representative'>3rd Year Representative</option>
+              <option value='4th Year Representative'>4th Year Representative</option>
+              <option value='Member'>Member</option>
+            </select>
+          </>
+        )}
         <button type='submit'>Register</button>
       </form>
     </div>

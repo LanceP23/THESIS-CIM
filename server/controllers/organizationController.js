@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const Organization = require('../models/organization');
 
 const authenticateUser = (req, res, next) => {
-    // Check if the authorization header is present
+    // Check if the authorization header exists
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).json({ error: 'Authorization header missing' });
@@ -49,7 +49,53 @@ const createOrganization = async (req, res) => {
     }
 };
 
+const getOrganization = async (req, res) => {
+    try {
+        const organization = await Organization.find();
+        res.json(organization);
+    } catch (error) {
+        console.error('Error fetching organizations: ', error);
+        res.status(500).json({ error: 'Failed to fetch organizations' });
+    }
+};
+
+const approveOfficer = async (req, res) => {
+    try {
+        // Check if the requesting user has the necessary permissions to approve officers
+        if (req.user.adminType !== 'AllowedAdminType') {
+            return res.status(403).json({ error: 'You are not authorized to approve officers' });
+        }
+
+        const { officerId } = req.params;
+
+        // Find the organization by ID
+        const organization = await Organization.findById(req.params.orgId);
+        if (!organization) {
+            return res.status(404).json({ error: 'Organization not found' });
+        }
+
+        // Find the officer in the organization's officers array
+        const officer = organization.officers.find(officer => officer._id === officerId);
+        if (!officer) {
+            return res.status(404).json({ error: 'Officer not found' });
+        }
+
+        // Update the officer's status to 'approved'
+        officer.status = 'approved';
+
+        // Save the organization with the updated officer status
+        await organization.save();
+
+        res.json({ message: 'Officer approved successfully', officer });
+    } catch (error) {
+        console.error('Error approving officer:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 module.exports = {
     createOrganization,
-    authenticateUser // Exporting the authentication middleware if needed elsewhere
+    authenticateUser,
+    getOrganization,
+    approveOfficer
 };

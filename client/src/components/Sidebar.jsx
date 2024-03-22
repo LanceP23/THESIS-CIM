@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {toast} from 'react-hot-toast';
+import axios from 'axios';
 
 export default function Sidebar({adminType}) {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+
+  useEffect (()=>{
+    setIsOpen(false);
+  },[adminType]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -11,6 +19,18 @@ export default function Sidebar({adminType}) {
   const closeSidebar = () => {
     setIsOpen(false);
   };
+
+  const handleLogout = async () =>{
+    try{
+      await axios.post('/logout');
+      localStorage.removeItem('token');
+      toast.success('Logout Successful.');
+      navigate('/login');
+    } catch (error){
+      console.error('Login failed: ', error);
+      toast.error('Logout failed.');
+    }
+  }
 
   return (
     <div>
@@ -23,18 +43,21 @@ export default function Sidebar({adminType}) {
             <li>
               <Link to="/dashboard" onClick={closeSidebar}>Dashboard</Link>
             </li>
-            {adminType !== 'Student Government'&&(
+            {adminType !== 'Organization Officer'&&(
             <li>
-              <Link to="/createorg" onClick={closeSidebar}>Create Organization</Link>
+              <Link to="/createorg" onClick={closeSidebar}>Manage Organization</Link>
             </li>
             )}
             
           </ul>
         </div>
         <div className="logout-container">
-          <Link to="/" onClick={closeSidebar}>
-            <span role="img" aria-label="logout">🚪</span> Logout
-          </Link>
+          <button onClick={handleLogout}>
+            <span role ="img" aria-label="logout">
+            🚪
+            </span>{' '}
+            Logout
+          </button>
         </div>
       </div>
     </div>

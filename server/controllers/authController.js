@@ -7,64 +7,74 @@ const test = (req, res) =>{
     res.json("Hello World Test")
 }
 //Registration ep
-const registerUser = async(req, res)=> {
+const registerUser = async (req, res) => {
     try {
-        const{name, studentemail,password,adminType} = req.body;
+        const { name, studentemail, password, adminType, position, organization } = req.body;
         //name field validation
-        if(!name){
+        if (!name) {
             return res.json({
                 error: 'please input your name'
-            })
-        };
-        //password validation
-        if(!password || password.length<6){
-            return res.json({
-                error:'Please enter a password, should be more than 6 characters'
-            })
-        };
-        //email validation
-        const exist = await User.findOne({studentemail});
-        if(!studentemail){
-            return res.json({
-                error:'Email is required!'
-            })
+            });
         }
-        if(exist){
+        //password validation
+        if (!password || password.length < 6) {
             return res.json({
-                error:'Email already exists'
-            })
+                error: 'Please enter a password, should be more than 6 characters'
+            });
+        }
+        //email validation
+        const exist = await User.findOne({ studentemail });
+        if (!studentemail) {
+            return res.json({
+                error: 'Email is required!'
+            });
+        }
+        if (exist) {
+            return res.json({
+                error: 'Email already exists'
+            });
         }
         //adminType validation
-        if(!adminType){
+        if (!adminType) {
             return res.json({
-                error:'Admin type is required!'
+                error: 'Admin type is required!'
             });
         }
 
-        const NotallowMultipleAdminType = ["School Owner", "President", "School Executive Admin","School Executive Dean"];
-        if(NotallowMultipleAdminType.includes(adminType)){
-            const existingAdmin = await User.findOne({adminType});
-            if(existingAdmin){
+        // Hash the password
+        const hashedPassword = await hashPassword(password);
+
+        // Create user
+        let user;
+        if (adminType === 'Organization Officer') {
+            // Create user with position and organization for Organization Officer
+            if (!position || !organization) {
                 return res.json({
-                    error: `A user with the admin type '${adminType}' already exists`
-                })
+                    error: 'Position and organization are required for Organization Officer'
+                });
             }
+            user = await User.create({
+                name,
+                studentemail,
+                password: hashedPassword,
+                adminType,
+                position,
+                organization
+            });
+        } else {
+            // Create user without position and organization for other admin types
+            user = await User.create({
+                name,
+                studentemail,
+                password: hashedPassword,
+                adminType
+            });
         }
 
-        
-        const hashedPassword = await hashPassword(password)
-
-
-        const user = await User.create({
-            name,
-            studentemail,
-            password: hashedPassword,
-            adminType
-        })
-
-        return res.json(user)
+        return res.json(user);
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
@@ -75,6 +85,7 @@ const loginUser = async (req,res)=>{
 
         //user validation
         const user = await User.findOne({studentemail});
+        console.log('found user: ', user);
         if(!user){
             return res.json({
                 error: 'No user found'
@@ -82,7 +93,7 @@ const loginUser = async (req,res)=>{
         }
         const matchpass = await comparePassword(password, user.password)
         if(matchpass){
-            jwt.sign({email: user.studentemail, id:user._id,name: user.name, adminType:user.adminType}, process.env.JWT_SECRET, {}, (err,token)=>{
+            jwt.sign({email: user.studentemail, id:user._id,name: user.name, adminType:user.adminType}, process.env.JWT_SECRET, {expiresIn: '24h'}, (err,token)=>{
                 if(err) throw err;
                 res.cookie('token', token).json(user)
             } )
@@ -110,9 +121,28 @@ if(token){
 }
 }
 
+const logoutUser = async (req, res) => {
+    try{
+        const token = req.cookies.token; // Retrieve token from the client
+        if (!token) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        
+        // Expire the token by setting its expiration time to a past date
+        res.cookie('token', '', { expires: new Date(0) });
+
+        res.json({ message: 'Logout successful' });
+    }
+    catch(error){
+        res.status(500).json({error: "Internal Server Error"});
+    }
+    
+}
+
 module.exports = {
     test,
     registerUser,
     loginUser,
-    getProfile
-}
+    getProfile,
+    logoutUser
+}   
