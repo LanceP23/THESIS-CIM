@@ -3,6 +3,9 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import StaffRegistration from '../RegistrationModals/StaffRegistration'; 
+import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
+import StudentRegistration from '../RegistrationModals/StudentRegistration';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -11,10 +14,11 @@ export default function Register() {
     studentemail: '',
     password: '',
     adminType: 'School Owner',
-    organization: '', // New field for organization name
-    position: '', // New field for position in the organization
+    organization: '',
+    position: '',
   });
   const [organizations, setOrganizations] = useState([]);
+  const [registrationType, setRegistrationType] = useState(null); 
 
   useEffect(() => {
     fetchOrganizations();
@@ -28,6 +32,17 @@ export default function Register() {
       console.error('Error fetching organizations:', error);
       toast.error('Failed to fetch organizations');
     }
+  };
+
+  const resetData = () => {
+    setData({
+      name: '',
+      studentemail: '',
+      password: '',
+      adminType: 'School Owner',
+      organization: '',
+      position: '',
+    });
   };
 
   const registerAdmin = async (e) => {
@@ -47,14 +62,7 @@ export default function Register() {
       if (data.error) {
         toast.error(data.error);
       } else {
-        setData({
-          name: '',
-          studentemail: '',
-          password: '',
-          adminType: 'School Owner',
-          organization: '',
-          position: '',
-        });
+        resetData(); // Clear fields after successful registration
         toast.success('Registration Successful!');
         navigate('/login');
       }
@@ -64,80 +72,45 @@ export default function Register() {
   };
 
   const handleAdminTypeChange = (e) => {
+    resetData(); // Clear fields when admin type changes
     setData({ ...data, adminType: e.target.value });
+  };
+
+  const handleRegistrationType = (type) => {
+    resetData(); // Clear fields when registration type changes
+    setRegistrationType(type);
   };
 
   return (
     <div className='register-form'>
       <Navbar />
-      <form onSubmit={registerAdmin}>
-        <label>Name</label>
-        <input
-          type='text'
-          placeholder='Enter Full Name...'
-          value={data.name}
-          onChange={(e) => setData({ ...data, name: e.target.value })}
+      {registrationType === 'staff' && (
+        <StaffRegistration
+          data={data}
+          setData={setData}
+          organizations={organizations}
+          registerAdmin={registerAdmin}
+          handleAdminTypeChange={handleAdminTypeChange}
         />
-        <label>Admin Email</label>
-        <input
-          type='text'
-          placeholder='Enter Admin Email...'
-          value={data.studentemail}
-          onChange={(e) => setData({ ...data, studentemail: e.target.value })}
+      )}
+      {registrationType === 'faculty' && (
+        <FacultyRegistration
+          data={data}
+          setData={setData}
         />
-        <label>Password</label>
-        <input
-          type='password'
-          placeholder='Enter Your Password'
-          value={data.password}
-          onChange={(e) => setData({ ...data, password: e.target.value })}
+      )}
+      {registrationType === 'student' && (
+        <StudentRegistration
+          data={data}
+          setData={setData}
+          organizations={organizations}
+          registerAdmin={registerAdmin}
         />
-        <label>Admin Type</label>
-        <select value={data.adminType} onChange={handleAdminTypeChange}>
-          <option value='School Owner'>School Owner</option>
-          <option value='President'>President</option>
-          <option value='School Executive Admin'>School Executive Admin</option>
-          <option value='School Executive Dean'>School Executive Dean</option>
-          <option value='Program Head'>Program Head</option>
-          <option value='Student Government'>Student Government</option>
-          <option value='Organization Officer'>Organization Officer</option>
-        </select>
-        {data.adminType === 'Organization Officer' && (
-          <>
-            <label>Organization Name</label>
-            <select
-              value={data.organization}
-              onChange={(e) => setData({ ...data, organization: e.target.value })}
-            >
-              <option value=''>Select Organization</option>
-              {organizations.map((org) => (
-                <option key={org._id} value={org.name}>
-                  {org.name}
-                </option>
-              ))}
-            </select>
-            <label>Position</label>
-            <select
-              value={data.position}
-              onChange={(e) => setData({ ...data, position: e.target.value })}
-            >
-              <option value=''>Select Position</option>
-              <option value='President'>President</option>
-              <option value='Vice President'>Vice President</option>
-              <option value='Secretary'>Secretary</option>
-              <option value='Treasurer'>Treasurer</option>
-              <option value='Public Relations Officer'>Public Relations Officer</option>
-              <option value='Auditor'>Auditor</option>
-              <option value='1st Year Representative'>1st Year Representative</option>
-              <option value='2nd Year Representative'>2nd Year Representative</option>
-              <option value='3rd Year Representative'>3rd Year Representative</option>
-              <option value='4th Year Representative'>4th Year Representative</option>
-              <option value='Member'>Member</option>
-            </select>
-          </>
-        )}
-        <button type='submit'>Register</button>
-      </form>
+      )}
+      
+      <button onClick={() => handleRegistrationType('staff')}>Staff Registration</button>
+      <button onClick={() => handleRegistrationType('faculty')}>Faculty Registration</button>
+      <button onClick={() => handleRegistrationType('student')}>Student Registration</button>
     </div>
   );
 }

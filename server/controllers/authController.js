@@ -9,7 +9,15 @@ const test = (req, res) =>{
 //Registration ep
 const registerUser = async (req, res) => {
     try {
-        const { name, studentemail, password, adminType, position, organization } = req.body;
+        const { name, studentemail, password, adminType, position, schoolYear,department,organization } = req.body;
+
+        if (adminType === 'School Owner' || adminType === 'President') {
+            const existingUser = await User.findOne({ adminType });
+            if (existingUser) {
+                return res.json({ error: `There can only be one ${adminType} in the system` });
+            }
+        }
+        
         //name field validation
         if (!name) {
             return res.json({
@@ -22,7 +30,23 @@ const registerUser = async (req, res) => {
                 error: 'Please enter a password, should be more than 6 characters'
             });
         }
+        
         //email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(studentemail)) {
+            return res.json({
+                error: 'Invalid email format'
+            });
+        }
+
+        const allowedDomains = ['gmail.com', 'example.org']; 
+        const domain = studentemail.split('@')[1];
+        if (!allowedDomains.includes(domain)) {
+            return res.json({
+                error: 'Invalid email domain'
+            });
+        }
+
         const exist = await User.findOne({ studentemail });
         if (!studentemail) {
             return res.json({
@@ -46,29 +70,67 @@ const registerUser = async (req, res) => {
 
         // Create user
         let user;
-        if (adminType === 'Organization Officer') {
-            // Create user with position and organization for Organization Officer
-            if (!position || !organization) {
-                return res.json({
-                    error: 'Position and organization are required for Organization Officer'
+
+        // Create user based sa registration type 
+        switch (adminType) {
+            case 'School Owner':
+            case 'President':
+            case 'School Executive Admin':
+            case 'School Executive Dean':
+                // For staff registration
+                user = await User.create({
+                    name,
+                    studentemail,
+                    password: hashedPassword,
+                    adminType,
                 });
-            }
-            user = await User.create({
-                name,
-                studentemail,
-                password: hashedPassword,
-                adminType,
-                position,
-                organization
-            });
-        } else {
-            // Create user without position and organization for other admin types
-            user = await User.create({
-                name,
-                studentemail,
-                password: hashedPassword,
-                adminType
-            });
+                break;
+            case 'Program Head':
+            case 'Instructor':
+                // For faculty registration
+                if (!department || !schoolYear) {
+                    return res.status(400).json({ error: 'Department and school year are required for faculty registration' });
+                }
+                user = await User.create({
+                    name,
+                    studentemail,
+                    password: hashedPassword,
+                    adminType,
+                    department,
+                    schoolYear,
+                });
+                break;
+            case 'Organization Officer':
+                // For student registration
+                if (!position || !schoolYear) {
+                    return res.status(400).json({ error: 'position and school year are required for student registration' });
+                }
+                user = await User.create({
+                    name,
+                    studentemail,
+                    password: hashedPassword,
+                    adminType,
+                    organization,
+                    position,
+                    schoolYear,
+                });
+                break;
+            case 'Student Government':
+                // For student government registration
+                if (!position || !schoolYear) {
+                    return res.status(400).json({ error: 'Position and school year are required for student government registration' });
+                }
+                user = await User.create({
+                    name,
+                    studentemail,
+                    password: hashedPassword,
+                    adminType,
+                    position,
+                    schoolYear,
+                });
+                break;
+            default:
+                return res.status(400).json({ error: 'Invalid admin type' });
         }
 
         return res.json(user);
@@ -85,7 +147,6 @@ const loginUser = async (req,res)=>{
 
         //user validation
         const user = await User.findOne({studentemail});
-        console.log('found user: ', user);
         if(!user){
             return res.json({
                 error: 'No user found'
