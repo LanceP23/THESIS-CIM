@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const cors = require('cors');
 const { test, registerUser, loginUser, getProfile, logoutUser } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer } = require('../controllers/organizationController');
+const { createAnnouncement } = require('../controllers/postsController'); // Import the createAnnouncement function
+const upload = multer(); // Initialize multer
 
 router.use(
     cors({
@@ -19,5 +22,8 @@ router.post('/create_organization', authenticateUser, createOrganization);
 router.post('/logout', logoutUser);
 router.get('/organization', getOrganization);
 router.put('/approve_officer/:orgId/:officerId', authenticateUser, approveOfficer); 
+
+// Define the route for creating announcements with file upload
+router.post('/announcements', authenticateUser, upload.single('media'), createAnnouncement);
 
 module.exports = router;

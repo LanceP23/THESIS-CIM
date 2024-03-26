@@ -141,34 +141,44 @@ const registerUser = async (req, res) => {
 };
 
 //Login ep
-const loginUser = async (req,res)=>{
+const bcrypt = require('bcrypt');
+
+const loginUser = async (req, res) => {
     try {
-        const{studentemail, password} = req.body;
+        const { studentemail, password } = req.body;
 
-        //user validation
-        const user = await User.findOne({studentemail});
-        if(!user){
-            return res.json({
-                error: 'No user found'
-            })
+        // Find user by email
+        const user = await User.findOne({ studentemail });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid email or password' });
         }
-        const matchpass = await comparePassword(password, user.password)
-        if(matchpass){
-            jwt.sign({email: user.studentemail, id:user._id,name: user.name, adminType:user.adminType}, process.env.JWT_SECRET, {expiresIn: '24h'}, (err,token)=>{
-                if(err) throw err;
-                res.cookie('token', token).json(user)
-            } )
+
+        // Compare hashed password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({ error: 'Invalid email or password' });
         }
-        if(!matchpass){
-            res.json({
-                error:'Wrong Password'
-            })
-        }
+
+        // Generate JWT token
+        jwt.sign(
+            { email: user.studentemail, id: user._id, name: user.name, adminType: user.adminType },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' },
+            (err, token) => {
+                if (err) {
+                    console.error('Error signing JWT:', err);
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+                // Send the token and adminType in the response
+                res.cookie('token', token).json({ token, adminType: user.adminType });
+            }
+        );
     } catch (error) {
-        console.log(error)
+        console.error('Error during login:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-
-}
+};
 
 const getProfile=(req,res)=>{
 const{token} = req.cookies

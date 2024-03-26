@@ -21,6 +21,7 @@ const FacultyRegistration = ({ data, setData }) => {
         toast.success('Faculty registration successful!');
       }
     } catch (error) {
+      console.log(adminType);
       console.error('Error registering faculty:', error);
       toast.error('Failed to register faculty');
     }

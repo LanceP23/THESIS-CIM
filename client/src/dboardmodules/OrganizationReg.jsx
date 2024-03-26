@@ -14,6 +14,9 @@ export default function OrganizationReg() {
     semester: ''
   });
 
+  // Fetch admin type from localStorage
+  const adminType = localStorage.getItem('adminType');
+
   useEffect(() => {
     fetchOrganizations();
   }, []);
@@ -66,19 +69,13 @@ export default function OrganizationReg() {
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
-  const handleShowMembers = (orgId) => {
-    // Fetch members for the organization with the given ID >.<
-    // Implement the logic to fetch members from the server and display them in a modal or expand the row
-  };
-
   const handleManageOfficers = (orgId) => {
-    
     navigate(`/organization/${orgId}/officers`);
   };
 
   return (
     <div>
-      <Sidebar />
+      <Sidebar adminType={adminType} /> {/* Pass adminType to Sidebar component */}
       <h2>Manage Organizations</h2>
       <button onClick={() => setShowModal(true)}>Add Organization</button>
       {organizations.length === 0 && <p>No organizations yet.</p>}
@@ -129,7 +126,7 @@ export default function OrganizationReg() {
               <th>School Year</th>
               <th>Semester</th>
               <th>Members</th>
-              <th>Manage Officers</th> {/* Add this column */}
+              <th>Manage Officers</th> 
             </tr>
           </thead>
           <tbody>
@@ -139,10 +136,10 @@ export default function OrganizationReg() {
                 <td>{org.schoolYear}</td>
                 <td>{org.semester}</td>
                 <td>
-                  <button onClick={() => handleShowMembers(org._id)}>Show Members</button>
+                <button onClick={() => handleShowMembers(org._id)}>Show Members</button>
                 </td>
                 <td>
-                  <button onClick={() => handleManageOfficers(org._id)}>Manage Officers</button> {/* Add button to manage officers */}
+                  <button onClick={() => handleManageOfficers(org._id)}>Manage Officers</button> 
                 </td>
               </tr>
             ))}

@@ -23,14 +23,13 @@ const Login = () => {
                 toast.error(error);
             } else {
                 toast.success('Login Successful!');
-                // Save adminType in local storage
                 localStorage.setItem('adminType', adminType);
                 navigate('/dashboard');
             }
         } catch (error) {
             console.error('Error during login:', error);
             toast.error('An error occurred during login');
-        }
+        }   
     };
 
     return (

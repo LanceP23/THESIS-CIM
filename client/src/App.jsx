@@ -10,6 +10,7 @@ import { UserContext, UserContextProvider } from '../context/userContext';
 import Dashboard from './pages/Dashboard';
 import OrganizationReg from './dboardmodules/OrganizationReg';
 import ManageOfficers from './dboardmodules/ManageOrgSubModules/ManageOfficers';
+import CreateAnnouncement from './dboardmodules/CreateAnnouncement';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -26,6 +27,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/createorg" element={<OrganizationReg />} />
         <Route path="/organization/:orgId/officers" element={<ManageOfficers />} />
+        <Route path ="/createannouncement" element={<CreateAnnouncement/>}/>
       </Routes>
     </UserContextProvider>
   );
