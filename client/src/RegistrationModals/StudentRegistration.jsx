@@ -97,6 +97,19 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
             </select>
           </>
         )}
+         <label>Organization</label>
+        <select
+          value={data.organization}
+          onChange={(e) => setData({ ...data, organization: e.target.value })}
+          required
+        >
+          <option value=''>Select Organization</option>
+          {organizations.map((org) => (
+            <option key={org._id} value={org.name}>
+              {org.name}
+            </option>
+          ))}
+        </select>
         <label>School Year</label>
         <input
           type='text'
