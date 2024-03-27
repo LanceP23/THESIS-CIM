@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,22 @@ const Login = () => {
         studentemail: '',
         password: '',
     });
+
+    useEffect(() => {
+        // Check if the user is already authenticated
+        const checkAuthStatus = async () => {
+            try {
+                const response = await axios.get('/check-auth'); // Adjust the endpoint based on your backend
+                if (response.data.authenticated) {
+                    navigate('/dashboard'); // Redirect to dashboard if already authenticated
+                }
+            } catch (error) {
+                console.error('Error checking authentication status:', error);
+            }
+        };
+
+        checkAuthStatus();
+    }, [navigate]);
 
     const loginAdmin = async (e) => {
         e.preventDefault();
@@ -24,7 +40,7 @@ const Login = () => {
             } else {
                 toast.success('Login Successful!');
                 localStorage.setItem('adminType', adminType);
-                navigate('/dashboard');
+                navigate('/dashboard'); // Redirect to dashboard after successful login
             }
         } catch (error) {
             console.error('Error during login:', error);

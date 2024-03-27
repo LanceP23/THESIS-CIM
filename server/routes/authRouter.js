@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const cors = require('cors');
-const { test, registerUser, loginUser, getProfile, logoutUser } = require('../controllers/authController');
+const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer } = require('../controllers/organizationController');
 const { createAnnouncement } = require('../controllers/postsController'); // Import the createAnnouncement function
 const upload = multer(); // Initialize multer
@@ -14,9 +14,12 @@ router.use(
     })
 );
 
+
+
 router.get('/', test);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.get('/check-auth',checkAuth);
 router.get('/profile', getProfile);
 router.post('/create_organization', authenticateUser, createOrganization);
 router.post('/logout', logoutUser);

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-hot-toast'; // Import toast from react-hot-toast
-
+import { toast } from 'react-hot-toast'; 
+import Sidebar from '../components/Sidebar'; 
 
 export default function CreateAnnouncement() {
   const [header, setHeader] = useState('');
   const [body, setBody] = useState('');
   const [media, setMedia] = useState(null);
+
+  const adminType = localStorage.getItem('adminType');
 
   const handleHeaderChange = (e) => {
     setHeader(e.target.value);
@@ -58,6 +60,7 @@ export default function CreateAnnouncement() {
 
   return (
     <div className="container">
+      <Sidebar adminType={adminType}/> 
       <h2>Create Announcement</h2>
       <div>
         <label className="label" htmlFor="header">Header:</label>

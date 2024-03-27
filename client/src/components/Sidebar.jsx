@@ -58,6 +58,9 @@ export default function Sidebar({ adminType }) {
                 </Link>
               </li>
             ) : null}
+            <li>
+            <Link to="/register">Register Admin Account</Link>
+            </li>
           </ul>
         </div>
         <div className="logout-container">

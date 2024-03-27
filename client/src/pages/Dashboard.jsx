@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import OrganizationReg from '../dboardmodules/OrganizationReg';
+import axios from 'axios';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -18,7 +19,26 @@ const Dashboard = () => {
         }
     }, [navigate]);
 
-    // Function to mock dashboard content based on user's role hardcoded hehe
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+            try {
+                const response = await axios.get('/check-auth');
+                if (!response.data.authenticated) {
+                    // If not authenticated, redirect to login
+                    navigate('/login');
+                } else {
+                    // If authenticated, set the admin type
+                    setAdminType(localStorage.getItem('adminType'));
+                }
+            } catch (error) {
+                console.error('Error checking authentication status:', error);
+            }
+        };
+
+        checkAuthStatus();
+    }, [navigate]);
+
+    // Function to mock dashboard content based on user's role
     const mockDashboardContent = (role) => {
         switch (role) {
             case 'School Owner':
@@ -59,6 +79,8 @@ const Dashboard = () => {
     useEffect(() => {
         setDashboardContent(mockDashboardContent(adminType));
     }, [adminType]);
+
+
 
     return (
         <div className="dashboard">

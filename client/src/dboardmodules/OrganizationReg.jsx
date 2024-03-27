@@ -75,7 +75,7 @@ export default function OrganizationReg() {
 
   return (
     <div>
-      <Sidebar adminType={adminType} /> {/* Pass adminType to Sidebar component */}
+      <Sidebar adminType={adminType} /> 
       <h2>Manage Organizations</h2>
       <button onClick={() => setShowModal(true)}>Add Organization</button>
       {organizations.length === 0 && <p>No organizations yet.</p>}
