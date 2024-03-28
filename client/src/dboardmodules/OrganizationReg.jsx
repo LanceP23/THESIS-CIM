@@ -13,9 +13,29 @@ export default function OrganizationReg() {
     schoolYear: '',
     semester: ''
   });
+  const[adminType, setAdminType] = useState('');
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+        try {
+            const response = await axios.get('/check-auth');
+            if (!response.data.authenticated) {
+                // If not authenticated, redirect to login
+                navigate('/login');
+            } else {
+                // If authenticated, set the admin type
+                setAdminType(localStorage.getItem('adminType'));
+            }
+        } catch (error) {
+            console.error('Error checking authentication status:', error);
+        }
+    };
+
+    checkAuthStatus();
+}, [navigate]);
 
   // Fetch admin type from localStorage
-  const adminType = localStorage.getItem('adminType');
+  const adminType2 = localStorage.getItem('adminType');
 
   useEffect(() => {
     fetchOrganizations();
@@ -75,7 +95,7 @@ export default function OrganizationReg() {
 
   return (
     <div>
-      <Sidebar adminType={adminType} /> 
+      <Sidebar adminType={adminType2} /> 
       <h2>Manage Organizations</h2>
       <button onClick={() => setShowModal(true)}>Add Organization</button>
       {organizations.length === 0 && <p>No organizations yet.</p>}

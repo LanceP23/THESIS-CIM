@@ -54,12 +54,14 @@ export default function Sidebar({ adminType }) {
             {adminType === 'School Owner' || adminType === 'Student Government' || adminType === 'Organization Officer' ? (
               <li>
                 <Link to="/createannouncement" onClick={closeSidebar}>
-                  Create Announcement
+                  Manage Post
                 </Link>
               </li>
             ) : null}
             <li>
-            <Link to="/register">Register Admin Account</Link>
+              {adminType === 'School Owner'?(
+                <Link to="/register">Register Admin Account</Link>
+              ):null}
             </li>
           </ul>
         </div>

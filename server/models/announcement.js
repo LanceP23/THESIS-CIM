@@ -15,6 +15,16 @@ const announcementSchema = new mongoose.Schema({
     data: Buffer, // Store the binary data of the file
     contentType: String // Store the MIME type of the file
   },
+  postedBy:{
+    type:String,
+    required:true
+  },
+  
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending',
+  },
   createdAt: {
     type: Date,
     default: Date.now
