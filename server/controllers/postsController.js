@@ -54,14 +54,15 @@ const createAnnouncement = async (req, res) => {
 
     // Check if file is included in the request
     if (req.file) {
+      // Set media to the binary data
       media = {
-        data: req.file.buffer, // Store the binary data of the uploaded file
+        data: req.file.buffer, 
         contentType: req.file.mimetype // Store the MIME type for file type
-      }
+      };
     }
 
-    if (req.user.adminType==='School Owner'){
-      status='approved';
+    if (req.user.adminType === 'School Owner') {
+      status = 'approved';
     }
 
     // Create the announcement
@@ -82,6 +83,7 @@ const createAnnouncement = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 const getPendingAnnouncements = async (req, res) => {
   try {

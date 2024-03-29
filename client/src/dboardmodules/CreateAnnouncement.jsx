@@ -75,10 +75,53 @@ export default function CreateAnnouncement() {
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
     setMedia(file);
+
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      
+      console.log('File loaded:', event.target.result);
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async () => {
-    // Your submit logic
+    try {
+      const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      const formData = new FormData();
+      formData.append('header', header);
+      formData.append('body', body);
+      formData.append('media', media);
+
+      const response = await axios.post('/announcements', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token.split('=')[1]}`, // Extract token value from cookie
+        },
+      });
+
+      
+      if (adminType2 !== 'School Owner') {
+        toast.success('Your post is pending approval');
+      } else {
+        toast.success('Announcement created successfully');
+      }
+
+      // Reset form fields
+      setHeader('');
+      setBody('');
+      setMedia(null);
+
+    } catch (error) {
+      // Show toast message on error
+      toast.error('Error creating announcement');
+      console.error('Error creating announcement:', error);
+    }
   };
 
   const toggleModal = () => {
@@ -129,24 +172,28 @@ export default function CreateAnnouncement() {
                 <div className='recent_post_container'>
                   <h3>Recent Posts</h3>
                   <ul>
-                    {approvedAnnouncements.slice(0, 3).map((announcement) => (
-                      <li key={announcement._id}>
-                        <h4>{announcement.header}</h4>
-                        <p>{announcement.body}</p>
-                        {announcement.media && (
-                          <div>
-                            <p>Media:</p>
-                            {announcement.media.contentType.startsWith('image') ? (
-                              <img src={`data:${announcement.media.contentType};base64,${announcement.media.data.toString('base64')}`} alt="Media" />
-                            ) : (
-                              <video controls>
-                                <source src={`data:${announcement.media.contentType};base64,${announcement.media.data.toString('base64')}`} type={announcement.media.contentType} />
-                              </video>
-                            )}
-                          </div>
-                        )}
-                      </li>
-                    ))}
+                  {approvedAnnouncements.slice(0, 3).map((announcement) => {
+                      return (
+                        <li key={announcement._id}>
+                          <h4>{announcement.header}</h4>
+                          <p>{announcement.body}</p>
+                          {announcement.media && announcement.media.data ? (
+                            <div>
+                              <p>Media:</p>
+                              {announcement.media.contentType.startsWith('image') ? (
+                                <img src={`data:${announcement.media.contentType};base64,${announcement.media.data}`} alt="Media" />
+                              ) : (
+                                <video controls>
+                                  <source src={`data:${announcement.media.contentType};base64,${announcement.media.data}`} type={announcement.media.contentType} />
+                                </video>
+                              )}
+                            </div>
+                          ) : (
+                            <p>No media available</p>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </Tab>
