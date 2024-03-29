@@ -1,0 +1,154 @@
+.container {
+    max-width: 600px;
+    margin: 0;
+    padding: 0;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: whitesmoke;
+
+    
+    
+  }
+  .create_announcement{
+    background-color: whitesmoke;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .label {
+    font-weight: bold;
+    margin-bottom: 8px;
+   
+  }
+  
+  .input-field,
+  .textarea-field {
+    width: 100%;
+    padding: 12px;
+   
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+
+
+  
+  }
+  
+  .textarea-field {
+    resize: none;
+    height: 70px; 
+  }
+
+  
+  .file-field {
+    margin-bottom: 20px;
+  }
+  
+  .button {
+    padding: 12px 24px;
+    background-color: #4caf50; 
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    justify-content: right;
+  }
+  
+  .button:hover {
+    background-color: #388e3c; 
+  }
+  
+
+/*fasfasf*/
+.Announcement_container{
+    background-color: #C3E5CC;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    margin-left: 200px;
+    
+   
+   
+}
+.tab_container{
+    background-color: whitesmoke;
+    height: 100%;
+    width: 800px;
+    border-radius: 10px;
+    padding: 30px;
+
+}
+
+
+
+
+.recent_post_container{
+    background-color: #388e3cc0;
+    height: 200px;
+    border-radius: 20px;
+    padding-left: 10px;
+}
+
+.community_calendar_container{
+  background-color: #C3E5CC;
+  display: grid;
+  grid-template-rows: auto, auto;
+  grid-gap: 10px;
+
+}
+
+.calendar_container{
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+.bottom_part{
+   background-color: #C3E5CC;;
+
+}
+
+/**/
+.nav-pills .nav-link{
+    
+    color: white;
+  
+    
+}
+
+.nav-pills .nav-item:not(:nth-last-child(1)) .nav-link{
+    border-right: 1px solid white;
+
+}
+
+.tab_content{
+    background-color: #388e3c;
+    border: 1px solid #dddddd; 
+}
+
+
+
+.container-tab{
+  background-color: aquamarine;
+}
+  .custom-tabs .nav-link {
+    color: green !important; /* Default text color */
+    border-color: green !important; /* Border color */
+   
+    width: 200px; /* Adjust width as needed */
+
+  }
+  
+  .custom-tabs .nav-link.active, 
+  .custom-tabs .nav-link:hover {
+    background-color: rgba(0, 128, 0, 0.541) !important; /* Green background color when clicked or hovered */
+    color: #fff !important; /* Text color when clicked or hovered */
+  }
+
+ 
+ 

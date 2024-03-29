@@ -5,7 +5,9 @@ export default function Home() {
   return (
     <div>
       <Navbar/>
-      <h1>Test Homepage</h1>
+      <div className='image'>
+        <img src='../src/assets/St.Catherine Logo.png'/>
+      </div>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import OrganizationReg from '../dboardmodules/OrganizationReg';
 import axios from 'axios';
+import "./Dashboard.css"
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -84,16 +85,38 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <Sidebar adminType={adminType} />
-            <div className="dashboard-content">
-                <h1>Welcome to the Dashboard</h1>
-                {dashboardContent ? (
-                    <div>{dashboardContent}</div>
-                ) : (
-                    <div>Loading...</div>
-                )}
-            </div>
+        <Sidebar adminType={adminType} />
+        <div className="dashboard-content">
+            <div className='Column_1'>
+
+           
+                <div className="Analytics_section">
+                <h2>Analytics</h2>
+
+                </div>
+
+                <div className="My_community_section">
+                <h2>My Community</h2>
+
+                </div>
+           </div>
+
+            <div className="Column_2">
+
+
+           
+           <div className="School_calendar_section">
+           <h2>School calendar</h2>
+
+           </div>
+           <div className="Active_user_section">
+           <h2>Active User</h2>
+           </div>
+
+           </div>
+            
         </div>
+    </div>
     );
 };
 
