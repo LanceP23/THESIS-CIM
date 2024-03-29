@@ -1,47 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 export default function PostApproval({ adminType }) {
   const [pendingAnnouncements, setPendingAnnouncements] = useState([]);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchPendingAnnouncements = async () => {
-      try {
-        if (adminType === 'School Owner') {
-          const token = document.cookie.split('; ').find(row => row.startsWith('token='));
-          if(!token){
-            throw new Error('No token found');
-          }
-          const response = await axios.get('/pending-announcements',{
-            headers:{
-                Authorization: `Bearer ${token.split('=')[1]}`,
-            },
-          });
-          setPendingAnnouncements(response.data);
-          setIsLoading(false);
-          if (response.data.length === 0) {
-            toast('No pending announcements found');
-          } else {
-            toast.success('Pending announcements fetched successfully');
-          }
-        } else {
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error('Error fetching pending announcements:', error);
-        toast.error('Error fetching pending announcements');
-        setIsLoading(false);
+  const fetchPendingAnnouncements = async () => {
+    try {
+      setIsLoading(true);
+      const token = getToken();
+      const response = await axios.get('/pending-announcements', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPendingAnnouncements(response.data);
+      setIsLoading(false);
+      if (response.data.length === 0) {
+        toast('No pending announcements found');
+      } else {
+        toast.success('Pending announcements fetched successfully');
       }
-    };
-    fetchPendingAnnouncements();
-  }, [adminType]);
-
-  const handleAnnouncementClick = (announcement) => {
-    setSelectedAnnouncement(announcement);
+    } catch (error) {
+      console.error('Error fetching pending announcements:', error);
+      toast.error('Error fetching pending announcements');
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchPendingAnnouncements();
+  }, [adminType]); // Refetch pending announcements when adminType changes
 
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
@@ -50,7 +41,11 @@ export default function PostApproval({ adminType }) {
     }
     return token.split('=')[1];
   };
-  
+
+  const handleAnnouncementClick = (announcement) => {
+    setSelectedAnnouncement(announcement);
+  };
+
   const handleApproval = async () => {
     try {
       const token = getToken();
@@ -70,7 +65,7 @@ export default function PostApproval({ adminType }) {
       toast.error('Error approving announcement');
     }
   };
-  
+
   const handleRejection = async () => {
     try {
       const token = getToken();
@@ -94,6 +89,7 @@ export default function PostApproval({ adminType }) {
   return (
     <div>
       <h2>Pending Announcements</h2>
+      <button onClick={fetchPendingAnnouncements}>Fetch Pending Announcements</button>
       {isLoading ? (
         <p>Loading pending announcements...</p>
       ) : pendingAnnouncements.length > 0 ? (

@@ -4,7 +4,8 @@ const multer = require('multer');
 const cors = require('cors');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer } = require('../controllers/organizationController');
-const { createAnnouncement,getPendingAnnouncements,updateAnnouncementStatus } = require('../controllers/postsController'); // Import the createAnnouncement function
+const { createAnnouncement,getPendingAnnouncements,updateAnnouncementStatus } = require('../controllers/postsController'); 
+const { getApprovedAnnouncements } = require('../controllers/postsController');
 const upload = multer(); // Initialize multer
 
 router.use(
@@ -28,7 +29,9 @@ router.put('/approve_officer/:orgId/:officerId', authenticateUser, approveOffice
 
 // Define the route for creating announcements with file upload
 router.post('/announcements', authenticateUser, upload.single('media'), createAnnouncement);
+//announcement approval
 router.get('/pending-announcements', authenticateUser, getPendingAnnouncements);
 router.put('/update-announcement-status/:announcementId', authenticateUser, updateAnnouncementStatus);
+router.get('/approved-announcements', authenticateUser, getApprovedAnnouncements);
 
 module.exports = router;

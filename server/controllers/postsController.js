@@ -138,10 +138,23 @@ const updateAnnouncementStatus = async (req, res) => {
   }
 };
 
+const getApprovedAnnouncements = async (req, res) => {
+  try {
+    const approvedAnnouncements = await Announcement.find({ status: 'approved' })
+      .sort({ createdAt: -1 }) 
+      .limit(3); 
+    res.json(approvedAnnouncements);
+  } catch (error) {
+    console.error('Error fetching approved announcements:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   createAnnouncement,
   upload,
   authenticate, 
   getPendingAnnouncements,
-  updateAnnouncementStatus
+  updateAnnouncementStatus,
+  getApprovedAnnouncements
 };

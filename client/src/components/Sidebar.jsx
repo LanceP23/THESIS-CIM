@@ -47,7 +47,7 @@ export default function Sidebar({adminType}) {
 
             </div>
 
-            <h3>School Owner</h3>
+            <h3>{adminType}</h3>
 
           </div>
           
