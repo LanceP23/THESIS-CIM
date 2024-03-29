@@ -180,6 +180,29 @@ const loginUser = async (req, res) => {
     }
 };
 
+const checkAuth = (req, res) => {
+    try {
+        // Check if token is present in cookies
+        const token = req.cookies.token;
+        if (!token) {
+            return res.json({ authenticated: false });
+        }
+
+        // Verify the token
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return res.json({ authenticated: false });
+            }
+            // If token is valid, user is authenticated
+            return res.json({ authenticated: true });
+        });
+    } catch (error) {
+        console.error('Error checking authentication status:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
 const getProfile=(req,res)=>{
 const{token} = req.cookies
 if(token){
@@ -201,8 +224,10 @@ const logoutUser = async (req, res) => {
         
         // Expire the token by setting its expiration time to a past date
         res.cookie('token', '', { expires: new Date(0) });
+        
 
         res.json({ message: 'Logout successful' });
+        
     }
     catch(error){
         res.status(500).json({error: "Internal Server Error"});
@@ -214,6 +239,7 @@ module.exports = {
     test,
     registerUser,
     loginUser,
+    checkAuth,
     getProfile,
     logoutUser
 }   

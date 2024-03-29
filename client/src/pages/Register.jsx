@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import StaffRegistration from '../RegistrationModals/StaffRegistration'; 
 import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
 import StudentRegistration from '../RegistrationModals/StudentRegistration';
+import Sidebar from '../components/Sidebar'; // Import Sidebar component
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Register() {
     name: '',
     studentemail: '',
     password: '',
-    adminType: 'School Owner',
+    adminType: 'School Owner', // Set adminType as 'School Owner'
     organization: '',
     position: '',
   });
@@ -82,35 +83,37 @@ export default function Register() {
   };
 
   return (
-    <div className='register-form'>
-      <Navbar />
-      {registrationType === 'staff' && (
-        <StaffRegistration
-          data={data}
-          setData={setData}
-          organizations={organizations}
-          registerAdmin={registerAdmin}
-          handleAdminTypeChange={handleAdminTypeChange}
-        />
-      )}
-      {registrationType === 'faculty' && (
-        <FacultyRegistration
-          data={data}
-          setData={setData}
-        />
-      )}
-      {registrationType === 'student' && (
-        <StudentRegistration
-          data={data}
-          setData={setData}
-          organizations={organizations}
-          registerAdmin={registerAdmin}
-        />
-      )}
-      
-      <button onClick={() => handleRegistrationType('staff')}>Staff Registration</button>
-      <button onClick={() => handleRegistrationType('faculty')}>Faculty Registration</button>
-      <button onClick={() => handleRegistrationType('student')}>Student Registration</button>
+    <div>
+      <Sidebar adminType={data.adminType} /> {/* Pass adminType as prop */}
+      <div className='register-form'>
+        {registrationType === 'staff' && (
+          <StaffRegistration
+            data={data}
+            setData={setData}
+            organizations={organizations}
+            registerAdmin={registerAdmin}
+            handleAdminTypeChange={handleAdminTypeChange}
+          />
+        )}
+        {registrationType === 'faculty' && (
+          <FacultyRegistration
+            data={data}
+            setData={setData}
+          />
+        )}
+        {registrationType === 'student' && (
+          <StudentRegistration
+            data={data}
+            setData={setData}
+            organizations={organizations}
+            registerAdmin={registerAdmin}
+          />
+        )}
+        
+        <button onClick={() => handleRegistrationType('staff')}>Staff Registration</button>
+        <button onClick={() => handleRegistrationType('faculty')}>Faculty Registration</button>
+        <button onClick={() => handleRegistrationType('student')}>Student Registration</button>
+      </div>
     </div>
   );
 }
