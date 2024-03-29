@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast';
 import axios from 'axios';
+import './Sidebar.css'
 
 export default function Sidebar({adminType}) {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,17 +35,38 @@ export default function Sidebar({adminType}) {
 
   return (
     <div>
-      <button className="toggle-btn" onClick={toggleSidebar}>
+      <button className="toggle-btn_open" onClick={toggleSidebar}>
         ☰
       </button>
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-content">
-          <ul>
+
+          <div className='profile_container'>
+          <button className="toggle-btn_close" onClick={toggleSidebar}>
+        ☰
+      </button>
+            <h2>MENU</h2>
+            <div className='profile_image'>
+
+            </div>
+
+            <h4>School Owner</h4>
+
+          </div>
+          
+          <ul >
             <li>
+<<<<<<< Updated upstream
               <Link to="/dashboard" onClick={closeSidebar}>Dashboard</Link>
+=======
+              <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button  ' >
+                Dashboard
+              </Link>
+>>>>>>> Stashed changes
             </li>
             {adminType !== 'Organization Officer'&&(
             <li>
+<<<<<<< Updated upstream
               <Link to="/createorg" onClick={closeSidebar}>Manage Organization</Link>
             </li>
             )}
@@ -55,6 +77,53 @@ export default function Sidebar({adminType}) {
           <button onClick={handleLogout}>
             <span role ="img" aria-label="logout">
             🚪
+=======
+              <Link to="/createorg" onClick={closeSidebar} className='sidebar_button  ' >
+                Manage Organization
+              </Link>
+            </li>
+            
+              <li>
+                <Link to="/createannouncement" onClick={closeSidebar} className='sidebar_button ' >
+                  My Community
+                </Link>
+              </li>
+
+               <li>
+                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                  School Calendar
+                </Link>
+              </li>
+
+              <li>
+                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                 Campus Comms
+                </Link>
+              </li>
+
+              <li>
+                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                
+                  Analytics Report
+                </Link>
+              </li>
+              <li>
+                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                  Admin Settings
+                </Link>
+              </li>
+              <li>
+                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                  User Management
+                </Link>
+              </li>
+          </ul>
+        </div>
+        <div className="logout-container">
+          <button onClick={handleLogout} className='logout_button'>
+            <span role="img" aria-label="logout">
+              🚪
+>>>>>>> Stashed changes
             </span>{' '}
             Logout
           </button>

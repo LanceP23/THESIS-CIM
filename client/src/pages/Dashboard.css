@@ -1,0 +1,59 @@
+.dashboard-content{
+    background-color: #C3E5CC;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    margin-left: 100px;
+
+}
+
+.Column_1{
+    display: grid;
+    grid-template-rows: auto, auto;
+  
+   
+    
+}
+
+.Column_2{
+    display: grid;
+    grid-template-rows: auto, auto;
+    
+    
+
+}
+.Analytics_section{
+    text-align: left;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    padding-left: 10px;
+    margin: 10px;
+    height: 300px;
+    width: 850px;
+    
+}
+.My_community_section{
+    text-align: left;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    padding-left: 10px;
+    margin: 10px;
+    height: 250px;
+    width: 850px;
+    
+
+}
+.School_calendar_section{
+    background-color: whitesmoke;
+    border-radius: 20px;
+    margin: 10px;
+    height: 250px;
+    width: 250px;
+}
+.Active_user_section{
+    background-color: whitesmoke;
+    border-radius: 20px;
+    height: 300px;
+    width: 250px;
+   
+    margin: 10px;
+}
