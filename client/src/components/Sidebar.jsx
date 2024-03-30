@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast';
 import axios from 'axios';
 import './Sidebar.css'
+import { UserContext } from '../../context/userContext';
 
-export default function Sidebar({adminType}) {
+export default function Sidebar() {
+  const { user } = useContext(UserContext);
+  const adminType = user ? user.adminType : null;
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
 
   useEffect (()=>{
     setIsOpen(false);
@@ -103,7 +105,7 @@ export default function Sidebar({adminType}) {
               </li>
               <li>
               {adminType === 'School Owner'?(
-                <Link to="/register" className='sidebar_button  '>Register Admin Account</Link>
+                <Link to="/register" className='sidebar_button  '>Account Registration</Link>
               ):null}
             </li>
           </ul>

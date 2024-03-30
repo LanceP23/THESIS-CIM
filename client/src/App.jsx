@@ -11,6 +11,8 @@ import Dashboard from './pages/Dashboard';
 import OrganizationReg from './dboardmodules/OrganizationReg';
 import ManageOfficers from './dboardmodules/ManageOrgSubModules/ManageOfficers';
 import CreateAnnouncement from './dboardmodules/CreateAnnouncement';
+import PostApproval from './dboardmodules/ManagePostSubModules/PostApproval';
+import Sidebar from './components/Sidebar';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -19,6 +21,7 @@ function App() {
   return (
     <UserContextProvider>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
+      <Sidebar />
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Home />} />
@@ -28,9 +31,10 @@ function App() {
         <Route path="/createorg" element={<OrganizationReg />} />
         <Route path="/organization/:orgId/officers" element={<ManageOfficers />} />
         <Route path ="/createannouncement" element={<CreateAnnouncement/>}/>
+        <Route exact path="/post-approval" component={PostApproval} />
       </Routes>
     </UserContextProvider>
   );
 }
 
-export default App;
+export default App; 

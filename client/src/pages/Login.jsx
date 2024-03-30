@@ -37,15 +37,22 @@ const Login = () => {
             });
             const { error, adminType } = response.data;
             if (error) {
-                toast.error(error);
+                toast.error(error); 
             } else {
                 toast.success('Login Successful!');
                 localStorage.setItem('adminType', adminType);
-                navigate('/dashboard'); // Redirect to dashboard after successful login
+                navigate('/dashboard');
+                window.location.reload();
             }
         } catch (error) {
-            console.error('Error during login:', error);
-            toast.error('An error occurred during login');
+            // Check if the error is a 401 (Unauthorized) error
+            if (error.response && error.response.status === 401) {
+                toast.error('Incorrect email or password');
+            } else {
+                // Display a generic error message for other errors
+                console.error('Error during login:', error);
+                toast.error('An error occurred during login');
+            }
         }   
     };
 

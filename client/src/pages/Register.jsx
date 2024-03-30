@@ -6,7 +6,8 @@ import Navbar from '../components/Navbar';
 import StaffRegistration from '../RegistrationModals/StaffRegistration'; 
 import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
 import StudentRegistration from '../RegistrationModals/StudentRegistration';
-import Sidebar from '../components/Sidebar'; // Import Sidebar component
+import Sidebar from '../components/Sidebar'; 
+import RegisteredAccounts from '../RegisteredAdmins/RegisteredAccounts';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ export default function Register() {
 
   return (
     <div>
-      <Sidebar adminType={data.adminType} /> {/* Pass adminType as prop */}
+      <Sidebar adminType={data.adminType} /> 
       <div className='register-form'>
         {registrationType === 'staff' && (
           <StaffRegistration
@@ -114,6 +115,7 @@ export default function Register() {
         <button onClick={() => handleRegistrationType('faculty')}>Faculty Registration</button>
         <button onClick={() => handleRegistrationType('student')}>Student Registration</button>
       </div>
+      <RegisteredAccounts />
     </div>
   );
 }

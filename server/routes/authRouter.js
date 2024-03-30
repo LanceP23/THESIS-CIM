@@ -4,9 +4,9 @@ const multer = require('multer');
 const cors = require('cors');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer } = require('../controllers/organizationController');
-const { createAnnouncement,getPendingAnnouncements,updateAnnouncementStatus } = require('../controllers/postsController'); 
+const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
-const upload = multer(); // Initialize multer
+const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
 
 router.use(
     cors({
@@ -15,17 +15,18 @@ router.use(
     })
 );
 
-
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.get('/', test);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/check-auth',checkAuth);
+router.get('/check-auth', checkAuth);
 router.get('/profile', getProfile);
 router.post('/create_organization', authenticateUser, createOrganization);
 router.post('/logout', logoutUser);
 router.get('/organization', getOrganization);
-router.put('/approve_officer/:orgId/:officerId', authenticateUser, approveOfficer); 
+router.put('/approve_officer/:orgId/:officerId', authenticateUser, approveOfficer);
 
 // Define the route for creating announcements with file upload
 router.post('/announcements', authenticateUser, upload.single('media'), createAnnouncement);
@@ -33,5 +34,16 @@ router.post('/announcements', authenticateUser, upload.single('media'), createAn
 router.get('/pending-announcements', authenticateUser, getPendingAnnouncements);
 router.put('/update-announcement-status/:announcementId', authenticateUser, updateAnnouncementStatus);
 router.get('/approved-announcements', authenticateUser, getApprovedAnnouncements);
+
+//fetchingAdminAccounts
+router.get('/staff', getAllStaff);
+router.get('/faculty', getAllFaculty);
+router.get('/students', getAllStudents);
+
+//updateAdminAccount
+router.put('/users/:id/update', updateUser);
+
+//deleteAdminAccount
+router.delete('/users/:id/delete', deleteUser);
 
 module.exports = router;
