@@ -32,7 +32,7 @@ const userSchema = new Schema({
         }
     },
     schoolYear: {
-        type: String, // Added field for staff and faculty registration
+        type: String, // staff and faculty registration
         required: function() {
             return this.adminType === 'School Owner' || this.adminType === 'President' || this.adminType === 'School Executive Admin' || this.adminType === 'School Executive Dean' || this.adminType === 'Program Head' || this.adminType === 'Instructor'; // required for staff and faculty
         }

@@ -12,6 +12,7 @@ export default function CreateAnnouncement() {
   const [header, setHeader] = useState('');
   const [body, setBody] = useState('');
   const [media, setMedia] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null); // For image preview
   const [showPostApprovalModal, setShowPostApprovalModal] = useState(false); // modal visibility
   const [adminType, setAdminType] = useState('');
   const [approvedAnnouncements, setApprovedAnnouncements] = useState([]);
@@ -75,15 +76,8 @@ export default function CreateAnnouncement() {
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
     setMedia(file);
-
-    
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      
-      console.log('File loaded:', event.target.result);
-    };
-
-    reader.readAsDataURL(file);
+    // Display image preview
+    setMediaPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async () => {
@@ -112,10 +106,11 @@ export default function CreateAnnouncement() {
         toast.success('Announcement created successfully');
       }
 
-      // Reset form fields
+      // Reset form fields and image preview
       setHeader('');
       setBody('');
       setMedia(null);
+      setMediaPreview(null);
 
     } catch (error) {
       // Show toast message on error
@@ -127,6 +122,7 @@ export default function CreateAnnouncement() {
   const toggleModal = () => {
     setShowPostApprovalModal(!showPostApprovalModal);
   };
+
 
   return (
     <div>
@@ -166,13 +162,16 @@ export default function CreateAnnouncement() {
                     accept="image/*, video/*"
                     onChange={handleMediaChange}
                   />
+                  {mediaPreview && (
+                    <img src={mediaPreview} alt="Media Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                  )}
                 </div>
                 <button className="button" onClick={handleSubmit}>Post</button>
 
                 <div className='recent_post_container'>
                   <h3>Recent Posts</h3>
                   <ul>
-                  {approvedAnnouncements.slice(0, 3).map((announcement) => {
+                    {approvedAnnouncements.slice(0, 3).map((announcement) => {
                       return (
                         <li key={announcement._id}>
                           <h4>{announcement.header}</h4>
@@ -181,10 +180,10 @@ export default function CreateAnnouncement() {
                             <div>
                               <p>Media:</p>
                               {announcement.media.contentType.startsWith('image') ? (
-                                <img src={`data:${announcement.media.contentType};base64,${announcement.media.data}`} alt="Media" />
+                                <img src={URL.createObjectURL(new Blob([new Uint8Array(announcement.media.data)], { type: announcement.media.contentType }))} alt="Announcement Media" />
                               ) : (
                                 <video controls>
-                                  <source src={`data:${announcement.media.contentType};base64,${announcement.media.data}`} type={announcement.media.contentType} />
+                                  <source src={URL.createObjectURL(new Blob([new Uint8Array(announcement.media.data)], { type: announcement.media.contentType }))} type={announcement.media.contentType} />
                                 </video>
                               )}
                             </div>

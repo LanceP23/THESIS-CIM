@@ -1,5 +1,3 @@
-// announcementModel.js
-
 const mongoose = require('mongoose');
 
 const announcementSchema = new mongoose.Schema({
@@ -12,14 +10,14 @@ const announcementSchema = new mongoose.Schema({
     required: true
   },
   media: {
-    data: Buffer, // Store the binary data of the file
-    contentType: String // Store the MIME type of the file
+    data: Buffer,
+    contentType: String
   },
   postedBy:{
     type:String,
     required:true
   },
-  
+
   status: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],

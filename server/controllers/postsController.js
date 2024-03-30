@@ -3,9 +3,8 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-// Multer configuration for file upload
-const storage = multer.memoryStorage(); // Store files in memory
-const upload = multer({ storage: storage });
+
+
 
 // req auth
 const authenticate = async (req, res, next) => {
@@ -48,24 +47,21 @@ r
 const createAnnouncement = async (req, res) => {
   try {
     const { header, body } = req.body;
-
     let media = null;
     let status = 'pending';
 
-    // Check if file is included in the request
     if (req.file) {
-      // Set media to the binary data
       media = {
-        data: req.file.buffer, 
-        contentType: req.file.mimetype // Store the MIME type for file type
+        data: req.file.buffer.toString('base64'), 
+        contentType: req.file.mimetype // Store content type
       };
+      
     }
-
+  console.log(media);
     if (req.user.adminType === 'School Owner') {
       status = 'approved';
     }
 
-    // Create the announcement
     const announcement = new Announcement({
       header,
       body,
@@ -74,7 +70,6 @@ const createAnnouncement = async (req, res) => {
       postedBy: req.user.email
     });
 
-    // Save announcement to the database
     await announcement.save();
 
     res.status(201).json(announcement);
@@ -83,6 +78,10 @@ const createAnnouncement = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
+
 
 
 const getPendingAnnouncements = async (req, res) => {
@@ -154,7 +153,6 @@ const getApprovedAnnouncements = async (req, res) => {
 
 module.exports = {
   createAnnouncement,
-  upload,
   authenticate, 
   getPendingAnnouncements,
   updateAnnouncementStatus,
