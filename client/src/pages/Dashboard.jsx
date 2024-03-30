@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import OrganizationReg from '../dboardmodules/OrganizationReg';
-
+import "./Dashboard.css"
 const Dashboard = () => {
     const navigate = useNavigate();
     const [adminType, setAdminType] = useState('');
@@ -24,7 +24,7 @@ const Dashboard = () => {
             case 'School Owner':
                 return (
                     <div>
-                        <h2>This is the School Owner dashboard content</h2> 
+                        
                     </div>
                 );
             case 'President':
@@ -64,7 +64,33 @@ const Dashboard = () => {
         <div className="dashboard">
             <Sidebar adminType={adminType} />
             <div className="dashboard-content">
-                <h1>Welcome to the Dashboard</h1>
+                <div className='Column_1'>
+
+               
+                    <div className="Analytics_section">
+                    <h2>Analytics</h2>
+
+                    </div>
+
+                    <div className="My_community_section">
+                    <h2>My Community</h2>
+
+                    </div>
+               </div>
+
+                <div className="Column_2">
+
+
+               
+               <div className="School_calendar_section">
+               <h2>School calendar</h2>
+
+               </div>
+               <div className="Active_user_section">
+               <h2>Active User</h2>
+               </div>
+
+               </div>
                 {dashboardContent ? (
                     <div>{dashboardContent}</div>
                 ) : (

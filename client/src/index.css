@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: #333; /* Dark gray */
-  background-color: #f5f5dc; /* Beige (off-white) */
+  background-color: #C3E5CC; /* light green*/
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,11 +25,12 @@ a:hover {
 
 body {
   margin: 0;
-  background-color: #fafad2; /* Light goldenrod yellow */
+
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #C3E5CC;
 }
 
 h1 {
@@ -37,61 +38,7 @@ h1 {
   line-height: 1.1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #f0e68c; /* Khaki */
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
 
-button:hover {
-  border-color: #bdb76b; /* Dark khaki */
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-nav {
-  background-color: #556b2f; /* Dark olive green */
-  padding: 10px 20px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  width: 100%;
-}
-
-nav a {
-  color: #fff;
-  text-decoration: none;
-  padding: 10px 15px;
-  margin: 0 5px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-nav a:first-child {
-  margin-left: 0;
-}
-
-nav a:last-child {
-  margin-right: 0;
-}
-
-nav a:hover {
-  background-color: #8fbc8f; /* Dark sea green */
-}
 
 .register-form,
 .login-form {
@@ -100,7 +47,7 @@ nav a:hover {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #ffffe0; /* Light yellow */
+  background-color: rgba(106, 142, 35, 0.151); /* Light yellow */
 }
 
 .register-form label,
@@ -127,7 +74,7 @@ nav a:hover {
   border: none;
   border-radius: 5px;
   background-color: #f0e68c; /* Khaki */
-  color: #fff;
+  color: white;
   cursor: pointer;
 }
 
@@ -149,56 +96,7 @@ nav a:hover {
   }
 }
 
-.sidebar {
-  width: 250px;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: -250px; /* Initially hide the sidebar */
-  background-color: #333;
-  padding-top: 20px;
-  color: #fff;
-  transition: left 0.3s ease; /* Smooth transition for opening and closing */
-}
 
-.sidebar.open {
-  left: 0; /* Slide in the sidebar when it's open */
-}
-
-.toggle-btn {
-  position: absolute;
-  top: 20px;
-  left: 10px;
-  font-size: 20px;
-  background-color: #222; /* Darker background color */
-  border: none;
-  color: #fff;
-  cursor: pointer;
-}
-.sidebar-content ul {
-  list-style-type: none; /* Remove bullets */
-  padding: 0;
-  margin: 0; /* Optional: Remove default margin */
-}
-
-.sidebar-content ul li {
-  padding: 10px 0;
-}
-
-.sidebar-content ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-.logout-container {
-  position: absolute;
-  bottom: 50px;
-  left: 20px;
-}
-
-.logout-container a {
-  color: #fff;
-  text-decoration: none;
-}
 
 .modal {
   display: none;
@@ -263,5 +161,7 @@ nav a:hover {
 .organization-table tr:hover {
   background-color: #ddd;
 }
+
+
 
 
