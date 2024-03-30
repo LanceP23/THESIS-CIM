@@ -3,6 +3,14 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+<<<<<<< Updated upstream
+=======
+import StaffRegistration from '../RegistrationModals/StaffRegistration'; 
+import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
+import StudentRegistration from '../RegistrationModals/StudentRegistration';
+import Sidebar from '../components/Sidebar'; // Import Sidebar component
+import './Register.css'
+>>>>>>> Stashed changes
 
 export default function Register() {
   const navigate = useNavigate();
@@ -68,6 +76,7 @@ export default function Register() {
   };
 
   return (
+<<<<<<< Updated upstream
     <div className='register-form'>
       <Navbar />
       <form onSubmit={registerAdmin}>
@@ -138,6 +147,46 @@ export default function Register() {
         )}
         <button type='submit'>Register</button>
       </form>
+=======
+    <div>
+      <Sidebar adminType={data.adminType} /> {/* Pass adminType as prop */}
+
+      <div className="button_container">
+      <button onClick={() => handleRegistrationType('staff')} className = 'register_button'>Staff Registration</button>
+        <button onClick={() => handleRegistrationType('faculty')} className = 'register_button'>Faculty Registration</button>
+        <button onClick={() => handleRegistrationType('student')} className = 'register_button'>Student Registration</button>
+      </div>
+      <div className='register-form'>
+        {registrationType === 'staff' && (
+          <StaffRegistration
+            data={data}
+            setData={setData}
+            organizations={organizations}
+            registerAdmin={registerAdmin}
+            handleAdminTypeChange={handleAdminTypeChange}
+          />
+        )}
+        {registrationType === 'faculty' && (
+          <FacultyRegistration
+            data={data}
+            setData={setData}
+          />
+        )}
+        {registrationType === 'student' && (
+          <StudentRegistration
+            data={data}
+            setData={setData}
+            organizations={organizations}
+            registerAdmin={registerAdmin}
+          />
+        )}
+
+        
+       
+      </div>
+
+      
+>>>>>>> Stashed changes
     </div>
   );
 }

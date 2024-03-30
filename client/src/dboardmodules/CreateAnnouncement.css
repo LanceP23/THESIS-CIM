@@ -140,5 +140,35 @@
     color: #fff !important; /* Text color when clicked or hovered */
   }
 
+  
+  
+ 
+  .recent_post_container li {
+    margin-bottom: 20px; 
+    
+  }
+
+  .recent_post_container {
+    width: 100%; 
+    padding: 10px; 
+    background-color: #388e3c; 
+    height: auto;
+  }
+  
+  
+  .recent_post_container ul {
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  
+  
+  
+  .container_2 img,
+  .container_2 video {
+    max-width: 100%; 
+    height: auto; 
+  }
+  
  
  

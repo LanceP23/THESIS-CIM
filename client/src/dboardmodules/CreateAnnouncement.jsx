@@ -131,6 +131,52 @@ export default function CreateAnnouncement() {
 
       </Container>
 
+<<<<<<< Updated upstream
+=======
+                <div className='recent_post_container'>
+                  <h3>Recent Posts</h3>
+                  
+                  <div className="container_1">
+                  <ul>
+                  {approvedAnnouncements.slice(0, 3).map((announcement) => {
+                      return (
+                        <li key={announcement._id}>
+                          <h4>{announcement.header}</h4>
+                          <p>{announcement.body}</p>
+                          {announcement.media && announcement.media.data ? (
+                            <div className="container_2">
+                              <p>Media:</p>
+                              {announcement.media.contentType.startsWith('image') ? (
+                                <img src={`data:${announcement.media.contentType};base64,${announcement.media.data}`} alt="Media" />
+                              ) : (
+                                <video controls>
+                                  <source src={`data:${announcement.media.contentType};base64,${announcement.media.data}`} type={announcement.media.contentType} />
+                                </video>
+                              )}
+                            </div>
+                          ) : (
+                            <p>No media available</p>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  </div>
+                  
+                </div>
+              </Tab>
+              <Tab eventKey='tab-2' title='Event' className='tabs'>
+                Event
+              </Tab>
+              {adminType2 === 'School Owner' && (
+                <Tab eventKey='tab-3' title='Post Approval' className='tabs'>
+                  <PostApproval />
+                </Tab>
+              )}
+            </Tabs>
+          </Row>
+        </div>
+>>>>>>> Stashed changes
 
       </div>
 
