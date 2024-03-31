@@ -4,6 +4,7 @@ const cors = require('cors');
 const {mongoose} = require('mongoose')
 const app = express();
 const cookieParser = require('cookie-parser')
+const path = require('path');
 
 //db connection
 mongoose.connect(process.env.MONGO_URL)
@@ -15,7 +16,7 @@ mongoose.connect(process.env.MONGO_URL)
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
-
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 
 app.use('/', require('./routes/authRouter'))

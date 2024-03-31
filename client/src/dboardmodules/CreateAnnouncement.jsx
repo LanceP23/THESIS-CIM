@@ -176,14 +176,14 @@ export default function CreateAnnouncement() {
                         <li key={announcement._id}>
                           <h4>{announcement.header}</h4>
                           <p>{announcement.body}</p>
-                          {announcement.media && announcement.media.data ? (
+                          {announcement.media && announcement.media.path ? (
                             <div>
                               <p>Media:</p>
                               {announcement.media.contentType.startsWith('image') ? (
-                                <img src={URL.createObjectURL(new Blob([new Uint8Array(announcement.media.data)], { type: announcement.media.contentType }))} alt="Announcement Media" />
+                                <img src={`http://localhost:8000/${announcement.media.path}`} alt="Announcement Media" />
                               ) : (
                                 <video controls>
-                                  <source src={URL.createObjectURL(new Blob([new Uint8Array(announcement.media.data)], { type: announcement.media.contentType }))} type={announcement.media.contentType} />
+                                  <source src={`http://localhost:8000/${announcement.media.path}`} type={announcement.media.contentType} />
                                 </video>
                               )}
                             </div>

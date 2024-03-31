@@ -47,17 +47,14 @@ r
 const createAnnouncement = async (req, res) => {
   try {
     const { header, body } = req.body;
-    let media = null;
+    let mediaPath = null;
     let status = 'pending';
 
     if (req.file) {
-      media = {
-        data: req.file.buffer.toString('base64'), 
-        contentType: req.file.mimetype // Store content type
-      };
-      
+      // Save the file to the filesystem and get the path
+      mediaPath = req.file.path;
     }
-  console.log(media);
+
     if (req.user.adminType === 'School Owner') {
       status = 'approved';
     }
@@ -65,7 +62,10 @@ const createAnnouncement = async (req, res) => {
     const announcement = new Announcement({
       header,
       body,
-      media,
+      media: {
+        path: mediaPath,
+        contentType: req.file.mimetype
+      },
       status,
       postedBy: req.user.email
     });

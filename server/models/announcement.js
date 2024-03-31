@@ -10,7 +10,7 @@ const announcementSchema = new mongoose.Schema({
     required: true
   },
   media: {
-    data: Buffer,
+    path: String,
     contentType: String
   },
   postedBy:{
