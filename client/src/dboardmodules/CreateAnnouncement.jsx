@@ -34,6 +34,7 @@ export default function CreateAnnouncement() {
   const [adminType, setAdminType] = useState('');
   const [approvedAnnouncements, setApprovedAnnouncements] = useState([]);
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
 
   const adminType2 = localStorage.getItem('adminType');
 
@@ -98,7 +99,12 @@ export default function CreateAnnouncement() {
   };
 
   const handleSubmit = async () => {
+    if(submitting){
+      return;
+    }
     try {
+      setSubmitting(true);
+      toast.loading('Uploading...');
       const token = document.cookie.split('; ').find(row => row.startsWith('token='));
       if (!token) {
         throw new Error('No token found');
@@ -119,6 +125,7 @@ export default function CreateAnnouncement() {
         },
         (error) => {
           // Handle unsuccessful upload
+          toast.dismiss();
           throw new Error('Error uploading media:', error);
         },
         async () => {
@@ -157,6 +164,8 @@ export default function CreateAnnouncement() {
             // Handle errors during announcement submission
             toast.error('Error creating announcement');
             console.error('Error creating announcement:', error);
+          }finally{
+            setSubmitting(false);
           }
         }
       );
