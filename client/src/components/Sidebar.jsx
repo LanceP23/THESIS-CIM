@@ -70,14 +70,8 @@ export default function Sidebar() {
     
             
               <li>
-                <Link to="/createannouncement" onClick={closeSidebar} className='sidebar_button ' >
+                <Link to="" onClick={closeSidebar} className='sidebar_button ' >
                   My Community
-                </Link>
-              </li>
-
-               <li>
-                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
-                  School Calendar
                 </Link>
               </li>
 
@@ -89,7 +83,6 @@ export default function Sidebar() {
 
               <li>
                 <Link to="" onClick={closeSidebar} className='sidebar_button  '>
-                
                   Analytics Report
                 </Link>
               </li>
@@ -99,8 +92,8 @@ export default function Sidebar() {
                 </Link>
               </li>
               <li>
-                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
-                  User Management
+                <Link to="/createannouncement" onClick={closeSidebar} className='sidebar_button  '>
+                  Post Management
                 </Link>
               </li>
               <li>

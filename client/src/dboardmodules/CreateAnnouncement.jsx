@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { initializeApp } from 'firebase/app';
 import 'firebase/storage';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import CreateEvent from './CreateEvent';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQZQtWzdKepDwzzhOAw_F8A4xkhtwz9p0",
@@ -246,7 +247,7 @@ export default function CreateAnnouncement() {
                 </div>
               </Tab>
               <Tab eventKey='tab-2' title='Event' className='tabs'>
-                Event
+              <CreateEvent />
               </Tab>
               {adminType2 === 'School Owner' && (
                 <Tab eventKey='tab-3' title='Post Approval' className='tabs'>

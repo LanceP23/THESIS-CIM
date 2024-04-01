@@ -8,6 +8,7 @@ const { createOrganization, authenticateUser, getOrganization, approveOfficer } 
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
+const {postEventController,getEventsController} = require('../controllers/postEventController');
 
 router.use(
     cors({
@@ -56,5 +57,9 @@ router.put('/users/:id/update', updateUser);
 
 //deleteAdminAccount
 router.delete('/users/:id/delete', deleteUser);
+
+//event creation
+router.post('/events', authenticateUser, postEventController);
+router.get('/fetch-event', getEventsController);
 
 module.exports = router;
