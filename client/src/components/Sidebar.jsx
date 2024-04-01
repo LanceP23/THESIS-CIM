@@ -90,7 +90,7 @@ export default function Sidebar({adminType}) {
               </li>
 
                <li>
-                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                <Link to="/calendarevent" onClick={closeSidebar} className='sidebar_button  '>
                   School Calendar
                 </Link>
               </li>

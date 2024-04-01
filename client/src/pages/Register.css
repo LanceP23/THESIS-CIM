@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 .register_button{
     background-color: #4caf50;
     margin:10px;
@@ -10,3 +11,49 @@
     margin:10px;
     
 }
+=======
+.Account_registration_container{
+    display: flex;
+   
+    background-color: #C3E5CC;
+}
+
+.button_container{
+  
+    
+
+}
+
+.register_button{
+    background-color: #388e3c;
+    margin: 10px;
+    border-radius: 5px;
+
+    
+   
+}
+
+.register_button:hover{
+    background-color: #b4b6b48f;
+    margin: 10px;
+    border-radius: 5px;
+    color:#388e3c;
+  
+
+}
+
+.registered_accounts_container{
+    background-color: #C3E5CC;
+    margin-left: 100px;
+   
+    
+}
+.register_accounts{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+
+}
+>>>>>>> Stashed changes

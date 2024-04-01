@@ -138,6 +138,7 @@ export default function CreateAnnouncement() {
                   
                   <div className="container_1">
                   <ul>
+<<<<<<< Updated upstream
                   {approvedAnnouncements.slice(0, 3).map((announcement) => {
                       return (
                         <li key={announcement._id}>
@@ -145,6 +146,14 @@ export default function CreateAnnouncement() {
                           <p>{announcement.body}</p>
                           {announcement.media && announcement.media.data ? (
                             <div className="container_2">
+=======
+                      {approvedAnnouncements.slice(0, 3).map((announcement) => (
+                        <div key={announcement._id} className="announcement">
+                          <h4> Header: {announcement.header}</h4>
+                          <p> Body: {announcement.body}</p>
+                          {announcement.media && announcement.media.path ? (
+                            <div className='retrieved_image'>
+>>>>>>> Stashed changes
                               <p>Media:</p>
                               {announcement.media.contentType.startsWith('image') ? (
                                 <img src={`data:${announcement.media.contentType};base64,${announcement.media.data}`} alt="Media" />
@@ -157,12 +166,19 @@ export default function CreateAnnouncement() {
                           ) : (
                             <p>No media available</p>
                           )}
+<<<<<<< Updated upstream
                         </li>
                       );
                     })}
                   </ul>
                   </div>
                   
+=======
+                        </div>
+                      ))}
+                    </ul>
+
+>>>>>>> Stashed changes
                 </div>
               </Tab>
               <Tab eventKey='tab-2' title='Event' className='tabs'>

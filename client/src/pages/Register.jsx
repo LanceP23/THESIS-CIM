@@ -8,10 +8,16 @@ import Navbar from '../components/Navbar';
 import StaffRegistration from '../RegistrationModals/StaffRegistration'; 
 import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
 import StudentRegistration from '../RegistrationModals/StudentRegistration';
+<<<<<<< Updated upstream
 import Sidebar from '../components/Sidebar'; // Import Sidebar component
 import './Register.css'
 >>>>>>> Stashed changes
 
+=======
+import Sidebar from '../components/Sidebar'; 
+import RegisteredAccounts from '../RegisteredAdmins/RegisteredAccounts';
+import './Register.css'
+>>>>>>> Stashed changes
 export default function Register() {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -76,6 +82,7 @@ export default function Register() {
   };
 
   return (
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     <div className='register-form'>
       <Navbar />
@@ -156,7 +163,23 @@ export default function Register() {
         <button onClick={() => handleRegistrationType('faculty')} className = 'register_button'>Faculty Registration</button>
         <button onClick={() => handleRegistrationType('student')} className = 'register_button'>Student Registration</button>
       </div>
+=======
+    <div className='Account_registration_container'>
+      <Sidebar adminType={data.adminType} /> 
+      
+
+       <div className="register_form_container">
+
+       <div className="button_container">
+        <button onClick={() => handleRegistrationType('staff')} className = 'register_button'>Staff Registration</button>
+        <button onClick={() => handleRegistrationType('faculty')} className = 'register_button'>Faculty Registration</button>
+        <button onClick={() => handleRegistrationType('student')} className = 'register_button'>Student Registration</button>
+       </div>
+>>>>>>> Stashed changes
       <div className='register-form'>
+
+     
+
         {registrationType === 'staff' && (
           <StaffRegistration
             data={data}
@@ -182,10 +205,23 @@ export default function Register() {
         )}
 
         
+<<<<<<< Updated upstream
        
       </div>
 
       
+>>>>>>> Stashed changes
+=======
+        
+      </div>
+
+      </div>
+
+      <div className="registered_accounts_container">
+        <div className="registered_accounts">
+        <RegisteredAccounts />
+        </div>
+      </div>
 >>>>>>> Stashed changes
     </div>
   );

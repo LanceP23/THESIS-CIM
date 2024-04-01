@@ -10,11 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/react": "^6.1.11",
     "axios": "^1.6.7",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
+<<<<<<< Updated upstream
+=======
+    "react-bootstrap": "^2.10.2",
+    "react-datetime": "^3.2.0",
+>>>>>>> Stashed changes
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.22.2"
   },
   "devDependencies": {

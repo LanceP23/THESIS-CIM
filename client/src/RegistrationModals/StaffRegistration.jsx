@@ -1,7 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+<<<<<<< Updated upstream
 import './register.css'
+=======
+import './RegisterModals.css'
+>>>>>>> Stashed changes
 
 const StaffRegistration = ({ data, setData }) => {
   const handleSubmit = async (e) => {
@@ -42,7 +46,11 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.name}
           onChange={(e) => setData({ ...data, name: e.target.value })}
           required
+<<<<<<< Updated upstream
           className = 'input_field'
+=======
+          className='input_field'
+>>>>>>> Stashed changes
         />
         <label>Email</label>
         <input
@@ -50,7 +58,11 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.studentemail}
           onChange={(e) => setData({ ...data, studentemail: e.target.value })}
           required
+<<<<<<< Updated upstream
           className = 'input_field'
+=======
+          className='input_field_email'
+>>>>>>> Stashed changes
         />
         <label>Password</label>
         <input
@@ -58,7 +70,11 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.password}
           onChange={(e) => setData({ ...data, password: e.target.value })}
           required
+<<<<<<< Updated upstream
           className = 'input_field'
+=======
+          className='input_field'
+>>>>>>> Stashed changes
         />
         <label>Admin Type</label>
         <select value={data.adminType} onChange={handleAdminTypeChange}>
@@ -73,7 +89,11 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.schoolYear}
           onChange={(e) => setData({ ...data, schoolYear: e.target.value })}
           required
+<<<<<<< Updated upstream
           className = 'input_field'
+=======
+          className='input_field'
+>>>>>>> Stashed changes
         />
         <button type='submit'>Register</button>
       </form>
