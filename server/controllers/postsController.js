@@ -2,6 +2,7 @@ const Announcement = require('../models/announcement');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const axios = require('axios');
 
 
 
@@ -46,26 +47,36 @@ r
 // Create Announcement
 const createAnnouncement = async (req, res) => {
   try {
-    const { header, body } = req.body;
-    let mediaPath = null;
-    let status = 'pending';
+    const { header, body, mediaUrl } = req.body;
+    let contentType = null;
 
-    if (req.file) {
-      // Save the file to the filesystem and get the path
-      mediaPath = req.file.path;
-    }
+    let status = 'pending';
 
     if (req.user.adminType === 'School Owner') {
       status = 'approved';
     }
 
+    // Extract contentType from uploaded file
+    if (req.file && req.file.mimetype) {
+      contentType = req.file.mimetype;
+    }
+
+    // Extract contentType from mediaUrl
+    if (mediaUrl) {
+      const response = await axios.head(mediaUrl);
+      const contentTypeFromUrl = response.headers['content-type'];
+      if (contentTypeFromUrl) {
+        contentType = contentTypeFromUrl;
+      }
+    }
+
+    console.log('Inferred contentType:', contentType);
+
     const announcement = new Announcement({
       header,
       body,
-      media: {
-        path: mediaPath,
-        contentType: req.file.mimetype
-      },
+      mediaUrl,
+      contentType,
       status,
       postedBy: req.user.email
     });
@@ -82,8 +93,7 @@ const createAnnouncement = async (req, res) => {
 
 
 
-
-
+//fetch pending announcement
 const getPendingAnnouncements = async (req, res) => {
   try {
     const pendingAnnouncements = await Announcement.find({ status: 'pending' });
@@ -94,6 +104,7 @@ const getPendingAnnouncements = async (req, res) => {
   }
 };
 
+//update Status upon approval
 const updateAnnouncementStatus = async (req, res) => {
   try {
     const { announcementId } = req.params; 

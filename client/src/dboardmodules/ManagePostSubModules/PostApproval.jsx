@@ -115,14 +115,14 @@ export default function PostApproval({ adminType }) {
           <h2>{selectedAnnouncement.header}</h2>
           <p>Posted by: {selectedAnnouncement.postedBy}</p>
           <p>{selectedAnnouncement.body}</p>
-          {selectedAnnouncement.media && (
+          {selectedAnnouncement.mediaUrl && (
             <div>
-              {selectedAnnouncement.media.contentType.startsWith('image') && (
-                <img src={`data:${selectedAnnouncement.media.contentType};base64,${selectedAnnouncement.media.data.toString('base64')}`} alt="Media" />
+              {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
+                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" />
               )}
-              {selectedAnnouncement.media.contentType.startsWith('video') && (
+              {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
                 <video controls>
-                  <source src={`data:${selectedAnnouncement.media.contentType};base64,${selectedAnnouncement.media.data.toString('base64')}`} type={selectedAnnouncement.media.contentType} />
+                  <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
                   Your browser does not support the video tag.
                 </video>
               )}

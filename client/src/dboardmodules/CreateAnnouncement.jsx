@@ -7,6 +7,22 @@ import PostApproval from '../dboardmodules/ManagePostSubModules/PostApproval';
 import './CreateAnnouncement.css';
 import { Container, Row, Tabs, Tab } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { initializeApp } from 'firebase/app';
+import 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAQZQtWzdKepDwzzhOAw_F8A4xkhtwz9p0",
+  authDomain: "cim-storage.firebaseapp.com",
+  projectId: "cim-storage",
+  storageBucket: "cim-storage.appspot.com",
+  messagingSenderId: "616767248215",
+  appId: "1:616767248215:web:b554a837f3229fdc155012",
+  measurementId: "G-YN9S75JSNB"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
 
 export default function CreateAnnouncement() {
   const [header, setHeader] = useState('');
@@ -86,34 +102,65 @@ export default function CreateAnnouncement() {
       if (!token) {
         throw new Error('No token found');
       }
-
-      const formData = new FormData();
-      formData.append('header', header);
-      formData.append('body', body);
-      formData.append('media', media);
-
-      const response = await axios.post('/announcements', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token.split('=')[1]}`, // Extract token value from cookie
-        },
-      });
-
-      
-      if (adminType2 !== 'School Owner') {
-        toast.success('Your post is pending approval');
-      } else {
-        toast.success('Announcement created successfully');
+  
+      // Ensure media file is selected
+      if (!media) {
+        throw new Error('No media file selected');
       }
+  
+      const storageRef = ref(storage, media.name);
+      // Upload the media file to Firebase storage
+      const uploadTask = uploadBytesResumable(storageRef, media);
+  
 
-      // Reset form fields and image preview
-      setHeader('');
-      setBody('');
-      setMedia(null);
-      setMediaPreview(null);
-
+      uploadTask.on('state_changed',
+        (snapshot) => {
+        },
+        (error) => {
+          // Handle unsuccessful upload
+          throw new Error('Error uploading media:', error);
+        },
+        async () => {
+          // Handle successful upload
+          try {
+            // Get the download URL for the uploaded file
+            const mediaUrl = await getDownloadURL(uploadTask.snapshot.ref);
+  
+            // Create form data with announcement details
+            const formData = new FormData();
+            formData.append('header', header);
+            formData.append('body', body);
+            formData.append('mediaUrl', mediaUrl);
+  
+            // Post the announcement data to your server
+            const response = await axios.post('/announcements', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token.split('=')[1]}`,
+              },
+            });
+  
+            // Reset form fields and image preview after successful submission
+            setHeader('');
+            setBody('');
+            setMedia(null);
+            setMediaPreview(null);
+  
+            // Show success message
+            if (adminType2 !== 'School Owner') {
+              toast.success('Your post is pending approval');
+            } else {
+              toast.success('Announcement created successfully');
+            }
+          } catch (error) {
+            // Handle errors during announcement submission
+            toast.error('Error creating announcement');
+            console.error('Error creating announcement:', error);
+          }
+        }
+      );
     } catch (error) {
-      // Show toast message on error
+      // Handle errors in token retrieval or media selection
       toast.error('Error creating announcement');
       console.error('Error creating announcement:', error);
     }
@@ -176,15 +223,17 @@ export default function CreateAnnouncement() {
                         <li key={announcement._id}>
                           <h4>{announcement.header}</h4>
                           <p>{announcement.body}</p>
-                          {announcement.media && announcement.media.path ? (
+                          {announcement.mediaUrl ? (
                             <div>
                               <p>Media:</p>
-                              {announcement.media.contentType.startsWith('image') ? (
-                                <img src={`http://localhost:8000/${announcement.media.path}`} alt="Announcement Media" />
-                              ) : (
+                              {announcement.contentType && announcement.contentType.startsWith('image') ? (
+                                <img src={announcement.mediaUrl} alt="Announcement Media" />
+                              ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
                                 <video controls>
-                                  <source src={`http://localhost:8000/${announcement.media.path}`} type={announcement.media.contentType} />
+                                  <source src={announcement.mediaUrl} type={announcement.contentType} />
                                 </video>
+                              ) : (
+                                <p>No media available</p>
                               )}
                             </div>
                           ) : (

@@ -9,9 +9,11 @@ const announcementSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  media: {
-    path: String,
-    contentType: String
+  mediaUrl: {
+    type: String 
+  },
+  contentType: {
+    type: String 
   },
   postedBy:{
     type:String,
