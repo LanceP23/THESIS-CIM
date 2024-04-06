@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import './RegisterModal.css'
 
 const StaffRegistration = ({ data, setData }) => {
   const handleSubmit = async (e) => {
@@ -41,6 +42,7 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.name}
           onChange={(e) => setData({ ...data, name: e.target.value })}
           required
+          className='input_field'
         />
         <label>Email</label>
         <input
@@ -48,6 +50,7 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.studentemail}
           onChange={(e) => setData({ ...data, studentemail: e.target.value })}
           required
+          className='input_field_email'
         />
         <label>Password</label>
         <input
@@ -55,6 +58,7 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.password}
           onChange={(e) => setData({ ...data, password: e.target.value })}
           required
+          className='input_field'
         />
         <label>Admin Type</label>
         <select value={data.adminType} onChange={handleAdminTypeChange}>
@@ -69,6 +73,7 @@ const StaffRegistration = ({ data, setData }) => {
           value={data.schoolYear}
           onChange={(e) => setData({ ...data, schoolYear: e.target.value })}
           required
+          className='input_field'
         />
         <button type='submit'>Register</button>
       </form>

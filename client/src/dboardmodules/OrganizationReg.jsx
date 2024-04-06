@@ -3,6 +3,8 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
+import './OrganizationReg.css'
+import Modal from 'react-modal';
 
 export default function OrganizationReg() {
   const navigate = useNavigate();
@@ -96,14 +98,20 @@ export default function OrganizationReg() {
   return (
     <div>
       <Sidebar adminType={adminType2} /> 
+
+    
+
+      <div className="Manage_org_container">
       <h2>Manage Organizations</h2>
-      <button onClick={() => setShowModal(true)}>Add Organization</button>
+      
       {organizations.length === 0 && <p>No organizations yet.</p>}
+      
       <div className={`modal ${showModal ? 'show' : ''}`}>
         <div className="modal-content">
           <span className="close" onClick={() => setShowModal(false)}>&times;</span>
           <h2>Create a School Organization</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className='Org_form'>
+            <div className="Org_name_field">
             <label htmlFor="organizationName">Organization Name:</label>
             <input
               type="text"
@@ -113,7 +121,8 @@ export default function OrganizationReg() {
               onChange={handleInputChange}
               required
             />
-
+            </div>
+            <div className="Org_name_field">
             <label htmlFor="schoolYear">School Year:</label>
             <input
               type="text"
@@ -123,7 +132,8 @@ export default function OrganizationReg() {
               onChange={handleInputChange}
               required
             />
-
+            </div>
+            <div className="Org_name_field">
             <label htmlFor="semester">Semester:</label>
             <input
               type="text"
@@ -133,15 +143,21 @@ export default function OrganizationReg() {
               onChange={handleInputChange}
               required
             />
+            </div>
 
             <button type="submit">Create Organization</button>
           </form>
+          
         </div>
+        
       </div>
+      
+      
       {organizations.length > 0 && (
+        <div className="org_table_container">
         <table className="organization-table">
           <thead>
-            <tr>
+            <tr className='table_header'>
               <th>Organization Name</th>
               <th>School Year</th>
               <th>Semester</th>
@@ -165,7 +181,12 @@ export default function OrganizationReg() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
+      <button onClick={() => setShowModal(true)} className='Add_button'>Add Organization</button>
+      </div>
+      
     </div>
+    
   );
 }

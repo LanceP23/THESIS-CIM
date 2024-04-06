@@ -8,7 +8,7 @@ import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
 import StudentRegistration from '../RegistrationModals/StudentRegistration';
 import Sidebar from '../components/Sidebar'; 
 import RegisteredAccounts from '../RegisteredAdmins/RegisteredAccounts';
-
+import './Register.css'
 export default function Register() {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -84,9 +84,21 @@ export default function Register() {
   };
 
   return (
-    <div>
+    <div className='Account_registration_container'>
       <Sidebar adminType={data.adminType} /> 
+      
+
+       <div className="register_form_container">
+
+       <div className="button_container">
+        <button onClick={() => handleRegistrationType('staff')} className = 'register_button'>Staff Registration</button>
+        <button onClick={() => handleRegistrationType('faculty')} className = 'register_button'>Faculty Registration</button>
+        <button onClick={() => handleRegistrationType('student')} className = 'register_button'>Student Registration</button>
+       </div>
       <div className='register-form'>
+
+     
+
         {registrationType === 'staff' && (
           <StaffRegistration
             data={data}
@@ -111,11 +123,16 @@ export default function Register() {
           />
         )}
         
-        <button onClick={() => handleRegistrationType('staff')}>Staff Registration</button>
-        <button onClick={() => handleRegistrationType('faculty')}>Faculty Registration</button>
-        <button onClick={() => handleRegistrationType('student')}>Student Registration</button>
+        
       </div>
-      <RegisteredAccounts />
+
+      </div>
+
+      <div className="registered_accounts_container">
+        <div className="registered_accounts">
+        <RegisteredAccounts />
+        </div>
+      </div>
     </div>
   );
 }

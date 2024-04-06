@@ -230,11 +230,12 @@ export default function CreateAnnouncement() {
                   <ul>
                     {approvedAnnouncements.slice(0, 3).map((announcement) => {
                       return (
-                        <li key={announcement._id}>
-                          <h4>{announcement.header}</h4>
-                          <p>{announcement.body}</p>
+                        <div key={announcement._id} className='announcement'>
+                          <h4> Header: {announcement.header}</h4>
+                          <p> Body: {announcement.body}</p>
                           {announcement.mediaUrl ? (
                             <div>
+                              
                               <p>Media:</p>
                               {announcement.contentType && announcement.contentType.startsWith('image') ? (
                                 <img src={announcement.mediaUrl} alt="Announcement Media" />
@@ -249,7 +250,7 @@ export default function CreateAnnouncement() {
                           ) : (
                             <p>No media available</p>
                           )}
-                        </li>
+                        </div>
                       );
                     })}
                   </ul>

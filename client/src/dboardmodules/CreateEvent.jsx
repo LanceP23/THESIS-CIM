@@ -7,6 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import './CreateEvent.css'
 
 const customStyles = {
   overlay: {
@@ -40,6 +41,7 @@ const CreateEvent = () => {
   const [events, setEvents] = useState([]);
   const [authenticated, setAuthenticated] = useState(false);
   const[adminType, setAdminType] = useState('');
+  const[submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,6 +100,8 @@ const CreateEvent = () => {
 
   const handleEventCreate = async () => {
     try {
+      setSubmitting(true);
+      toast.loading('Creating Event...');
       const token = getToken();
       const response = await axios.post(
         '/events',
@@ -116,8 +120,11 @@ const CreateEvent = () => {
       console.log('Event created:', response.data);
       toast.success('Event Creation Successful!')
     } catch (error) {
+      toast.dismiss();
       console.error('Error creating event:', error);
       toast.error('Event Creation Failed',error);
+    } finally{
+      setSubmitting(false);
     }
   };
 
@@ -130,8 +137,8 @@ const CreateEvent = () => {
   };
 
   return (
-    <div>
-      <button onClick={handleOpenModal}>Add Event</button>
+    <div >
+      <button onClick={handleOpenModal} className='_button'>Add Event</button>
 
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin]}
@@ -145,45 +152,46 @@ const CreateEvent = () => {
         onRequestClose={handleCloseModal}
         style={customStyles}
         contentLabel="Event Details Modal"
+        
       >
         <h2>{selectedEvent ? 'Event Details' : 'Create Event'}</h2>
         {selectedEvent ? (
-          <div>
-            <p>Title: {selectedEvent.title}</p>
-            <p>Start Time: {moment(selectedEvent.start).format('MMMM Do YYYY, h:mm a')}</p>
-            <p>End Time: {moment(selectedEvent.end).format('MMMM Do YYYY, h:mm a')}</p>
+          <div className='display_event_container'>
+            <p> <strong>Title: </strong> {selectedEvent.title}</p>
+            <p><strong>Start Time: </strong> {moment(selectedEvent.start).format('MMMM Do YYYY, h:mm a')}</p>
+            <p><strong>End Time: </strong> {moment(selectedEvent.end).format('MMMM Do YYYY, h:mm a')}</p>
           </div>
         ) : (
-          <div>
-            <div>
+          <div className='display_event_container'>
+            <div className='event_content_1'>
               <label>
-                Event Name:
+               <strong>Event Name:</strong>
                 <input type="text" value={eventName} onChange={(e) => setEventName(e.target.value)} />
               </label>
             </div>
-            <div>
+            <div className='event_content_2'>
               <label>
-                Start Date:
+              <strong> Start Date:</strong>
                 <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
               </label>
               <label>
-                Start Time:
+                <strong>Start Time:</strong>
                 <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
               </label>
             </div>
-            <div>
+            <div className='event_content_3'>
               <label>
-                End Date:
+              <strong> End Date:</strong>
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
               </label>
               <label>
-                End Time:
+              <strong>End Time:</strong>
                 <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
               </label>
             </div>
-            <div>
+            <div className='event_content_4'>
               <label>
-                Event Type:
+              <strong>Event Type:</strong>
                 <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
                   <option value="">Select Event Type</option>
                   <option value="institutional">Institutional</option>
@@ -193,10 +201,11 @@ const CreateEvent = () => {
                 </select>
               </label>
             </div>
-            <button onClick={handleEventCreate}>Create</button>
+            
           </div>
         )}
-        <button onClick={handleCloseModal}>Close</button>
+        <button onClick={handleEventCreate} className='create_close_button'>Create</button>
+        <button onClick={handleCloseModal} className='create_close_button'>Close</button>
       </Modal>
     </div>
   );

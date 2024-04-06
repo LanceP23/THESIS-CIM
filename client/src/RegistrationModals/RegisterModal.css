@@ -1,0 +1,45 @@
+.input_field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    height: 30px;
+  }
+  
+  .input_field:focus {
+    outline: none;
+    border-color: khaki;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  select {
+    width: 335px;
+    padding: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .input_field_email {
+    width: 335px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    height: 30px;
+  }
+  .registration_form h2{
+    text-align: center;
+  }
+

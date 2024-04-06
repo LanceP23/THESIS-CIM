@@ -1,0 +1,41 @@
+.display_event_container{
+
+
+}
+
+._button{
+    border-radius: 10px;
+
+}
+
+.event_content_1{
+    
+    text-align: justify;
+    padding:5px;
+  
+}
+.event_content_2{
+    
+    text-align: center;
+    padding:5px;
+    
+}
+.event_content_3{
+
+    text-align: center;
+    padding:5px;
+    
+
+   
+}
+.event_content_4{
+    
+    text-align: justify;
+    padding:5px;
+}
+
+.create_close_button{
+    border-radius: 10px;
+    margin: 10px;
+  
+}
