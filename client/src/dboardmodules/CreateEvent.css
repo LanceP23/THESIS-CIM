@@ -1,5 +1,13 @@
-.display_event_container{
-
+.create_event_container{
+    text-align: left;
+    
+    padding: 20px;
+    border-radius: 20px ;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 100px;
+    background-image: linear-gradient(to right, #C3E5CC, rgba(240, 230, 140, 0.452));
+    animation: moveBackground 10s linear infinite;
 
 }
 
@@ -8,34 +16,87 @@
 
 }
 
-.event_content_1{
-    
-    text-align: justify;
-    padding:5px;
-  
-}
-.event_content_2{
-    
-    text-align: center;
-    padding:5px;
-    
-}
-.event_content_3{
-
-    text-align: center;
-    padding:5px;
-    
-
-   
-}
-.event_content_4{
-    
-    text-align: justify;
-    padding:5px;
+.input__field{
+    padding: 5px;
+    border-radius: 10px;
+    width: 200px;
 }
 
 .create_close_button{
     border-radius: 10px;
     margin: 10px;
   
+}
+.custom-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+
+.modal_container{
+    background-color: whitesmoke;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add box shadow here */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    
+    padding: 20px;
+    text-align: center;
+    z-index: 1001; /* This z-index ensures the modal content appears above the overlay */
+    max-height: 100vh;
+    
+   
+
+}
+
+.details_container {
+    padding: 10px;
+    background-image: linear-gradient(to right, #C3E5CC, rgba(240, 230, 140, 0.438));
+    animation: moveBackground 5s linear infinite;
+  }
+  
+  @keyframes moveBackground {
+    0% {
+      background-position: 0 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0 50%;
+    }
+  }
+ 
+
+.first-col{
+    padding: 20px;
+}
+
+.second_col{
+    text-align: left;
+}
+
+.second_column_container{
+    
+    padding: 5px;
+    height: 400px;
+    overflow-y:auto;
+ 
+    
+
+}
+
+.add_remove_button{
+    margin: 5px;
+    border-radius:10px;
+    padding: 10px;
+}
+.add_remove_button:hover{
+    background-color: green;
+}
+
+.create_close_button:hover{
+    background-color: green;
+
 }
