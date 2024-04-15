@@ -70,13 +70,13 @@ export default function Sidebar() {
     
             
               <li>
-                <Link to="" onClick={closeSidebar} className='sidebar_button ' >
+                <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button ' >
                   My Community
                 </Link>
               </li>
 
               <li>
-                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                <Link to="/chat" onClick={closeSidebar} className='sidebar_button  '>
                  Campus Comms
                 </Link>
               </li>

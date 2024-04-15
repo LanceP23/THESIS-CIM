@@ -39,10 +39,12 @@ const Login = () => {
             if (error) {
                 toast.error(error); 
             } else {
-                toast.success('Login Successful!');
+                
                 localStorage.setItem('adminType', adminType);
-                navigate('/dashboard');
                 window.location.reload();
+                navigate('/dashboard');
+                toast.success('Login Successful!');
+                
             }
         } catch (error) {
             // Check if the error is a 401 (Unauthorized) error

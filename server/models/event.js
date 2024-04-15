@@ -17,15 +17,24 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  organizerType: {
+    type: String,
     required: true
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  organizerName: {
+    type: String,
+    required: true
+  },
+  participants: [{
+    name: String,
+    section: String,
+    type: String,
+    members: [String]
+  }],
+  committee: String,
+  committeeChairman: String,
+  location: String,
+  budget: String
 });
 
 const Event = mongoose.model('Event', eventSchema);

@@ -5,6 +5,9 @@ const {mongoose} = require('mongoose')
 const app = express();
 const cookieParser = require('cookie-parser')
 const path = require('path');
+const socketIo = require('socket.io');
+const {initializeSocket} = require('./socketManager');
+
 
 //db connection
 mongoose.connect(process.env.MONGO_URL)
@@ -19,7 +22,10 @@ app.use(express.urlencoded({extended: false}))
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 
-app.use('/', require('./routes/authRouter'))
+app.use('/', require('./routes/authRouter'));
 
 const port = 8000;
-app.listen(port, ()=> console.log('Ang server na ito ay tumatakbo sa server na '+port))
+const server = app.listen(port, ()=> console.log('Ang server na ito ay tumatakbo sa server na '+port))
+
+initializeSocket(server);
+

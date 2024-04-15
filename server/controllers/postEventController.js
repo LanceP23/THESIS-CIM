@@ -1,23 +1,52 @@
 const Event = require('../models/event');
-const User = require('../models/user');
+const Organization = require('../models/organization');
+
 const postEventController = async (req, res) => {
   try {
-    const { title, start, end, eventType } = req.body;
+    // Destructure request body
+    const { title, start, end, eventType, organizerType, organizerName, participants, committee, committeeChairman, location, budget } = req.body;
 
-    if (!title || !start || !end || !eventType ) {
+    // Validate required fields
+    if (!title || !start || !end || !eventType || !organizerType || !organizerName || !participants || !committee || !committeeChairman || !location || !budget) {
       return res.status(400).json({ error: 'All fields are required' });
     }
-    
-    const createdBy = req.user.id;
 
+    // Validate participants format
+    if (!Array.isArray(participants) || participants.length === 0) {
+      return res.status(400).json({ error: 'Participants must be provided as an array' });
+    }
+
+    // Convert participants array to string
+    const participantsString = JSON.stringify(participants);
+
+    // Check if the organizer is an existing organization
+    let organizerId;
+    if (organizerType === 'Organization') {
+      const organizerExists = await Organization.findOne({ name: organizerName });
+      if (!organizerExists) {
+        return res.status(404).json({ error: 'Organizer not found' });
+      }
+      organizerId = organizerExists._id;
+    }
+
+    // Create the new event
+    const createdBy = req.user.id;
     const newEvent = new Event({
       title,
       start,
       end,
       eventType,
+      organizerType,
+      organizerName,
+      participants: participantsString, // Assign the stringified participants
+      committee,
+      committeeChairman,
+      location,
+      budget,
       createdBy
     });
 
+    // Save the new event to the database
     const savedEvent = await newEvent.save();
 
     return res.status(201).json(savedEvent);
@@ -28,20 +57,19 @@ const postEventController = async (req, res) => {
 };
 
 const getEventsController = async (req, res) => {
-    try {
-      // Fetch events from the database
-      const events = await Event.find();
-      // Return the events to the client
-      return res.status(200).json(events);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
-  
-  
+  try {
+    // Fetch events from the database
+    const currentDate = new Date(); // Get the current date and time
+    const events = await Event.find({ end: { $gte: currentDate } }); // Filter out events that have not ended yet
+    // Return the events to the client
+    return res.status(200).json(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
-    postEventController,
-    getEventsController
-}
+  postEventController,
+  getEventsController
+};

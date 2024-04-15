@@ -1,0 +1,58 @@
+.chat-app-container {
+    display: flex;
+    height: 100vh; /* Adjust height as needed */
+}
+
+.chat-sidebar {
+    flex: 1.5; /* Updated flex value */
+    background-color: #f0f0f0;
+    padding: 20px;
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+.chat-window {
+    flex: 4; /* Updated flex value */
+    background-color: #fff;
+    padding: 20px;
+    border-left: 1px solid #ccc; /* Add a border between sidebar and chat window */
+}
+
+.chat-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.chat-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Add a border between user items */
+}
+
+.chat-item:hover {
+    background-color: #f9f9f9;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.chat-input-container {
+    position: relative;
+    margin-top: 20px;
+}
+
+.message-input {
+    position: absolute;
+    bottom: -700px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+}
+
+
+.chat-input:focus {
+    outline: none;
+    border-color: #007bff; /* Change border color on focus */
+}

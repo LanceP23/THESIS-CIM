@@ -13,6 +13,8 @@ import ManageOfficers from './dboardmodules/ManageOrgSubModules/ManageOfficers';
 import CreateAnnouncement from './dboardmodules/CreateAnnouncement';
 import PostApproval from './dboardmodules/ManagePostSubModules/PostApproval';
 import Sidebar from './components/Sidebar';
+import ChatApp from './dboardmodules/ChatModule/ChatApp';
+import React, {useContext} from 'react';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -32,6 +34,7 @@ function App() {
         <Route path="/organization/:orgId/officers" element={<ManageOfficers />} />
         <Route path ="/createannouncement" element={<CreateAnnouncement/>}/>
         <Route exact path="/post-approval" component={PostApproval} />
+        <Route path="/chat" element={<ChatApp/>} />
       </Routes>
     </UserContextProvider>
   );

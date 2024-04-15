@@ -9,6 +9,17 @@ const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } 
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
 const {postEventController,getEventsController} = require('../controllers/postEventController');
+const { 
+  createChatRoom,
+  sendMessage,
+  getChatHistory,
+  getAllChatsForUser,
+  addParticipantsToChat,
+  leaveChat,
+  deleteChatRoom,
+  getUsers,
+  checkChatRoomExists
+} = require('../controllers/chatController');
 
 router.use(
     cors({
@@ -61,5 +72,17 @@ router.delete('/users/:id/delete', deleteUser);
 //event creation
 router.post('/events', authenticateUser, postEventController);
 router.get('/fetch-event', getEventsController);
+
+
+//Chat related
+router.get('/users', getUsers);
+router.post('/create-chat-room',authenticateUser, createChatRoom);
+router.post('/send-message', authenticateUser,sendMessage);
+router.get('/chat-history/:chatId', getChatHistory);
+router.get('/all-chats', getAllChatsForUser);
+router.post('/add-participants', addParticipantsToChat);
+router.post('/leave-chat', leaveChat);
+router.delete('/delete-chat-room/:chatRoomId',authenticateUser, deleteChatRoom);
+router.get('/chat-room/:userId/:adminId', checkChatRoomExists);
 
 module.exports = router;
