@@ -6,7 +6,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 100px;
-    background-image: linear-gradient(to right, #C3E5CC, rgba(240, 230, 140, 0.452));
+    background-image: linear-gradient(to right, #98D08F, #F6E929);
     animation: moveBackground 10s linear infinite;
 
 }
@@ -52,7 +52,7 @@
 
 .details_container {
     padding: 10px;
-    background-image: linear-gradient(to right, #C3E5CC, rgba(240, 230, 140, 0.438));
+    background-image: linear-gradient(to right,#98D08F, #F6E929);
     animation: moveBackground 5s linear infinite;
   }
   

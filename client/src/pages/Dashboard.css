@@ -1,5 +1,6 @@
+
 .dashboard-content{
-    background-color: #C3E5CC;
+    background-color: #98D08F;
     display: grid;
     grid-template-columns: 1fr 1fr; /* Two equal columns */
     margin-left: 100px;

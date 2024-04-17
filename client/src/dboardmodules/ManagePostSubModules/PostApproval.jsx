@@ -91,27 +91,7 @@ export default function PostApproval({ adminType }) {
     <div>
       <h2>Pending Announcements</h2>
       <button onClick={fetchPendingAnnouncements} className='approval_button'>Fetch Pending Announcements</button>
-      {isLoading ? (
-        <p>Loading pending announcements...</p>
-      ) : pendingAnnouncements.length > 0 ? (
-        <ul>
-          {pendingAnnouncements.map((announcement) => (
-            <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)}>
-              <h3>{announcement.header}</h3>
-              <p>Posted by: {announcement.postedBy}</p>
-             
-              {selectedAnnouncement && selectedAnnouncement._id === announcement._id && (
-                <div classname >
-                  <button onClick={handleApproval} className='approval_button'>Approve</button>
-                  <button onClick={handleRejection} className='approval_button'>Reject</button>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No pending announcements</p>
-      )}
+     
       {selectedAnnouncement && (
         <div className='approval_container'>
           
@@ -139,6 +119,27 @@ export default function PostApproval({ adminType }) {
           <p>{selectedAnnouncement.body}</p>
           </div>
           </div>
+
+          <div className="filler">
+
+          </div>
+          {isLoading ? (
+        <p>Loading pending announcements...</p>
+      ) : pendingAnnouncements.length > 0 ? (
+        <ul>
+       
+          
+             
+                <div className='approval_buttons_container'>
+                  <button onClick={handleApproval} className='approval_button'>Approve</button>
+                  <button onClick={handleRejection} className='approval_button'>Reject</button>
+                </div>
+              
+         
+        </ul>
+      ) : (
+        <p>No pending announcements</p>
+      )}
         </div>
       )}
     </div>

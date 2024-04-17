@@ -5,13 +5,14 @@
 
   color-scheme: light dark;
   color: #333; /* Dark gray */
-  background-color: #C3E5CC; /* Beige (off-white) */
+  
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 a {
   font-weight: 500;
@@ -25,7 +26,10 @@ a:hover {
 
 body {
   margin: 0;
-  background-color: #C3E5CC; /* Light green*/
+  background-color: #98D08F;
+  background-size: cover;
+  background-repeat: no-repeat;
+  
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -41,17 +45,5 @@ h1 {
 
 
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
 
 

@@ -316,6 +316,7 @@ const handleDateSelect = (selectInfo) => {
 
   return (
     <div>
+
       
 
       <FullCalendar
@@ -325,7 +326,9 @@ const handleDateSelect = (selectInfo) => {
         eventClick={handleEventClick} 
         selectable = {true}
         select={handleDateSelect}
+        
       />
+      
 
      <Modal
      isOpen={modalIsOpen || !!selectedDate} // Open the modal when a date is selected

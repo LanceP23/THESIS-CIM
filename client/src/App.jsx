@@ -14,29 +14,34 @@ import CreateAnnouncement from './dboardmodules/CreateAnnouncement';
 import PostApproval from './dboardmodules/ManagePostSubModules/PostApproval';
 import Sidebar from './components/Sidebar';
 import ChatApp from './dboardmodules/ChatModule/ChatApp';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 
 function App() {
+
+
+
   return (
+    <div >
     <UserContextProvider>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       <Sidebar />
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login  />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/createorg" element={<OrganizationReg />} />
         <Route path="/organization/:orgId/officers" element={<ManageOfficers />} />
-        <Route path ="/createannouncement" element={<CreateAnnouncement/>}/>
+        <Route path ="/createannouncement" element={<CreateAnnouncement />}/>
         <Route exact path="/post-approval" component={PostApproval} />
         <Route path="/chat" element={<ChatApp/>} />
       </Routes>
     </UserContextProvider>
+    </div>
   );
 }
 

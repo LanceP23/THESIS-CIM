@@ -5,7 +5,7 @@ import OrganizationReg from '../dboardmodules/OrganizationReg';
 import axios from 'axios';
 import "./Dashboard.css"
 
-const Dashboard = () => {
+const Dashboard = ({ changeBackgroundToColor }) => {
     const navigate = useNavigate();
     const [adminType, setAdminType] = useState('');
     const [dashboardContent, setDashboardContent] = useState(null);
@@ -84,6 +84,7 @@ const Dashboard = () => {
 
 
     return (
+        
         <div className="dashboard">
         <Sidebar adminType={adminType} />
         <div className="dashboard-content">

@@ -68,7 +68,7 @@ h2 {
 
 /*fasfasf*/
 .Announcement_container{
-  background-color: #C3E5CC;
+  background-color: #98D08F;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
@@ -99,7 +99,7 @@ h2 {
 }
 
 .community_calendar_container{
-background-color: #C3E5CC;
+background-color: #98D08F;
 display: grid;
 grid-template-rows: auto, auto;
 grid-gap: 10px;
@@ -111,7 +111,7 @@ background-color: whitesmoke;
 border-radius: 10px;
 }
 .bottom_part{
- background-color: #C3E5CC;;
+ background-color: 98D08F;
 
 }
 
@@ -161,24 +161,33 @@ text-align: left;
 }
 
 .announcement{
-background-color: #C3E5CC;
+  display: grid;
+grid-template-columns: auto auto;
+background-color: #98D08F;
 border-radius: 10px;
 padding: 10px;
-margin: 10px;
+margin: 30px;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.534);
+transition: transform 0.3s ease; /* Add smooth transition */
+}
+
+.announcement:hover{
+  transform: scale(1.1); /* Scale up by 10% on hover */
 }
 
 
 
 
 img{
-  height: 300px;
-  width: 400px;
+  height: 200px;
+  width: 300px;
+  border-radius: 10px;
 }
 
 video{
   height: 200px;
   width: 400px;
+  border-radius: 5px;
 }
 
 .announcement-form-container {
@@ -254,3 +263,20 @@ video{
   align-items:start;
   
 }
+
+.header_cont{
+  background-color: #FBFBFC;
+  margin: 5px;
+  padding: 5px;   
+  border-radius: 10 px;
+}
+
+
+
+.media_cont{
+  background-color: #FBFBFC;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
+}
+

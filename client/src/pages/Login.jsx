@@ -5,12 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './Login.css'
 
-const Login = () => {
+
+const Login = (  ) => {
     const navigate = useNavigate();
     const [data, setData] = useState({
         studentemail: '',
         password: '',
     });
+
+    
 
     useEffect(() => {
         // Check if the user is already authenticated
@@ -58,6 +61,8 @@ const Login = () => {
         }   
     };
 
+    
+
     return (
         <div className="login-form">
             <Navbar/>
@@ -76,7 +81,7 @@ const Login = () => {
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
                 />
-                <button type="submit">Login</button>
+                <button type="submit" >Login</button>
             </form>
         </div>
     );

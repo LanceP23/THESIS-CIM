@@ -265,11 +265,15 @@ export default function CreateAnnouncement() {
                     {approvedAnnouncements.slice(0, 3).map((announcement) => {
                       return (
                         <div key={announcement._id} className='announcement'>
+                          <div className="header_cont">
                           <h4> Header: {announcement.header}</h4>
                           <p> <strong>Body:</strong> {announcement.body}</p>
+                          </div>
+                         
                           {announcement.mediaUrl ? (
                             <div>
                               
+                              <div className="media_cont">
                               <p>Media:</p>
                               {announcement.contentType && announcement.contentType.startsWith('image') ? (
                                 <img src={announcement.mediaUrl} alt="Announcement Media" />
@@ -280,6 +284,7 @@ export default function CreateAnnouncement() {
                               ) : (
                                 <p>No media available</p>
                               )}
+                              </div>
                             </div>
                           ) : (
                             <p>No media available</p>
@@ -291,7 +296,10 @@ export default function CreateAnnouncement() {
                 </div>
               </Tab>
               <Tab eventKey='tab-2' title='Event' className='tabs'>
+                <div className="calendar_cont">
+                  
               <CreateEvent />
+              </div>
               </Tab>
               {adminType2 === 'School Owner' && (
                 <Tab eventKey='tab-3' title='Post Approval' className='tabs'>

@@ -4,6 +4,9 @@ import {toast} from 'react-hot-toast';
 import axios from 'axios';
 import './Sidebar.css'
 import { UserContext } from '../../context/userContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDashboard, faPeopleArrows,  faChartBar, faComment, faLock, faBullhorn, faAddressCard } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function Sidebar() {
   const { user } = useContext(UserContext);
@@ -54,51 +57,56 @@ export default function Sidebar() {
           </div>
           
           <ul>
-            <li>
+            <li className='fa-fa' >
+            
 
               <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button  ' >
-                Dashboard
+              <FontAwesomeIcon icon={faDashboard} className='sidebar_icons' />     Dashboard
               </Link>
 
             </li>
             {adminType !== 'Organization Officer'&&(
             <li>
 
-              <Link to="/createorg" onClick={closeSidebar} className='sidebar_button'>Manage Organization</Link>
+              <Link to="/createorg" onClick={closeSidebar} className='sidebar_button'> 
+              <FontAwesomeIcon className='sidebar_icons' icon={faPeopleArrows} />     Manage Organization
+              </Link>
             </li>
             )}
     
             
               <li>
                 <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button ' >
-                  My Community
+                <FontAwesomeIcon className='sidebar_icons' icon={faPeopleArrows} />    My Community
                 </Link>
               </li>
 
               <li>
                 <Link to="/chat" onClick={closeSidebar} className='sidebar_button  '>
-                 Campus Comms
+                <FontAwesomeIcon className='sidebar_icons' icon={faComment} />     Campus Comms
                 </Link>
               </li>
 
               <li>
                 <Link to="" onClick={closeSidebar} className='sidebar_button  '>
-                  Analytics Report
+                <FontAwesomeIcon  className='sidebar_icons'icon={faChartBar} />     Analytics Report
                 </Link>
               </li>
               <li>
                 <Link to="" onClick={closeSidebar} className='sidebar_button  '>
-                  Admin Settings
+                <FontAwesomeIcon className='sidebar_icons' icon={faLock} />     Admin Settings
                 </Link>
               </li>
               <li>
                 <Link to="/createannouncement" onClick={closeSidebar} className='sidebar_button  '>
-                  Post Management
+                <FontAwesomeIcon className='sidebar_icons' icon={faBullhorn} />    Post Management
                 </Link>
               </li>
               <li>
               {adminType === 'School Owner'?(
-                <Link to="/register" className='sidebar_button  '>Account Registration</Link>
+                <Link to="/register" className='sidebar_button  '>
+                  <FontAwesomeIcon  className='sidebar_icons' icon={faAddressCard} />    Account Registration
+                  </Link>
               ):null}
             </li>
           </ul>

@@ -50,7 +50,7 @@
   }
   
   .approval_buttons_container{
-    display:flex;
+    float:right;
     
   }
   
