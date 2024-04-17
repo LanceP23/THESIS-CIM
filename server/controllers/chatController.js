@@ -66,7 +66,7 @@ const createChatRoom = async (req, res) => {
 const sendMessage = async (req, res) => {
     try {
         const { chatId, content, recipientId } = req.body;
-        const senderId = req.user ? req.user.id : null;
+        const userId = req.user ? req.user.id : null;
         const io = getIoInstance();
 
         let chat;
@@ -78,19 +78,21 @@ const sendMessage = async (req, res) => {
             }
         } else {
             // If chatId is not provided, create a new chat room
-            if (!senderId || !recipientId) {
+            if (!userId || !recipientId) {
                 return res.status(400).json({ error: 'senderId and recipientId are required to create a new chat room' });
             }
             // Create a new chat room
             chat = new Chat({
-                participants: [senderId, recipientId] // Use senderId and recipientId here
+                participants: [userId, recipientId] // Use userId and recipientId here
             });
             await chat.save();
+            io.to(userId).emit('joinRoom', chat._id);
+            io.to(recipientId).emit('joinRoom',chat._id);
         }
 
         // Create the message object
         const message = {
-            sender: senderId,
+            sender: userId,
             content,
             timestamp: new Date()
         };
@@ -101,6 +103,7 @@ const sendMessage = async (req, res) => {
 
         // Emit a socket.io event to inform clients about the new message
         io.to(chat._id).emit('newMessage', message);
+        io.to(userId).emit('messageSentConfirmation');
 
         res.status(200).json({ message: 'Message sent successfully', data: message });
     } catch (error) {
@@ -137,18 +140,22 @@ const getChatHistory = async (req, res) =>{
 };
 
 
-const getAllChatsForUser = async (req, res) =>{
-    try{
+const getAllChatsForUser = async (req, res) => {
+    try {
         const userId = req.user.id;
 
-        const chats = await Chat.find({participants: userId}).populate('participants', 'name');
+        // Fetch all chats for the user and populate the 'participants' and 'messages' fields
+        const chats = await Chat.find({ participants: userId })
+            .populate('participants', 'name')
+            .populate('messages.sender', 'name'); 
 
         res.json(chats);
-    } catch (error){
+    } catch (error) {
         console.error('Error fetching chats for user:', error);
-        res.status(500).json({error: 'Internal Server Error'})
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 const addParticipantsToChat = async (req, res) =>{
     try{
@@ -199,11 +206,11 @@ const leaveChat = async (req, res) => {
 
 const deleteChatRoom = async (req, res) => {
     try {
-        const { chatRoomId } = req.params;
+        const { chatId } = req.params;
         const userId = req.user._id; 
 
         // Find the chat room by ID
-        const chatRoom = await Chat.findById(chatRoomId);
+        const chatRoom = await Chat.findById(chatId);
         if (!chatRoom) {
             return res.status(404).json({ error: 'Chat room not found' });
         }
@@ -216,7 +223,7 @@ const deleteChatRoom = async (req, res) => {
 
         // delete chat for deleter's side only
         if (chatRoom.participants.length === 2) {
-            await Chat.findByIdAndDelete(chatRoomId);
+            await Chat.findByIdAndDelete(chatId);
             return res.status(200).json({ message: 'Chat room deleted successfully' });
         }
 
@@ -253,7 +260,7 @@ const getUsers = async (req, res) => {
         });
 
         if (existingChatRoom) {
-            return res.status(200).json({ exists: true, chatId: existingChatRoom._id });
+            return res.status(200).json({ exists: true, chatRoom: existingChatRoom._id });
         } else {
             return res.status(200).json({ exists: false });
         }

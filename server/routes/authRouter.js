@@ -21,6 +21,8 @@ const {
   checkChatRoomExists
 } = require('../controllers/chatController');
 
+const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
+
 router.use(
     cors({
         credentials: true,
@@ -82,7 +84,10 @@ router.get('/chat-history/:chatId', getChatHistory);
 router.get('/all-chats', getAllChatsForUser);
 router.post('/add-participants', addParticipantsToChat);
 router.post('/leave-chat', leaveChat);
-router.delete('/delete-chat-room/:chatRoomId',authenticateUser, deleteChatRoom);
+router.delete('/delete-chat-room/:chatId',authenticateUser, deleteChatRoom);
 router.get('/chat-room/:userId/:adminId', checkChatRoomExists);
 
+//school year/ semester update temporary archival of accounts
+router.put('/update-settings',updateAcademicSettingsAndArchiveAccounts,archiveAccounts);
+router.put('/unarchive-accounts',unarchiveAccounts);
 module.exports = router;

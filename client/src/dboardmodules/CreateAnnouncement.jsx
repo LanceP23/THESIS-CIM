@@ -35,6 +35,12 @@ export default function CreateAnnouncement() {
   const [approvedAnnouncements, setApprovedAnnouncements] = useState([]);
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
+  const [visibility, setVisibility] = useState({
+    everyone: false,
+    staff: false,
+    faculty: false,
+    students: false
+  });
 
   const adminType2 = localStorage.getItem('adminType');
 
@@ -139,6 +145,7 @@ export default function CreateAnnouncement() {
             formData.append('header', header);
             formData.append('body', body);
             formData.append('mediaUrl', mediaUrl);
+            formData.append('visibility', JSON.stringify(visibility));
   
             // Post the announcement data to your server
             const response = await axios.post('/announcements', formData, {
@@ -178,6 +185,14 @@ export default function CreateAnnouncement() {
 
   const toggleModal = () => {
     setShowPostApprovalModal(!showPostApprovalModal);
+  };
+
+  const handleVisibilityChange = (e) => {
+    const { name, checked } = e.target;
+    setVisibility(prevVisibility => ({
+      ...prevVisibility,
+      [name]: checked
+    }));
   };
 
 
@@ -223,6 +238,25 @@ export default function CreateAnnouncement() {
                     <img src={mediaPreview} alt="Media Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
                   )}
                 </div>
+                <div class="visibility-options">
+                  <label>Visibility:</label>
+                  <label class="custom-option">
+                    <input type="checkbox" name="everyone" checked={visibility.everyone} onChange={handleVisibilityChange} />
+                    <span class="option-icon"><i class="fa fa-users"></i> Everyone</span>
+                  </label>
+                  <label class="custom-option">
+                    <input type="checkbox" name="staff" checked={visibility.staff} onChange={handleVisibilityChange} />
+                    <span class="option-icon"><i class="fa fa-briefcase"></i> Staff</span>
+                  </label>
+                  <label class="custom-option">
+                    <input type="checkbox" name="faculty" checked={visibility.faculty} onChange={handleVisibilityChange} />
+                    <span class="option-icon"><i class="fa fa-university"></i> Faculty</span>
+                  </label>
+                  <label class="custom-option">
+                    <input type="checkbox" name="students" checked={visibility.students} onChange={handleVisibilityChange} />
+                    <span class="option-icon"><i class="fa fa-graduation-cap"></i> Students</span>
+                  </label>
+                </div>
                 <button className="button" onClick={handleSubmit}>Post</button>
 
                 <div className='recent_post_container'>
@@ -232,7 +266,7 @@ export default function CreateAnnouncement() {
                       return (
                         <div key={announcement._id} className='announcement'>
                           <h4> Header: {announcement.header}</h4>
-                          <p> Body: {announcement.body}</p>
+                          <p> <strong>Body:</strong> {announcement.body}</p>
                           {announcement.mediaUrl ? (
                             <div>
                               

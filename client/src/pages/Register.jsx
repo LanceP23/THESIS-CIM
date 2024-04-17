@@ -21,6 +21,9 @@ export default function Register() {
   });
   const [organizations, setOrganizations] = useState([]);
   const [registrationType, setRegistrationType] = useState(null); 
+  const [academicYear, setAcademicYear] = useState('');
+  const [schoolSemester, setSchoolSemester] = useState('');
+  const [archivedAccounts, setArchivedAccounts] = useState([]);
 
   useEffect(() => {
     fetchOrganizations();
@@ -83,9 +86,67 @@ export default function Register() {
     setRegistrationType(type);
   };
 
+  const updateSchoolSetting = async ()=>{
+    try{
+      const response = await axios.put('/route', {
+        academicYear,
+        schoolSemester,
+      });
+      if(response.data.success){
+        toast.success('School setting updated succesfully!');
+      } else{
+        toast.error('Failed to update school setting');
+      }
+    } catch(error){
+      console.error('Error updating school setting: ', error);
+      toast.error('Failed to update school setting');
+    }
+  }
+
+  const archiveAccounts = async () =>{
+    try{
+      const response =  await axios.post('/placeholdermuna');
+      if(response.data.success){
+        toast.success('Accounts archived successfully!');
+      } else{
+        toast.error('Failed to archive accounts');
+      }
+    }catch(error){
+      console.error('Error archiving accounts: ', error);
+      toast.error('Failed to archive accounts');
+    }
+  }
+
   return (
     <div className='Account_registration_container'>
       <Sidebar adminType={data.adminType} /> 
+
+      <div>
+        <h2>School Year Setting</h2>
+        <div>
+          <label htmlFor="academicYear">Academic Year:</label>
+          <input
+            type="text"
+            id="academicYear"
+            value={academicYear}
+            onChange={(e) => setAcademicYear(e.target.value)}
+            placeholder="Enter academic year"
+          />
+        </div>
+        <div>
+          <label htmlFor="schoolSemester">School Semester:</label>
+          <input
+            type="text"
+            id="schoolSemester"
+            value={schoolSemester}
+            onChange={(e) => setSchoolSemester(e.target.value)}
+            placeholder="Enter school semester"
+          />
+        </div>
+        <div>
+          <button onClick={updateSchoolSetting}>Update School Setting</button>
+        </div>
+      </div>
       
 
        <div className="register_form_container">
@@ -133,6 +194,8 @@ export default function Register() {
         <RegisteredAccounts />
         </div>
       </div>
+
+    
     </div>
   );
 }

@@ -1,0 +1,60 @@
+.approval_button{
+    padding: 10px 20px;
+    background-color:green;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .approval_button:hover {
+    background-color: #C3E5CC;
+  }
+
+  .approval_container{
+    background-color:aqua ;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
+    border-radius: 10px;
+  }
+
+  .text_container{
+    background-color: azure;
+  }
+
+  .content_container{
+    background-color: blue;
+  }
+
+  .content{
+    height: 200px;
+    width: 250px;
+    border-radius: 5px;
+  }
+
+  .title_container{
+    background-color: rgb(168, 168, 168);
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    text-align: left;
+  }
+
+  .body_container{
+    background-color: rgb(168, 168, 168);
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+  }
+  
+  .approval_buttons_container{
+    display:flex;
+    
+  }
+  
+  .approval_button{
+    margin: 5px;
+
+  }

@@ -62,7 +62,7 @@ const getOrganization = async (req, res) => {
 const approveOfficer = async (req, res) => {
     try {
         // Check if the requesting user has the necessary permissions to approve officers
-        if (req.user.adminType !== 'AllowedAdminType') {
+        if (req.user.adminType !== 'School Owner') {
             return res.status(403).json({ error: 'You are not authorized to approve officers' });
         }
 

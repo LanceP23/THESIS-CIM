@@ -8,6 +8,12 @@ const path = require('path');
 const socketIo = require('socket.io');
 const {initializeSocket} = require('./socketManager');
 
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 //db connection
 mongoose.connect(process.env.MONGO_URL)

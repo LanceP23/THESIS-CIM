@@ -38,8 +38,11 @@ const ChatUserList = ({ onSelectUser, currentUser }) => {
   );
 
   const handleSelectUser = (user) => {
-    setSelectedUser(user);
-    onSelectUser(user); // Pass selected user to parent component
+    if(user!==selectedUser){
+      setSelectedUser(user);
+     onSelectUser(user); // Pass selected user to parent component
+    }
+    
   };
 
   return (
@@ -56,7 +59,7 @@ const ChatUserList = ({ onSelectUser, currentUser }) => {
       ) : (
         <ul className="chat-list"> 
           {filteredUsers.map(user => (
-            <li key={user.id} onClick={() => handleSelectUser(user)} className="chat-item">
+            <li key={user._id} onClick={() => handleSelectUser(user)} className="chat-item">
               <div>{user.name}</div>
               <div>{user.adminType}</div>
             </li>

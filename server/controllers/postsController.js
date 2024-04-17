@@ -47,7 +47,7 @@ r
 // Create Announcement
 const createAnnouncement = async (req, res) => {
   try {
-    const { header, body, mediaUrl } = req.body;
+    const { header, body, mediaUrl, visibility } = req.body;
     let contentType = null;
 
     let status = 'pending';
@@ -78,7 +78,8 @@ const createAnnouncement = async (req, res) => {
       mediaUrl,
       contentType,
       status,
-      postedBy: req.user.email
+      postedBy: req.user.name,
+      visibility: JSON.parse(visibility)
     });
 
     await announcement.save();

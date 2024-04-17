@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import './PostApproval.css'
 
 export default function PostApproval({ adminType }) {
   const [pendingAnnouncements, setPendingAnnouncements] = useState([]);
@@ -89,7 +90,7 @@ export default function PostApproval({ adminType }) {
   return (
     <div>
       <h2>Pending Announcements</h2>
-      <button onClick={fetchPendingAnnouncements}>Fetch Pending Announcements</button>
+      <button onClick={fetchPendingAnnouncements} className='approval_button'>Fetch Pending Announcements</button>
       {isLoading ? (
         <p>Loading pending announcements...</p>
       ) : pendingAnnouncements.length > 0 ? (
@@ -98,10 +99,11 @@ export default function PostApproval({ adminType }) {
             <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)}>
               <h3>{announcement.header}</h3>
               <p>Posted by: {announcement.postedBy}</p>
+             
               {selectedAnnouncement && selectedAnnouncement._id === announcement._id && (
-                <div>
-                  <button onClick={handleApproval}>Approve</button>
-                  <button onClick={handleRejection}>Reject</button>
+                <div classname >
+                  <button onClick={handleApproval} className='approval_button'>Approve</button>
+                  <button onClick={handleRejection} className='approval_button'>Reject</button>
                 </div>
               )}
             </li>
@@ -111,23 +113,32 @@ export default function PostApproval({ adminType }) {
         <p>No pending announcements</p>
       )}
       {selectedAnnouncement && (
-        <div>
-          <h2>{selectedAnnouncement.header}</h2>
-          <p>Posted by: {selectedAnnouncement.postedBy}</p>
-          <p>{selectedAnnouncement.body}</p>
+        <div className='approval_container'>
+          
           {selectedAnnouncement.mediaUrl && (
-            <div>
+            <div className='content_container'>
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
-                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" />
+                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className='content'/>
               )}
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
-                <video controls>
+                <video controls className='content'>
                   <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
                   Your browser does not support the video tag.
                 </video>
               )}
             </div>
+
           )}
+
+        <div className="text_container">
+          <div className="title_container">
+          <h2>{selectedAnnouncement.header}</h2>
+          <p>Posted by: {selectedAnnouncement.postedBy}</p>
+          </div>
+          <div className="body_container">
+          <p>{selectedAnnouncement.body}</p>
+          </div>
+          </div>
         </div>
       )}
     </div>

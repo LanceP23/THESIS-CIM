@@ -3,13 +3,25 @@ const socketIo = require('socket.io');
 let io;
 
 const initializeSocket = (server) => {
-    io = socketIo(server);
+    io = socketIo(server, {
+        cors: {
+            origin: "http://localhost:5173",
+            methods: ["GET", "POST"]
+        }
+    });
 
     io.on('connection', (socket) => {
         console.log('A user connected');
 
-        socket.on('sendMessage', (message) => {
-            io.emit('message', message);
+        // Join a specific room
+        socket.on('joinRoom', (chatId) => {
+            socket.join(chatId);
+            console.log(`User joined room ${chatId}`);
+        });
+
+        socket.on('sendMessage', ({ chatId, message }) => {
+            // Emit message only to users in the specific room
+            io.to(chatId).emit('newMessage', message);
         });
 
         socket.on('disconnect', () => {
@@ -17,6 +29,7 @@ const initializeSocket = (server) => {
         });
     });
 };
+
 
 const getIoInstance = () => {
     if (!io) {

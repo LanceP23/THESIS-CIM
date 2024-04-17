@@ -19,7 +19,12 @@ const announcementSchema = new mongoose.Schema({
     type:String,
     required:true
   },
-
+  visibility: {
+    everyone: { type: Boolean, default: false },
+    staff: { type: Boolean, default: false },
+    faculty: { type: Boolean, default: false },
+    students: { type: Boolean, default: false }
+  },
   status: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],
