@@ -9,8 +9,14 @@ export default function Home() {
    
   return (
     < >
-       <Navbar/>
+    <div className="background_image_container">
+        <Navbar/>
+
+       <img src='../src/assets/webwithLogo.png' className='image'></img>
       
+
+     
+       </div>
     
     </>
   )

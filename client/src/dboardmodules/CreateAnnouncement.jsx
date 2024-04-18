@@ -238,23 +238,23 @@ export default function CreateAnnouncement() {
                     <img src={mediaPreview} alt="Media Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
                   )}
                 </div>
-                <div class="visibility-options">
+                <div className="visibility-options">
                   <label>Visibility:</label>
-                  <label class="custom-option">
+                  <label className="custom-option">
                     <input type="checkbox" name="everyone" checked={visibility.everyone} onChange={handleVisibilityChange} />
-                    <span class="option-icon"><i class="fa fa-users"></i> Everyone</span>
+                    <span className="option-icon"><i className="fa fa-users"></i> Everyone</span>
                   </label>
-                  <label class="custom-option">
+                  <label className="custom-option">
                     <input type="checkbox" name="staff" checked={visibility.staff} onChange={handleVisibilityChange} />
-                    <span class="option-icon"><i class="fa fa-briefcase"></i> Staff</span>
+                    <span className="option-icon"><i className="fa fa-briefcase"></i> Staff</span>
                   </label>
-                  <label class="custom-option">
+                  <label className="custom-option">
                     <input type="checkbox" name="faculty" checked={visibility.faculty} onChange={handleVisibilityChange} />
-                    <span class="option-icon"><i class="fa fa-university"></i> Faculty</span>
+                    <span className="option-icon"><i className="fa fa-university"></i> Faculty</span>
                   </label>
-                  <label class="custom-option">
+                  <label className="custom-option">
                     <input type="checkbox" name="students" checked={visibility.students} onChange={handleVisibilityChange} />
-                    <span class="option-icon"><i class="fa fa-graduation-cap"></i> Students</span>
+                    <span className="option-icon"><i className="fa fa-graduation-cap"></i> Students</span>
                   </label>
                 </div>
                 <button className="button" onClick={handleSubmit}>Post</button>
@@ -296,10 +296,10 @@ export default function CreateAnnouncement() {
                 </div>
               </Tab>
               <Tab eventKey='tab-2' title='Event' className='tabs'>
-                <div className="calendar_cont">
+             
                   
               <CreateEvent />
-              </div>
+              
               </Tab>
               {adminType2 === 'School Owner' && (
                 <Tab eventKey='tab-3' title='Post Approval' className='tabs'>

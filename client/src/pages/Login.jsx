@@ -64,6 +64,9 @@ const Login = (  ) => {
     
 
     return (
+        <div className="background_image_container">
+            
+       <img src='../src/assets/webwithLogo.png' className='image'></img>
         <div className="login-form">
             <Navbar/>
             <form onSubmit={loginAdmin}>
@@ -83,6 +86,7 @@ const Login = (  ) => {
                 />
                 <button type="submit" >Login</button>
             </form>
+        </div>
         </div>
     );
 };

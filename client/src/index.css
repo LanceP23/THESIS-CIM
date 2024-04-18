@@ -26,9 +26,10 @@ a:hover {
 
 body {
   margin: 0;
-  background-color: #98D08F;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-color: #98D08F; 
+  
+  
+  
   
   display: flex;
   place-items: center;

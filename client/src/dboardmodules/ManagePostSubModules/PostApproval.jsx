@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import './PostApproval.css'
 
 export default function PostApproval({ adminType }) {
   const [pendingAnnouncements, setPendingAnnouncements] = useState([]);
@@ -90,56 +89,45 @@ export default function PostApproval({ adminType }) {
   return (
     <div>
       <h2>Pending Announcements</h2>
-      <button onClick={fetchPendingAnnouncements} className='approval_button'>Fetch Pending Announcements</button>
-     
+      <button onClick={fetchPendingAnnouncements}>Fetch Pending Announcements</button>
+      {isLoading ? (
+        <p>Loading pending announcements...</p>
+      ) : pendingAnnouncements.length > 0 ? (
+        <ul>
+          {pendingAnnouncements.map((announcement) => (
+            <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)}>
+              <h3>{announcement.header}</h3>
+              <p>Posted by: {announcement.postedBy}</p>
+              {selectedAnnouncement && selectedAnnouncement._id === announcement._id && (
+                <div>
+                  <button onClick={handleApproval}>Approve</button>
+                  <button onClick={handleRejection}>Reject</button>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No pending announcements</p>
+      )}
       {selectedAnnouncement && (
-        <div className='approval_container'>
-          
+        <div>
+          <h2>{selectedAnnouncement.header}</h2>
+          <p>Posted by: {selectedAnnouncement.postedBy}</p>
+          <p>{selectedAnnouncement.body}</p>
           {selectedAnnouncement.mediaUrl && (
-            <div className='content_container'>
+            <div>
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
-                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className='content'/>
+                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" />
               )}
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
-                <video controls className='content'>
+                <video controls>
                   <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
                   Your browser does not support the video tag.
                 </video>
               )}
             </div>
-
           )}
-
-        <div className="text_container">
-          <div className="title_container">
-          <h2>{selectedAnnouncement.header}</h2>
-          <p>Posted by: {selectedAnnouncement.postedBy}</p>
-          </div>
-          <div className="body_container">
-          <p>{selectedAnnouncement.body}</p>
-          </div>
-          </div>
-
-          <div className="filler">
-
-          </div>
-          {isLoading ? (
-        <p>Loading pending announcements...</p>
-      ) : pendingAnnouncements.length > 0 ? (
-        <ul>
-       
-          
-             
-                <div className='approval_buttons_container'>
-                  <button onClick={handleApproval} className='approval_button'>Approve</button>
-                  <button onClick={handleRejection} className='approval_button'>Reject</button>
-                </div>
-              
-         
-        </ul>
-      ) : (
-        <p>No pending announcements</p>
-      )}
         </div>
       )}
     </div>
