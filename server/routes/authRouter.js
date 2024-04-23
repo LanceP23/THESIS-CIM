@@ -9,19 +9,10 @@ const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } 
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
 const {postEventController,getEventsController} = require('../controllers/postEventController');
-const { 
-  createChatRoom,
-  sendMessage,
-  getChatHistory,
-  getAllChatsForUser,
-  addParticipantsToChat,
-  leaveChat,
-  deleteChatRoom,
-  getUsers,
-  checkChatRoomExists
-} = require('../controllers/chatController');
+
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
+
 
 router.use(
     cors({
@@ -76,18 +67,15 @@ router.post('/events', authenticateUser, postEventController);
 router.get('/fetch-event', getEventsController);
 
 
-//Chat related
-router.get('/users', getUsers);
-router.post('/create-chat-room',authenticateUser, createChatRoom);
-router.post('/send-message', authenticateUser,sendMessage);
-router.get('/chat-history/:chatId', getChatHistory);
-router.get('/all-chats', getAllChatsForUser);
-router.post('/add-participants', addParticipantsToChat);
-router.post('/leave-chat', leaveChat);
-router.delete('/delete-chat-room/:chatId',authenticateUser, deleteChatRoom);
-router.get('/chat-room/:userId/:adminId', checkChatRoomExists);
-
 //school year/ semester update temporary archival of accounts
 router.put('/update-settings',updateAcademicSettingsAndArchiveAccounts,archiveAccounts);
 router.put('/unarchive-accounts',unarchiveAccounts);
+
+
+
+
+
+
+
 module.exports = router;
+

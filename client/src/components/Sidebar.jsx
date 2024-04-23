@@ -82,7 +82,7 @@ export default function Sidebar() {
               </li>
 
               <li>
-                <Link to="/chat" onClick={closeSidebar} className='sidebar_button  '>
+                <Link to="/campcomms" onClick={closeSidebar} className='sidebar_button  '>
                 <FontAwesomeIcon className='sidebar_icons' icon={faComment} />     Campus Comms
                 </Link>
               </li>

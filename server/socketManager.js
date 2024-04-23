@@ -1,44 +1,36 @@
-const socketIo = require('socket.io');
+const { Server } = require("socket.io");
+const http = require("http");
+const express = require("express");
 
-let io;
+const app = express();
 
-const initializeSocket = (server) => {
-    io = socketIo(server, {
-        cors: {
-            origin: "http://localhost:5173",
-            methods: ["GET", "POST"]
-        }
-    });
+const server = http.createServer(app);
+const io = new Server(server, {
+	cors: {
+		origin: ["http://localhost:5173"],
+		methods: ["GET", "POST"],
+	},
+});
 
-    io.on('connection', (socket) => {
-        console.log('A user connected');
-
-        // Join a specific room
-        socket.on('joinRoom', (chatId) => {
-            socket.join(chatId);
-            console.log(`User joined room ${chatId}`);
-        });
-
-        socket.on('sendMessage', ({ chatId, message }) => {
-            // Emit message only to users in the specific room
-            io.to(chatId).emit('newMessage', message);
-        });
-
-        socket.on('disconnect', () => {
-            console.log('User disconnected');
-        });
-    });
+const getReceiverSocketId = (receiverId) => {
+	return userSocketMap[receiverId];
 };
 
+const userSocketMap = {}; // {userId: socketId}
 
-const getIoInstance = () => {
-    if (!io) {
-        throw new Error('Socket.io has not been initialized');
-    }
-    return io;
-};
+io.on("connection", (socket) => {
+	console.log("a user connected", socket.id);
 
-module.exports = {
-    initializeSocket,
-    getIoInstance
-};
+	const userId = socket.handshake.query.userId;
+	if (userId != "undefined") userSocketMap[userId] = socket.id;
+
+	io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+	socket.on("disconnect", () => {
+		console.log("user disconnected", socket.id);
+		delete userSocketMap[userId];
+		io.emit("getOnlineUsers", Object.keys(userSocketMap));
+	});
+});
+
+module.exports = { app, io, server, getReceiverSocketId };

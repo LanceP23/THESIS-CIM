@@ -13,8 +13,11 @@ import ManageOfficers from './dboardmodules/ManageOrgSubModules/ManageOfficers';
 import CreateAnnouncement from './dboardmodules/CreateAnnouncement';
 import PostApproval from './dboardmodules/ManagePostSubModules/PostApproval';
 import Sidebar from './components/Sidebar';
-import ChatApp from './dboardmodules/ChatModule/ChatApp';
+import ChatPage from './ChatModule/ChatPage';
+
 import React, {useContext, useState} from 'react';
+import { SocketContextProvider } from '../context/socketContext';
+
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -26,6 +29,7 @@ function App() {
   return (
     <div >
     <UserContextProvider>
+      <SocketContextProvider>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       <Sidebar />
       <Routes>
@@ -38,8 +42,9 @@ function App() {
         <Route path="/organization/:orgId/officers" element={<ManageOfficers />} />
         <Route path ="/createannouncement" element={<CreateAnnouncement />}/>
         <Route exact path="/post-approval" component={PostApproval} />
-        <Route path="/chat" element={<ChatApp/>} />
+        <Route path ="/campcomms" element={<ChatPage/>}/>
       </Routes>
+      </SocketContextProvider>
     </UserContextProvider>
     </div>
   );
