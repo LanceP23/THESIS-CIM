@@ -4,8 +4,10 @@ import Sidebar from '../components/Sidebar';
 import OrganizationReg from '../dboardmodules/OrganizationReg';
 import axios from 'axios';
 import "./Dashboard.css"
+import Conversation from '../ChatModule/Conversation';
+import Conversations from '../ChatModule/Conversations';
 
-const Dashboard = ({ changeBackgroundToColor }) => {
+const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
     const [adminType, setAdminType] = useState('');
     const [dashboardContent, setDashboardContent] = useState(null);
@@ -112,6 +114,10 @@ const Dashboard = ({ changeBackgroundToColor }) => {
            </div>
            <div className="Active_user_section">
            <h2>Active User</h2>
+           <div className='Active_users'>
+           <Conversations conversations={{conversations}}/>
+           </div>
+           
            </div>
 
            </div>

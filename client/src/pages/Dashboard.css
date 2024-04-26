@@ -59,11 +59,16 @@
     border-radius: 10px;
     padding-left: 10px;
     padding-top: 10px;
-    height: 300px;
+    max-height: 300px; 
     width: 250px;
    
     margin: 10px;
 }
 h2{
     font-size: 30px;
+}
+.Active_users{
+    max-height: 250px; 
+    max-width: 500px;
+    overflow-y: auto;
 }
