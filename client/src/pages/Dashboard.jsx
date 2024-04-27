@@ -114,8 +114,9 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
            </div>
            <div className="Active_user_section">
            <h2>Active User</h2>
+           <Conversations conversations={{conversations}} className='active_'/>
            <div className='Active_users'>
-           <Conversations conversations={{conversations}}/>
+           
            </div>
            
            </div>

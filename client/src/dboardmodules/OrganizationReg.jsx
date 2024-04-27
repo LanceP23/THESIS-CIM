@@ -145,7 +145,7 @@ export default function OrganizationReg() {
             />
             </div>
 
-            <button type="submit">Create Organization</button>
+            <button type="submit" className='create_org_button'>Create Organization</button>
           </form>
           
         </div>

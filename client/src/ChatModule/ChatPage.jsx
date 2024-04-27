@@ -1,13 +1,19 @@
 import React from 'react'
 import SearchUser from './SearchUser';
 import MessageContainer from './MessageContainer';
-//import './ChatPage.css' Novs pag gusto mo makita design maayos yung chat enable mo to wala pang design yung chat pag wala to eh
+import './ChatPage.css' 
 
 const ChatPage = () => {
-  return <div className='flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-green bg-clip-padding backdrop-filter backdrop-blur-lig bg-opacity-0'>
+  
+  return <div className='chat_container'>
+    <div className="search_user_container">
     <SearchUser/>
+    </div>
+    <div className="messages_container">
     <MessageContainer/>
     </div>
+    </div>
+    
   
 };
 

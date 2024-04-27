@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { UserContext } from '../../context/userContext'
 import useConversation from '../zustand/useConversation';
 import { extractTime } from '../utilities/extractTime';
+import './ChatPage.css' 
 
 const Message = ({message}) => {
     const { user } = useContext(UserContext);

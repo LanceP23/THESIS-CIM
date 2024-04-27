@@ -4,6 +4,9 @@ import useConversation from '../zustand/useConversation';
 import Conversations from './Conversations';
 import toast from 'react-hot-toast';
 import useGetConversations from '../hooks/useGetConversations';
+import './ChatPage.css' 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 const SearchInput = ({}) => {
     const [search, setSearch] = useState("");
 	const { setSelectedConversation } = useConversation();
@@ -24,13 +27,13 @@ const SearchInput = ({}) => {
 		} else toast.error("No such user found!");
 	};
   return (
-    <form onSubmit={handleSubmit} className='flex items-center gap-2'>
-        <input type = "text" placeholder='Search Users...' className='input input-bordered rounded-full'
+    <form onSubmit={handleSubmit} className=''>
+        <input type = "text" placeholder='Search Users...' className='input_search'
         value ={search}
         onChange={(e)=> setSearch(e.target.value)}
         />
-        <button type = 'submit' className='btn btn-circle'>
-        <i className="bi bi-search"></i>
+        <button type = 'submit' className='search_icon_container'>
+         <FontAwesomeIcon icon={faSearch} className='search_icon'/>
         </button>
 
     </form>

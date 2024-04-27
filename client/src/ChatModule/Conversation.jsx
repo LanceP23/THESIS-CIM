@@ -1,6 +1,7 @@
 import React from 'react';
 import useConversation from '../zustand/useConversation';
 import { useSocketContext } from '../../context/socketContext';
+import './ChatPage.css' 
 
 const Conversation = ({ conversation, lastIdx }) => {
     const { selectedConversation, setSelectedConversation } = useConversation();
@@ -12,19 +13,19 @@ const Conversation = ({ conversation, lastIdx }) => {
     return (
         <>
             <div
-                className={`flex gap-2 items-center hover:bg-gray-500 rounded p-2 cursor-pointer ${
-                    isSelected ? 'bg-gray-500' : ''
-                }`}
+                className={`custom-container ${isSelected ? 'selected' : ''}`}
                 onClick={() => setSelectedConversation(conversation)}
             >
-                <div className={`flex flex-col flex-1 ${isOnline ? 'online' : ''}`}>
-                    <div className='flex gap-3 justify-between'>
-                        <p className='font-bold text-gray-200'>{conversation.name}</p>
-                        {isOnline ? <div className='online-dot'></div> : <div className='offline-dot'></div>}
+                <div className={`container_1${isOnline ? 'online' : ''}`}>
+                    <div className='flex_container'>
+                  
+                   
+                        <p > <span> {isOnline ? <div className='online-dot'></div> : <div className='offline-dot'></div>}</span>{conversation.name}</p>
+                        
                     </div>
                 </div>
             </div>
-            <div className='divider my-0 py-0 h-1'></div>
+            <div className='divider '></div>
         </>
     );
 };

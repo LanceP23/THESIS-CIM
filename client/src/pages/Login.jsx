@@ -66,7 +66,7 @@ const Login = (  ) => {
     return (
         <div className="background_image_container">
             
-       <img src='../src/assets/webwithLogo.png' className='image'></img>
+       <img src='../src/assets/webwithLogo.png' className='background_image_login'></img>
         <div className="login-form">
             <Navbar/>
             <form onSubmit={loginAdmin}>
@@ -84,7 +84,7 @@ const Login = (  ) => {
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
                 />
-                <button type="submit" >Login</button>
+                <button type="submit" className='login__button' >Login</button>
             </form>
         </div>
         </div>
