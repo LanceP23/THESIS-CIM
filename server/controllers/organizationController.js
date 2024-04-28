@@ -179,7 +179,79 @@ const getAddedMembers = async (req, res) =>{
         console.error('Error fetching added members:', error);
         res.status(500).json({ message: 'Failed to fetch added members' });
     }
-}
+};
+
+const updateOrganizationMember = async (req, res) => {
+    try {
+      // Find the organization by ID
+      const organization = await Organization.findById(req.params.orgId);
+      if (!organization) {
+        return res.status(404).json({ error: 'Organization not found' });
+      }
+  
+      // Find the member by ID
+      const member = organization.members.find(member => member._id.toString() === req.params.memberId);
+      if (!member) {
+        return res.status(404).json({ error: 'Member not found' });
+      }
+  
+      // Update the member's information
+      member.name = req.body.name || member.name;
+      member.email = req.body.email || member.email;
+      member.position = req.body.position || member.position;
+      member.schoolYear = req.body.schoolYear || member.schoolYear; // Include schoolYear update
+  
+      // Find the user in the database by email
+      const user = await User.findById(member._id);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Update the user's name, position, and schoolYear in the database
+      user.name = member.name;
+      user.position = member.position;
+      user.schoolYear = member.schoolYear;
+      await user.save();
+  
+      // Save the updated organization
+      await organization.save();
+  
+      res.json({ message: 'Member and user updated successfully', member, user });
+    } catch (error) {
+      console.error('Error updating member:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  
+
+  const deleteOrganizationMember = async (req, res) => {
+    try {
+      // Find the organization by ID
+      const organization = await Organization.findById(req.params.orgId);
+      if (!organization) {
+        return res.status(404).json({ error: 'Organization not found' });
+      }
+  
+      // Find the member by ID
+      const memberIndex = organization.members.findIndex(member => member._id.toString() === req.params.memberId);
+      if (memberIndex === -1) {
+        return res.status(404).json({ error: 'Member not found' });
+      }
+  
+      // Remove the member from the organization's members list
+      organization.members.splice(memberIndex, 1);
+  
+      // Save the updated organization
+      await organization.save();
+  
+      res.json({ message: 'Member deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting member:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+
 
 
 module.exports = {
@@ -189,5 +261,7 @@ module.exports = {
     approveOfficer,
     getPotentialMembers,
     addPotentialMembers,
-    getAddedMembers
+    getAddedMembers,
+    updateOrganizationMember,
+    deleteOrganizationMember
 };

@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import './OrganizationReg.css';
-import ReactModal from 'react-modal';
+import ReactModal from 'react-modal'; 
 
 export default function OrganizationReg() {
   const navigate = useNavigate();
@@ -19,10 +19,14 @@ export default function OrganizationReg() {
   const [adminType, setAdminType] = useState('');
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const [showPotentialMembersModal, setShowPotentialMembersModal] = useState(false);
-  const [showMembers, setShowMembers] = useState(false); 
   const [activeOrgId, setActiveOrgId] = useState(null); 
   const [members, setMembers] = useState([]); 
-
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [editMember, setEditMember] = useState(null);
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editPosition, setEditPosition] = useState('');
+  const [editSchoolYear, setEditSchoolYear] = useState('');
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -48,6 +52,12 @@ export default function OrganizationReg() {
   useEffect(() => {
     fetchOrganizations();
   }, []);
+
+  useEffect(() => {
+    if (activeOrgId) {
+      fetchMembers(selectedOrganization);
+    }
+  }, [activeOrgId, selectedOrganization]);
 
   const fetchOrganizations = async () => {
     try {
@@ -107,17 +117,102 @@ export default function OrganizationReg() {
       toast.error('Failed to fetch members');
     }
   };
-  
 
   const handleShowMembers = (org) => {
-    // for visibility of active org and state para yun lang lalabas kung anong org pinindot
-    setActiveOrgId((prevOrgId) => (prevOrgId === org._id ? null : org._id));
-    setShowMembers((prev) => !prev);
-    // Fetch members for the selected organization
-    fetchMembers(org.name);
+    setActiveOrgId(org._id);
+    setSelectedOrganization(org.name);
+    setShowMembersModal(true);
   };
   
+  const updateMember = async (memberId, updatedData) => {
+    try {
+      const token = getCookie('token');
+      if (!activeOrgId) {
+        console.error('activeOrgId is not defined');
+        return;
+      }
   
+      // Ensure that schoolYear field is included in updatedData and is not empty
+      if (!updatedData.schoolYear) {
+        console.error('schoolYear is required');
+        return;
+      }
+  
+      const response = await axios.put(
+        `http://localhost:8000/organizations/${activeOrgId}/members/${memberId}`, // Update the API endpoint URL
+        updatedData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      if (response.status === 200) {
+        toast.success('Member updated successfully');
+  
+        // Update the members state with the updated member data
+        setMembers((prevMembers) =>
+          prevMembers.map((member) =>
+            member._id === memberId ? { ...member, ...updatedData } : member
+          )
+        );
+      } else {
+        toast.error('Failed to update member');
+      }
+    } catch (error) {
+      console.error('Error updating member:', error);
+      toast.error('Failed to update member');
+    }
+  };
+  
+  // Function to delete a member
+  const deleteMember = async (memberId) => {
+    try {
+      const token = getCookie('token');
+      const response = await axios.delete(
+        `http://localhost:8000/organizations/${activeOrgId}/members/${memberId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.status === 200) {
+        toast.success('Member deleted successfully');
+        // Optionally, update the local state to remove the deleted member
+      } else {
+        toast.error('Failed to delete member');
+      }
+    } catch (error) {
+      console.error('Error deleting member:', error);
+      toast.error('Failed to delete member');
+    }
+  };
+
+  const handleEditMember = (member) => {
+    setEditMember(member);
+    setEditName(member.name);
+    setEditEmail(member.studentemail);
+    setEditPosition(member.position);
+    setEditSchoolYear(member.schoolYear);
+  };
+
+  const handleSaveMember = () => {
+    if (editMember) {
+      const updatedMember = {
+        ...editMember,
+        name: editName,
+        studentemail: editEmail,
+        position: editPosition,
+        schoolYear: editSchoolYear
+      };
+      updateMember(editMember._id, updatedMember);
+      setEditMember(null);
+    }
+  };
+
+  const handleDeleteMember = (memberId) => {
+    if (window.confirm("Are you sure you want to delete this member?")) {
+      deleteMember(memberId);
+    }
+  };
+  
+  const handleCloseMembersModal = () => {
+    setShowMembersModal(false);
+  };
 
   const handleClosePotentialMembersModal = () => {
     setShowPotentialMembersModal(false);
@@ -176,63 +271,39 @@ export default function OrganizationReg() {
         {organizations.length === 0 && <p>No organizations yet.</p>}
 
         {organizations.length > 0 && (
-  <div className="org_table_container">
-    <table className="organization-table">
-      <thead>
-        <tr className='table_header'>
-          <th>Organization Name</th>
-          <th>School Year</th>
-          <th>Semester</th>
-          <th>Members</th>
-          <th>Manage Officers</th>
-        </tr>
-      </thead>
-      <tbody>
-        {organizations.map((org) => (
-          <tr key={org._id}>
-            <td>{org.name}</td>
-            <td>{org.schoolYear}</td>
-            <td>{org.semester}</td>
-            <td>
-              <button onClick={() => handleShowMembers(org)}>Show Members</button>
-              {activeOrgId === org._id && (
-                <div>
-                  <h3>Members of {org.name}</h3>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Position</th>
-                        <th>School Year</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {members.map((member) => (
-                        <tr key={member._id}>
-                          <td>{member.name}</td>
-                          <td>{member.studentemail}</td>
-                          <td>{member.position}</td>
-                          <td>{member.schoolYear}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </td>
-            <td>
-              <button onClick={() => fetchPotentialMembers(org.name, org._id)}>View Potential Members</button>
-            </td>
-            <td>
-              <button onClick={() => handleManageOfficers(org._id)}>Manage Officers</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+          <div className="org_table_container">
+            <table className="organization-table">
+              <thead>
+                <tr className='table_header'>
+                  <th>Organization Name</th>
+                  <th>School Year</th>
+                  <th>Semester</th>
+                  <th>Members</th>
+                  <th>Manage Officers</th>
+                </tr>
+              </thead>
+              <tbody>
+                {organizations.map((org) => (
+                  <tr key={org._id}>
+                    <td>{org.name}</td>
+                    <td>{org.schoolYear}</td>
+                    <td>{org.semester}</td>
+                    <td>
+                      <button onClick={() => handleShowMembers(org)}>Show Members</button>
+                    </td>
+                    <td>
+                      <button onClick={() => fetchPotentialMembers(org.name, org._id)}>View Potential Members</button>
+                    </td>
+                    <td>
+                      <button onClick={() => handleManageOfficers(org._id)}>Manage Officers</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
         <button onClick={() => setShowModal(true)} className='Add_button'>Add Organization</button>
 
         <ReactModal
@@ -304,8 +375,88 @@ export default function OrganizationReg() {
             <button onClick={handleClosePotentialMembersModal}>Close</button>
           </div>
         </ReactModal>
+
+        <ReactModal
+        isOpen={showMembersModal}
+        onRequestClose={handleCloseMembersModal}
+        contentLabel="Members Modal"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <div className="modal-content">
+          <h2>Members of {selectedOrganization}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Position</th>
+                <th>School Year</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member) => (
+                <tr key={member._id}>
+                  <td>
+                    {editMember === member ? (
+                      <input
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                      />
+                    ) : (
+                      member.name
+                    )}
+                  </td>
+                  <td>
+                    {editMember === member ? (
+                      <input
+                        value={editEmail}
+                        onChange={(e) => setEditEmail(e.target.value)}
+                      />
+                    ) : (
+                      member.studentemail
+                    )}
+                  </td>
+                  <td>
+                    {editMember === member ? (
+                      <input
+                        value={editPosition}
+                        onChange={(e) => setEditPosition(e.target.value)}
+                      />
+                    ) : (
+                      member.position
+                    )}
+                  </td>
+                  <td>
+                    {editMember === member ? (
+                      <input
+                        value={editSchoolYear}
+                        onChange={(e) => setEditSchoolYear(e.target.value)}
+                      />
+                    ) : (
+                      member.schoolYear
+                    )}
+                  </td>
+                  <td>
+                    {editMember === member ? (
+                      <button onClick={handleSaveMember}>Save</button>
+                    ) : (
+                      <button onClick={() => handleEditMember(member)}>Edit</button>
+                    )}
+                  </td>
+                  <td>
+                    <button onClick={() => handleDeleteMember(member._id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button onClick={handleCloseMembersModal}>Close</button>
+        </div>
+      </ReactModal>
       </div>
-      
     </div>
   );
 }
