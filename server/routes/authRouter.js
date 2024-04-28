@@ -4,7 +4,7 @@ const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth } = require('../controllers/authController');
-const { createOrganization, authenticateUser, getOrganization, approveOfficer } = require('../controllers/organizationController');
+const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers } = require('../controllers/organizationController');
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
@@ -43,6 +43,10 @@ router.post('/create_organization', authenticateUser, createOrganization);
 router.post('/logout', logoutUser);
 router.get('/organization', getOrganization);
 router.put('/approve_officer/:orgId/:officerId', authenticateUser, approveOfficer);
+router.get('/organization/:orgName/potential_members', authenticateUser, getPotentialMembers);
+router.post('/organization/:orgName/add_members',addPotentialMembers);
+router.get('/organization/:orgName/members', getAddedMembers);
+
 
 // Define the route for creating announcements with file upload
 router.post('/announcements', authenticateUser, upload.single('media'), createAnnouncement);

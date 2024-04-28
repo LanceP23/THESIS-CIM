@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Organization = require('../models/organization');
+const User = require('../models/user');
 
 const authenticateUser = (req, res, next) => {
     // Check if the authorization header exists
@@ -39,7 +40,8 @@ const createOrganization = async (req, res) => {
             schoolYear,
             semester,
             createdBy: req.user.id, // Assuming req.user has the user information
-            createdAt: new Date()
+            createdAt: new Date(),
+            members:[]
         });
 
         res.json(organization);
@@ -93,9 +95,99 @@ const approveOfficer = async (req, res) => {
     }
 };
 
+const getPotentialMembers = async (req, res) => {
+    try {
+        const { orgName } = req.params;
+        const organization = await Organization.findOne({ name: orgName });
+
+        if (!organization) {
+            return res.status(404).json({ error: 'Organization not found' });
+        }
+
+        // Fetch potential members from the database based on the organization ID
+        const existingMemberIds = organization.members.map(member => member.toString());
+        const potentialMembers = await User.find({ 
+            _id: { $nin: existingMemberIds },
+            organization: orgName
+        });
+
+        res.json(potentialMembers);
+    } catch (error) {
+        console.error('Error fetching potential members:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+const addPotentialMembers = async (req, res) => {
+    try {
+        // Extract organization name from the request params
+        const { orgName } = req.params;
+        const decodedOrgName = decodeURIComponent(orgName);
+
+        console.log('Decoded Organization Name:', decodedOrgName);
+
+        // Find the organization by name
+        const organization = await Organization.findOne({ name: decodedOrgName });
+
+        if (!organization) {
+            console.log('Organization not found:', decodedOrgName);
+            return res.status(404).json({ message: 'Organization not found' });
+        }
+
+        // Extract potential member IDs from the request body
+        const { potentialMemberIds } = req.body;
+
+        // Check if the potential members exist
+        const potentialMembers = await User.find({ _id: { $in: potentialMemberIds } });
+
+        // Filter out existing members from potential members
+        const nonExistingMembers = potentialMembers.filter(member => !organization.members.some(existingMember => existingMember.equals(member._id)));
+
+        // Add non-existing members to the organization's members list
+        organization.members.push(...nonExistingMembers);
+
+        // Save the updated organization
+        await organization.save();
+
+        res.status(200).json({ message: 'Potential members added successfully', addedMembers: nonExistingMembers });
+    } catch (error) {
+        console.error('Error adding potential members:', error);
+        res.status(500).json({ message: 'Failed to add potential members' });
+    }
+};
+
+
+
+const getAddedMembers = async (req, res) =>{
+    try {
+        const { orgName } = req.params;
+
+        // Find the organization by name
+        const organization = await Organization.findOne({ name: orgName });
+
+        if (!organization) {
+            return res.status(404).json({ message: 'Organization not found' });
+        }
+
+        // Fetch the list of added members for the organization
+        const addedMembers = await User.find({ _id: { $in: organization.members } });
+
+        res.status(200).json({ addedMembers });
+    } catch (error) {
+        console.error('Error fetching added members:', error);
+        res.status(500).json({ message: 'Failed to fetch added members' });
+    }
+}
+
+
 module.exports = {
     createOrganization,
     authenticateUser,
     getOrganization,
-    approveOfficer
+    approveOfficer,
+    getPotentialMembers,
+    addPotentialMembers,
+    getAddedMembers
 };

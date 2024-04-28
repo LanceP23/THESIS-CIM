@@ -3,38 +3,44 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
-import './OrganizationReg.css'
-import Modal from 'react-modal';
+import './OrganizationReg.css';
+import ReactModal from 'react-modal';
 
 export default function OrganizationReg() {
   const navigate = useNavigate();
   const [organizations, setOrganizations] = useState([]);
+  const [potentialMembers, setPotentialMembers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newOrganization, setNewOrganization] = useState({
     organizationName: '',
     schoolYear: '',
     semester: ''
   });
-  const[adminType, setAdminType] = useState('');
+  const [adminType, setAdminType] = useState('');
+  const [selectedOrganization, setSelectedOrganization] = useState(null);
+  const [showPotentialMembersModal, setShowPotentialMembersModal] = useState(false);
+  const [showMembers, setShowMembers] = useState(false); 
+  const [activeOrgId, setActiveOrgId] = useState(null); 
+  const [members, setMembers] = useState([]); 
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-        try {
-            const response = await axios.get('/check-auth');
-            if (!response.data.authenticated) {
-                // If not authenticated, redirect to login
-                navigate('/login');
-            } else {
-                // If authenticated, set the admin type
-                setAdminType(localStorage.getItem('adminType'));
-            }
-        } catch (error) {
-            console.error('Error checking authentication status:', error);
+      try {
+        const response = await axios.get('/check-auth');
+        if (!response.data.authenticated) {
+          // If not authenticated, redirect to login
+          navigate('/login');
+        } else {
+          // If authenticated, set the admin type
+          setAdminType(localStorage.getItem('adminType'));
         }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+      }
     };
 
     checkAuthStatus();
-}, [navigate]);
+  }, [navigate]);
 
   // Fetch admin type from localStorage
   const adminType2 = localStorage.getItem('adminType');
@@ -51,6 +57,71 @@ export default function OrganizationReg() {
       console.error('Error fetching organizations:', error);
       toast.error('Failed to fetch organizations');
     }
+  };
+
+  const fetchPotentialMembers = async (orgName, orgId) => {
+    try {
+      setSelectedOrganization(orgName); 
+      const token = getCookie('token');
+      const response = await axios.get(`http://localhost:8000/organization/${orgName}/potential_members`, { headers: { Authorization: `Bearer ${token}` } });
+      setPotentialMembers(response.data);
+      setShowPotentialMembersModal(true);
+    } catch (error) {
+      console.error('Error fetching potential members:', error);
+      toast.error('Failed to fetch potential members');
+    }
+  };
+
+  const addPotentialMember = async (potentialMemberId, orgName) => {
+    try {
+      const token = getCookie('token');
+      if (!orgName) {
+        console.error('Organization name is null');
+        return;
+      }
+      const encodedOrgName = encodeURIComponent(orgName);
+      const response = await axios.post(
+          `http://localhost:8000/organization/${encodedOrgName}/add_members`,
+          { potentialMemberIds: [potentialMemberId] },
+          { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (response.status === 200) {
+        toast.success('Potential member added to organization');
+        setShowPotentialMembersModal(false);
+      } else {
+        toast.error('Failed to add potential member to organization');
+      }
+    } catch (error) {
+      console.error('Error adding potential member to organization:', error);
+      toast.error('Failed to add potential member to organization');
+    }
+  };
+  
+  const fetchMembers = async (orgName) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/organization/${orgName}/members`);
+      const addedMembers = response.data.addedMembers;
+      setMembers(addedMembers);
+    } catch (error) {
+      console.error('Error fetching members:', error);
+      toast.error('Failed to fetch members');
+    }
+  };
+  
+
+  const handleShowMembers = (org) => {
+    // for visibility of active org and state para yun lang lalabas kung anong org pinindot
+    setActiveOrgId((prevOrgId) => (prevOrgId === org._id ? null : org._id));
+    setShowMembers((prev) => !prev);
+    // Fetch members for the selected organization
+    fetchMembers(org.name);
+  };
+  
+  
+
+  const handleClosePotentialMembersModal = () => {
+    setShowPotentialMembersModal(false);
+    setPotentialMembers([]);
   };
 
   const handleInputChange = (e) => {
@@ -97,96 +168,144 @@ export default function OrganizationReg() {
 
   return (
     <div>
-      <Sidebar adminType={adminType2} /> 
-
-    
+      <Sidebar adminType={adminType2} />
 
       <div className="Manage_org_container">
-      <h2>Manage Organizations</h2>
-      
-      {organizations.length === 0 && <p>No organizations yet.</p>}
-      
-      <div className={`modal ${showModal ? 'show' : ''}`}>
-        <div className="modal-content">
-          <span className="close" onClick={() => setShowModal(false)}>&times;</span>
-          <h2>Create a School Organization</h2>
-          <form onSubmit={handleSubmit} className='Org_form'>
-            <div className="Org_name_field">
-            <label htmlFor="organizationName">Organization Name:</label>
-            <input
-              type="text"
-              id="organizationName"
-              name="organizationName"
-              value={newOrganization.organizationName}
-              onChange={handleInputChange}
-              required
-            />
-            </div>
-            <div className="Org_name_field">
-            <label htmlFor="schoolYear">School Year:</label>
-            <input
-              type="text"
-              id="schoolYear"
-              name="schoolYear"
-              value={newOrganization.schoolYear}
-              onChange={handleInputChange}
-              required
-            />
-            </div>
-            <div className="Org_name_field">
-            <label htmlFor="semester">Semester:</label>
-            <input
-              type="text"
-              id="semester"
-              name="semester"
-              value={newOrganization.semester}
-              onChange={handleInputChange}
-              required
-            />
-            </div>
+        <h2>Manage Organizations</h2>
 
-            <button type="submit" className='create_org_button'>Create Organization</button>
-          </form>
-          
-        </div>
-        
-      </div>
-      
-      
-      {organizations.length > 0 && (
-        <div className="org_table_container">
-        <table className="organization-table">
-          <thead>
-            <tr className='table_header'>
-              <th>Organization Name</th>
-              <th>School Year</th>
-              <th>Semester</th>
-              <th>Members</th>
-              <th>Manage Officers</th> 
-            </tr>
-          </thead>
-          <tbody>
-            {organizations.map((org) => (
-              <tr key={org._id}>
-                <td>{org.name}</td>
-                <td>{org.schoolYear}</td>
-                <td>{org.semester}</td>
-                <td>
-                <button onClick={() => handleShowMembers(org._id)}>Show Members</button>
-                </td>
-                <td>
-                  <button onClick={() => handleManageOfficers(org._id)}>Manage Officers</button> 
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
-      )}
-      <button onClick={() => setShowModal(true)} className='Add_button'>Add Organization</button>
+        {organizations.length === 0 && <p>No organizations yet.</p>}
+
+        {organizations.length > 0 && (
+  <div className="org_table_container">
+    <table className="organization-table">
+      <thead>
+        <tr className='table_header'>
+          <th>Organization Name</th>
+          <th>School Year</th>
+          <th>Semester</th>
+          <th>Members</th>
+          <th>Manage Officers</th>
+        </tr>
+      </thead>
+      <tbody>
+        {organizations.map((org) => (
+          <tr key={org._id}>
+            <td>{org.name}</td>
+            <td>{org.schoolYear}</td>
+            <td>{org.semester}</td>
+            <td>
+              <button onClick={() => handleShowMembers(org)}>Show Members</button>
+              {activeOrgId === org._id && (
+                <div>
+                  <h3>Members of {org.name}</h3>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Position</th>
+                        <th>School Year</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {members.map((member) => (
+                        <tr key={member._id}>
+                          <td>{member.name}</td>
+                          <td>{member.studentemail}</td>
+                          <td>{member.position}</td>
+                          <td>{member.schoolYear}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </td>
+            <td>
+              <button onClick={() => fetchPotentialMembers(org.name, org._id)}>View Potential Members</button>
+            </td>
+            <td>
+              <button onClick={() => handleManageOfficers(org._id)}>Manage Officers</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+        <button onClick={() => setShowModal(true)} className='Add_button'>Add Organization</button>
+
+        <ReactModal
+          isOpen={showModal}
+          onRequestClose={() => setShowModal(false)}
+          contentLabel="Create Organization Modal"
+          className="Modal"
+          overlayClassName="Overlay"
+        >
+          <div className="modal-content">
+            <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+            <h2>Create a School Organization</h2>
+            <form onSubmit={handleSubmit} className='Org_form'>
+              <div className="Org_name_field">
+                <label htmlFor="organizationName">Organization Name:</label>
+                <input
+                  type="text"
+                  id="organizationName"
+                  name="organizationName"
+                  value={newOrganization.organizationName}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="Org_name_field">
+                <label htmlFor="schoolYear">School Year:</label>
+                <input
+                  type="text"
+                  id="schoolYear"
+                  name="schoolYear"
+                  value={newOrganization.schoolYear}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="Org_name_field">
+                <label htmlFor="semester">Semester:</label>
+                <input
+                  type="text"
+                  id="semester"
+                  name="semester"
+                  value={newOrganization.semester}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <button type="submit" className='create_org_button'>Create Organization</button>
+            </form>
+          </div>
+        </ReactModal>
+
+        <ReactModal
+          isOpen={showPotentialMembersModal}
+          onRequestClose={handleClosePotentialMembersModal}
+          contentLabel="Potential Members Modal"
+          className="Modal"
+          overlayClassName="Overlay"
+        >
+          <div className="modal-content">
+            <h2>Potential Members</h2>
+            <ul>
+              {potentialMembers.map((member) => (
+                <li key={member._id}>
+                  {member.name} - {member.position}
+                  <button onClick={() => addPotentialMember(member._id, selectedOrganization)}>Add to Organization</button>
+                </li>
+              ))}
+            </ul>
+            <button onClick={handleClosePotentialMembersModal}>Close</button>
+          </div>
+        </ReactModal>
       </div>
       
     </div>
-    
   );
 }

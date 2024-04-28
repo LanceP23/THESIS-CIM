@@ -24,6 +24,10 @@ const organizationSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    members: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
 
 });
 
