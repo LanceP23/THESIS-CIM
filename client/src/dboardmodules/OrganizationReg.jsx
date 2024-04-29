@@ -279,7 +279,9 @@ export default function OrganizationReg() {
                   <th>School Year</th>
                   <th>Semester</th>
                   <th>Members</th>
+                  <th>Potential Members</th>
                   <th>Manage Officers</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -289,13 +291,13 @@ export default function OrganizationReg() {
                     <td>{org.schoolYear}</td>
                     <td>{org.semester}</td>
                     <td>
-                      <button onClick={() => handleShowMembers(org)}>Show Members</button>
+                      <button onClick={() => handleShowMembers(org)} className='_button'>Show Members</button>
                     </td>
                     <td>
-                      <button onClick={() => fetchPotentialMembers(org.name, org._id)}>View Potential Members</button>
+                      <button onClick={() => fetchPotentialMembers(org.name, org._id)} className='_button'>View Potential Members</button>
                     </td>
                     <td>
-                      <button onClick={() => handleManageOfficers(org._id)}>Manage Officers</button>
+                      <button onClick={() => handleManageOfficers(org._id)} className='_button'>Manage Officers</button>
                     </td>
                   </tr>
                 ))}
@@ -304,7 +306,7 @@ export default function OrganizationReg() {
           </div>
         )}
 
-        <button onClick={() => setShowModal(true)} className='Add_button'>Add Organization</button>
+        <button onClick={() => setShowModal(true)} className='add_button'>Add Organization</button>
 
         <ReactModal
           isOpen={showModal}
@@ -314,7 +316,8 @@ export default function OrganizationReg() {
           overlayClassName="Overlay"
         >
           <div className="modal-content">
-            <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+           
+            <p></p>
             <h2>Create a School Organization</h2>
             <form onSubmit={handleSubmit} className='Org_form'>
               <div className="Org_name_field">
@@ -350,7 +353,7 @@ export default function OrganizationReg() {
                   required
                 />
               </div>
-              <button type="submit" className='create_org_button'>Create Organization</button>
+              <button type="submit" className='org_button'>Create Organization</button>
             </form>
           </div>
         </ReactModal>
@@ -368,11 +371,11 @@ export default function OrganizationReg() {
               {potentialMembers.map((member) => (
                 <li key={member._id}>
                   {member.name} - {member.position}
-                  <button onClick={() => addPotentialMember(member._id, selectedOrganization)}>Add to Organization</button>
+                  <button onClick={() => addPotentialMember(member._id, selectedOrganization)} className='_button'>Add to Organization</button>
                 </li>
               ))}
             </ul>
-            <button onClick={handleClosePotentialMembersModal}>Close</button>
+            <button onClick={handleClosePotentialMembersModal} className='_button'>Close</button>
           </div>
         </ReactModal>
 
@@ -441,19 +444,19 @@ export default function OrganizationReg() {
                   </td>
                   <td>
                     {editMember === member ? (
-                      <button onClick={handleSaveMember}>Save</button>
+                      <button onClick={handleSaveMember} className='_button'>Save</button>
                     ) : (
-                      <button onClick={() => handleEditMember(member)}>Edit</button>
+                      <button onClick={() => handleEditMember(member)} className='_button'>Edit</button>
                     )}
                   </td>
                   <td>
-                    <button onClick={() => handleDeleteMember(member._id)}>Delete</button>
+                    <button onClick={() => handleDeleteMember(member._id)} className='_button'>Delete</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <button onClick={handleCloseMembersModal}>Close</button>
+          <button onClick={handleCloseMembersModal} className='_button'>Close</button>
         </div>
       </ReactModal>
       </div>

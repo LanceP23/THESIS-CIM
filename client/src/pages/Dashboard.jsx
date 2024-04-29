@@ -6,6 +6,12 @@ import axios from 'axios';
 import "./Dashboard.css"
 import Conversation from '../ChatModule/Conversation';
 import Conversations from '../ChatModule/Conversations';
+import CreateEvent from '../dboardmodules/CreateEvent'
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid'; 
+import moment from 'moment';
+import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 
 const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
@@ -110,13 +116,21 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
            
            <div className="School_calendar_section">
            <h2>School calendar</h2>
+           
+      
+      
 
            </div>
            <div className="Active_user_section">
-           <h2>Active User</h2>
-           <Conversations conversations={{conversations}} className='active_'/>
+            <div className="active_user_tag">
+            <div className='online-dot'></div>
+            <h3>Active User</h3>
+            </div>
+          
            <div className='Active_users'>
-           
+          
+          
+           <Conversations conversations={{conversations}} className='active_'/>
            </div>
            
            </div>

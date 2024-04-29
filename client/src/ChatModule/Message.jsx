@@ -11,7 +11,7 @@ const Message = ({message}) => {
     const formattedTime = extractTime(message.createdAt);
 
     const chatClassName = fromMe?'chat-end':'chat-start';
-    const bubbleBgColor = fromMe? 'bg-blue-500' : "";
+    const bubbleBgColor = fromMe? 'bg-green-500' : "";
   return (
     <div className={`chat ${chatClassName}`}>
       <div className={`chat-bubble text-white ${bubbleBgColor}`}>

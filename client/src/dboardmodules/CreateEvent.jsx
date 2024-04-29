@@ -385,6 +385,7 @@ const handleDateSelect = (selectInfo) => {
           
            <label>
               <strong>End Date:</strong>
+            </label>
               <input type="date" value={endDate}  onChange={(e) => {
                 const inputtedEndDate = e.target.value;
                 if (inputtedEndDate < selectedDate.start) {
@@ -393,19 +394,22 @@ const handleDateSelect = (selectInfo) => {
                 }
                 setEndDate(inputtedEndDate);
                 }}
+                className='date_field'
               />
-            </label>
+            
             </div>
             <div className='event_content_3'>
             <label>
               <strong>Start Time:</strong> 
-              <input type="time"  value={startTime} onChange={(e) => setStartTime(e.target.value)} />
             </label>
+              <input type="time"  value={startTime} onChange={(e) => setStartTime(e.target.value)}  className='date_field'  />
+           
            
             <label>
               <strong>End Time: </strong>
-              <input type="time"  value={endTime} onChange={(e) => setEndTime(e.target.value)} />
             </label>
+              <input type="time"  value={endTime} onChange={(e) => setEndTime(e.target.value)}  className='date_field' />
+            
           </div>
           <div className='event_content_2'>
             <label>

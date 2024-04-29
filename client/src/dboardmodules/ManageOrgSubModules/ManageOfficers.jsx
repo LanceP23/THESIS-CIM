@@ -45,7 +45,7 @@ export default function ManageOfficers() {
           <li key={officer._id}>
             {officer.name} - {officer.position} - {officer.status}
             <div>
-              <button onClick={() => handleApproveOfficer(officer._id)}>Approve</button>
+              <button onClick={() => handleApproveOfficer(officer._id)} className='approve_button'>Approve</button>
             </div>
           </li>
         ))}

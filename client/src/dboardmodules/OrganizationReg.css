@@ -1,4 +1,7 @@
 
+.Modal{
+  ;
+}
 .modal {
     display: none;
     position: fixed;
@@ -19,17 +22,18 @@
   
   .modal-content {
     background-color: #fefefe;
-    margin: 10% auto;
+    margin: 0 ;
     padding: 20px;
     border: 1px solid #888;
 
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    
   }
   
   .close {
     color: #aaa;
+    
     float: right;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
     
   }
@@ -54,6 +58,7 @@
   }
   
   .organization-table th {
+    
     background-color: #388e3ca9;
     font-weight: bold;
     text-align: left;
@@ -90,12 +95,12 @@
   
   
   
-  .create_org_button {
-    padding: 12px 24px;
+  .org_button {
+    padding:10px;
     background-color: #4caf50; 
     color: #fff;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
@@ -157,20 +162,27 @@
     height: 300px;
     overflow-y: auto;
   }
-  .table_header{
-    position:sticky;
-   
-    
-
-  }
+ 
   .Manage_org_container{
     background-color: whitesmoke;
     padding: 40px;
     border-radius: 20px;
 
   }
-  .Add_button{
-    margin: 30px;
+  .add_button{
+    margin: 50px;
+    padding:10px;
+    border-radius: 10px;
+    background-color: #4caf50;
+    color: white;
+  }
+
+  ._button{
+    padding:10px;
+    border-radius: 5  px;
+    background-color: #4caf50;
+    color: white;
+
   }
 
   /* Adjust the position of the modals */
@@ -189,7 +201,7 @@
 .ReactModal__Content {
   position: relative;
   z-index: 1000; /* Ensure modal is above other content */
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 8px;
   padding: 20px;
 }
@@ -229,21 +241,7 @@
 }
 
 /* Style for the buttons */
-.create_org_button,
-.Add_button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
 
-.create_org_button:hover,
-.Add_button:hover {
-  background-color: #0056b3;
-}
 
 /* Style for the potential members modal */
 .Potential_Members_Modal {
@@ -259,19 +257,5 @@
   margin-bottom: 5px;
 }
 
-.Potential_Members_Modal button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.Potential_Members_Modal button:hover {
-  background-color: #0056b3;
-}
 
 
