@@ -1,6 +1,6 @@
 
 .Modal{
-  ;
+  
 }
 .modal {
     display: none;
@@ -257,5 +257,7 @@
   margin-bottom: 5px;
 }
 
-
+.centered-header {
+  text-align: center;
+}
 

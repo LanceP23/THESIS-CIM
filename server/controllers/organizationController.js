@@ -251,7 +251,25 @@ const updateOrganizationMember = async (req, res) => {
     }
   };
 
-
+  const fetchOrganizationData = async (req, res) => {
+    try {
+        
+        const userId = req.params.userId; 
+        
+        const user = await User.findById(userId);
+    
+    
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+    
+        // Respond with the user's organization and position
+        res.json({ organization: user.organization, position: user.position });
+      } catch (error) {
+        console.error('Error checking authentication status with organization:', error);
+        res.status(500).json({ error: 'Server error' });
+      }
+};
 
 
 module.exports = {
@@ -263,5 +281,6 @@ module.exports = {
     addPotentialMembers,
     getAddedMembers,
     updateOrganizationMember,
-    deleteOrganizationMember
+    deleteOrganizationMember,
+    fetchOrganizationData
 };

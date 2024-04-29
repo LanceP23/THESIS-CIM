@@ -65,14 +65,14 @@ export default function Sidebar() {
               </Link>
 
             </li>
-            {adminType !== 'Organization Officer'&&(
+            
             <li>
 
               <Link to="/createorg" onClick={closeSidebar} className='sidebar_button'> 
               <FontAwesomeIcon className='sidebar_icons' icon={faPeopleArrows} />     Manage Organization
               </Link>
             </li>
-            )}
+
     
             
               <li>
@@ -88,12 +88,12 @@ export default function Sidebar() {
               </li>
 
               <li>
-                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button  '>
                 <FontAwesomeIcon  className='sidebar_icons'icon={faChartBar} />     Analytics Report
                 </Link>
               </li>
               <li>
-                <Link to="" onClick={closeSidebar} className='sidebar_button  '>
+                <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button  '>
                 <FontAwesomeIcon className='sidebar_icons' icon={faLock} />     Admin Settings
                 </Link>
               </li>

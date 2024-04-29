@@ -5,9 +5,13 @@ import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import './OrganizationReg.css';
 import ReactModal from 'react-modal'; 
+import { UserContext } from '../../context/userContext';
+import { useContext } from 'react';
+import OrganizationOfficerPanel from './OrganizationOfficerPanel';
 
 export default function OrganizationReg() {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   const [organizations, setOrganizations] = useState([]);
   const [potentialMembers, setPotentialMembers] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -20,6 +24,7 @@ export default function OrganizationReg() {
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const [showPotentialMembersModal, setShowPotentialMembersModal] = useState(false);
   const [activeOrgId, setActiveOrgId] = useState(null); 
+  const [organizationData, setOrganizationData] = useState(null);
   const [members, setMembers] = useState([]); 
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [editMember, setEditMember] = useState(null);
@@ -35,7 +40,7 @@ export default function OrganizationReg() {
           // If not authenticated, redirect to login
           navigate('/login');
         } else {
-          // If authenticated, set the admin type
+          // Set the admin type
           setAdminType(localStorage.getItem('adminType'));
         }
       } catch (error) {
@@ -58,7 +63,7 @@ export default function OrganizationReg() {
       fetchMembers(selectedOrganization);
     }
   }, [activeOrgId, selectedOrganization]);
-
+  
   const fetchOrganizations = async () => {
     try {
       const response = await axios.get('http://localhost:8000/organization');
@@ -265,7 +270,7 @@ export default function OrganizationReg() {
     <div>
       <Sidebar adminType={adminType2} />
 
-      <div className="Manage_org_container">
+      {adminType !== 'Organization Officer'&&(<div className="Manage_org_container">
         <h2>Manage Organizations</h2>
 
         {organizations.length === 0 && <p>No organizations yet.</p>}
@@ -280,7 +285,6 @@ export default function OrganizationReg() {
                   <th>Semester</th>
                   <th>Members</th>
                   <th>Potential Members</th>
-                  <th>Manage Officers</th>
                   
                 </tr>
               </thead>
@@ -295,9 +299,6 @@ export default function OrganizationReg() {
                     </td>
                     <td>
                       <button onClick={() => fetchPotentialMembers(org.name, org._id)} className='_button'>View Potential Members</button>
-                    </td>
-                    <td>
-                      <button onClick={() => handleManageOfficers(org._id)} className='_button'>Manage Officers</button>
                     </td>
                   </tr>
                 ))}
@@ -459,7 +460,12 @@ export default function OrganizationReg() {
           <button onClick={handleCloseMembersModal} className='_button'>Close</button>
         </div>
       </ReactModal>
-      </div>
+      </div>)}
+
+      {adminType==='Organization Officer'&&(
+        <OrganizationOfficerPanel/>
+      )}
+
     </div>
   );
 }
