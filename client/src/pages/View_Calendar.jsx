@@ -10,9 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import './CreateEvent.css';
 import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-icons/font/bootstrap-icons.css' // needs additional webpack config!
-
 const customStyles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -39,7 +36,7 @@ const customStyles = {
 };
 
 
-const CreateEvent = ({ defaultSelectable = true }) => {
+const CreateEvent = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [eventName, setEventName] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -67,8 +64,6 @@ const CreateEvent = ({ defaultSelectable = true }) => {
   const [modalMode, setModalMode] = useState('add');
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(null);
-
-  const [selectable, setSelectable] = useState(defaultSelectable);
 
 
   useEffect(() => {
@@ -325,15 +320,13 @@ const handleDateSelect = (selectInfo) => {
       
 
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, ]}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         events={events}
         eventClick={handleEventClick} 
-        selectable={selectable} // Set selectable based on state
+        selectable = {true}
         select={handleDateSelect}
-        
         className="calendar_component"
-        
         
       />
       

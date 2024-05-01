@@ -4,9 +4,11 @@ import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './Login.css'
+import ReactModal from 'react-modal'; 
 
 
 const Login = (  ) => {
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
     const [data, setData] = useState({
         studentemail: '',
@@ -63,12 +65,17 @@ const Login = (  ) => {
 
     
 
+    
+
     return (
-        <div className="background_image_container">
-            
+        <div className="background_image_container" >
+             <Navbar/>
        <img src='../src/assets/webwithLogo.png' className='background_image_login'></img>
+       
+    
         <div className="login-form">
-            <Navbar/>
+
+           
             <form onSubmit={loginAdmin}>
                 <label>Admin email</label>
                 <input
@@ -76,6 +83,7 @@ const Login = (  ) => {
                     placeholder="Enter Admin Email..."
                     value={data.studentemail}
                     onChange={(e) => setData({ ...data, studentemail: e.target.value })}
+                    className='login_field'
                 />
                 <label>Password</label>
                 <input
@@ -83,11 +91,25 @@ const Login = (  ) => {
                     placeholder="Enter Your Password"
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
+                    className='login_field'
                 />
                 <button type="submit" className='login__button' >Login</button>
             </form>
+
+        
+           
+
+
+            
+           
+            
         </div>
+     
+       
         </div>
+
+
+
     );
 };
 

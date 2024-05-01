@@ -34,5 +34,28 @@
     z-index: -1;
     
   }
-  
+
+  @keyframes slideInFromBottom {
+    from {
+        
+        transform: translateX(-700px)}
+    to {
+        
+        transform: translateX(0);
+    }
+}
+
+  .login-form  {
+    animation-name: slideInFromBottom;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in;
+    animation-delay: 0;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    transform: translateY(-150px);
+  }
+
+  .login_field{
+    color: white;
+  }
   

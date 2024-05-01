@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import OrganizationReg from '../dboardmodules/OrganizationReg';
 import axios from 'axios';
@@ -12,6 +12,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid'; 
 import moment from 'moment';
 import interactionPlugin from '@fullcalendar/interaction'; // for selectable
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDashboard } from '@fortawesome/free-solid-svg-icons';
 
 const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
@@ -95,6 +97,8 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
         
         <div className="dashboard">
         <Sidebar adminType={adminType} />
+
+        <h2 className='_title'>Dashboard <FontAwesomeIcon icon={faDashboard}/></h2>
         <div className="dashboard-content">
             <div className='Column_1'>
 
@@ -114,13 +118,13 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
 
            
-           <div className="School_calendar_section">
-           <h2>School calendar</h2>
-           
-      
-      
-
+           <div className="School_calendar_section" >
+            
+         
+            <CreateEvent defaultSelectable={false}/>
+            
            </div>
+
            <div className="Active_user_section">
             <div className="active_user_tag">
             <div className='online-dot'></div>

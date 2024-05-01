@@ -1,10 +1,15 @@
 
 .dashboard-content{
     
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 1fr; /* Two equal columns */
     margin-left: 100px;
 
+}
+._title{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ font-style: italic;
+ margin-left: 120px;
 }
 
 .Column_1{
@@ -30,7 +35,8 @@
     padding-top: 10px;
     margin: 10px;
     height: 300px;
-    width: 850px;
+    width: 780px;
+    box-shadow:   5px 5px 10px rgba(0, 0, 0, 0.1);;
     
 }
 .My_community_section{
@@ -41,7 +47,8 @@
     padding-top: 10px;
     margin: 10px;
     height: 250px;
-    width: 850px;
+    width: 780px;
+    box-shadow:   5px 5px 10px rgba(0, 0, 0, 0.1);;
     
 
 }
@@ -51,8 +58,9 @@
     padding-left: 10px;
     padding-top: 10px;
     margin: 10px;
-    height: 250px;
-    width: 250px;
+    height: 330px;
+    box-shadow:   5px 5px 10px rgba(0, 0, 0, 0.1);;
+    
 }
 .Active_user_section{
    
@@ -61,10 +69,11 @@
     border-radius: 10px;
     padding-left: 10px;
     padding-top: 10px;
-    max-height: 300px; 
-    width: 250px;
+    max-height: 220px; 
+    width: 300px;
     overflow: hidden;
     color: black;
+    box-shadow:   5px 5px 10px rgba(0, 0, 0, 0.1);;
     
    
     margin: 10px;
@@ -99,3 +108,22 @@ h2{
     align-items: center; /* Vertically align items */
     margin: 5px;
   }
+
+  .fc-toolbar-title {
+    font-size: 5px;
+  }
+
+  .fc-toolbar-chunk{
+    display: grid;
+    grid-template-columns: auto auto;
+    padding-right: 5px;
+  }
+
+  .fc-fc-media-screen-fc-direction-ltr-fc-theme-standard{
+    padding: 40px;
+  }
+  .fc-dayGridMonth-view {
+    
+    border-radius: 10px;
+  }
+  

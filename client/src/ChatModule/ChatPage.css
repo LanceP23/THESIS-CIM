@@ -2,9 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@keyframes slideleft {
+  from{
+    transform: translateY(-500px);
+  }
+
+  to{
+    transform: translateY(0);
+  }
+  
+}
 .label_cont h2{
- font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
  font-style: italic;
+ animation-name: slideleft;
+ animation-duration: 0;
+ animation-timing-function: ease-in;
+ animation-delay: 1s;
+ animation-direction: normal;
+ animation-fill-mode: both;
+ transform: translateY(-150px);
+
+ 
   
 }
 
@@ -16,7 +36,15 @@
     border-radius: 10px;
     color: black;
     background:radial-gradient( circle, #9bf88ce3 0%, grey 100%);
-    animation: moveGradient 10s linear infinite;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.534);
+  
+    animation-name: slideleft;
+    animation-duration: 1s;
+    animation-timing-function: ease-in;
+    animation-delay: 0;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    transform: translateY(-150px);
   
 }
 @keyframes moveGradient {

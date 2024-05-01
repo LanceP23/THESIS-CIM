@@ -11,6 +11,9 @@ import { initializeApp } from 'firebase/app';
 import 'firebase/storage';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import CreateEvent from './CreateEvent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQZQtWzdKepDwzzhOAw_F8A4xkhtwz9p0",
@@ -198,6 +201,7 @@ export default function CreateAnnouncement() {
 
   return (
     <div>
+      <h2 className='_post_manag_title'>Post Management <FontAwesomeIcon icon={faBullhorn}/></h2>
       <Sidebar adminType={adminType2} />
 
       <div className='Announcement_container'>
@@ -309,13 +313,14 @@ export default function CreateAnnouncement() {
             </Tabs>
           </Row>
         </div>
+        
 
-        <div className='community_calendar_container'>
+        {/*<div className='community_calendar_container'>
           <div className='calendar_container'>
             <h3>Community Calendar</h3>
           </div>
           <div className='bottom_part'></div>
-        </div>
+            </div>*/}
       </div>
     </div>
   );

@@ -1,7 +1,4 @@
 
-.Modal{
-  
-}
 .modal {
     display: none;
     position: fixed;
@@ -74,7 +71,7 @@
   }
   
   .organization-table tr:hover {
-    background-color: #4caf4f9f;
+    background-color: #f6e8295b;
   }
   
   .container {
@@ -98,6 +95,17 @@
   .org_button {
     padding:10px;
     background-color: #4caf50; 
+    color: #252525;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  .org_button:hover {
+    padding:10px;
+    background-color: green; 
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -105,10 +113,13 @@
     font-size: 16px;
     transition: background-color 0.3s ease;
   }
+
+
+  
   
   .create_org_button :hover {
     
-    background-color: #4caf50; 
+    background-color: green; 
     color: #fff;
     border: none;
    
@@ -167,6 +178,7 @@
     background-color: whitesmoke;
     padding: 40px;
     border-radius: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.377);
 
   }
   .add_button{
@@ -174,16 +186,36 @@
     padding:10px;
     border-radius: 10px;
     background-color: #4caf50;
+    color: #252525;
+    
+    
+  }
+
+  .add_button:hover{
+    margin: 50px;
+    padding:10px;
+    border-radius: px;
+    background-color: green;
     color: white;
+    
   }
 
   ._button{
     padding:10px;
     border-radius: 5  px;
     background-color: #4caf50;
+    color: #252525;
+
+  }
+
+  ._button:hover{
+    padding:10px;
+    border-radius: 5  px;
+    background-color: green;
     color: white;
 
   }
+
 
   /* Adjust the position of the modals */
 .ReactModal__Overlay {
@@ -238,6 +270,7 @@
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  color: white;
 }
 
 /* Style for the buttons */
@@ -260,4 +293,11 @@
 .centered-header {
   text-align: center;
 }
+
+._manag_org_title{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-style: italic;
+  margin-left: 20px;
+}
+
 

@@ -8,6 +8,8 @@ import ReactModal from 'react-modal';
 import { UserContext } from '../../context/userContext';
 import { useContext } from 'react';
 import OrganizationOfficerPanel from './OrganizationOfficerPanel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPeopleArrows } from '@fortawesome/free-solid-svg-icons';
 
 export default function OrganizationReg() {
   const navigate = useNavigate();
@@ -267,11 +269,14 @@ export default function OrganizationReg() {
   };
 
   return (
-    <div>
+    <div className='manage_org-cont'>
       <Sidebar adminType={adminType2} />
+      <h2 className='_manag_org_title'>Manage Organizations <FontAwesomeIcon icon={faPeopleArrows}/></h2>
+      
 
-      {adminType !== 'Organization Officer'&&(<div className="Manage_org_container">
-        <h2>Manage Organizations</h2>
+      {adminType !== 'Organization Officer'&&(
+      <div className="Manage_org_container">
+        
 
         {organizations.length === 0 && <p>No organizations yet.</p>}
 
@@ -316,7 +321,7 @@ export default function OrganizationReg() {
           className="Modal"
           overlayClassName="Overlay"
         >
-          <div className="modal-content">
+          <div className="modal-content" >
            
             <p></p>
             <h2>Create a School Organization</h2>
