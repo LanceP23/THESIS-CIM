@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import StaffRegistration from '../RegistrationModals/StaffRegistration'; 
 import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
 import StudentRegistration from '../RegistrationModals/StudentRegistration';
+import StudentMobileUserReg from '../RegistrationModals/StudentMobileUser';
 import Sidebar from '../components/Sidebar'; 
 import RegisteredAccounts from '../RegisteredAdmins/RegisteredAccounts';
 import './Register.css'
@@ -194,6 +195,8 @@ export default function Register() {
         <RegisteredAccounts />
         </div>
       </div>
+
+      <StudentMobileUserReg/>
 
     
     </div>

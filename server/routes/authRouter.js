@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
-const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth } = require('../controllers/authController');
+const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData } = require('../controllers/organizationController');
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
@@ -79,7 +79,7 @@ router.put('/update-settings',updateAcademicSettingsAndArchiveAccounts,archiveAc
 router.put('/unarchive-accounts',unarchiveAccounts);
 
 
-
+router.post('/register-mobile-user', registerMobileUser);
 
 
 

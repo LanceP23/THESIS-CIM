@@ -1,6 +1,8 @@
 const User = require('../models/user')
+const MobileUser = require('../models/mobileUser')
 const{hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 
 
 const test = (req, res) =>{
@@ -235,11 +237,86 @@ const logoutUser = async (req, res) => {
     
 }
 
+
+//mobile Registration
+const registerMobileUser = async (req, res) => {
+    try {
+        const { name, studentemail, password, section, educationLevel, gradeLevel, highSchoolYearLevel, shsStrand, collegeCourse, collegeYearLevel, subjects, profilePicture } = req.body;
+
+        // Validate required fields
+        if (!name || !studentemail || !password || !section || !educationLevel || !subjects) {
+            return res.status(400).json({ error: 'All required fields must be provided' });
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(studentemail)) {
+            return res.status(400).json({ error: 'Invalid email format' });
+        }
+
+        // Check if the email already exists
+        const existingUser = await MobileUser.findOne({ studentemail });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email already exists' });
+        }
+
+        // Hash the password
+        const hashedPassword = await hashPassword(password);
+
+        // Create the mobile user
+        let newUser = new MobileUser({
+            name,
+            studentemail,
+            password: hashedPassword,
+            section,
+            educationLevel,
+            subjects,
+            profilePicture,
+        });
+
+        // Include relevant fields based on education level
+        switch (educationLevel) {
+            case 'Grade School':
+                if (gradeLevel != null) newUser.gradeLevel = gradeLevel;
+                break;
+            case 'High School':
+                if (highSchoolYearLevel != null) newUser.highSchoolYearLevel = highSchoolYearLevel;
+                break;
+            case 'Senior High School':
+                if (!shsStrand) {
+                    return res.status(400).json({ error: 'Strand is required for Senior High School' });
+                }
+                newUser.shsStrand = shsStrand;
+                if (highSchoolYearLevel != null) newUser.seniorHighSchoolYearLevel = highSchoolYearLevel;
+                break;
+            case 'College':
+                if (collegeCourse) newUser.collegeCourse = collegeCourse;
+                if (collegeYearLevel != null) newUser.collegeYearLevel = collegeYearLevel;
+                break;
+            default:
+                return res.status(400).json({ error: 'Invalid education level' });
+        }
+
+        // Save the user to the database
+        await newUser.save();
+
+        // Send a success response
+        res.status(201).json(newUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+
 module.exports = {
     test,
     registerUser,
     loginUser,
     checkAuth,
     getProfile,
-    logoutUser
+    logoutUser,
+    registerMobileUser
 }   

@@ -32,7 +32,7 @@ app.use("/api/users", require('./routes/userRoutes'));
 
 
 const port = 8000;
-server.listen(port, ()=> console.log('Ang server na ito ay tumatakbo sa server na '+port))
+server.listen(port, '0.0.0.0', ()=> console.log('Ang server na ito ay tumatakbo sa server na '+port))
 
 
 
