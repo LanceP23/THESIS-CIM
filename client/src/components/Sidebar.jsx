@@ -93,8 +93,8 @@ export default function Sidebar() {
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button  '>
-                <FontAwesomeIcon className='sidebar_icons' icon={faLock} />     Admin Settings
+                <Link to="/user-settings" onClick={closeSidebar} className='sidebar_button  '>
+                <FontAwesomeIcon className='sidebar_icons' icon={faLock} />     User Settings
                 </Link>
               </li>
               <li>

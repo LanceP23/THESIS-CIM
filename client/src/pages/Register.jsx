@@ -10,6 +10,7 @@ import StudentMobileUserReg from '../RegistrationModals/StudentMobileUser';
 import Sidebar from '../components/Sidebar'; 
 import RegisteredAccounts from '../RegisteredAdmins/RegisteredAccounts';
 import './Register.css'
+import UserManagement from '../mobileusermanagement/DisplayAllMobileAcc';
 export default function Register() {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -198,7 +199,6 @@ export default function Register() {
 
       <StudentMobileUserReg/>
 
-    
     </div>
   );
 }

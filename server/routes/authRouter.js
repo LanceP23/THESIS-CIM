@@ -12,6 +12,7 @@ const {postEventController,getEventsController} = require('../controllers/postEv
 
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
+const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
 
 
 router.use(
@@ -78,9 +79,12 @@ router.get('/fetch-event', getEventsController);
 router.put('/update-settings',updateAcademicSettingsAndArchiveAccounts,archiveAccounts);
 router.put('/unarchive-accounts',unarchiveAccounts);
 
-
+//mobileusers
 router.post('/register-mobile-user', registerMobileUser);
-
+router.get('/mobile-users/:userId', getMobileUserById);
+router.get('/mobile-users', getAllMobileUsers);
+router.put('/update-mobile-users/:userId',updateMobileUserById);
+router.delete('/delete-mobile-users/:userId',deleteMobileUserById);
 
 
 
