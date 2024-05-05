@@ -44,6 +44,8 @@ export default function CreateAnnouncement() {
     faculty: false,
     students: false
   });
+  const [postingDate, setPostingDate] = useState('');
+  const [expirationDate, setExpirationDate] = useState('');
 
   const adminType2 = localStorage.getItem('adminType');
 
@@ -149,6 +151,8 @@ export default function CreateAnnouncement() {
             formData.append('body', body);
             formData.append('mediaUrl', mediaUrl);
             formData.append('visibility', JSON.stringify(visibility));
+            formData.append('postingDate', postingDate);
+            formData.append('expirationDate', expirationDate);
   
             // Post the announcement data to your server
             const response = await axios.post('/announcements', formData, {
@@ -163,6 +167,9 @@ export default function CreateAnnouncement() {
             setBody('');
             setMedia(null);
             setMediaPreview(null);
+            setVisibility('');
+            setPostingDate('')
+            setExpirationDate('')
   
             // Show success message
             if (adminType2 !== 'School Owner') {
@@ -196,6 +203,14 @@ export default function CreateAnnouncement() {
       ...prevVisibility,
       [name]: checked
     }));
+  };
+
+  const handlePostingDateChange = (e) => {
+    setPostingDate(e.target.value);
+  };
+  
+  const handleExpirationDateChange = (e) => {
+    setExpirationDate(e.target.value);
   };
 
 
@@ -235,7 +250,7 @@ export default function CreateAnnouncement() {
                     className="input-field"
                     type="file"
                     id="media"
-                    accept="image/*, video/*"
+                    accept="image/*, video/*, audio/*"
                     onChange={handleMediaChange}
                   />
                   {mediaPreview && (
@@ -261,6 +276,26 @@ export default function CreateAnnouncement() {
                     <span className="option-icon"><i className="fa fa-graduation-cap"></i> Students</span>
                   </label>
                 </div>
+                <div>
+                    <label className="label" htmlFor="postingDate">Posting Date:</label>
+                    <input
+                      className="input-field"
+                      type="date"
+                      id="postingDate"
+                      value={postingDate}
+                      onChange={handlePostingDateChange}
+                    />
+                  </div>
+                  <div>
+                    <label className="label" htmlFor="expirationDate">Expiration Date:</label>
+                    <input
+                      className="input-field"
+                      type="date"
+                      id="expirationDate"
+                      value={expirationDate}
+                      onChange={handleExpirationDateChange}
+                    />
+                  </div>
                 <button className="button" onClick={handleSubmit}>Post</button>
 
                 <div className='recent_post_container'>
@@ -285,7 +320,12 @@ export default function CreateAnnouncement() {
                                 <video controls>
                                   <source src={announcement.mediaUrl} type={announcement.contentType} />
                                 </video>
-                              ) : (
+                              ) : announcement.contentType && announcement.contentType.startsWith('audio') ?
+                               (
+                                <audio controls>
+                                  <source src={announcement.mediaUrl} type={announcement.contentType} />
+                                </audio>
+                               ):(
                                 <p>No media available</p>
                               )}
                               </div>

@@ -27,8 +27,15 @@ const announcementSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected'],
+    enum: ['pending', 'approved', 'rejected', 'scheduled', 'expired'],
     default: 'pending',
+  },
+  postingDate: {
+    type: Date, 
+  },
+  expirationDate: {
+    type: Date, 
+    required: true
   },
   createdAt: {
     type: Date,

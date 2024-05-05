@@ -47,13 +47,15 @@ r
 // Create Announcement
 const createAnnouncement = async (req, res) => {
   try {
-    const { header, body, mediaUrl, visibility } = req.body;
+    const { header, body, mediaUrl, visibility, postingDate, expirationDate } = req.body;
     let contentType = null;
 
     let status = 'pending';
 
-    if (req.user.adminType === 'School Owner') {
-      status = 'approved';
+    if (req.user.adminType === 'School Owner' && postingDate && new Date(postingDate) > new Date()) {
+      status = 'scheduled'; // Set status to 'scheduled' if posting date is in the future
+    } else {
+      status = 'approved'; // Set status to 'approved' if no posting date provided or for other user roles
     }
 
     // Extract contentType from uploaded file
@@ -79,7 +81,9 @@ const createAnnouncement = async (req, res) => {
       contentType,
       status,
       postedBy: req.user.name,
-      visibility: JSON.parse(visibility)
+      visibility: JSON.parse(visibility),
+      postingDate,
+      expirationDate
     });
 
     await announcement.save();
