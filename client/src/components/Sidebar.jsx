@@ -76,7 +76,7 @@ export default function Sidebar() {
     
             
               <li>
-                <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button ' >
+                <Link to="/community-landing" onClick={closeSidebar} className='sidebar_button ' >
                 <FontAwesomeIcon className='sidebar_icons' icon={faPeopleArrows} />    My Community
                 </Link>
               </li>

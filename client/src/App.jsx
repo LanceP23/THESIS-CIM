@@ -18,6 +18,8 @@ import ChatPage from './ChatModule/ChatPage';
 import React, {useContext, useState} from 'react';
 import { SocketContextProvider } from '../context/socketContext';
 import UserManagement from './mobileusermanagement/DisplayAllMobileAcc';
+import MyCommunity from './dboardmodules/MyCommunityModule/MyCommunity';
+import BuildCommunity from './dboardmodules/MyCommunityModule/BuildCommunity';
 
 
 axios.defaults.baseURL = 'http://localhost:8000';
@@ -45,6 +47,8 @@ function App() {
         <Route exact path="/post-approval" component={PostApproval} />
         <Route path ="/campcomms" element={<ChatPage/>}/>
         <Route path ="/user-settings" element={<UserManagement/>}/>
+        <Route path="/community-landing" element={<MyCommunity />}  />
+        <Route path="/build-community" element={<BuildCommunity/>} />
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>

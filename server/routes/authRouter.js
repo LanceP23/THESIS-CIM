@@ -13,6 +13,7 @@ const {postEventController,getEventsController} = require('../controllers/postEv
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
+const { buildCommunity, fetchMobileUsers, fetchUsers } = require('../controllers/communityController');
 
 
 router.use(
@@ -85,6 +86,10 @@ router.get('/mobile-users/:userId', getMobileUserById);
 router.get('/mobile-users', getAllMobileUsers);
 router.put('/update-mobile-users/:userId',updateMobileUserById);
 router.delete('/delete-mobile-users/:userId',deleteMobileUserById);
+
+router.post('/build-community',authenticateUser,upload.none(), buildCommunity);
+router.get('/get-mobile-users', fetchMobileUsers);
+router.get('/get-users', fetchUsers);
 
 
 

@@ -42,7 +42,7 @@ const StudentMobileUserReg = () => {
             
             // Display success toast
             toast.success('User registered successfully', {
-                duration: 4000 // Optional: Specify toast duration
+                duration: 4000 
             });
             setName('');
             setEmail('');
@@ -57,7 +57,6 @@ const StudentMobileUserReg = () => {
             setSubjects('');
             setProfilePicture('');
         } catch (error) {
-            // Display error toast
             toast.error(error.response.data.error);
         }
     };
