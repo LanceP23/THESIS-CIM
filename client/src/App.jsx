@@ -20,6 +20,7 @@ import { SocketContextProvider } from '../context/socketContext';
 import UserManagement from './mobileusermanagement/DisplayAllMobileAcc';
 import MyCommunity from './dboardmodules/MyCommunityModule/MyCommunity';
 import BuildCommunity from './dboardmodules/MyCommunityModule/BuildCommunity';
+import ViewCommunity from './dboardmodules/MyCommunityModule/ViewCommunity';
 
 
 axios.defaults.baseURL = 'http://localhost:8000';
@@ -49,6 +50,7 @@ function App() {
         <Route path ="/user-settings" element={<UserManagement/>}/>
         <Route path="/community-landing" element={<MyCommunity />}  />
         <Route path="/build-community" element={<BuildCommunity/>} />
+        <Route path="/view-community" element={<ViewCommunity/>} />
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>

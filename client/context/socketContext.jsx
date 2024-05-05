@@ -2,40 +2,54 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { UserContext } from "./userContext";
 import io from "socket.io-client";
 
- export const socketContext = createContext();
- export const useSocketContext =()=>{
+export const socketContext = createContext();
+export const useSocketContext = () => {
     return useContext(socketContext);
- }
-  export const SocketContextProvider = ({children})=>{
-    const[socket, setSocket] = useState(null)
-    const[onlineUsers, setOnlineUsers] = useState([])
+}
+export const SocketContextProvider = ({ children }) => {
+    const [socket, setSocket] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([]);
     const { user } = useContext(UserContext);
 
-    useEffect(()=>{
-        if(user){
-            const socket = io("http://localhost:8000",{
-                query:{
-                    userId: user.id,
-                }
-            });
+    useEffect(() => {
+        if (user) {
+            // Define an array of URLs to attempt connecting
+            const connectionURLs = [
+                "http://192.168.0.101:8000", // Hardcoded IP address
+                "http://localhost:8000" // Localhost
+            ];
 
-            setSocket(socket);
-            socket.on("getOnlineUsers",(users)=>{
-                setOnlineUsers(users);
-            })
-            return()=>socket.close();
-        }else{
-            if(socket){
-                socket.close()
-                setSocket(null)
+            // Attempt to connect using each URL until successful
+            let socket;
+            for (const url of connectionURLs) {
+                socket = io(url, {
+                    query: {
+                        userId: user.id,
+                    }
+                });
+                // If connection is successful, break out of the loop
+                socket.on("connect", () => {
+                    setSocket(socket);
+                    socket.on("getOnlineUsers", (users) => {
+                        setOnlineUsers(users);
+                    });
+                    return;
+                });
             }
-            setOnlineUsers([]);
+
+            return () => {
+                if (socket) {
+                    socket.close();
+                    setSocket(null);
+                }
+                setOnlineUsers([]);
+            };
         }
-    },[user])
-    return(
-        <socketContext.Provider value ={{socket, onlineUsers}}>
+    }, [user]);
+
+    return (
+        <socketContext.Provider value={{ socket, onlineUsers }}>
             {children}
         </socketContext.Provider>
-    )
- }
-
+    );
+};

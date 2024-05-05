@@ -7,7 +7,7 @@ const path = require('path');
 const socketIo = require('socket.io');
 const {initializeSocket} = require('./socketManager');
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://192.168.0.101:5173'],
     credentials: true,
 };
 const {app, server} =require('./socketManager');
@@ -32,7 +32,7 @@ app.use("/api/users", require('./routes/userRoutes'));
 
 
 const port = 8000;
-server.listen(port, '0.0.0.0', ()=> console.log('Ang server na ito ay tumatakbo sa server na '+port))
+server.listen(port, ()=> console.log('Ang server na ito ay tumatakbo sa server na '+port))
 
 
 

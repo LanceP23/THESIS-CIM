@@ -51,10 +51,14 @@ const buildCommunity = async (req, res) => {
   
       // Get the authenticated user (creator)
       const creator = req.user;
+      
   
       // Add the creator as admin
-      const creatorMember = { userId: creator._id, name: creator.name, userType: 'User', adminType: creator.adminType || '', role: 'admin' };
+      const creatorMember = { userId: creator.id, name: creator.name, userType: 'User', adminType: creator.adminType || '', role: 'admin' };
         members.push(creatorMember);
+        
+
+        
   
       // Create the community
       const newCommunity = new Community({
@@ -99,8 +103,36 @@ const fetchUsers = async (req, res) => {
     }
   };
 
+  const getAllCommunities = async (req, res) => {
+    try {
+      // Fetch all communities
+      const communities = await Community.find();
+      res.status(200).json(communities);
+    } catch (error) {
+      console.error('Error fetching communities:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+  const getCommunityById = async (req, res) => {
+    try {
+      const userId = req.user.id; 
+  
+      // Fetch communities where the current user is an admin
+      const communities = await Community.find({ 'members.userId': userId, 'members.role': 'admin' });
+  
+      res.status(200).json(communities);
+    } catch (error) {
+      console.error('Error fetching communities:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  
+
 module.exports = {
   buildCommunity,
   fetchMobileUsers,
-  fetchUsers
+  fetchUsers,
+  getAllCommunities,
+  getCommunityById
 };
