@@ -19,6 +19,10 @@ const announcementSchema = new mongoose.Schema({
     type:String,
     required:true
   },
+  communityId: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Community', 
+  },
   visibility: {
     everyone: { type: Boolean, default: false },
     staff: { type: Boolean, default: false },
@@ -41,6 +45,13 @@ const announcementSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+announcementSchema.pre('save', function(next) {
+  if (this.postingDate && this.expirationDate <= this.postingDate) {
+    return next(new Error('Expiration date must be after posting date'));
+  }
+  next();
 });
 
 const Announcement = mongoose.model('Announcement', announcementSchema);

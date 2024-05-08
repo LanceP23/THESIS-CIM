@@ -4,23 +4,28 @@ const ArchiveAnnouncement = require('../models/archiveAnnouncement');
 
 // Define a function to run periodically
 const startBackgroundTasks = () => {
-    // Schedule a task to run every hour
-    cron.schedule('0 * * * *', async () => {
+    // Schedule a task to run every minute
+    cron.schedule('* * * * *', async () => {
+        console.log('Cron job started at', new Date().toISOString());
+
         try {
-            // Find announcements with pending or scheduled status and posting dates that have been reached
+            const now = new Date();
+            const bufferStart = new Date(now.getTime() - 60000); // 1 minute before now
+            const bufferEnd = new Date(now.getTime() + 60000); // 1 minute after now
+
+            // Find announcements with scheduled status and posting dates that have been reached within buffer time
             const announcementsToApprove = await Announcement.find({
-                $or: [
-                    { status: 'scheduled', postingDate: { $lte: new Date() } }
-                ]
+                status: 'scheduled',
+                postingDate: { $lte: bufferEnd, $gte: bufferStart }
             });
+            //console.log('Found announcements to approve:', announcementsToApprove);
 
             // Update status to "approved" for announcements that meet the criteria
-            await Announcement.updateMany(
+            const result = await Announcement.updateMany(
                 { _id: { $in: announcementsToApprove.map(announcement => announcement._id) } },
                 { $set: { status: 'approved' } }
             );
-
-            console.log('Announcements approved:', announcementsToApprove.length);
+            //console.log('Announcements approved:', result);
         } catch (error) {
             console.error('Error approving announcements:', error);
         }
@@ -48,9 +53,10 @@ const startBackgroundTasks = () => {
             }
 
             // Remove expired announcements from the main announcements collection
-            await Announcement.deleteMany({ _id: { $in: expiredAnnouncements.map(announcement => announcement._id) } });
-
-            console.log('Announcements archived:', expiredAnnouncements.length);
+            const archivedCount = await Announcement.deleteMany({
+                _id: { $in: expiredAnnouncements.map(announcement => announcement._id) }
+            });
+            //console.log('Announcements archived:', archivedCount.deletedCount);
         } catch (error) {
             console.error('Error archiving announcements:', error);
         }

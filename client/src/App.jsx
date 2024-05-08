@@ -21,6 +21,8 @@ import UserManagement from './mobileusermanagement/DisplayAllMobileAcc';
 import MyCommunity from './dboardmodules/MyCommunityModule/MyCommunity';
 import BuildCommunity from './dboardmodules/MyCommunityModule/BuildCommunity';
 import ViewCommunity from './dboardmodules/MyCommunityModule/ViewCommunity';
+import RecentPostCommunity from './dboardmodules/MyCommunityModule/RecentPostCommunity';
+import NotificationBell from './components/NotificationBell';
 
 
 axios.defaults.baseURL = 'http://localhost:8000';
@@ -36,6 +38,7 @@ function App() {
       <SocketContextProvider>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       <Sidebar />
+      <NotificationBell/>
       <Routes>
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/" element={<Home />} />

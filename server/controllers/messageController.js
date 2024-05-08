@@ -34,7 +34,13 @@ const sendMessage = async (req,res) =>{
          const receiverSocketId = getReceiverSocketId(receiverId);
          if(receiverSocketId){
             console.log("Emitting newMessage event to receiver:", receiverSocketId);
-            io.to(receiverSocketId).emit("newMessage", newMessage)
+            io.to(receiverSocketId).emit("newMessage", newMessage);
+
+            io.to(receiverSocketId).emit("newNotification", {
+                senderName: req.user.name,
+                message: message,
+                timestamp: new Date().toISOString()
+            });
          }
 
         res.status(201).json(newMessage);

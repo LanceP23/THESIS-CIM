@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './MyCommunit.css'; 
 
 export default function MyCommunity() {
   const navigate = useNavigate();
@@ -11,14 +12,14 @@ export default function MyCommunity() {
   const handleViewCommunity = () => {
     navigate('/view-community');
   };
+  
   return (
-    
-    <div>
-       
+    <div className="my-community-container">
       <h1>Welcome to the Community Management Module</h1>
-      <button onClick={handleBuildCommunity}>Build a Community</button>
-      <button onClick={handleViewCommunity}>View Your Community</button>
-    
+      <div className="button-container"> 
+        <button className="build-button" onClick={handleBuildCommunity}>Build a Community</button> 
+        <button className="view-button" onClick={handleViewCommunity}>View Your Community</button> 
+      </div>
     </div>
-  )
+  );
 }

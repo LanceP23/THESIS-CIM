@@ -1,6 +1,7 @@
 const Community = require('../models/community');
 const User = require('../models/user');
 const MobileUser = require('../models/mobileUser');
+const Announcement = require('../models/announcement');
 
 // Controller function to build a new community
 const buildCommunity = async (req, res) => {
@@ -127,12 +128,40 @@ const fetchUsers = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
-  
+
+  const getCommunityName = async (req, res) => {
+    try {
+      const communityId = req.params.communityId;
+      // Assuming you have a Community model with a name field
+      const community = await Community.findById(communityId);
+      if (!community) {
+        return res.status(404).json({ error: 'Community not found' });
+      }
+      res.status(200).json({ name: community.name });
+    } catch (error) {
+      console.error('Error fetching community name:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+  const getAnnouncementsByCommunityId = async (req, res) => {
+    try {
+      const { communityId } = req.params;
+      // Fetch announcements filtered by community ID
+      const announcements = await Announcement.find({ communityId });
+      res.status(200).json(announcements);
+    } catch (error) {
+      console.error('Error fetching announcements by community ID:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
 
 module.exports = {
   buildCommunity,
   fetchMobileUsers,
   fetchUsers,
   getAllCommunities,
-  getCommunityById
+  getCommunityById,
+  getCommunityName,
+  getAnnouncementsByCommunityId
 };

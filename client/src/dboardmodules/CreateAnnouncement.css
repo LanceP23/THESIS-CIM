@@ -26,6 +26,10 @@ h2 {
  
 }
 
+.textarea-field{
+  color: white;
+}
+
 .input-field,
 .textarea-field {
   width: 100%;
@@ -289,3 +293,6 @@ video{
   margin-left: 210px;
 }
 
+.input-field{
+  color: white;
+}

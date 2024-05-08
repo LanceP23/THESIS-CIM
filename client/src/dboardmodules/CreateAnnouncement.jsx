@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
@@ -13,6 +13,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/s
 import CreateEvent from './CreateEvent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { UserContext } from '../../context/userContext';
 
 
 const firebaseConfig = {
@@ -29,6 +30,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage(firebaseApp);
 
 export default function CreateAnnouncement() {
+  const {user} = useContext(UserContext);
   const [header, setHeader] = useState('');
   const [body, setBody] = useState('');
   const [media, setMedia] = useState(null);
@@ -46,6 +48,8 @@ export default function CreateAnnouncement() {
   });
   const [postingDate, setPostingDate] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
+  const [userCommunities, setUserCommunities] = useState([]);
+  const [selectedCommunity, setSelectedCommunity] = useState('');
 
   const adminType2 = localStorage.getItem('adminType');
 
@@ -93,6 +97,38 @@ export default function CreateAnnouncement() {
 
     fetchApprovedAnnouncements();
   }, []);
+
+  useEffect(() => {
+    const fetchUserCommunities = async () => {
+      try {
+        const token = getToken();
+        const response = await axios.get(`/view-community/${user.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserCommunities(response.data);
+      } catch (error) {
+        console.error('Error fetching user communities:', error);
+      }
+    };
+  
+    if (user && user.id) {
+      fetchUserCommunities();
+    }
+  }, [user]);
+
+  const PromiseRenderer = ({ promise }) => {
+    const [communityName, setCommunityName] = useState(null);
+    
+    useEffect(() => {
+      promise.then((name) => {
+        setCommunityName(name);
+      });
+    }, [promise]);
+  
+    return communityName && <p><strong>Community:</strong> {communityName}</p>;
+  };
 
   const handleHeaderChange = (e) => {
     setHeader(e.target.value);
@@ -153,6 +189,7 @@ export default function CreateAnnouncement() {
             formData.append('visibility', JSON.stringify(visibility));
             formData.append('postingDate', postingDate);
             formData.append('expirationDate', expirationDate);
+            formData.append('communityId', selectedCommunity);
   
             // Post the announcement data to your server
             const response = await axios.post('/announcements', formData, {
@@ -170,6 +207,7 @@ export default function CreateAnnouncement() {
             setVisibility('');
             setPostingDate('')
             setExpirationDate('')
+            setSelectedCommunity('');
   
             // Show success message
             if (adminType2 !== 'School Owner') {
@@ -193,6 +231,17 @@ export default function CreateAnnouncement() {
     }
   };
 
+  const getCommunityName = async (communityId) => {
+    try {
+      const response = await axios.get(`/get-community-name/${communityId}`);
+      return response.data.name;
+    } catch (error) {
+      console.error('Error fetching community name:', error);
+      // Handle error appropriately, e.g., show error message to the user
+      return null;
+    }
+  };
+
   const toggleModal = () => {
     setShowPostApprovalModal(!showPostApprovalModal);
   };
@@ -211,6 +260,10 @@ export default function CreateAnnouncement() {
   
   const handleExpirationDateChange = (e) => {
     setExpirationDate(e.target.value);
+  };
+
+  const handleCommunityChange = (event) => {
+    setSelectedCommunity(event.target.value);
   };
 
 
@@ -280,7 +333,7 @@ export default function CreateAnnouncement() {
                     <label className="label" htmlFor="postingDate">Posting Date:</label>
                     <input
                       className="input-field"
-                      type="date"
+                      type="datetime-local"
                       id="postingDate"
                       value={postingDate}
                       onChange={handlePostingDateChange}
@@ -290,23 +343,41 @@ export default function CreateAnnouncement() {
                     <label className="label" htmlFor="expirationDate">Expiration Date:</label>
                     <input
                       className="input-field"
-                      type="date"
+                      type="datetime-local"
                       id="expirationDate"
                       value={expirationDate}
                       onChange={handleExpirationDateChange}
                     />
                   </div>
+
+                  <div>
+                  <label htmlFor="community">Select Community:</label>
+                  <select id="community" value={selectedCommunity} onChange={handleCommunityChange}>
+                    <option value="">Select a community</option>
+                    {userCommunities.map((community) => (
+                      <option key={community._id} value={community._id}>
+                        {community.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <button className="button" onClick={handleSubmit}>Post</button>
 
                 <div className='recent_post_container'>
                   <h3>Recent Posts</h3>
                   <ul>
                     {approvedAnnouncements.slice(0, 3).map((announcement) => {
+                      // Create a promise for fetching the community name
+                      const communityNamePromise = announcement.communityId ? getCommunityName(announcement.communityId) : Promise.resolve(null);
+                      
+                      // Render each announcement with its community name when available
                       return (
                         <div key={announcement._id} className='announcement'>
                           <div className="header_cont">
-                          <h4> Header: {announcement.header}</h4>
-                          <p> <strong>Body:</strong> {announcement.body}</p>
+                            <h4> Header: {announcement.header}</h4>
+                            <p> <strong>Body:</strong> {announcement.body}</p>
+                            <PromiseRenderer promise={communityNamePromise} />
                           </div>
                          
                           {announcement.mediaUrl ? (

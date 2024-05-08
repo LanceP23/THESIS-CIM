@@ -47,7 +47,7 @@ r
 // Create Announcement
 const createAnnouncement = async (req, res) => {
   try {
-    const { header, body, mediaUrl, visibility, postingDate, expirationDate } = req.body;
+    const { header, body, mediaUrl, visibility, postingDate, expirationDate, communityId } = req.body;
     let contentType = null;
 
     let status = 'pending';
@@ -74,7 +74,7 @@ const createAnnouncement = async (req, res) => {
 
     console.log('Inferred contentType:', contentType);
 
-    const announcement = new Announcement({
+    const announcementData = {
       header,
       body,
       mediaUrl,
@@ -83,8 +83,12 @@ const createAnnouncement = async (req, res) => {
       postedBy: req.user.name,
       visibility: JSON.parse(visibility),
       postingDate,
-      expirationDate
-    });
+      expirationDate,
+    };
+    if (communityId) {
+      announcementData.communityId = communityId;
+    }
+    const announcement = new Announcement(announcementData);
 
     await announcement.save();
 

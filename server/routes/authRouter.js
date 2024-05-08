@@ -13,7 +13,7 @@ const {postEventController,getEventsController} = require('../controllers/postEv
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
-const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById } = require('../controllers/communityController');
+const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId } = require('../controllers/communityController');
 
 
 router.use(
@@ -92,6 +92,10 @@ router.get('/get-mobile-users', fetchMobileUsers);
 router.get('/get-users', fetchUsers);
 router.get('/view-community', authenticateUser, getAllCommunities);
 router.get('/view-community/:id', authenticateUser, getCommunityById);
+router.get('/get-community-name/:communityId', getCommunityName);
+router.get('/announcements/:communityId', authenticateUser, getAnnouncementsByCommunityId);
+
+
 
 
 module.exports = router;
