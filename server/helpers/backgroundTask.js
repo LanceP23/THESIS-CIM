@@ -18,14 +18,14 @@ const startBackgroundTasks = () => {
                 status: 'scheduled',
                 postingDate: { $lte: bufferEnd, $gte: bufferStart }
             });
-            //console.log('Found announcements to approve:', announcementsToApprove);
+            console.log('Found announcements to approve:', announcementsToApprove);
 
             // Update status to "approved" for announcements that meet the criteria
             const result = await Announcement.updateMany(
                 { _id: { $in: announcementsToApprove.map(announcement => announcement._id) } },
                 { $set: { status: 'approved' } }
             );
-            //console.log('Announcements approved:', result);
+            console.log('Announcements approved:', result);
         } catch (error) {
             console.error('Error approving announcements:', error);
         }
@@ -56,7 +56,7 @@ const startBackgroundTasks = () => {
             const archivedCount = await Announcement.deleteMany({
                 _id: { $in: expiredAnnouncements.map(announcement => announcement._id) }
             });
-            //console.log('Announcements archived:', archivedCount.deletedCount);
+            console.log('Announcements archived:', archivedCount.deletedCount);
         } catch (error) {
             console.error('Error archiving announcements:', error);
         }

@@ -27,7 +27,6 @@ const archiveAnnouncementSchema = new mongoose.Schema({
   },
   postingDate: {
     type: Date,
-    required: true
   },
   expirationDate: {
     type: Date,
