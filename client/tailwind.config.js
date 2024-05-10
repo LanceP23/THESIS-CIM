@@ -6,6 +6,12 @@ export default {
   ],
   theme: {
     extend: {},
+
+    fontFamily: {
+      sans: ['Inter', 'sans-serif'],
+      serif: ['Georgia', 'serif'],
+      mono: ['Menlo', 'monospace'],
+    },
   },
   plugins: [require("daisyui")],
 }

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+  
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -9,26 +13,20 @@
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  background-color: #98D08F; 
+
 
 }
 
 
-a {
-  font-weight: 500;
-  color: #9acd32; /* Yellow-green */
-  text-decoration: none;
-}
 
-a:hover {
-  color: #388e3c; /* Olive drab */
-}
 
 body {
   margin: 0;
+ 
   background-color: #98D08F; 
-  
 
-  display: flex;
+  
   place-items: center;
   min-width: 320px;
   min-height: 100vh;

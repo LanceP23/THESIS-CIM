@@ -69,7 +69,7 @@ const Login = (  ) => {
 
     return (
         <div className="background_image_container" >
-             <Navbar/>
+            <Navbar/>
        <img src='../src/assets/webwithLogo.png' className='background_image_login'></img>
        
     

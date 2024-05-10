@@ -20,15 +20,10 @@ const NotificationBell = () => {
 
     return (
         <div className="notification-bell">
-            <button onClick={toggleDropdown}>
-                <span>🔔</span>
-                {unreadCount > 0 && (
-                    <span className="notification-count">{unreadCount}</span>
-                )}
-            </button>
-            {showDropdown && (
+           
+     
                 <div className="notification-dropdown">
-                    <h4>Notifications</h4>
+                    <h3>Notifications</h3>
                     {notifications.length > 0 ? (
                         <ul>
                             {notifications.map((notification, index) => (
@@ -41,7 +36,7 @@ const NotificationBell = () => {
                         <p>No new notifications</p>
                     )}
                 </div>
-            )}
+           
         </div>
     );
 };
