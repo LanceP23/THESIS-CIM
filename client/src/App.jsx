@@ -39,7 +39,6 @@ function App() {
       <SocketContextProvider>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       <Navbar_2/>
-      
       <Routes>
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/" element={<Home />} />

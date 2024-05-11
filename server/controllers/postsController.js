@@ -3,6 +3,7 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const axios = require('axios');
+const { getReceiverSocketId, io } = require('../socketManager');
 
 
 
@@ -52,10 +53,12 @@ const createAnnouncement = async (req, res) => {
 
     let status = 'pending';
 
-    if (req.user.adminType === 'School Owner' && postingDate && new Date(postingDate) > new Date()) {
-      status = 'scheduled'; // Set status to 'scheduled' if posting date is in the future
-    } else {
-      status = 'approved'; // Set status to 'approved' if no posting date provided or for other user roles
+    if (req.user.adminType === 'School Owner') {
+      if (postingDate && new Date(postingDate) > new Date()) {
+        status = 'scheduled';
+      } else {
+        status = 'approved'; 
+      }
     }
 
     // Extract contentType from uploaded file
@@ -91,6 +94,39 @@ const createAnnouncement = async (req, res) => {
     const announcement = new Announcement(announcementData);
 
     await announcement.save();
+
+    let targetUsers = [];
+
+    if (JSON.parse(visibility).staff) {
+      const staffUsers = await User.find({ position: { $exists: false }, organization: { $exists: false }, department: { $exists: false } });
+      targetUsers.push(...staffUsers);
+    }
+    if (JSON.parse(visibility).faculty) {
+      const facultyUsers = await User.find({ department: { $exists: true } });
+      targetUsers.push(...facultyUsers);
+    }
+    if (JSON.parse(visibility).students) {
+      const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
+      targetUsers.push(...studentUsers);
+    }
+
+
+    targetUsers.forEach(user => {
+      const receiverSocketId = getReceiverSocketId(user.id);
+      console.log('Receiver socket ID for user', user.id, ':', receiverSocketId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newAnnouncement", {
+          type: "announcement",
+          message: "New announcement posted",
+          posterName: req.user.name,
+          announcementHeader: header,
+          timestamp: new Date().toISOString()
+        });
+        console.log('Emitting "newNotification" event for announcement:', header);
+      }
+    });
+    console.log("New announcement emitted successfully");
+
 
     res.status(201).json(announcement);
   } catch (error) {

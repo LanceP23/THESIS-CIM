@@ -173,6 +173,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                 <div className="p-2 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white">
                 <h2 className='text-3xl'>Active Users</h2>
+                {/*<Conversations conversations={{conversations}} className='active_'/>*/}
                 
                 </div>
 

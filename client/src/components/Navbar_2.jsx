@@ -13,6 +13,8 @@ const Navbar_2 = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
+  const userName = user ? user.name : '';
+
   useEffect (()=>{
     setIsOpen(false);
   },[adminType]);
@@ -82,7 +84,7 @@ const Navbar_2 = () => {
   
           
             <li className=''>
-              <Link to="/dashboard" onClick={closeSidebar} className='' >
+              <Link to="/community-landing" onClick={closeSidebar} className='' >
               <FontAwesomeIcon className='navbar_icons' icon={faPeopleArrows} /> 
               <div className="">
               <h6 className=''>   My Community</h6>
@@ -164,9 +166,10 @@ const Navbar_2 = () => {
         
         
       </div>
-      <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">{adminType}</a>
+      <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">{userName}</a>
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-white">
-      
+          <li>Admin Level: {adminType}</li>
+          <li></li>
         <li  onClick={handleLogout}><a>Logout</a></li>
       </ul>
     </div>
