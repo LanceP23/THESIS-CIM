@@ -268,20 +268,17 @@ export default function CreateAnnouncement() {
 
 
   return (
-    <div>
-      <h2 className='_post_manag_title'>Post Management <FontAwesomeIcon icon={faBullhorn}/></h2>
-      <Sidebar adminType={adminType2} />
-
-      <div className='Announcement_container'>
-        <div className='tab_container'>
-          <Row className='justify-content-start row'>
-            <Tabs justify variant='tabs' defaultActiveKey='tab-1' className='mb-1 p-0 custom-tabs'>
-              <Tab eventKey='tab-1' title=' Announcement' className='tabs'>
-                <h2>Create Announcement</h2>
+    <div className='flex flex-row my-24'>
+      <div className="main_container p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
+      <div role="tablist" className="tabs tabs-lifted">
+        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600" aria-label="Announcements" />
+        <div role="tabpanel" className="tab-content bg-green-600 shadow-lg rounded-md p-6">
+          <div className="annoucement_creation_container bg-white p-4 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border">
+          <h2 className='border-b border-gray-500 py-2 font-bold'>Create Announcement</h2>
                 <div>
-                  <label className="label" htmlFor="header">Header:</label>
+                  <label className="label text-gray-700" htmlFor="header">Header:</label>
                   <input
-                    className="input-field"
+                    className="input input-bordered input-success input-md w-full text-gray-700 bg-white rounded-md shadow-xl"
                     type="text"
                     id="header"
                     value={header}
@@ -289,18 +286,20 @@ export default function CreateAnnouncement() {
                   />
                 </div>
                 <div>
-                  <label className="label" htmlFor="body">Body:</label>
+                  <label className="label text-gray-700" htmlFor="body">Body:</label>
                   <textarea
-                    className="textarea-field"
+                    className="textarea textarea-success w-full text-gray-700 bg-white rounded-md shadow-xl"
                     id="body"
                     value={body}
                     onChange={handleBodyChange}
                   />
                 </div>
-                <div className="file-field">
-                  <label className="label" htmlFor="media">Media:</label>
+                <div className="file-field flex justify-start">
+                  <div className="div">
+                  <label className="label flex justify-center items-center text-gray-700" htmlFor="media">Media:</label>
+                  </div>
                   <input
-                    className="input-field"
+                    className="file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl"
                     type="file"
                     id="media"
                     accept="image/*, video/*, audio/*"
@@ -310,39 +309,50 @@ export default function CreateAnnouncement() {
                     <img src={mediaPreview} alt="Media Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
                   )}
                 </div>
-                <div className="visibility-options">
-                  <label>Visibility:</label>
-                  <label className="custom-option">
-                    <input type="checkbox" name="everyone" checked={visibility.everyone} onChange={handleVisibilityChange} />
-                    <span className="option-icon"><i className="fa fa-users"></i> Everyone</span>
+
+                <div className="flex flex-col my-3">
+                  <div className="label my-0 py-0">
+                    <label className="label text-gray-700" htmlFor="body">Visibility:</label>
+                    </div>
+
+                    <div className="radio_buttons flex">
+                  <label className="flex justify-start mx-2">
+                    <input type="checkbox"  className="checkbox checkbox-success" name="everyone" checked={visibility.everyone} onChange={handleVisibilityChange} />
+                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-users"></i> Everyone</span>
                   </label>
-                  <label className="custom-option">
-                    <input type="checkbox" name="staff" checked={visibility.staff} onChange={handleVisibilityChange} />
-                    <span className="option-icon"><i className="fa fa-briefcase"></i> Staff</span>
+
+                  <label className="flex justify-start mx-2">
+                    <input type="checkbox"  className="checkbox checkbox-success" name="staff" checked={visibility.staff} onChange={handleVisibilityChange} />
+                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-briefcase"></i> Staff</span>
                   </label>
-                  <label className="custom-option">
-                    <input type="checkbox" name="faculty" checked={visibility.faculty} onChange={handleVisibilityChange} />
-                    <span className="option-icon"><i className="fa fa-university"></i> Faculty</span>
+
+                  <label className="flex justify-start mx-2">
+                    <input type="checkbox"  className="checkbox checkbox-success" name="faculty" checked={visibility.faculty} onChange={handleVisibilityChange}/>
+                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-university"></i> Faculty</span>
                   </label>
-                  <label className="custom-option">
-                    <input type="checkbox" name="students" checked={visibility.students} onChange={handleVisibilityChange} />
-                    <span className="option-icon"><i className="fa fa-graduation-cap"></i> Students</span>
+
+                  <label className="flex justify-start mx-2">
+                    <input type="checkbox"  className="checkbox checkbox-success" name="students" checked={visibility.students} onChange={handleVisibilityChange}/>
+                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-graduation-cap"></i> Students</span>
                   </label>
+
+                  </div>
                 </div>
-                <div>
-                    <label className="label" htmlFor="postingDate">Posting Date:</label>
+                
+                <div className='flex justify-start my-2'>
+                    <label className="label text-gray-700" htmlFor="postingDate">Posting Date:</label>
                     <input
-                      className="input-field"
+                      className="input input-success input-md text-white mx-4 shadow-md "
                       type="datetime-local"
                       id="postingDate"
                       value={postingDate}
                       onChange={handlePostingDateChange}
                     />
                   </div>
-                  <div>
-                    <label className="label" htmlFor="expirationDate">Expiration Date:</label>
+                  <div className='flex justify-start'>
+                    <label className="label text-gray-700" htmlFor="expirationDate">Expiration Date:</label>
                     <input
-                      className="input-field"
+                      className="input input-success input-md text-white mx-1 shadow-md "
                       type="datetime-local"
                       id="expirationDate"
                       value={expirationDate}
@@ -350,22 +360,34 @@ export default function CreateAnnouncement() {
                     />
                   </div>
 
-                  <div>
-                  <label htmlFor="community">Select Community:</label>
-                  <select id="community" value={selectedCommunity} onChange={handleCommunityChange}>
-                    <option value="">Select a community</option>
-                    {userCommunities.map((community) => (
-                      <option key={community._id} value={community._id}>
-                        {community.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className='flex my-3'>
+                    <label htmlFor="community" className="block text-gray-700 text-left">Select Community:</label>
+                    <select
+                      id="community"
+                      value={selectedCommunity}
+                      onChange={handleCommunityChange}
+                      className="flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md   "
+                    >
+                      <option value="">Select a community</option>
+                      {userCommunities.map((community) => (
+                        <option key={community._id} value={community._id}>
+                          {community.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  
+
+                <div className="post_button flex justify-end">
+                <button className="btn btn-success px-16 my-4 size text-base " onClick={handleSubmit}>Post</button>
                 </div>
 
-                <button className="button" onClick={handleSubmit}>Post</button>
+                <h3 className="border-t-2 border-gray-500 py-2 font-bold">Recent Posts</h3>
 
-                <div className='recent_post_container'>
-                  <h3>Recent Posts</h3>
+                <div className="recentpost_container overflow-auto max-h-96">
+                
+                  
                   <ul>
                     {approvedAnnouncements.slice(0, 3).map((announcement) => {
                       // Create a promise for fetching the community name
@@ -373,29 +395,35 @@ export default function CreateAnnouncement() {
                       
                       // Render each announcement with its community name when available
                       return (
-                        <div key={announcement._id} className='announcement'>
-                          <div className="header_cont">
-                            <h4> Header: {announcement.header}</h4>
-                            <p> <strong>Body:</strong> {announcement.body}</p>
-                            <PromiseRenderer promise={communityNamePromise} />
+                        <div key={announcement._id} className='card lg:card-side bg-white-100 shadow-xl p-3 m-5 transition-transform duration-300 ease-in-out transform hover:scale-110'>
+                          <div className=" mx-2 ">
+                            <h4 className='card-title p-2 bg-gray-300 w-full h rounded-md'> {announcement.header}</h4>
+                            <div className="body_container  p-2 bg-gray-300 w-full h-32 rounded-md text-left overflow-auto max-h-full">
+                            <p className=''> {announcement.body}</p>
+                            </div>
+                            <div className="community_container  p-2 bg-gray-300 w-full my-2 rounded-md">
+                            <PromiseRenderer promise={communityNamePromise}  />
+                            </div>
                           </div>
                          
                           {announcement.mediaUrl ? (
                             <div>
                               
-                              <div className="media_cont">
-                              <p>Media:</p>
+                              <div className=" flex justify-center items-center">
+                              
                               {announcement.contentType && announcement.contentType.startsWith('image') ? (
-                                <img src={announcement.mediaUrl} alt="Announcement Media" />
+                                <img src={announcement.mediaUrl} alt="Announcement Media" className= 'w-full' /> 
                               ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
-                                <video controls>
+                              <figure> <video controls>
                                   <source src={announcement.mediaUrl} type={announcement.contentType} />
                                 </video>
+                                </figure> 
                               ) : announcement.contentType && announcement.contentType.startsWith('audio') ?
                                (
                                 <audio controls>
                                   <source src={announcement.mediaUrl} type={announcement.contentType} />
                                 </audio>
+                                
                                ):(
                                 <p>No media available</p>
                               )}
@@ -409,29 +437,24 @@ export default function CreateAnnouncement() {
                     })}
                   </ul>
                 </div>
-              </Tab>
-              <Tab eventKey='tab-2' title='Event' className='tabs'>
-             
-                  
-              <CreateEvent />
-              
-              </Tab>
-              {adminType2 === 'School Owner' && (
-                <Tab eventKey='tab-3' title='Post Approval' className='tabs'>
-                  <PostApproval />
-                </Tab>
-              )}
-            </Tabs>
-          </Row>
+          </div>
         </div>
+
+
+        <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Tab 2"  />
+        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">Tab content 2</div>
+
+        <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Tab 3" />
+        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">Tab content 3</div>
+      </div>
+
+      </div>
+
+      <div className="community_calendar_container p-3 m-3 w-max h-full  shadow-md rounded-3 bg-white border">
+
+        <h2>Community Calendar</h2>
         
 
-        {/*<div className='community_calendar_container'>
-          <div className='calendar_container'>
-            <h3>Community Calendar</h3>
-          </div>
-          <div className='bottom_part'></div>
-            </div>*/}
       </div>
     </div>
   );

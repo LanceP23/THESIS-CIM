@@ -14,6 +14,8 @@ import moment from 'moment';
 import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDashboard } from '@fortawesome/free-solid-svg-icons';
+import Navbar_2 from '../components/Navbar_2';
+import Navbar from '../components/Navbar';
 
 const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
@@ -100,8 +102,9 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
 
     return (
+        
     <div className="dashboard">
-
+     
 
         <div className="flex">
            
@@ -147,7 +150,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                 <div className=" p-3 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white">
                 <h2 className='text-3xl'>My Community</h2>
-                
+                    
                 
 
 
@@ -173,7 +176,6 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                 <div className="p-2 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white">
                 <h2 className='text-3xl'>Active Users</h2>
-                {/*<Conversations conversations={{conversations}} className='active_'/>*/}
                 
                 </div>
 

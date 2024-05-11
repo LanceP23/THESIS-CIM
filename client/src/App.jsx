@@ -35,7 +35,9 @@ function App() {
 
   return (
     <div >
+      
     <UserContextProvider>
+  
       <SocketContextProvider>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       <Navbar_2/>

@@ -68,30 +68,32 @@ const Login = (  ) => {
     
 
     return (
-        <div className="background_image_container" >
+        <body className=" bg-[url('../src/assets/webwithLogo.png')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
             <Navbar/>
-       <img src='../src/assets/webwithLogo.png' className='background_image_login'></img>
+           
        
     
-        <div className="login-form">
+        <div className="login-form bg-[url('../src/assets/webwithLogo.png')]  ">
+
+              
 
            
             <form onSubmit={loginAdmin}>
-                <label>Admin email</label>
+                <label className='text-white'>Admin email</label>
                 <input
                     type="text"
                     placeholder="Enter Admin Email..."
                     value={data.studentemail}
                     onChange={(e) => setData({ ...data, studentemail: e.target.value })}
-                    className='login_field'
+                    className='input input-bordered input-accent w-full max-w-xs text-white'
                 />
-                <label>Password</label>
+                <label className='text-white'>Password</label>
                 <input
                     type="password"
                     placeholder="Enter Your Password"
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
-                    className='login_field'
+                    className='input input-bordered input-accent w-full max-w-xs text-white'
                 />
                 <button type="submit" className='login__button' >Login</button>
             </form>
@@ -106,7 +108,7 @@ const Login = (  ) => {
         </div>
      
        
-        </div>
+        </body>
 
 
 
