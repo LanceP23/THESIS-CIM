@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid'; 
@@ -12,6 +12,7 @@ import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-icons/font/bootstrap-icons.css' // needs additional webpack config!
+import { UserContext } from '../../context/userContext';
 
 const customStyles = {
   overlay: {
@@ -40,6 +41,7 @@ const customStyles = {
 
 
 const CreateEvent = ({ defaultSelectable = true }) => {
+  const {user} = useContext(UserContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [eventName, setEventName] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -69,6 +71,11 @@ const CreateEvent = ({ defaultSelectable = true }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const [selectable, setSelectable] = useState(defaultSelectable);
+  const [error, setError] = useState(null);
+  const [adminCommunities, setAdminCommunities] = useState([]);
+  const [viewCommunityId, setViewCommunityId] = useState(null);
+  const [selectedCommunities, setSelectedCommunities] = useState([]);
+  const [participantCommunities, setParticipantCommunities] = useState([]);
 
 
   useEffect(() => {
@@ -109,6 +116,7 @@ const CreateEvent = ({ defaultSelectable = true }) => {
             committeeChairman: event.committeeChairman,
             location: event.location,
             budget: event.budget,
+            viewCommunityId: event.viewCommunityId,
             ...event, 
           };
         });
@@ -132,6 +140,8 @@ const CreateEvent = ({ defaultSelectable = true }) => {
     Modal.setAppElement('#root');
   }, []);
 
+  
+
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
@@ -143,6 +153,55 @@ const CreateEvent = ({ defaultSelectable = true }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    const fetchAdminCommunities = async () => {
+      try {
+        const token = getToken();
+        const response = await axios.get('/view-community', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        const userCommunities = response.data.filter(community => {
+          return community.members.some(member => member.userId === user.id && member.role === 'admin');
+        });
+  
+        setAdminCommunities(userCommunities);
+  
+        // Set the initial viewCommunityId to the first community ID if available
+        if (userCommunities.length > 0) {
+          setViewCommunityId(userCommunities[0]._id);
+        }
+  
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+  
+    fetchAdminCommunities();
+  }, [user]);
+  
+
+  const handleEventTypeChange = (value) => {
+    setEventType(value);
+  };
+
+  const handleCommunityChange = (event) => {
+    const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
+    const newSelectedCommunities = selectedOptions.map(id => adminCommunities.find(community => community._id === id));
+    setSelectedCommunities(prevSelectedCommunities => {
+      const isAlreadySelected = prevSelectedCommunities.some(selectedCommunity => selectedCommunity._id === newSelectedCommunities[0]._id);
+      return isAlreadySelected ? prevSelectedCommunities.filter(selectedCommunity => selectedCommunity._id !== newSelectedCommunities[0]._id) : [...prevSelectedCommunities, ...newSelectedCommunities];
+    });
+  };
+
+  const handleRemoveCommunity = (community) => {
+    setSelectedCommunities(prevSelectedCommunities => prevSelectedCommunities.filter(selectedCommunity => selectedCommunity._id !== community._id));
   };
 
   const handleEventCreate = async () => {
@@ -162,13 +221,6 @@ const CreateEvent = ({ defaultSelectable = true }) => {
         }));
       } 
        if (eventType === 'organizational') {
-        // Add individual participants
-        participantsToSend = participants.map(participant => ({
-          name: participant.name,
-          section: participant.section,
-          type: participantType,
-          ...(participantType === 'individual' ? {} : { members: participant.members })
-        }));
       
         // Add selected organizations
         selectedParticipantOrganizations.forEach(org => {
@@ -178,6 +230,13 @@ const CreateEvent = ({ defaultSelectable = true }) => {
             type: 'organizational'
           });
         });
+      }
+      if (eventType === 'specialized') {
+        participantsToSend = participantsToSend.concat(selectedCommunities.map(community => ({
+          id: community._id,
+          name: community.name,
+          type: 'community'
+        })));
       }
       const response = await axios.post(
         '/events',
@@ -201,7 +260,7 @@ const CreateEvent = ({ defaultSelectable = true }) => {
         }
       );
       
-      toast.success('Event Creation Successful!')
+      
       setModalIsOpen(false);
       setEventName('');
       setStartDate('');
@@ -219,6 +278,8 @@ const CreateEvent = ({ defaultSelectable = true }) => {
       setBudget('');
       setOrganizerType('');
       setOrganizerName('');
+      toast.dismiss();
+      toast.success('Event Creation Successful!')
     } catch (error) {
       toast.dismiss();
       console.error('Error creating event:', error);
@@ -228,6 +289,125 @@ const CreateEvent = ({ defaultSelectable = true }) => {
     }
   };
 
+  const handleUpdateEvent = async (event) => {
+    try {
+      setSubmitting(true);
+      toast.loading('Updating Event...');
+      const token = getToken();
+      let participantsToSend = [];
+  
+      // Include participants based on their type
+      if (participantType === 'individual' || participantType === 'group') {
+        participantsToSend = participants.map(participant => ({
+          name: participant.name,
+          section: participant.section,
+          type: participantType,
+          ...(participantType === 'individual' ? {} : { members: participant.members })
+        }));
+      } 
+       if (eventType === 'organizational') {
+  
+        // Add selected organizations
+        selectedParticipantOrganizations.forEach(org => {
+          participantsToSend.push({
+            id: org.id,
+            name: org.name,
+            type: 'organizational'
+          });
+        });
+      }
+      const response = await axios.put(
+        `/update-event/${selectedEvent.id}`,
+        {
+          title: eventName,
+          start: `${selectedDate.start}T${startTime}`,
+          end: `${endDate}T${endTime}`,
+          eventType: eventType,
+          organizerType: organizerType,
+          organizerName: organizerName,
+          participants: participantsToSend, 
+          committee: committee,
+          committeeChairman: committeeChairman,
+          location: location,
+          budget: budget,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setModalIsOpen(false);
+      setEventName('');
+      setStartDate('');
+      setStartTime('');
+      setEndDate('');
+      setEndTime('');
+      setEventType('');
+      setParticipantType('individual');
+      setParticipants([]);
+      setParticipantOrganizations([]);
+      setSelectedParticipantOrganizations([]);
+      setCommittee('');
+      setCommitteeChairman('');
+      setLocation('');
+      setBudget('');
+      setOrganizerType('');
+      setOrganizerName('');
+      toast.dismiss();
+      toast.success('Event Update Successful!')
+    } catch (error) {
+      toast.dismiss();
+      console.error('Error updating event:', error);
+      toast.error('Event Update Failed', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteEvent = async (event) => {
+    try {
+      setSubmitting(true);
+      toast.loading('Deleting Event...');
+      const token = getToken();
+      await axios.delete(
+        `/delete-event/${selectedEvent.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setModalIsOpen(false);
+      setEventName('');
+      setStartDate('');
+      setStartTime('');
+      setEndDate('');
+      setEndTime('');
+      setEventType('');
+      setParticipantType('individual');
+      setParticipants([]);
+      setParticipantOrganizations([]);
+      setSelectedParticipantOrganizations([]);
+      setCommittee('');
+      setCommitteeChairman('');
+      setLocation('');
+      setBudget('');
+      setOrganizerType('');
+      setOrganizerName('');
+      toast.dismiss();
+      toast.success('Event Deletion Successful!')
+    } catch (error) {
+      toast.dismiss();
+      console.error('Error deleting event:', error);
+      toast.error('Event Deletion Failed', error);
+    } finally {
+      setSubmitting(false);
+  }
+  };
+
   const handleEventClick = (info) => {
     setSelectedEvent(info.event); 
     setModalMode('details');
@@ -235,14 +415,12 @@ const CreateEvent = ({ defaultSelectable = true }) => {
   };
   const handleDoubleClick = (org) => {
     // Check if the organization object is already in selectedParticipantOrganizations
-    if (!selectedParticipantOrganizations.some(selectedOrg => selectedOrg.id === org.id)) {
-      setSelectedParticipantOrganizations([...selectedParticipantOrganizations, org]);
-  
-      // Add the organization's name to the participants array
-      const organizationName = org.name;
-      setParticipants([...participants, organizationName]);
+    if (!selectedParticipantOrganizations.some(selectedOrg => selectedOrg._id === org._id)) {
+      setSelectedParticipantOrganizations(prevSelectedOrgs => [...prevSelectedOrgs, org]);
+      setParticipants(prevParticipants => [...prevParticipants, { name: org.name, section: '', members: [] }]);
     } else {
       toast.error('Organization already selected');
+      return;
     }
   };
   
@@ -318,6 +496,12 @@ const handleDateSelect = (selectInfo) => {
 
 };
 
+const handleSelectEvent = (event) => {
+  setSelectedEvent(event);
+  setModalIsOpen(true);
+  setModalMode('details');
+};
+
 
   return (
     <div>
@@ -336,6 +520,7 @@ const handleDateSelect = (selectInfo) => {
         
         
       />
+      
       
 
      <Modal
@@ -372,8 +557,27 @@ const handleDateSelect = (selectInfo) => {
       <p> <strong>Budget:</strong>{selectedEvent.extendedProps.budget}</p>
       
       {selectedEvent && selectedEvent.extendedProps && selectedEvent.extendedProps.participants && (
-      <p> <strong>Participants:</strong> {JSON.stringify(selectedEvent.extendedProps.participants)}</p>
-      )}
+  <div>
+    <strong>Participants:</strong>
+    <ul style={{ listStyleType: 'none', padding: 0 }}>
+      {JSON.parse(selectedEvent.extendedProps.participants).map((participant, index) => (
+        <li key={index} style={{ marginBottom: '10px' }}>
+          <div style={{ marginLeft: '20px' }}>
+            <strong>Name:</strong> {participant.name}<br />
+            <strong>Section:</strong> {participant.section}<br />
+            <strong>Type:</strong> {participant.type}<br />
+            {participant.type !== 'individual' && participant.members && (
+  <div style={{ marginLeft: '20px' }}>
+    <strong>Members:</strong> {participant.members.join(', ')}
+  </div>
+)}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
       </div>
          
       <button onClick={closeModal} className='create_close_button'>Close</button>
@@ -469,7 +673,7 @@ const handleDateSelect = (selectInfo) => {
               </select>
             </label>
           </div>
-          {["institutional", "structural", "specialized"].includes(eventType) && (
+          {["institutional", "structural"].includes(eventType) && (
             <div className='event_content_5'>
               <label>
                 <strong>Participant Type:</strong>
@@ -536,7 +740,29 @@ const handleDateSelect = (selectInfo) => {
                   ))}
                 </select>
               </label>
-              <button onClick={() => setSelectedParticipantOrganizations([...selectedParticipantOrganizations, ...participantOrganizations])}>Add Participant Organizations</button>
+            </div>
+          )}
+       {eventType === 'specialized' && (
+            <div className="event_content_8">
+              <label htmlFor="participantCommunity"><strong>Participant Community:</strong></label>
+              <select id="participantCommunity" multiple value={selectedCommunities.map(community => community._id)} onChange={handleCommunityChange}>
+                {adminCommunities.map(community => (
+                  <option key={community._id} value={community._id}>{community.name}</option>
+                ))}
+              </select>
+              {selectedCommunities.length > 0 && (
+                <div>
+                  <strong>Selected Communities:</strong>
+                  <ul>
+                    {selectedCommunities.map(community => (
+                      <li key={community._id}>
+                        {community.name}
+                        <button onClick={() => handleRemoveCommunity(community)} className='add_remove_button'>Remove</button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
           <div className="selected-participants">

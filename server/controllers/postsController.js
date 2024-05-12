@@ -113,7 +113,7 @@ const createAnnouncement = async (req, res) => {
 
     targetUsers.forEach(user => {
       const receiverSocketId = getReceiverSocketId(user.id);
-      console.log('Receiver socket ID for user', user.id, ':', receiverSocketId);
+      
       if (receiverSocketId) {
         io.to(receiverSocketId).emit("newAnnouncement", {
           type: "announcement",
@@ -122,10 +122,25 @@ const createAnnouncement = async (req, res) => {
           announcementHeader: header,
           timestamp: new Date().toISOString()
         });
-        console.log('Emitting "newNotification" event for announcement:', header);
       }
     });
-    console.log("New announcement emitted successfully");
+
+    if (communityId) {
+      const communityMembers = await User.find({ communityId });
+      communityMembers.forEach(user => {
+        const receiverSocketId = getReceiverSocketId(user.id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newCommunityAnnouncement", {
+            type: "announcement",
+            message: "New announcement posted in your community",
+            posterName: req.user.name,
+            announcementHeader: header,
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+    }
+    
 
 
     res.status(201).json(announcement);

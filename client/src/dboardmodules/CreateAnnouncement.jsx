@@ -439,13 +439,19 @@ export default function CreateAnnouncement() {
                 </div>
           </div>
         </div>
+                    
 
+        <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Events"  />
+        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6"><CreateEvent/></div>
 
-        <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Tab 2"  />
-        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">Tab content 2</div>
-
-        <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Tab 3" />
-        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">Tab content 3</div>
+        {adminType2 === 'School Owner' && (
+  <>
+    <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Post Approval" />
+    <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">
+      <PostApproval />
+    </div>
+  </>
+)}
       </div>
 
       </div>

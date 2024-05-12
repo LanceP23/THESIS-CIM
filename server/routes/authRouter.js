@@ -8,7 +8,7 @@ const { createOrganization, authenticateUser, getOrganization, approveOfficer, g
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
-const {postEventController,getEventsController} = require('../controllers/postEventController');
+const {postEventController,getEventsController, putEventController, deleteEventController} = require('../controllers/postEventController');
 
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
@@ -74,6 +74,8 @@ router.delete('/users/:id/delete', deleteUser);
 //event creation
 router.post('/events', authenticateUser, postEventController);
 router.get('/fetch-event', getEventsController);
+router.put('/update-event/:id', authenticateUser, putEventController);
+router.delete('/delete-event/:id', authenticateUser, deleteEventController);
 
 
 //school year/ semester update temporary archival of accounts

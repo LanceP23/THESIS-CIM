@@ -34,7 +34,7 @@ const eventSchema = new mongoose.Schema({
   committee: String,
   committeeChairman: String,
   location: String,
-  budget: String
+  budget: String,
 });
 
 const Event = mongoose.model('Event', eventSchema);
