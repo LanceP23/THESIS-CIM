@@ -24,10 +24,6 @@ const NotificationBell = () => {
 
     useEffect(() => {
         setUnreadEventCount(eventNotifications.length);
-        if (eventNotifications.length > 0) {
-            // Set the latest event when eventNotifications change
-            setLatestEvent(eventNotifications[0]);
-        }
     }, [eventNotifications]);
 
     // Set the latest message whenever there is a new message notification
@@ -78,11 +74,11 @@ const NotificationBell = () => {
                                 New announcement: {announcement.announcementHeader} by {announcement.posterName}
                             </li>
                         ))}
-                        {latestEvent && ( // Render the latest event if it exists
-                            <li>
-                                New event: {latestEvent.eventName} by {latestEvent.organizerName}
+                        {eventNotifications.map((event, index) => (
+                            <li key={index}>
+                                New event: {event.eventName} organized by {event.organizerName}
                             </li>
-                        )}
+                        ))}
                     </ul>
                 ) : (
                     <p>No new notifications</p>

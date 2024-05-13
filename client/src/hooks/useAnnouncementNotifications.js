@@ -17,7 +17,6 @@ const useAnnouncementNotifications = () => {
             if (socket) {
                 socket.on("newAnnouncement", handleNewAnnouncement); 
             } else {
-                console.log("Socket object is null or undefined.");
             }
         }
 

@@ -28,6 +28,10 @@ const organizationSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    mobileMembers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'MobileUser'
+    }],
 
 });
 

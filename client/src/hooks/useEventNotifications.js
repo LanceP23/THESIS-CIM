@@ -15,7 +15,6 @@ const useEventNotifications = () => {
         if (socket && isSubscribed) {
             socket.on("newEvent", handleNewEvent);
         } else {
-            console.log("Socket object is null or undefined.");
         }
 
         return () => {

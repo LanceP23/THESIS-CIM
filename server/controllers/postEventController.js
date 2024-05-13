@@ -82,6 +82,107 @@ const postEventController = async (req, res) => {
         }
       });
     }
+    if (eventType.toLowerCase() === 'organizational') {
+      const organizationNames = participants
+        .filter(participant => participant.type === 'organizational')
+        .map(participant => participant.name);
+
+      // Get all users who are members of the organizational participants from both User and MobileUser tables maybe itll work maybe it won't
+      const usersToNotify = await User.find({ organization: { $in: organizationNames } });
+
+      // Send notifications to each user from User table
+      usersToNotify.forEach(user => {
+        const receiverSocketId = getReceiverSocketId(user.id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newEvent", {
+            type: "event",
+            message: "New event created",
+            eventName: title,
+            organizerName: organizerName,
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+
+    } else if (eventType.toLowerCase() === 'organizational') {
+      // Get organization names from participants
+      const organizationNames = participants
+        .filter(participant => participant.type === 'organizational')
+        .map(participant => participant.name);
+
+      // Get users who are members of the organizational participants
+      const usersToNotify = await User.find({ organization: { $in: organizationNames } });
+
+      // Get mobile users who are members of the organizational participants
+      const mobileUsersToNotify = await MobileUser.find({ organization: { $in: organizationNames } });
+
+      // Send notifications to users
+      usersToNotify.forEach(user => {
+        const receiverSocketId = getReceiverSocketId(user.id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newEvent", {
+            type: "event",
+            message: "New event created",
+            eventName: title,
+            organizerName: organizerName,
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+
+      // Send notifications to mobile users
+      mobileUsersToNotify.forEach(mobileUser => {
+        const receiverSocketId = getReceiverSocketId(mobileUser.id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newEventMobile", {
+            type: "event",
+            message: "New event created",
+            eventName: title,
+            organizerName: organizerName,
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+    } else if (eventType.toLowerCase() === 'specialized') {
+      const communityIds = participants
+        .filter(participant => participant.type === 'community')
+        .map(participant => participant.id);
+
+      // Retrieve all Community documents by the IDs specified
+      const communities = await Community.find({ _id: { $in: communityIds } });
+
+      // Collect all member IDs from these communities
+      const memberIds = communities.flatMap(community => community.members);
+      const mobileMemberIds = communities.flatMap(community => community.mobileMembers);
+
+      // Find all users who are members of these communities
+      const usersToNotify = await User.find({ _id: { $in: memberIds } });
+      const mobileUsersToNotify = await MobileUser.find({ _id: { $in: mobileMemberIds } });
+
+      const notificationData = {
+        type: "event",
+        message: "New specialized event created",
+        eventName: title,
+        organizerName: organizerName,
+        timestamp: new Date().toISOString()
+      };
+
+      // Send notifications to users
+      usersToNotify.forEach(user => {
+        const receiverSocketId = getReceiverSocketId(user.id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newEvent", notificationData);
+        }
+      });
+
+      // Send notifications to mobile users
+      mobileUsersToNotify.forEach(mobileUser => {
+        const receiverSocketId = getReceiverSocketId(mobileUser.id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newEventMobile", notificationData);
+        }
+      });
+    }
 
     return res.status(201).json(savedEvent);
   } catch (error) {
