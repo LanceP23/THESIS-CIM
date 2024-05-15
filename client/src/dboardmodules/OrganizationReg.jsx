@@ -4,12 +4,39 @@ import { toast } from 'react-hot-toast';
 import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import './OrganizationReg.css';
-import ReactModal from 'react-modal'; 
+import Modal from 'react-modal'; 
 import { UserContext } from '../../context/userContext';
 import { useContext } from 'react';
 import OrganizationOfficerPanel from './OrganizationOfficerPanel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPeopleArrows } from '@fortawesome/free-solid-svg-icons';
+
+const customStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 1000, 
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    width: '60%',
+    maxWidth: '70%',
+    padding: '20px',
+    textAlign: 'center',
+    zIndex: 1001, 
+    maxHeight: '100vh', // Maximum height for modal content
+    backgroundImage: 'linear-gradient(to right,white ,#98D08F)', // Add gradient background
+    borderRadius: '30px', // Add border radius property
+    
+    
+    
+    
+  },
+};
 
 export default function OrganizationReg() {
   const navigate = useNavigate();
@@ -269,64 +296,82 @@ export default function OrganizationReg() {
   };
 
   return (
-    <div className='manage_org-cont'>
-      <Sidebar adminType={adminType2} />
-      <h2 className='_manag_org_title'>Manage Organizations <FontAwesomeIcon icon={faPeopleArrows}/></h2>
-      
+    <div className=''>
+
 
       {adminType !== 'Organization Officer'&&(
-      <div className="Manage_org_container">
-        
+      <div className=" bg-slate-100 p-3 my-5 rounded-3xl shadow-inner shadow-slate-950">
 
+        <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faPeopleArrows} className=' text-yellow-500 mx-1'/>Manage Organizations</h2>
+        
+        <div className="flex flex-col">
+          <div className=" flex justify-end items-end">
+        <div className="indicator my-3 ">
+          <span className="indicator-item indicator-start badge badge-warning text-lg">+</span>
+          <button onClick={() => setShowModal(true)} className=' btn btn-wide btn-success '>Add Organization</button>
+          
+        </div>
+        </div>
+        
+      
         {organizations.length === 0 && <p>No organizations yet.</p>}
 
         {organizations.length > 0 && (
-          <div className="org_table_container">
-            <table className="organization-table">
-              <thead>
-                <tr className='table_header'>
-                  <th>Organization Name</th>
-                  <th>School Year</th>
-                  <th>Semester</th>
-                  <th>Members</th>
-                  <th>Potential Members</th>
+          <div className=" max-h-96 overflow-auto rounded-lg ">
+            <table className=" ">
+              <thead className=' sticky top-0'>
+                <tr className=' text-left'>
+                  <th className=' bg-green-700 text-white'>Organization Name</th>
+                  <th className=' bg-green-700 text-white'>School Year</th>
+                  <th className=' bg-green-700 text-white '>Semester</th>
+                  <th className=' bg-green-700 text-white'>Members</th>
+                  <th className=' bg-green-700 text-white'>Potential Members</th>
                   
                 </tr>
               </thead>
-              <tbody>
-                {organizations.map((org) => (
-                  <tr key={org._id}>
-                    <td>{org.name}</td>
-                    <td>{org.schoolYear}</td>
-                    <td>{org.semester}</td>
-                    <td>
-                      <button onClick={() => handleShowMembers(org)} className='_button'>Show Members</button>
-                    </td>
-                    <td>
-                      <button onClick={() => fetchPotentialMembers(org.name, org._id)} className='_button'>View Potential Members</button>
-                    </td>
-                  </tr>
-                ))}
+              <tbody className="bg-green-100 border">
+                  {organizations.map((org, index) => (
+                    <tr
+                      key={org._id}
+                      className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}
+                    >
+                      <td className=" border-r-2 ">{org.name}</td>
+                      <td className="border-r-2">{org.schoolYear}</td>
+                      <td className="border-r-2 ">{org.semester}</td>
+                      <td className="border-r-2   items-center">
+                        <button onClick={() => handleShowMembers(org)} className="btn btn-success">
+                          Show Members
+                        </button>
+                      </td>
+                      <td className=" items-center">
+                        <button onClick={() => fetchPotentialMembers(org.name, org._id)} className="btn btn-success">
+                          View Potential Members
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
+
             </table>
           </div>
         )}
+        </div>
 
-        <button onClick={() => setShowModal(true)} className='add_button'>Add Organization</button>
+     
 
-        <ReactModal
+        <Modal
           isOpen={showModal}
           onRequestClose={() => setShowModal(false)}
           contentLabel="Create Organization Modal"
-          className="Modal"
-          overlayClassName="Overlay"
+          style={customStyles}
+          
         >
-          <div className="modal-content" >
+          <div className=" bg-gradient-to-r from-white to-customgreen_1 p-3 rounded-lg " >
            
             <p></p>
-            <h2>Create a School Organization</h2>
+            <h2 className=' my-2 text-xl font-bold border-b-2 border-black'>Create a School Organization</h2>
             <form onSubmit={handleSubmit} className='Org_form'>
-              <div className="Org_name_field">
+              <div className="text-left ">
                 <label htmlFor="organizationName">Organization Name:</label>
                 <input
                   type="text"
@@ -335,9 +380,10 @@ export default function OrganizationReg() {
                   value={newOrganization.organizationName}
                   onChange={handleInputChange}
                   required
+                  className="input input-bordered input-success input-md w-full  bg-white text-black rounded-md shadow-xl"
                 />
               </div>
-              <div className="Org_name_field">
+              <div className="text-left my-1">
                 <label htmlFor="schoolYear">School Year:</label>
                 <input
                   type="text"
@@ -346,9 +392,10 @@ export default function OrganizationReg() {
                   value={newOrganization.schoolYear}
                   onChange={handleInputChange}
                   required
+                  className="input input-bordered input-success input-md w-full  text-black  bg-white rounded-md shadow-xl"
                 />
               </div>
-              <div className="Org_name_field">
+              <div className="text-left">
                 <label htmlFor="semester">Semester:</label>
                 <input
                   type="text"
@@ -357,62 +404,84 @@ export default function OrganizationReg() {
                   value={newOrganization.semester}
                   onChange={handleInputChange}
                   required
+                  className="input input-bordered input-success input-md w-full  text-black  bg-white rounded-md shadow-xl"
                 />
               </div>
-              <button type="submit" className='org_button'>Create Organization</button>
+              <div className="dv">
+              <button type="submit" className='btn btn-wide btn-success float-end my-3'>Create Organization</button>
+              </div>
             </form>
           </div>
-        </ReactModal>
+        </Modal>
 
-        <ReactModal
+        <Modal
           isOpen={showPotentialMembersModal}
           onRequestClose={handleClosePotentialMembersModal}
           contentLabel="Potential Members Modal"
-          className="Modal"
-          overlayClassName="Overlay"
+          style={customStyles}
         >
-          <div className="modal-content">
-            <h2>Potential Members</h2>
-            <ul>
-              {potentialMembers.map((member) => (
-                <li key={member._id}>
-                  {member.name} - {member.position}
-                  <button onClick={() => addPotentialMember(member._id, selectedOrganization)} className='_button'>Add to Organization</button>
-                </li>
-              ))}
-            </ul>
-            <button onClick={handleClosePotentialMembersModal} className='_button'>Close</button>
-          </div>
-        </ReactModal>
+          <div className="">
+            <h2 className='text-xl border-b-2'>Potential Members</h2>
+            <div className=" bg-slate-50 ">
 
-        <ReactModal
+              
+            <table>
+            <thead>
+                  <tr >
+                    <th className=' bg-green-700 text-white text-left'> Member Name</th>
+                    <th className=' bg-green-700 text-white text-left'>Position</th>
+                    <th className=' bg-green-700 text-white text-left'>fsfdds</th>
+                  </tr>
+
+                </thead>
+                <tbody>
+              {potentialMembers.map((member, index) => (
+                
+                <tr key={member._id} className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}>
+                 <td>{member.name} </td> 
+                  <td>{member.position}</td>
+                  <td><button onClick={() => addPotentialMember(member._id, selectedOrganization)} className='btn btn-success'>Add to Organization</button></td>
+                </tr>
+                
+              ))}
+             </tbody>
+            </table>
+            </div>
+
+            <div className=" flex justify-end item">
+              <button onClick={handleClosePotentialMembersModal} className='my-2 btn btn-wide btn-error float-end'>Close</button>
+            </div>
+         </div>
+        </Modal>
+
+        <Modal
         isOpen={showMembersModal}
         onRequestClose={handleCloseMembersModal}
         contentLabel="Members Modal"
-        className="Modal"
-        overlayClassName="Overlay"
+       style={customStyles}
       >
-        <div className="modal-content">
-          <h2>Members of {selectedOrganization}</h2>
+        <div className=" ">
+          <h2 className='text-xl border-b-2 py-2 border-gray-700'>Members of {selectedOrganization}</h2>
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Position</th>
-                <th>School Year</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th className=' bg-green-700 text-white text-left'>Name</th>
+                <th className=' bg-green-700 text-white text-left'>Email</th>
+                <th className=' bg-green-700 text-white text-left'>Position</th>
+                <th className=' bg-green-700 text-white text-left'>School Year</th>
+                <th className=' bg-green-700 text-white text-left'>Edit</th>
+                <th className=' bg-green-700 text-white text-left'>Delete</th>
               </tr>
             </thead>
             <tbody>
-              {members.map((member) => (
-                <tr key={member._id}>
+              {members.map((member, index) => (
+                <tr key={member._id} className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}>
                   <td>
                     {editMember === member ? (
                       <input
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
+                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
                       />
                     ) : (
                       member.name
@@ -423,6 +492,7 @@ export default function OrganizationReg() {
                       <input
                         value={editEmail}
                         onChange={(e) => setEditEmail(e.target.value)}
+                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
                       />
                     ) : (
                       member.studentemail
@@ -433,6 +503,7 @@ export default function OrganizationReg() {
                       <input
                         value={editPosition}
                         onChange={(e) => setEditPosition(e.target.value)}
+                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
                       />
                     ) : (
                       member.position
@@ -443,6 +514,7 @@ export default function OrganizationReg() {
                       <input
                         value={editSchoolYear}
                         onChange={(e) => setEditSchoolYear(e.target.value)}
+                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
                       />
                     ) : (
                       member.schoolYear
@@ -450,21 +522,24 @@ export default function OrganizationReg() {
                   </td>
                   <td>
                     {editMember === member ? (
-                      <button onClick={handleSaveMember} className='_button'>Save</button>
+                      <button onClick={handleSaveMember} className='btn btn-sm btn-success'>Save</button>
                     ) : (
-                      <button onClick={() => handleEditMember(member)} className='_button'>Edit</button>
+                      <button onClick={() => handleEditMember(member)} className='btn btn-xs btn-success'>Edit</button>
                     )}
                   </td>
                   <td>
-                    <button onClick={() => handleDeleteMember(member._id)} className='_button'>Delete</button>
+                    <button onClick={() => handleDeleteMember(member._id)} className='btn btn-xs btn-error'>Delete</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <button onClick={handleCloseMembersModal} className='_button'>Close</button>
+
+          <div className="">
+          <button onClick={handleCloseMembersModal} className=' my-3 btn btn-wide btn-error float-end'>Close</button>
+          </div>
         </div>
-      </ReactModal>
+      </Modal>
       </div>)}
 
       {adminType==='Organization Officer'&&(
