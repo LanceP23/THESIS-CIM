@@ -7,7 +7,7 @@ export default function SearchUser() {
     
       <div>
       <SearchInput/>
-      <div className = "divider"></div>
+      <div className = "divider divider-warning"></div>
       <Conversations/>
 
     </div>

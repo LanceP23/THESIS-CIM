@@ -8,7 +8,7 @@ const Messages = () => {
     const {messages, loading} = useGetMessages();
     useListenMessages();
   return (
-    <div className='convo_cont'>
+    <div className=' max-h-80 max-w overflow-auto bg-gradient-to-r from-green-300 to-green-100'>
         {!loading&& messages.length>0&& messages.map((message)=>(
             <Message key ={message._id} message ={message}/>
         ))}

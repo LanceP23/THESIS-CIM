@@ -45,28 +45,30 @@ const Navbar_2 = () => {
     }
   }
   return (
-    <nav className='navbar_2 ' >
-      <div className="navbar ">
+    <nav className='navbar_2 h-16 ' >
+      <div className="navbar  ">
         <div className="flex">
 
   
 
   <div className="dropdown ">
 
-  <label tabIndex={0} role="button" className="btn btn-square btn-success text-white swap swap-rotate"  >
+  {/*swap swap-rotate*/} 
+  <label tabIndex={0} role="button" className="btn btn-square btn-success text-white" >
   
-  {/* this hidden checkbox controls the state */}
-  <input type="checkbox" />
+   {/* this hidden checkbox controls the state 
+  <input type="checkbox" />*/}
+  
   
   {/* hamburger icon */}
-  <svg className="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
+  <svg className="swap-off fill-current " xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
   
-  {/* close icon */}
+  {/* close icon 
   <svg className="swap-on fill-current"    xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"/></svg>
-  
+  */}
 </label>
       
-      <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 z-[1] shadow bg-green-800 transition duration-300 ease-out w-max grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 text-center">
+<ul tabIndex={0} className="menu menu-sm dropdown-content mt-1 p-2 z-[1] shadow bg-green-800 transition duration-300 ease-out w-max grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 text-center">
        
       <li className=' ' >
             
@@ -154,11 +156,12 @@ const Navbar_2 = () => {
   <img src='../src/assets/logo.png' className=' h-auto w-28'></img>
   </div>
   <div className="flex flex-row">
-    <div className="div">
-        
-    <button className="btn btn-success mx-1 dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="indicator m-1 ">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400 " fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+  <div className="indicator">
+    <span className="indicator-item indicator-start badge badge-secondary bg-yellow-200">1</span> 
+    <button className="btn btn-success mx-1 dropdown dropdown-end btn-sm btn-circle">
+      <div tabIndex={0} role="button" className="indicator m-1 " >
+  
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400  " data-tip="Notif" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
 </div>
       <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
           <NotificationBell/>
@@ -180,7 +183,7 @@ const Navbar_2 = () => {
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-white">
           <li>Admin Level: {adminType}</li>
           <li></li>
-        <li  onClick={handleLogout}><a>Logout</a></li>
+          <li  onClick={handleLogout} className=' bg-red-600 rounded-lg'><a>Logout</a></li>
       </ul>
     </div>
 

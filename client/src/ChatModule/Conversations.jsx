@@ -8,7 +8,7 @@ import './ChatPage.css'
 const Conversations = ({}) => {
     const { loading, conversations } = useGetConversations();
   return (
-    <div className='convo_cont'>
+    <div className=' max-h-96 overflow-auto w-full '>
         {conversations.map((conversation, idx)=>(
             <Conversation
             key={conversation._id}

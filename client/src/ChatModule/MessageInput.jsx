@@ -16,19 +16,26 @@ const MessageInput = () => {
     }
     
   return (
-    <form className='message_container' onSubmit={handleSubmit}>
-        <div className='message_content'>
+    <form className='m-3 ' onSubmit={handleSubmit}>
+      <div className="flex flex-row w-full justify-between items-center ">
+        <div className='w-full'>
         <input 
         type = "text"
-        className='input_message'
+        className='input input-bordered input-success w-full rounded-full p-3 shadow-lg shadow-black bg-base-100 text-white'
         placeholder='Send a message'
         value ={message}
         onChange = {(e)=> setMessage(e.target.value)}
         />
+        </div>
+       
+       <div className="">
         <button type='submit' className='sent_button'>
-        {loading? <div className=''></div>:<i> <FontAwesomeIcon icon={faPaperPlane} className='send_icon'/></i>}
+        {loading? <div className=''></div>:<i> <FontAwesomeIcon icon={faPaperPlane} className=' mx-2 text-xl text-base-300 transition-transform duration-300 ease-in-out transform hover:scale-125 hover:text-green-500 shadow-lg shadow-black'/></i>}
         </button>
         </div>
+
+      </div>
+        
     </form>
   )
 }

@@ -88,48 +88,74 @@ export default function PostApproval({ adminType }) {
 
   return (
     <div>
-      <h2>Pending Announcements</h2>
-      <button onClick={fetchPendingAnnouncements}>Fetch Pending Announcements</button>
+      <h2 className=' border-b-2 border-black py-2 m-2'>Pending Announcements</h2>
+      <button onClick={fetchPendingAnnouncements} className='btn btn-wide btn-success'>Fetch Pending Announcements</button>
+      <div className="">
       {isLoading ? (
-        <p>Loading pending announcements...</p>
+        <p >Loading pending announcements...</p>
+
+        
       ) : pendingAnnouncements.length > 0 ? (
+        <div className="bg-white p-1 m-2 rounded-lg max-h-72 overflow-auto w-full">
         <ul>
+       
           {pendingAnnouncements.map((announcement) => (
-            <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)}>
-              <h3>{announcement.header}</h3>
-              <p>Posted by: {announcement.postedBy}</p>
+        
+            <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)} >
+              <div className="bg-white shadow-lg rounded-md m-3 p-2 transition-transform duration-300 ease-in-out transform hover:scale-95 active:bg-gray-500">
+              <h3 className=' text-2xl m-1'> Header: <strong>{announcement.header}</strong></h3>
+              <h3 className=''>Posted by: {announcement.postedBy}</h3>
+              </div>
               {selectedAnnouncement && selectedAnnouncement._id === announcement._id && (
                 <div>
-                  <button onClick={handleApproval}>Approve</button>
-                  <button onClick={handleRejection}>Reject</button>
+               
                 </div>
               )}
             </li>
           ))}
+         
+           
         </ul>
+        </div>
       ) : (
         <p>No pending announcements</p>
       )}
       {selectedAnnouncement && (
-        <div>
-          <h2>{selectedAnnouncement.header}</h2>
-          <p>Posted by: {selectedAnnouncement.postedBy}</p>
-          <p>{selectedAnnouncement.body}</p>
+         
+
+        <div className="card lg:card-side bg-slate-100 shadow-xl p-0">
+         
+          <figure>
           {selectedAnnouncement.mediaUrl && (
-            <div>
+            <div className='flex'>
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
-                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" />
+                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' w-full h-auto shadow-xl ' />
               )}
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
-                <video controls>
+                <video controls className='w-full h-full'>
                   <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
                   Your browser does not support the video tag.
                 </video>
               )}
             </div>
           )}
+          </figure>
+
+          <div className="card-body">
+          <h2 className="card-title"> Title: {selectedAnnouncement.header}</h2>
+          <p className=' text-left'> <strong>Posted by: {selectedAnnouncement.postedBy}</strong></p>
+          <p className=' bg-white p-1 rounded-md shadow-2xl'>{selectedAnnouncement.body}</p>
+
+          <div className="card-actions justify-end grid grid-cols-2">
+             <button onClick={handleApproval} className='btn btn-success'>Approve</button>
+                  <button onClick={handleRejection} className='btn btn-error'>Reject</button>
+                  </div>
+
+          </div>
+         
         </div>
       )}
+      </div>
     </div>
   );
 }

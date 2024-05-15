@@ -1,0 +1,15 @@
+.fc-toolbar-chunk{
+    display:  grid;
+    grid-template-columns: auto auto;
+ 
+ }
+ 
+ #fc-dom-86{
+     font-size: 20px;
+     margin-right: 5px;
+     font-weight: bold;
+ }
+ .fc-toolbar-title{
+     padding-right: 20px;
+     
+ }

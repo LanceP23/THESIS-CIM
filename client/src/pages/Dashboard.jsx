@@ -106,14 +106,40 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     <div className="dashboard">
      
 
-        <div className="flex">
+        <div className="">
+            
            
 
-           <div className=" my-24 inline-flex flex-row gap-1 absolute ">
+           <div className=" my-16 flex flex-row  w-auto h-full">
+
+            
+
+       
 
             <div className="row_1 inline-flex flex-col">
+
+                <div className="p3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border">
+                    <div className="carousel w-full ">
+                            <div id="item1" className="carousel-item w-full">
+                                <img src="../src/assets/398569058_739544134860223_1719844830869562449_n.jpg" className=" w-full" />
+                            </div> 
+                            <div id="item2" className="carousel-item w-full">
+                                <img src="../src/assets/434168365_828389249309044_1058040744990472008_n.jpg" className="w-full" />
+                            </div> 
+                            <div id="item3" className="carousel-item w-full">
+                                <img src="../src/assets/439841626_847556550725647_7502073539968304278_n.jpg" className="w-full " />
+                            </div> 
+                           
+                    </div> 
+                        <div className="flex justify-center w-full py-2 gap-2">
+                            <a href="#item1" className="btn btn-xs">1</a> 
+                            <a href="#item2" className="btn btn-xs">2</a> 
+                            <a href="#item3" className="btn btn-xs">3</a> 
+                           
+                        </div>
+                    </div>
                 <div className=' p-3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border'>
-                <h2 className='text-3xl'>Analytics</h2>
+                <h2 className='text-3xl border-b-2 border-gray-700'>Analytics</h2>
 
                 <div className="inline-flex flex-row">
                     <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border">
@@ -148,9 +174,53 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                 </div>
 
-                <div className=" p-3 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white">
-                <h2 className='text-3xl'>My Community</h2>
-                    
+                <div className=" p-3 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white ">
+                <h2 className='text-3xl border-b-2 border-gray-700 py-1'>My Community</h2>
+
+                <div className="container flex flex-row w-auto h-auto">
+
+                <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
+                <div className="flex flex-col gap-4 w-52">
+                    <div className="flex gap-4 items-center">
+                        <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
+                        <div className="flex flex-col gap-4">
+                        <div className="skeleton h-4 w-20"></div>
+                        <div className="skeleton h-4 w-28"></div>
+                        </div>
+                    </div>
+                    <div className="skeleton h-32 w-full"></div>
+                    </div>
+                </div>
+
+                <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
+                <div className="flex flex-col gap-4 w-52">
+                    <div className="flex gap-4 items-center">
+                        <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
+                        <div className="flex flex-col gap-4">
+                        <div className="skeleton h-4 w-20"></div>
+                        <div className="skeleton h-4 w-28"></div>
+                        </div>
+                    </div>
+                    <div className="skeleton h-32 w-full"></div>
+                    </div>
+                </div>
+
+                <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
+                <div className="flex flex-col gap-4 w-52">
+                    <div className="flex gap-4 items-center">
+                        <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
+                        <div className="flex flex-col gap-4">
+                        <div className="skeleton h-4 w-20"></div>
+                        <div className="skeleton h-4 w-28"></div>
+                        </div>
+                    </div>
+                    <div className="skeleton h-32 w-full"></div>
+                    </div>
+                </div>
+
+          
+                
+                </div>
                 
 
 
@@ -168,14 +238,25 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
             </div>
 
                <div className="row_2 flex flex-col">
-               <div className="p-3 m-3  w-auto h-96 shadow-inner shadow-md rounded-3 bg-white">
+               <div className="p-3 m-3 w-auto shadow-inner  rounded-3 bg-white">
       
-                <CreateEvent/>
+                <CreateEvent defaultSelectable={false}/>
                 </div>
                 
 
-                <div className="p-2 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white">
-                <h2 className='text-3xl'>Active Users</h2>
+                <div className="p-2 m-3  w-auto shadow-inner  rounded-3 bg-white ">
+                    <div className="flex border-b-2 border-gray-700">
+                        <div className='online-dot m-2'></div>
+                        <div className="">
+                        <h2 className='text-3xl '>Active Users</h2>
+                        </div>
+                    </div>
+
+                    <div className=" py-2 ">
+
+                    <Conversations conversations={{conversations}} className='active_'/>
+                    </div>
+                
                 
                 </div>
 

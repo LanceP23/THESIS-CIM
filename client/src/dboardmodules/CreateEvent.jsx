@@ -20,19 +20,21 @@ const customStyles = {
     zIndex: 1000, 
   },
   content: {
-    
     top: '50%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    width: '100vh',
-    maxWidth: '100vh',
+    width: '80%',
+    maxWidth: '80%',
     padding: '20px',
     textAlign: 'center',
     zIndex: 1001, 
     maxHeight: '100vh', // Maximum height for modal content
+    backgroundImage: 'linear-gradient(to right,white ,#98D08F)', // Add gradient background
+    borderRadius: '30px', // Add border radius property
+    
     
     
     
@@ -536,273 +538,336 @@ const handleSelectEvent = (event) => {
     
     {/*modal for details*/}
      { modalMode === 'details' && selectedEvent ? (
-    <div className='details_container'>
+    <div className='bg-grey-100 p-2 rounded-md  '>
       
      
-      <div className="first_col">
-      <h2>Event Details</h2>
-      <h3>Title:{selectedEvent.title}</h3>
-      <h3>Start Date: {moment(selectedEvent.start).format('YYYY-MM-DD HH:mm:ss')}</h3>
-      <h3>End Date: {moment(selectedEvent.end).format('YYYY-MM-DD HH:mm:ss')}</h3>
-     
+      <h2 className='text-4xl text-gray-600 border-b-2 border-gray-800 mb-3 text-left'>Event Details</h2>
+
+        <div className="   p-2 flex flex-1 flex-row justify-between column-gap-2 rounded-lg shadow-md shadow-black">
+        <div className="    w-6/12 p-2 rounded-md  shadow-black flex flex-col row-gap-1">
+          
+            <div className=" bg-slate-400 border-2 border-base-100 p-3 shadow-inner rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-110">
+                <div className=" flex justify-center items-center ">
+                  <label className=' text-lg text-white'> Event Name: </label> <label className='  p-2 rounded-md text-xl  font-extrabold italic '> {selectedEvent.title}</label>
+                </div>
+
+                <div className="flex justify-center items-center mx-1">
+                    <div className="div mx-1">
+                      <label className='text-white'>Start Date:</label>  <label className='p-2 rounded-md text-xl  font-extrabold italic  '>{moment(selectedEvent.start).format('YYYY-MM-DD HH:mm:ss')}</label>
+                    </div>
+                    <div className="div">
+                      <label className='text-white'>End Date:</label> <label className='p-2 rounded-md text-xl  font-extrabold italic  '> {moment(selectedEvent.end).format('YYYY-MM-DD HH:mm:ss')}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-slate-400 p-3 shadow-inner  rounded-sm">
+      <div className="flex my-1 ">
+      <label><strong className='text-white'>Event Type:</strong></label>  <label className=' '>{selectedEvent.extendedProps.eventType}</label>
       </div>
 
-      <div className="second_col">
-      <p><strong>Event Type:</strong> {selectedEvent.extendedProps.eventType}</p>
-      <p> <strong>Organizer Type:</strong> {selectedEvent.extendedProps.organizerType}</p>
-      <p><strong>Organizer Name:</strong> {selectedEvent.extendedProps.organizerName}</p>
-      <p><strong>Committee: </strong>{selectedEvent.extendedProps.committee}</p>
-      <p> <strong>Committee Chairman:</strong> {selectedEvent.extendedProps.committeeChairman}</p>
-      <p><strong>Location:  </strong>{selectedEvent.extendedProps.location}</p>
-      <p> <strong>Budget:</strong>{selectedEvent.extendedProps.budget}</p>
-      
-      {selectedEvent && selectedEvent.extendedProps && selectedEvent.extendedProps.participants && (
-  <div>
-    <strong>Participants:</strong>
-    <ul style={{ listStyleType: 'none', padding: 0 }}>
-      {JSON.parse(selectedEvent.extendedProps.participants).map((participant, index) => (
-        <li key={index} style={{ marginBottom: '10px' }}>
-          <div style={{ marginLeft: '20px' }}>
-            <strong>Name:</strong> {participant.name}<br />
-            <strong>Section:</strong> {participant.section}<br />
-            <strong>Type:</strong> {participant.type}<br />
-            {participant.type !== 'individual' && participant.members && (
-  <div style={{ marginLeft: '20px' }}>
-    <strong>Members:</strong> {participant.members.join(', ')}
-  </div>
-)}
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
 
+      <div className="flex justify-start items-center my-3">
+      <div className="flex my-3 mx-2">
+      <label> <strong className='text-white'>Organizer Type: </strong> </label><label className=''> {selectedEvent.extendedProps.organizerType}</label> 
       </div>
-         
-      <button onClick={closeModal} className='create_close_button'>Close</button>
-   
-    </div>
     
 
-     ) : (
-       <>
-         <h2>Create Event on :  {selectedDate && ( 
-          <h2 value={startDate} onChange={(e) => setStartDate(e.target.value)}> Start Date: <strong>{selectedDate.start} </strong>   </h2>
-           )}</h2>
-         <div className='create_event_container'>
+      <div className="flex my-3">
+      <p><strong className='text-white'>Organizer Name:</strong></p> <label className=''>{selectedEvent.extendedProps.organizerName}</label>
+      </div>
+      </div>
 
-          <div className="first_column">
-           <div className='event_content_1'>
-          
-           <label>
-              <strong>End Date:</strong>
-            </label>
-              <input type="date" value={endDate}  onChange={(e) => {
-                const inputtedEndDate = e.target.value;
-                if (inputtedEndDate < selectedDate.start) {
-                  alert('End date cannot be before the start date');
-                  return; 
-                }
-                setEndDate(inputtedEndDate);
-                }}
-                className='date_field'
-              />
-            
-            </div>
-            <div className='event_content_3'>
-            <label>
-              <strong>Start Time:</strong> 
-            </label>
-              <input type="time"  value={startTime} onChange={(e) => setStartTime(e.target.value)}  className='date_field'  />
-           
-           
-            <label>
-              <strong>End Time: </strong>
-            </label>
-              <input type="time"  value={endTime} onChange={(e) => setEndTime(e.target.value)}  className='date_field' />
-            
-          </div>
-          <div className='event_content_2'>
-            <label>
-              <strong>Event Name:</strong>
-              <input type="text" className='input__field' value={eventName} onChange={(e) => setEventName(e.target.value)} />
-            </label>
-          </div>
-          
-          <div className='event_content_11'>
-            <label>
-              <strong>Location:</strong>
-              <input type="text" className='input__field' value={location} onChange={(e) => setLocation(e.target.value)} />
-            </label>
-          </div>
+      <div className="flex justify-start items-center my-3">
 
-          <div className='event_content_9'>
-            <label>
-              <strong>Committee:</strong>
-              <input type="text" className='input__field' value={committee} onChange={(e) => setCommittee(e.target.value)} />
-            </label>
-          </div>
-          <div className='event_content_10'>
-            <label>
-              <strong>Committee Chairman:</strong>
-              <input type="text" className='input__field' value={committeeChairman} onChange={(e) => setCommitteeChairman(e.target.value)} />
-            </label>
-          </div>
-          
-          <div className='event_content_12'>
-            <label>
-              <strong>Budget:</strong>
-              <input type="text" className='input__field' value={budget} onChange={(e) => setBudget(e.target.value)} />
-            </label>
-          </div>
+      <div className="flex my-3">
+      <lab><strong className='text-white'>Committee: </strong></lab> <label className=''>{selectedEvent.extendedProps.committee}</label>
+      </div>
 
-          </div>
+      <div className="flex my-3 ">
+      <p> <strong className='text-white'>Committee Chairman:</strong></p> <label className=' '>{selectedEvent.extendedProps.committeeChairman}</label> 
+      </div>
+      </div>
 
-          <div className="second_column">
-          <div className="second_column_container">
-          <div className='event_content_4'>
-            <label>
-              <strong>Event Type:</strong>
-              <select value={eventType} className='input__field' onChange={(e) => setEventType(e.target.value)}>
-                <option value="">Select Event Type</option>
-                <option value="institutional">Institutional</option>
-                <option value="organizational">Organizational</option>
-                <option value="structural">Structural</option>
-                <option value="specialized">Specialized</option>
-              </select>
-            </label>
-          </div>
-          {["institutional", "structural"].includes(eventType) && (
-            <div className='event_content_5'>
-              <label>
-                <strong>Participant Type:</strong>
-                <select value={participantType} className='input__field' onChange={(e) => setParticipantType(e.target.value)}>
-                  <option value="individual">Individual</option>
-                  <option value="group">Group</option>
-                </select>
-              </label>
-              {participantType === 'individual' && (
-                <div className='event_content_6'>
-                  {participants.map((participant, index) => (
-                    <div key={index}>
-                      <label>
-                        <strong>Participant Name:</strong>
-                        <input type="text" value={participant.name} className='input__field' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
-                      </label>
-                      <label>
-                        <strong>Section:</strong>
-                        <input type="text" value={participant.section} className='input__field' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
-                      </label>
-                      <button onClick={() => removeParticipant(index)} className='add_remove_button'>Remove Participant</button>
-                    </div>
-                  ))}
-                  <button onClick={addParticipant} className='add_remove_button'>Add Participant</button>
-                </div>
-              )}
-              {participantType === 'group' && (
-                <div className='event_content_7'>
-                  {participants.map((participant, index) => (
-                    <div key={index}>
-                      <label>
-                        <strong>Group Name:</strong>
-                        <input type="text" value={participant.name} className='input__field' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
-                      </label>
-                      <label>
-                        <strong>Section:</strong>
-                        <input type="text" value={participant.section} className='input__field' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
-                      </label>
-                      <div>
-                        <strong>Members:</strong>
-                        {participant.members.map((member, memberIndex) => (
-                          <input key={memberIndex} type="text" className='input__field' value={member} onChange={(e) => handleMemberChange(index, memberIndex, e.target.value)} />
-                        ))}
-                        <button onClick={() => handleParticipantChange(index, 'members', [...participant.members, ''])}>Add Member</button>
-                      </div>
-                      <button onClick={() => handleRemoveParticipant(index)} className='add_remove_button'>Remove Participant</button>
-                    </div>
-                  ))}
-                  <button onClick={addGroup} className='add_remove_button'>Add Group</button>
-                </div>
+      <div className="flex my-3">
+      <p><strong className='text-white'>Location:  </strong></p> <label className=' '>{selectedEvent.extendedProps.location}</label>
+      </div>
+
+      <div className="flex my-3">
+      <p> <strong className='text-white'>Budget:</strong></p> <label className=' '>{selectedEvent.extendedProps.budget}</label>
+      </div>
+
+      </div>
+</div>  
+
+
+<div className="divider divider-horizontal divider-success"></div>
+<div className=" w-6/12 flex flex-col  ">
+    <h2 className=' border-b-2 border-gray-700'> <strong className=' text-gray-700 text-xl'>Participants: </strong></h2>
+    {selectedEvent && selectedEvent.extendedProps && selectedEvent.extendedProps.participants && (
+      
+    <div className=' max-h-96 overflow-auto border-b-2 border-gray-700 py-2  '>
+      
+
+      <ul className=' '>
+        {JSON.parse(selectedEvent.extendedProps.participants).map((participant, index) => (
+          <li key={index} style={{ marginBottom: '10px' }}>
+            <div className=' m-2 p-2 bg-slate-50 rounded-md shadow-inner shadow-black'>
+              <strong>Name:</strong> <h2 className=' bg-gray-300 p-2 rounded-md'>{participant.name}<br /></h2> 
+              <strong>Section:</strong> <h2 className=' bg-gray-300 p-2 rounded-md'>{participant.section}<br /></h2> 
+              <strong>Type:</strong>  <h2 className=' bg-gray-300 p-2 rounded-md'> {participant.type}<br /></h2>
+              {participant.type !== 'individual' && participant.members && (
+                  <div style={{ marginLeft: '20px' }}>
+                    <strong>Members:</strong> <h2 className=' bg-gray-300 p-2 rounded-md'> {participant.members.join(', ')}</h2> 
+                  </div>
               )}
             </div>
-          )}
-          
-          {eventType === 'organizational' && (
-            <div className='event_content_8'>
-              <label>
-                <strong>Participant Organizations:</strong>
-                <select multiple value={participantOrganizations} className='input__field'  onChange={(e) => {const selectedOptions = Array.from(e.target.selectedOptions, option => option.value); setParticipantOrganizations(selectedOptions);}}>
-                  {organizations.map(org => (
-                    <option key={org.id} value={org.id} onDoubleClick={() => handleDoubleClick(org)}>
-                      {org.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-          )}
-       {eventType === 'specialized' && (
-            <div className="event_content_8">
-              <label htmlFor="participantCommunity"><strong>Participant Community:</strong></label>
-              <select id="participantCommunity" multiple value={selectedCommunities.map(community => community._id)} onChange={handleCommunityChange}>
-                {adminCommunities.map(community => (
-                  <option key={community._id} value={community._id}>{community.name}</option>
-                ))}
-              </select>
-              {selectedCommunities.length > 0 && (
-                <div>
-                  <strong>Selected Communities:</strong>
-                  <ul>
-                    {selectedCommunities.map(community => (
-                      <li key={community._id}>
-                        {community.name}
-                        <button onClick={() => handleRemoveCommunity(community)} className='add_remove_button'>Remove</button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
-          <div className="selected-participants">
-            <strong>Selected Participants:</strong>
-            {selectedParticipantOrganizations.map(org => (
-              <div key={org.id}>
-                <span>{org.name}</span>
-                <button onClick={() => handleRemoveParticipant(org)} className='add_remove_button'>Remove</button>
-              </div>
-            ))}
-          </div>
-         
-          <div className='event_content_13'>
-            <label>
-              <strong>Organizer Type:</strong>
-              <select value={organizerType} className='input__field' onChange={(e) => setOrganizerType(e.target.value)}>
-                <option value="">Select Organizer Type</option>
-                <option value="Person">Person</option>
-                <option value="Organization">Organization</option>
-                <option value="School">School</option>
-              </select>
-            </label>
-          </div>
-          <div className='event_content_14'>
-            <label>
-              <strong>Organizer Name:</strong>
-              <input type="text" value={organizerName} className='input__field' onChange={(e) => setOrganizerName(e.target.value)} />
-            </label>
-          </div>
-         </div>
-         </div>
-         </div>
-         <button onClick={handleEventCreate} className='create_close_button'>Create</button>
-         
-
-       </>
-     )}
-   </Modal>   
+          </li>
+        ))}
+      </ul>
+      
     </div>
-  );
+
+
+)}
+   
+</div>
+
+</div>       
+<div className="flex justify-end my-2">
+<button onClick={closeModal} className='btn btn-error px-5 btn-wide '>Close</button>
+</div>
+    </div>
+
+) : (
+  <>
+    <h2 className=' text-3xl'>Create Event on :  {selectedDate && ( 
+     <h2 value={startDate} onChange={(e) => setStartDate(e.target.value)}> Start Date: <strong>{selectedDate.start} </strong>   </h2>
+      )}</h2>
+    <div className=' bg-gradient-to-r from-white to-green-200 flex flex-row justify-around rounded-xl p-3 shadow-inner shadow-xl'>
+
+     <div className=" flex flex-col text-left items-start">
+      <div className=' flex flex-row'>
+     
+      <label>
+         <strong>End Date:</strong>
+       </label>
+         <input type="date" value={endDate}  onChange={(e) => {
+           const inputtedEndDate = e.target.value;
+           if (inputtedEndDate < selectedDate.start) {
+             alert('End date cannot be before the start date');
+             return; 
+           }
+           setEndDate(inputtedEndDate);
+           }}
+           className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
+         />
+       
+       </div>
+       <div className='event_content_3'>
+       <label>
+         <strong>Start Time:</strong> 
+       </label>
+         <input type="time"  value={startTime} onChange={(e) => setStartTime(e.target.value)}  className='input input-bordered input-success input-sm  text-white mx-1'  />
+      
+      
+       <label>
+         <strong>End Time: </strong>
+       </label>
+         <input type="time"  value={endTime} onChange={(e) => setEndTime(e.target.value)}  className='input input-bordered input-success input-sm  text-white mx-1' />
+       
+     </div>
+     <div className='event_content_2'>
+       <label>
+         <strong>Event Name:</strong>
+         <input type="text" className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' value={eventName} onChange={(e) => setEventName(e.target.value)} />
+       </label>
+     </div>
+     
+     <div className='event_content_11'>
+       <label>
+         <strong>Location:</strong>
+         <input type="text" className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' value={location} onChange={(e) => setLocation(e.target.value)} />
+       </label>
+     </div>
+
+     <div className='event_content_9'>
+       <label>
+         <strong>Committee:</strong>
+         <input type="text" className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' value={committee} onChange={(e) => setCommittee(e.target.value)} />
+       </label>
+     </div>
+     <div className='event_content_10'>
+       <label>
+         <strong>Committee Chairman:</strong>
+         <input type="text" className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' value={committeeChairman} onChange={(e) => setCommitteeChairman(e.target.value)} />
+       </label>
+     </div>
+     
+     <div className='event_content_12'>
+       <label>
+         <strong>Budget:</strong>
+         <input type="text" className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' value={budget} onChange={(e) => setBudget(e.target.value)} />
+       </label>
+     </div>
+
+     </div>
+
+     <div className="divider divider-horizontal divider-success"></div>
+
+     <div className="second_column">
+     <div className="  border-black flex flex-col justify-start text-left overflow-auto max-w-full max-h-96 p-3">
+     <div className='event_content_4'>
+       <label>
+         <strong>Event Type:</strong>
+         <select value={eventType} className='flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md ' onChange={(e) => setEventType(e.target.value)}>
+           <option value="">Select Event Type</option>
+           <option value="institutional">Institutional</option>
+           <option value="organizational">Organizational</option>
+           <option value="structural">Structural</option>
+           <option value="specialized">Specialized</option>
+         </select>
+       </label>
+     </div>
+     {["institutional", "structural"].includes(eventType) && (
+       <div className='event_content_5'>
+         <label>
+           <strong>Participant Type:</strong>
+           <select value={participantType} className='flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md ' onChange={(e) => setParticipantType(e.target.value)}>
+             <option value="individual">Individual</option>
+             <option value="group">Group</option>
+           </select>
+         </label>
+         {participantType === 'individual' && (
+           <div className='event_content_6'>
+             {participants.map((participant, index) => (
+               <div key={index} className=' border shadow-lg my-1 p-1'>
+                 <label>
+                   <strong>Participant Name:</strong>
+                   <input type="text" value={participant.name} className='file-input file-input-bordered file-input-success file-input-sm w-52  max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
+                 </label>
+                 <label>
+                   <strong>Section:</strong>
+                   <input type="text" value={participant.section} className='file-input file-input-bordered file-input-success file-input-sm w-52 max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
+                 </label>
+                 <button onClick={() => removeParticipant(index)} className='btn btn-error my-1'>Remove Participant</button>
+               </div>
+             ))}
+             <button onClick={addParticipant} className='btn btn-success float-end'>Add Participant</button>
+           </div>
+         )}
+         {participantType === 'group' && (
+           <div className='event_content_7'>
+             {participants.map((participant, index) => (
+               <div key={index} className=''>
+                 <div className="border-1 shadow-lg p-1 m-1">
+                 <label>
+                   <strong>Group Name:</strong>
+                   <input type="text" value={participant.name} className='file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
+                 </label>
+                 <label>
+                   <strong>Section:</strong>
+                   <input type="text" value={participant.section} className='file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
+                 </label>
+
+                 </div>
+                 <div>
+                   <div className="border-1 shadow-lg p-1 m-1">
+                   <strong>Members:</strong> <br></br>
+                   {participant.members.map((member, memberIndex) => (
+                     <input key={memberIndex} type="text" className='m-1 file-input file-input-bordered file-input-success file-input-sm w- max-w-xs mx-5 bg-white rounded-md shadow-xl ' value={member} onChange={(e) => handleMemberChange(index, memberIndex, e.target.value)} />
+                   ))}
+                   </div>
+                   <button onClick={() => handleParticipantChange(index, 'members', [...participant.members, ''])} className='btn btn-success btn-xs m-1'>Add Member</button>
+                 </div>
+                 <button onClick={() => handleRemoveParticipant(index)} className='btn btn-error m-1'>Remove Participant</button>
+               </div>
+             ))}
+             <button onClick={addGroup} className='btn btn-success'>Add Group</button>
+           </div>
+         )}
+       </div>
+     )}
+     
+     {eventType === 'organizational' && (
+       <div className='event_content_8'>
+         <label>
+           <strong>Participant Organizations:</strong>
+           <select multiple value={participantOrganizations} className='input__field'  onChange={(e) => {const selectedOptions = Array.from(e.target.selectedOptions, option => option.value); setParticipantOrganizations(selectedOptions);}}>
+             {organizations.map(org => (
+               <option key={org.id} value={org.id} onDoubleClick={() => handleDoubleClick(org)}>
+                 {org.name}
+               </option>
+             ))}
+           </select>
+         </label>
+       </div>
+     )}
+  {eventType === 'specialized' && (
+       <div className="event_content_8">
+         <label htmlFor="participantCommunity"><strong>Participant Community:</strong></label>
+         <select id="participantCommunity" multiple value={selectedCommunities.map(community => community._id)} onChange={handleCommunityChange}>
+           {adminCommunities.map(community => (
+             <option key={community._id} value={community._id}>{community.name}</option>
+           ))}
+         </select>
+         {selectedCommunities.length > 0 && (
+           <div>
+             <strong>Selected Communities:</strong>
+             <div className="border-1">
+             <ul className=''>
+               {selectedCommunities.map(community => (
+                 <h2 key={community._id} className='m-1 text-green-500 font-semibold'>
+                   {community.name}
+                   <button onClick={() => handleRemoveCommunity(community)} className='btn btn-error btn-sm ml-1'>Remove</button>
+                 </h2>
+               ))}
+             </ul>
+
+             </div>
+           </div>
+         )}
+       </div>
+     )}
+     <div className="selected-participants">
+       <strong>Selected Participants:</strong>
+       {selectedParticipantOrganizations.map(org => (
+         
+         <div key={org.id} className='border-1 m-1 shadow-lg text-center'>
+           <span className='text-green-500 font-extrabold italic mr-8'>{org.name}</span>
+           <button onClick={() => handleRemoveParticipant(org)} className='btn btn-error mx-1 justify-end'>Remove</button>
+         </div>
+       ))}
+     </div>
+    
+     <div className='event_content_13'>
+       <label>
+         <strong>Organizer Type:</strong>
+         <select value={organizerType} className='flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md' onChange={(e) => setOrganizerType(e.target.value)}>
+           <option value="">Select Organizer Type</option>
+           <option value="Person">Person</option>
+           <option value="Organization">Organization</option>
+           <option value="School">School</option>
+         </select>
+       </label>
+     </div>
+     <div className='event_content_14'>
+       <label>
+         <strong>Organizer Name:</strong>
+         <input type="text" value={organizerName} className='file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => setOrganizerName(e.target.value)} />
+       </label>
+     </div>
+    </div>
+    </div>
+    </div>
+    <button onClick={handleEventCreate} className='btn btn-success float-end btn-md p3 m-4 btn-wide'>Create</button>
+    
+
+  </>
+)}
+</Modal>   
+</div>
+);
 };
 
 export default CreateEvent;

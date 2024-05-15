@@ -20,12 +20,12 @@ const Conversation = ({ conversation, lastIdx }) => {
                     <div className='flex_container'>
                   
                    
-                        <p > <span> {isOnline ? <div className='online-dot'></div> : <div className='offline-dot'></div>}</span>{conversation.name}</p>
+                        <p className='flex flex-row justify-normal text-md font-semibold'>  {isOnline ? <div className='online-dot'></div> : <div className='offline-dot'></div>}{conversation.name}</p>
                         
                     </div>
                 </div>
             </div>
-            <div className='divider '></div>
+            <div className='divider divider-success'></div>
         </>
     );
 };

@@ -28,11 +28,11 @@ const SearchInput = ({}) => {
 	};
   return (
     <form onSubmit={handleSubmit} className=''>
-        <input type = "text" placeholder='Search Users...' className='input_search'
+        <input type = "text" placeholder='Search Users...' className='input input-bordered input-success w-full max-w-xs bg-slate-100 input-sm shadow-xl'
         value ={search}
         onChange={(e)=> setSearch(e.target.value)}
         />
-        <button type = 'submit' className='search_icon_container'>
+        <button type = 'submit' className='btn btn-circle btn-success mx-2 bg-slate-100'>
          <FontAwesomeIcon icon={faSearch} className='search_icon'/>
         </button>
 
