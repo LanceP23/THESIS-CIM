@@ -266,6 +266,39 @@ export default function CreateAnnouncement() {
     setSelectedCommunity(event.target.value);
   };
 
+  const renderVisibilityOptions = () => {
+    // Check if the admin type is 'School Owner'
+    if (adminType === 'School Owner') {
+      return (
+        <div className="flex flex-col my-3">
+          <div className="label my-0 py-0">
+            <label className="label text-gray-700" htmlFor="body">Visibility:</label>
+          </div>
+          <div className="radio_buttons flex">
+            <label className="flex justify-start mx-2">
+              <input type="checkbox" className="checkbox checkbox-success" name="everyone" checked={visibility.everyone} onChange={handleVisibilityChange} />
+              <span className="label-text mx-1 text-gray-700 "><i className="fa fa-users"></i> Everyone</span>
+            </label>
+            <label className="flex justify-start mx-2">
+              <input type="checkbox" className="checkbox checkbox-success" name="staff" checked={visibility.staff} onChange={handleVisibilityChange} />
+              <span className="label-text mx-1 text-gray-700 "><i className="fa fa-briefcase"></i> Staff</span>
+            </label>
+            <label className="flex justify-start mx-2">
+              <input type="checkbox" className="checkbox checkbox-success" name="faculty" checked={visibility.faculty} onChange={handleVisibilityChange} />
+              <span className="label-text mx-1 text-gray-700 "><i className="fa fa-university"></i> Faculty</span>
+            </label>
+            <label className="flex justify-start mx-2">
+              <input type="checkbox" className="checkbox checkbox-success" name="students" checked={visibility.students} onChange={handleVisibilityChange} />
+              <span className="label-text mx-1 text-gray-700 "><i className="fa fa-graduation-cap"></i> Students</span>
+            </label>
+          </div>
+        </div>
+      );
+    }
+    // If admin type is not 'School Owner', return null to render nothing
+    return null;
+  };
+
 
   return (
     <div className='flex flex-row my-24'>
@@ -306,38 +339,25 @@ export default function CreateAnnouncement() {
                     onChange={handleMediaChange}
                   />
                   {mediaPreview && (
-                    <img src={mediaPreview} alt="Media Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                    <>
+                      {media.type.startsWith('image/') && (
+                        <img src={mediaPreview} alt="Media Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                      )}
+                      {media.type.startsWith('video/') && (
+                        <video controls style={{ maxWidth: '350px', maxHeight: '350px' }}>
+                          <source src={mediaPreview} type={media.type} />
+                        </video>
+                      )}
+                      {media.type.startsWith('audio/') && (
+                        <audio controls style={{ maxWidth: '200px' }}>
+                          <source src={mediaPreview} type={media.type} />
+                        </audio>
+                      )}
+                    </>
                   )}
                 </div>
 
-                <div className="flex flex-col my-3">
-                  <div className="label my-0 py-0">
-                    <label className="label text-gray-700" htmlFor="body">Visibility:</label>
-                    </div>
-
-                    <div className="radio_buttons flex">
-                  <label className="flex justify-start mx-2">
-                    <input type="checkbox"  className="checkbox checkbox-success" name="everyone" checked={visibility.everyone} onChange={handleVisibilityChange} />
-                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-users"></i> Everyone</span>
-                  </label>
-
-                  <label className="flex justify-start mx-2">
-                    <input type="checkbox"  className="checkbox checkbox-success" name="staff" checked={visibility.staff} onChange={handleVisibilityChange} />
-                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-briefcase"></i> Staff</span>
-                  </label>
-
-                  <label className="flex justify-start mx-2">
-                    <input type="checkbox"  className="checkbox checkbox-success" name="faculty" checked={visibility.faculty} onChange={handleVisibilityChange}/>
-                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-university"></i> Faculty</span>
-                  </label>
-
-                  <label className="flex justify-start mx-2">
-                    <input type="checkbox"  className="checkbox checkbox-success" name="students" checked={visibility.students} onChange={handleVisibilityChange}/>
-                    <span className="label-text mx-1 text-gray-700 "><i className="fa fa-graduation-cap"></i> Students</span>
-                  </label>
-
-                  </div>
-                </div>
+                {renderVisibilityOptions()}
                 
                 <div className='flex justify-start my-2'>
                     <label className="label text-gray-700" htmlFor="postingDate">Posting Date:</label>

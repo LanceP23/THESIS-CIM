@@ -203,6 +203,23 @@ const updateAnnouncementStatus = async (req, res) => {
     announcement.status = status;
     await announcement.save();
 
+
+    if (status === 'approved') {
+      // Find the user by their email (postedBy)
+      const postingUser = await User.findOne({ studentemail: announcement.postedBy });
+      if (postingUser) {
+        // Emit a socket event to the user who created the announcement
+        const receiverSocketId = getReceiverSocketId(postingUser._id.toString());
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit('announcementApproved', {
+            type: 'announcement',
+            message: `Your announcement titled "${announcement.title}" has been approved.`,
+            announcementId: announcementId
+          });
+        }
+      }
+    }
+
     res.json(announcement);
   } catch (error) {
     console.error('Error updating announcement status:', error);

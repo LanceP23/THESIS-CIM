@@ -16,7 +16,8 @@ export const SocketContextProvider = ({ children }) => {
             // Define an array of URLs to attempt connecting
             const connectionURLs = [
              // Hardcoded IP address
-                "http://localhost:8000" // Localhost
+                "http://localhost:8000",//local
+                "http://192.168.1.5:8000" //local network
             ];
 
             // Attempt to connect using each URL until successful

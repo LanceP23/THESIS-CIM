@@ -19,7 +19,7 @@ const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getComm
 router.use(
     cors({
         credentials: true,
-        origin:'http://localhost:5173'
+        origin:['http://localhost:5173', 'http://192.168.1.5:5173']
     })
 );
 
