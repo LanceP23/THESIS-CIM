@@ -24,7 +24,9 @@
 body {
   margin: 0;
  
-  background-color: #98D08F; 
+  background: linear-gradient(to right, #98D08F, rgb(221, 255, 153), #98D08F );
+  background-size: 200% 200%;
+  animation: gradient 20s ease infinite;
 
   
   place-items: center;
@@ -35,6 +37,17 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
 }
 
 
