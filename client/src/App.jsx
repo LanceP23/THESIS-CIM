@@ -24,7 +24,7 @@ import ViewCommunity from './dboardmodules/MyCommunityModule/ViewCommunity';
 import RecentPostCommunity from './dboardmodules/MyCommunityModule/RecentPostCommunity';
 import NotificationBell from './components/NotificationBell';
 import Navbar_2 from './components/Navbar_2';
-
+import address from 'address';
 
 const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.1.5:8000';
 axios.defaults.baseURL = baseURL;

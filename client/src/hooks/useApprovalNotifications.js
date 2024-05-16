@@ -26,7 +26,7 @@ const useApprovalNotifications = () => {
                 socket.off("announcementApproved", handleApprovalNotification);
             }
         };
-    }, [socket]);
+    }, [socket, handleApprovalNotification]);
 
     return notifications;
 };

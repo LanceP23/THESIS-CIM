@@ -4,7 +4,7 @@ import useAnnouncementNotifications from '../hooks/useAnnouncementNotifications'
 import useEventNotifications from '../hooks/useEventNotifications';
 import useApprovalNotifications from '../hooks/useApprovalNotifications';
 
-const NotificationBell = () => {
+const NotificationBell = ({setTotalUnreadCount}) => {
     const messageNotifications = useNotifications();
     const announcementNotifications = useAnnouncementNotifications();
     const eventNotifications = useEventNotifications();
@@ -79,21 +79,30 @@ const NotificationBell = () => {
     }, [approvalNotifications]);
 
     const toggleDropdown = () => {
-        setShowDropdown(prev => !prev);
-        // When the dropdown is opened, mark all notifications as read
-        if (!showDropdown) {
-            setUnreadMessageCount(0);
-            setUnreadAnnouncementCount(0);
-            setUnreadEventCount(0);
-        }
+        setShowDropdown(prev => {
+            // We check if the dropdown was previously closed and now is being opened
+            if (!prev) {
+                // Reset all counts to 0
+                setUnreadMessageCount(0);
+                setUnreadAnnouncementCount(0);
+                setUnreadEventCount(0);
+                setUnreadApprovalCount(0);
+            }
+            return !prev;
+        });
     };
+
+    useEffect(() => {
+        const totalUnreadCount = unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount;
+        setTotalUnreadCount(totalUnreadCount);
+    }, [unreadMessageCount, unreadAnnouncementCount, unreadEventCount, unreadApprovalCount, setTotalUnreadCount]);
 
     return (
         <div className="notification-bell">
             <div className="notification-dropdown">
                 <h3>Notifications</h3>
-                {(unreadMessageCount + unreadAnnouncementCount + unreadEventCount) > 0 && (
-                    <span className="notification-count">{unreadMessageCount + unreadAnnouncementCount + unreadEventCount}</span>
+                {(unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount) > 0 && (
+                    <span className="notification-count">{unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount}</span>
                 )}
                 {(messageNotifications.length + announcementNotifications.length + eventNotifications.length) > 0 ? (
                     <ul>

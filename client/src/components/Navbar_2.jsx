@@ -12,6 +12,7 @@ const Navbar_2 = () => {
   const adminType = user ? user.adminType : null;
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const [totalUnreadCount, setTotalUnreadCount] = useState(0); 
 
   const userName = user ? user.name : '';
 
@@ -43,7 +44,8 @@ const Navbar_2 = () => {
       console.error('Login failed: ', error);
       toast.error('Logout failed.');
     }
-  }
+  };
+  
   return (
     <nav className='navbar_2 h-16 ' >
       <div className="navbar  ">
@@ -157,14 +159,16 @@ const Navbar_2 = () => {
   </div>
   <div className="flex flex-row">
   <div className="indicator">
-    <span className="indicator-item indicator-start badge badge-secondary bg-yellow-200">1</span> 
+  {totalUnreadCount > 0 && (
+     <span className="indicator-item indicator-start badge badge-secondary bg-yellow-200">{totalUnreadCount}</span>
+   )}
     <button className="btn btn-success mx-1 dropdown dropdown-end btn-sm btn-circle">
       <div tabIndex={0} role="button" className="indicator m-1 " >
   
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400  " data-tip="Notif" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
 </div>
       <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-          <NotificationBell/>
+          <NotificationBell setTotalUnreadCount={setTotalUnreadCount}/>
         </ul>
     </button>
 
