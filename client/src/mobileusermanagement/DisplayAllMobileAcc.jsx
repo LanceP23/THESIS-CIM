@@ -63,16 +63,17 @@ const UserManagement = () => {
     };
 
     return (
-        <div className="user-management">
-            <h2>Mobile User Management</h2>
+        <div className="bg-slate-200 rounded-xl my-5 p-2">
+            <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>Mobile User Management</h2>
             <div className="filters-container">
                 <input
                     type="text"
                     placeholder="Search by name"
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
+                    className='input input-success input-sm text-white mx-4 shadow-md mb-3'
                 />
-                <select value={filterOption} onChange={e => setFilterOption(e.target.value)}>
+                <select value={filterOption} onChange={e => setFilterOption(e.target.value)} className='select select-success select-sm text-white w-full max-w-xs'>
                     <option value="All">All</option>
                     <option value="Grade School">Grade School</option>
                     <option value="High School">High School</option>
@@ -80,66 +81,98 @@ const UserManagement = () => {
                     <option value="College">College</option>
                 </select>
             </div>
+
+            <div className="w-full max-h-96 overflow-auto">
             <table>
-                <thead>
+                <thead className=' sticky top-0'>
                     <tr>
-                        <th>Name</th>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Education Level</th>
-                        <th>Additional Details</th>
-                        <th>Actions</th>
+                        <th className='bg-green-700 text-white text-left'>Name</th>
+                        <th className='bg-green-700 text-white text-left'>ID</th>
+                        <th className='bg-green-700 text-white text-left'>Email</th>
+                        <th className='bg-green-700 text-white text-left'>Education Level</th>
+                        <th className='bg-green-700 text-white '>Additional Details</th>
+                        <th className='bg-green-700 text-white text-left'>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredUsers.map(user => (
-                        <tr key={user._id}>
-                            <td>{user._id === editingUserId ? <input type="text" value={editedUserData.name} onChange={(e) => setEditedUserData({...editedUserData, name: e.target.value})} /> : user.name}</td>
-                            <td>{user._id}</td>
-                            <td>{user._id === editingUserId ? <input type="text" value={editedUserData.studentemail} onChange={(e) => setEditedUserData({...editedUserData, studentemail: e.target.value})} /> : user.studentemail}</td>
-                            <td>{user._id === editingUserId ? <input type="text" value={editedUserData.educationLevel} onChange={(e) => setEditedUserData({...editedUserData, educationLevel: e.target.value})} /> : user.educationLevel}</td>
+                {users.map((user, index) => (
+          <tr key={user._id} className={index % 2 === 0 ? 'bg-gray-200' : 'bg-customyellow'}>
+            <td>
+              {user._id === editingUserId ? (
+                <input
+                  type="text"
+                  value={editedUserData.name}
+                  onChange={(e) => setEditedUserData({ ...editedUserData, name: e.target.value })}
+                />
+              ) : (
+                user.name
+              )}
+            </td>
+            <td>{user._id}</td>
+            <td>
+              {user._id === editingUserId ? (
+                <input
+                  type="text"
+                  value={editedUserData.studentemail}
+                  onChange={(e) => setEditedUserData({ ...editedUserData, studentemail: e.target.value })}
+                />
+              ) : (
+                user.studentemail
+              )}
+            </td>
+            <td>
+              {user._id === editingUserId ? (
+                <input
+                  type="text"
+                  value={editedUserData.educationLevel}
+                  onChange={(e) => setEditedUserData({ ...editedUserData, educationLevel: e.target.value })}
+                />
+              ) : (
+                user.educationLevel
+              )}
+            </td>
                             <td>
                                 {user.educationLevel === 'Grade School' && (
-                                    <>
-                                        <div>Grade Level: {user.gradeLevel}</div>
-                                        <div>Section: {user.section}</div>
-                                        <div>Subjects Enrolled: {user.subjects.join(', ')}</div>
-                                    </>
+                                    <div className=' bg-green-400'>
+                                        <h2>Grade Level: {user.gradeLevel}</h2>
+                                        <h2>Section: {user.section}</h2>
+                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                                    </div>
                                 )}
                                 {user.educationLevel === 'High School' && (
-                                    <>
-                                        <div>Year Level: {user.highSchoolYearLevel}</div>
-                                        <div>Section: {user.section}</div>
-                                        <div>Subjects Enrolled: {user.subjects.join(', ')}</div>
-                                    </>
+                                    <div className=''>
+                                        <h2>Year Level: {user.highSchoolYearLevel}</h2>
+                                        <h2>Section: {user.section}</h2>
+                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                                    </div>
                                 )}
                                 {user.educationLevel === 'Senior High School' && (
-                                    <>
-                                        <div>Strand: {user.shsStrand}</div>
-                                        <div>Year Level: {user.seniorHighSchoolYearLevel}</div>
-                                        <div>Grade Level: {user.gradeLevel}</div>
-                                        <div>Section: {user.section}</div>
-                                        <div>Subjects Enrolled: {user.subjects.join(', ')}</div>
-                                    </>
+                                    <div  className=''>
+                                        <h2>Strand: {user.shsStrand}</h2>
+                                        <h2>Year Level: {user.seniorHighSchoolYearLevel}</h2>
+                                        <h2>Grade Level: {user.gradeLevel}</h2>
+                                        <h2>Section: {user.section}</h2>
+                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                                    </div>
                                 )}
                                 {user.educationLevel === 'College' && (
-                                    <>
-                                        <div>Course: {user.collegeCourse}</div>
-                                        <div>Year Level: {user.collegeYearLevel}</div>
-                                        <div>Subjects Enrolled: {user.subjects.join(', ')}</div>
-                                    </>
+                                    <div className=''>
+                                        <h2>Course: {user.collegeCourse}</h2>
+                                        <h2>Year Level: {user.collegeYearLevel}</h2>
+                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                                    </div>
                                 )}
                             </td>
                             <td>
                                 {user._id === editingUserId ? (
                                     <>
-                                        <button onClick={handleSave}>Save</button>
-                                        <button onClick={() => setEditingUserId(null)}>Cancel</button>
+                                        <button onClick={handleSave} className='btn btn-success btn-xs '>Save</button>
+                                        <button onClick={() => setEditingUserId(null)} className='btn btn-error btn-xs'>Cancel</button>
                                     </>
                                 ) : (
                                     <>
-                                        <button onClick={() => handleEdit(user._id)}>Edit</button>
-                                        <button onClick={() => handleDelete(user._id)}>Delete</button>
+                                        <button onClick={() => handleEdit(user._id)} className='btn btn-success btn-xs '>Edit</button>
+                                        <button onClick={() => handleDelete(user._id)} className='btn btn-error btn-xs'>Delete</button>
                                     </>
                                 )}
                             </td>
@@ -147,6 +180,7 @@ const UserManagement = () => {
                     ))}
                 </tbody>
             </table>
+            </div>
         </div>
     );
 };
