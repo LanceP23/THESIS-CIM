@@ -95,7 +95,7 @@ const UserManagement = () => {
                     </tr>
                 </thead>
                 <tbody>
-                {users.map((user, index) => (
+                {filteredUsers.map((user, index) => (
           <tr key={user._id} className={index % 2 === 0 ? 'bg-gray-200' : 'bg-customyellow'}>
             <td>
               {user._id === editingUserId ? (
