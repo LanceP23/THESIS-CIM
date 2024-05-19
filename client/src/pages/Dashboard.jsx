@@ -103,7 +103,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
     return (
         
-    <div className="dashboard">
+    <div className="dashboard animate-fade-in">
      
 
         <div className="">

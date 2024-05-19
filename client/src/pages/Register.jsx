@@ -11,6 +11,8 @@ import Sidebar from '../components/Sidebar';
 import RegisteredAccounts from '../RegisteredAdmins/RegisteredAccounts';
 import './Register.css'
 import UserManagement from '../mobileusermanagement/DisplayAllMobileAcc';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 export default function Register() {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -120,45 +122,38 @@ export default function Register() {
   }
 
   return (
-    <div className='Account_registration_container'>
-      <Sidebar adminType={data.adminType} /> 
+    <div className="flex justify-between">
+    <div className='  bg-slate-100 my-5 rounded-lg shadow-inner p-2'>
 
-      <div>
-        <h2>School Year Setting</h2>
-        <div>
-          <label htmlFor="academicYear">Academic Year:</label>
-          <input
-            type="text"
-            id="academicYear"
-            value={academicYear}
-            onChange={(e) => setAcademicYear(e.target.value)}
-            placeholder="Enter academic year"
-          />
-        </div>
-        <div>
-          <label htmlFor="schoolSemester">School Semester:</label>
-          <input
-            type="text"
-            id="schoolSemester"
-            value={schoolSemester}
-            onChange={(e) => setSchoolSemester(e.target.value)}
-            placeholder="Enter school semester"
-          />
-        </div>
-        <div>
-          <button onClick={updateSchoolSetting}>Update School Setting</button>
-        </div>
+    
+      <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faAddressCard} className=' text-yellow-500 mx-1'/>Account Registration</h2>
+
+      <div className="flex">
+      <div className="bg-gradient-to-r from-white to-green-200 p-4 m-4 rounded-lg shadow-2xl">
+      <StudentMobileUserReg/>
       </div>
+
+     
       
+      <div className="divider lg:divider-horizontal divider-warning my-3"></div> 
 
        <div className="register_form_container">
 
-       <div className="button_container">
-        <button onClick={() => handleRegistrationType('staff')} className = 'register_button'>Staff Registration</button>
-        <button onClick={() => handleRegistrationType('faculty')} className = 'register_button'>Faculty Registration</button>
-        <button onClick={() => handleRegistrationType('student')} className = 'register_button'>Student Registration</button>
+       <div className="flex flex-row my-2">
+        <div className="div">
+        <button onClick={() => handleRegistrationType('staff')} className = 'btn btn-success mx-1'>Staff Registration</button>
+        </div>
+
+        <div className="div">
+        <button onClick={() => handleRegistrationType('faculty')} className = 'btn btn-success mx-1'>Faculty Registration</button>
+        </div>
+
+        <div className="div">
+        <button onClick={() => handleRegistrationType('student')} className = 'btn btn-success mx-1'>Student Registration</button>
+        </div>
        </div>
-      <div className='register-form'>
+
+      <div className='bg-gradient-to-r from-white to-green-200 p-2 rounded-md shadow-2xl'>
 
      
 
@@ -188,16 +183,48 @@ export default function Register() {
         
         
       </div>
-
       </div>
 
-      <div className="registered_accounts_container">
-        <div className="registered_accounts">
+      </div>
+      <div className="divider divider-warning"></div>
+
+      <div className="">
         <RegisteredAccounts />
         </div>
-      </div>
 
-      <StudentMobileUserReg/>
+      
+    </div>
+
+    <div className="mx-3 ">
+    <div className=' bg-gradient-to-r from-white to-green-200 p-4 my-5 rounded-lg shadow-2xl '>
+        
+        <div>
+          <label htmlFor="academicYear">Academic Year:</label>
+          <input
+            type="text"
+            id="academicYear"
+            value={academicYear}
+            onChange={(e) => setAcademicYear(e.target.value)}
+            placeholder="Enter academic year"
+            className='input input-bordered input-success w-full max-w-xs text-white'
+          />
+        </div>
+        <div>
+          <label htmlFor="schoolSemester">School Semester:</label>
+          <input
+            type="text"
+            id="schoolSemester"
+            value={schoolSemester}
+            onChange={(e) => setSchoolSemester(e.target.value)}
+            placeholder="Enter school semester"
+            className='input input-bordered input-success w-full max-w-xs text-white'
+          />
+        </div>
+        <div className='my-3'>
+          <button onClick={updateSchoolSetting} className='btn btn-success'>Update School Setting</button>
+        </div>
+      </div>
+      </div>
 
     </div>
   );

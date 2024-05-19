@@ -99,32 +99,72 @@ const NotificationBell = ({setTotalUnreadCount}) => {
 
     return (
         <div className="notification-bell">
-            <div className="notification-dropdown">
-                <h3>Notifications</h3>
+            <h3 className=' border-b-2'>Notifications</h3>
+            <div className="notification-dropdown max-h-40 overflow-auto w-full">
+                
                 {(unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount) > 0 && (
-                    <span className="notification-count">{unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount}</span>
+                    <span className="notification-count"></span>
                 )}
                 {(messageNotifications.length + announcementNotifications.length + eventNotifications.length) > 0 ? (
-                    <ul>
+                    <ul className=''>
                         {messageNotifications.map((notification, index) => (
-                            <li key={index}>
+                            <div className="flex justify-between my-3 border-b-2 pb-2" key={index} >
+                                 <div className="avatar">
+                            <div className=" w-10 mask mask-squircle">
+                                <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                            </div>
+                            </div>
+                            <div className="div">
+                            <li >
+                           
                                 New message from {notification.senderName}: {notification.message}
                             </li>
+                            </div>
+                            </div>
                         ))}
                         {announcementNotifications.map((announcement, index) => (
-                            <li key={index}>
+                             <div className="flex justify-between my-3" key={index} >
+                             <div className="avatar">
+                        <div className=" w-10 mask mask-squircle">
+                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        </div>
+                        </div>
+                        <div className="div">
+                            <li >
+                                
                                 New announcement: {announcement.announcementHeader} by {announcement.posterName}
                             </li>
+                            </div>
+                        </div>
                         ))}
                         {eventNotifications.map((event, index) => (
-                            <li key={index}>
+                              <div className="flex justify-between my-3" key={index} >
+                              <div className="avatar">
+                         <div className=" w-10 mask mask-squircle">
+                             <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                         </div>
+                         </div>
+                         <div className="div">
+                            <li>
+                               
                                 New event: {event.eventName} organized by {event.organizerName}
                             </li>
+                            </div>
+                        </div>
                         ))}
                         {approvalNotifications.map((approval, index) => (
-                            <li key={index}>
+                             <div className="flex justify-between my-3" key={index} >
+                             <div className="avatar">
+                        <div className=" w-10 mask mask-squircle">
+                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        </div>
+                        </div>
+                        <div className="div">
+                            <li>
                                 Announcement approved: {approval.message} by {approval.posterName} at {approval.timestamp}
                             </li>
+                            </div>
+                        </div>
                         ))}
                     </ul>
                 ) : (

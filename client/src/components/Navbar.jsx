@@ -10,8 +10,8 @@ export default function Navbar() {
       </div>
       
       <div className="links">
-        <Link to="/" className='btn btn-outline btn-success text-white'>Home</Link>
-        <Link to="/login" className='btn btn-outline btn-success text-white'>Login</Link>
+        <Link to="/" className='btn  btn-ghost btn-warning text-yellow-200 font-semibold italic'>Home</Link>
+        <Link to="/login" className='btn  btn-ghost btn-warning text-yellow-200 font-semibold italic'>Login</Link>
       </div>
       
     </nav>

@@ -296,7 +296,7 @@ export default function OrganizationReg() {
   };
 
   return (
-    <div className=''>
+    <div className=' animate-fade-in'>
 
 
       {adminType !== 'Organization Officer'&&(

@@ -58,38 +58,67 @@ const UpdateUser = ({ user, onUpdate }) => {
 
   return (
     <div>
-      <h4>Update User</h4>
+     
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input type="text" value={name} onChange={handleChangeName} />
+        <div className='flex justify-between my-1'>
+          <label className='text-base-200'>Name:</label>
+          <input type="text"
+           value={name} 
+          onChange={handleChangeName} 
+          className='input input-sm input-success text-white'
+          />
         </div>
-        <div>
-          <label>Email:</label>
-          <input type="email" value={email} onChange={handleChangeEmail} />
+        <div className='flex justify-between'>
+          <label className='text-base-200'>Email:</label>
+          <input type="email" 
+          value={email} 
+          onChange={handleChangeEmail}
+          className='input input-sm input-success text-white' 
+          />
         </div>
         {user.adminType === 'Organization Officer' && (
-          <div>
-            <label>Position:</label>
-            <input type="text" value={position} onChange={handleChangePosition} />
-            <br />
-            <label>Organization:</label>
-            <input type="text" value={organization} onChange={handleChangeOrganization} />
-          </div>
+          <div className="flex flex-col">
+          <div className='flex justify-between my-1'>
+            <label className='text-base-200'>Position:</label>
+            <input type="text" 
+            value={position} 
+            onChange={handleChangePosition} 
+            className='input input-sm input-success text-white'
+            />
+            </div>
+
+          <div className="flex">
+            <label className='text-base-200'>Organization:</label>
+            <input type="text" 
+            value={organization} 
+            onChange={handleChangeOrganization} 
+            className='input input-sm input-success text-white'
+            />
+            </div>
+            </div>
+          
         )}
         {user.adminType !== 'Staff' && (
-          <div>
-            <label>School Year:</label>
-            <input type="text" value={schoolYear} onChange={handleChangeSchoolYear} />
+          <div className='flex justify-between my-1 '>
+            <label className='text-base-200'>School Year:</label>
+            <input type="text" 
+            value={schoolYear} 
+            onChange={handleChangeSchoolYear} 
+            className='input input-sm input-success text-white' 
+            />
           </div>
         )}
         {(user.adminType === 'Program Head' || user.adminType === 'Instructor') && (
-          <div>
-            <label>Department:</label>
-            <input type="text" value={department} onChange={handleChangeDepartment} />
+          <div className='flex justify-between my-1'>
+            <label className='text-base-200'>Department:</label>
+            <input type="text" 
+            value={department} 
+            onChange={handleChangeDepartment} 
+            className='input input-sm input-success text-white'
+            />
           </div>
         )}
-        <button type="submit">Update</button>
+        <button type="submit" className='btn btn-xs btn-success my-1'>Update</button>
       </form>
     </div>
   );

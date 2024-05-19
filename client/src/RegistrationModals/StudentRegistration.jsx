@@ -30,45 +30,61 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
 
   return (
     <div>
-      <h2>Student Registration</h2>
+      <h2 className='border-b-2 py-1 border-gray-800 text-lg font-semibold'>Student Registration</h2>
       <form onSubmit={handleSubmit}>
+
+        <div className="flex flex-col text-left m-1">
         <label>Name</label>
         <input
           type='text'
           value={data.name}
           onChange={(e) => setData({ ...data, name: e.target.value })}
           required
-          className='input_field'
+          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
         />
+        </div>
+
+        <div className="flex flex-col text-left m-1">
         <label>Email</label>
         <input
           type='email'
           value={data.studentemail}
           onChange={(e) => setData({ ...data, studentemail: e.target.value })}
           required
-          className='input_field_email'
+          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
         />
+        </div>
+
+        <div className="flex flex-col text-left m-1">
         <label>Password</label>
         <input
           type='password'
           value={data.password}
           onChange={(e) => setData({ ...data, password: e.target.value })}
           required
-          className='input_field'
+          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
         />
+        </div>
+
+        <div className="flex flex-col text-left m-1">
         <label>Admin Type</label>
-        <select value={data.adminType} onChange={(e) => setData({ ...data, adminType: e.target.value })}>
+        <select value={data.adminType} onChange={(e) => setData({ ...data, adminType: e.target.value })} className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'>
           <option value='Organization Officer'>Organization Officer</option>
           <option value='Student Government'>Student Government</option>
         </select>
+
+        </div>
+
+
         {data.adminType === 'Organization Officer' && (
           <>
+          <div className="flex flex-col text-left m-1">
             <label>Position</label>
             <select
               value={data.position}
               onChange={(e) => setData({ ...data, position: e.target.value })}
               required
-              className='input_field'
+              className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'
             >
               <option value=''>Select Position</option>
               <option value='President'>President</option>
@@ -81,15 +97,18 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
               <option value='3rd Year Representative'>3rd Year Representative</option>
               <option value='4th Year Representative'>4th Year Representative</option>
             </select>
+            </div>
           </>
         )}
         {data.adminType === 'Student Government' && (
           <>
+          <div className="flex flex-col text-left m-1">
             <label>Position</label>
             <select
               value={data.position}
               onChange={(e) => setData({ ...data, position: e.target.value })}
               required
+              className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'
             >
               <option value=''>Select Position</option>
               <option value='President'>President</option>
@@ -100,13 +119,17 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
               <option value='Public Relations Officer'>Public Relations Officer</option>
               <option value='SHS Representative'>SHS Representative</option>
             </select>
+            </div>
           </>
         )}
+
+        <div className="flex flex-col text-left m-1">
          <label>Organization</label>
         <select
           value={data.organization}
           onChange={(e) => setData({ ...data, organization: e.target.value })}
           required
+          className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'
         >
           <option value=''>Select Organization</option>
           {organizations.map((org) => (
@@ -115,14 +138,18 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
             </option>
           ))}
         </select>
+        </div>
+
+        <div className="flex flex-col text-left m-1">
         <label>School Year</label>
         <input
           type='text'
           value={data.schoolYear}
           onChange={(e) => setData({ ...data, schoolYear: e.target.value })}
           required
-          className='input_field'
+          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
         />
+        </div>
         <button type='submit'>Register</button>
       </form>
     </div>

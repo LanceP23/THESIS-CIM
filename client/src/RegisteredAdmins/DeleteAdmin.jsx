@@ -13,7 +13,7 @@ const DeleteUser = ({ userId, onDelete }) => {
 
   return (
     <div>
-      <button onClick={handleDelete}>Delete</button>
+      <button onClick={handleDelete} className='btn btn-xs btn-error'>Delete</button>
     </div>
   );
 };

@@ -538,7 +538,7 @@ const handleSelectEvent = (event) => {
     
     {/*modal for details*/}
      { modalMode === 'details' && selectedEvent ? (
-    <div className='bg-grey-100 p-2 rounded-md  '>
+    <div className='bg-grey-100 p-2 rounded-md '>
       
      
       <h2 className='text-4xl text-gray-600 border-b-2 border-gray-800 mb-3 text-left'>Event Details</h2>
@@ -546,7 +546,7 @@ const handleSelectEvent = (event) => {
         <div className="   p-2 flex flex-1 flex-row justify-between column-gap-2 rounded-lg shadow-md shadow-black">
         <div className="    w-6/12 p-2 rounded-md  shadow-black flex flex-col row-gap-1">
           
-            <div className=" bg-slate-400 border-2 border-base-100 p-3 shadow-inner rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-110">
+            <div className=" bg-slate-400 border-2 border-base-100 p-3 shadow-inner rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-110 animate-fade-in">
                 <div className=" flex justify-center items-center ">
                   <label className=' text-lg text-white'> Event Name: </label> <label className='  p-2 rounded-md text-xl  font-extrabold italic '> {selectedEvent.title}</label>
                 </div>
@@ -561,13 +561,13 @@ const handleSelectEvent = (event) => {
                 </div>
             </div>
 
-            <div className="bg-slate-400 p-3 shadow-inner  rounded-sm">
+            <div className="bg-slate-400 p-3 shadow-inner  rounded-sm animate-fade-in ">
       <div className="flex my-1 ">
       <label><strong className='text-white'>Event Type:</strong></label>  <label className=' '>{selectedEvent.extendedProps.eventType}</label>
       </div>
 
 
-      <div className="flex justify-start items-center my-3">
+      <div className="flex justify-start items-center my-3 animate-fade-in ">
       <div className="flex my-3 mx-2">
       <label> <strong className='text-white'>Organizer Type: </strong> </label><label className=''> {selectedEvent.extendedProps.organizerType}</label> 
       </div>
@@ -602,7 +602,7 @@ const handleSelectEvent = (event) => {
 
 
 <div className="divider divider-horizontal divider-success"></div>
-<div className=" w-6/12 flex flex-col  ">
+<div className=" w-6/12 flex flex-col animate-fade-in  ">
     <h2 className=' border-b-2 border-gray-700'> <strong className=' text-gray-700 text-xl'>Participants: </strong></h2>
     {selectedEvent && selectedEvent.extendedProps && selectedEvent.extendedProps.participants && (
       
@@ -644,7 +644,7 @@ const handleSelectEvent = (event) => {
     <h2 className=' text-3xl'>Create Event on :  {selectedDate && ( 
      <h2 value={startDate} onChange={(e) => setStartDate(e.target.value)}> Start Date: <strong>{selectedDate.start} </strong>   </h2>
       )}</h2>
-    <div className=' bg-gradient-to-r from-white to-green-200 flex flex-row justify-around rounded-xl p-3 shadow-inner shadow-xl'>
+    <div className=' bg-gradient-to-r from-white to-green-200 flex flex-row justify-around rounded-xl p-3 shadow-inner shadow-xl animate-fade-in'>
 
      <div className=" flex flex-col text-left items-start">
       <div className=' flex flex-row'>

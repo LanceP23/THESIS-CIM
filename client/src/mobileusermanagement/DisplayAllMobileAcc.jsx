@@ -63,7 +63,7 @@ const UserManagement = () => {
     };
 
     return (
-        <div className="bg-slate-200 rounded-xl my-5 p-2">
+        <div className="bg-slate-200 rounded-xl my-5 p-2 animate-fade-in">
             <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>Mobile User Management</h2>
             <div className="filters-container">
                 <input
@@ -133,7 +133,7 @@ const UserManagement = () => {
             </td>
                             <td>
                                 {user.educationLevel === 'Grade School' && (
-                                    <div className=' bg-green-400'>
+                                    <div className=' '>
                                         <h2>Grade Level: {user.gradeLevel}</h2>
                                         <h2>Section: {user.section}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>

@@ -73,19 +73,19 @@ const Login = (  ) => {
            
        
     
-        <div className="login-form bg-[url('../src/assets/webwithLogo.png')]  ">
+        <div className="login-form bg-[url('../src/assets/webwithLogo.png')] animate-fade-in ">
 
               
 
            
-            <form onSubmit={loginAdmin}>
+            <form onSubmit={loginAdmin} >
                 <label className='text-white'>Admin email</label>
                 <input
                     type="text"
                     placeholder="Enter Admin Email..."
                     value={data.studentemail}
                     onChange={(e) => setData({ ...data, studentemail: e.target.value })}
-                    className='input input-bordered input-accent w-full max-w-xs text-white'
+                    className='input input-bordered input-accent w-full max-w-xs text-base-300 bg-white shadow-2xl'
                 />
                 <label className='text-white'>Password</label>
                 <input
@@ -93,7 +93,7 @@ const Login = (  ) => {
                     placeholder="Enter Your Password"
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
-                    className='input input-bordered input-accent w-full max-w-xs text-white'
+                    className='input input-bordered input-accent w-full max-w-xs text-base-300 bg-white shadow-2xl'
                 />
                 <button type="submit" className='login__button' >Login</button>
             </form>

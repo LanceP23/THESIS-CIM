@@ -41,7 +41,7 @@ h1 {
 
 @keyframes gradient {
   0%, 100% {
-    background-size: 200% 200%;
+    background-size: 100% 100%;
     background-position: left center;
   }
   50% {

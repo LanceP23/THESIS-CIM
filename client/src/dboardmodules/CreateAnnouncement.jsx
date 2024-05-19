@@ -301,13 +301,13 @@ export default function CreateAnnouncement() {
 
 
   return (
-    <div className='flex flex-row my-24'>
+    <div className='flex flex-row my-24 animate-fade-in'>
       <div className="main_container p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
       <div role="tablist" className="tabs tabs-lifted">
-        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600" aria-label="Announcements" />
+        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 " aria-label="Announcements" />
         <div role="tabpanel" className="tab-content bg-green-600 shadow-lg rounded-md p-6">
-          <div className="annoucement_creation_container bg-white p-4 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border">
-          <h2 className='border-b border-gray-500 py-2 font-bold'>Create Announcement</h2>
+          <div className="annoucement_creation_container bg-white p-4 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border animate-fade-in ">
+          <h2 className='border-b border-gray-500 py-2 font-bold '>Create Announcement</h2>
                 <div>
                   <label className="label text-gray-700" htmlFor="header">Header:</label>
                   <input
@@ -415,43 +415,49 @@ export default function CreateAnnouncement() {
                       
                       // Render each announcement with its community name when available
                       return (
-                        <div key={announcement._id} className='card lg:card-side bg-white-100 shadow-xl p-3 m-5 transition-transform duration-300 ease-in-out transform hover:scale-110'>
-                          <div className=" mx-2 ">
-                            <h4 className='card-title p-2 bg-gray-300 w-full h rounded-md'> {announcement.header}</h4>
-                            <div className="body_container  p-2 bg-gray-300 w-full h-32 rounded-md text-left overflow-auto max-h-full">
+                        <div key={announcement._id} className='card card-side bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-110 '>
+
+                        {announcement.mediaUrl ? (
+                          
+                              
+                          <div className=" p-0">
+                          
+                          {announcement.contentType && announcement.contentType.startsWith('image') ? (
+                            <figure>
+
+                            
+                            <img src={announcement.mediaUrl} alt="Announcement Media" className= ' w-1-2 m-0' /> 
+                            </figure>
+                          ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
+                          <figure> <video controls>
+                              <source src={announcement.mediaUrl} type={announcement.contentType} />
+                            </video>
+                            </figure> 
+                          ) : announcement.contentType && announcement.contentType.startsWith('audio') ?
+                           (
+                            <audio controls>
+                              <source src={announcement.mediaUrl} type={announcement.contentType} />
+                            </audio>
+                            
+                           ):(
+                            <p>No media available</p>
+                          )}
+                          </div>
+                       
+                      ) : (
+                        <p>No media available</p>
+                      )}
+                          <div className=" card-body">
+                            <h4 className='card-title w-full border-b border-gray-700'> {announcement.header}</h4>
+                            <div className="body_container  p-2 bg-white w-full h-32 rounded-md text-left overflow-auto max-h-full shadow-lg border-2">
                             <p className=''> {announcement.body}</p>
                             </div>
-                            <div className="community_container  p-2 bg-gray-300 w-full my-2 rounded-md">
+                            <div className="community_container  p-2 bg-white w-full my-2 rounded-md shadow-2xl">
                             <PromiseRenderer promise={communityNamePromise}  />
                             </div>
                           </div>
                          
-                          {announcement.mediaUrl ? (
-                            <div>
-                              
-                              <div className=" flex justify-center items-center">
-                              
-                              {announcement.contentType && announcement.contentType.startsWith('image') ? (
-                                <img src={announcement.mediaUrl} alt="Announcement Media" className= 'w-full' /> 
-                              ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
-                              <figure> <video controls>
-                                  <source src={announcement.mediaUrl} type={announcement.contentType} />
-                                </video>
-                                </figure> 
-                              ) : announcement.contentType && announcement.contentType.startsWith('audio') ?
-                               (
-                                <audio controls>
-                                  <source src={announcement.mediaUrl} type={announcement.contentType} />
-                                </audio>
-                                
-                               ):(
-                                <p>No media available</p>
-                              )}
-                              </div>
-                            </div>
-                          ) : (
-                            <p>No media available</p>
-                          )}
+                          
                         </div>
                       );
                     })}

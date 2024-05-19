@@ -9,7 +9,8 @@ export default {
       colors: {
         customyellow: '#f6e8295b',
         customRed: '#EF4444',
-        customgreen_1: '#98D08F'
+        customgreen_1: '#98D08F',
+        bg_gradient: 'background: linear-gradient(to right, #98D08F, #8FD0A1, #D0D08F)',
       },
 
       boxShadow: {
