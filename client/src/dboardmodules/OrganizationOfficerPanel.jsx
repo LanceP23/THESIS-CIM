@@ -34,7 +34,6 @@ export default function OrganizationOfficerPanel() {
           },
         };
         const response = await axios.get(`/organization-data/${userId}`, config);
-        console.log('Organization Data Response:', response.data); // Debug log
         setOrganizationData(response.data);
         if (response.data.organization) {
           fetchMembers(response.data.organization);

@@ -137,6 +137,12 @@ export default function PostApproval({ adminType }) {
                   Your browser does not support the video tag.
                 </video>
               )}
+              {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('audio') && (
+                <audio controls className='w-full h-full'>
+                  <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
+                  Your browser does not support the video tag.
+                </audio>
+              )}
             </div>
           )}
           </figure>

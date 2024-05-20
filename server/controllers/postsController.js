@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const axios = require('axios');
 const { getReceiverSocketId, io } = require('../socketManager');
+const Organization = require('../models/organization');
 
 
 
@@ -48,7 +49,7 @@ r
 // Create Announcement
 const createAnnouncement = async (req, res) => {
   try {
-    const { header, body, mediaUrl, visibility, postingDate, expirationDate, communityId } = req.body;
+    const { header, body, mediaUrl, visibility, postingDate, expirationDate, communityId, organizationId } = req.body;
     let contentType = null;
 
     let status = 'pending';
@@ -90,6 +91,9 @@ const createAnnouncement = async (req, res) => {
     };
     if (communityId) {
       announcementData.communityId = communityId;
+    }
+    if(organizationId){
+      announcementData.organizationId = organizationId;
     }
     const announcement = new Announcement(announcementData);
 
@@ -204,6 +208,7 @@ const updateAnnouncementStatus = async (req, res) => {
     await announcement.save();
 
 
+
     if (status === 'approved') {
       // Find the user by their email (postedBy)
       const postingUser = await User.findOne({ studentemail: announcement.postedBy });
@@ -219,6 +224,47 @@ const updateAnnouncementStatus = async (req, res) => {
         }
       }
     }
+
+    if (status === 'approved') {
+  
+      try {
+          // Find the organization by ID
+          const organization = await Organization.findById(announcement.organizationId);
+  
+          if (!organization) {
+              console.log("Organization not found");
+              return; // Return early if organization not found
+          }
+  
+          // Fetch the list of members for the organization
+          const organizationUsers = await User.find({ _id: { $in: organization.members } });
+  
+          if (organizationUsers.length === 0) {
+              console.log("No users found for this organization. Organization may have no members.");
+              return; // Return early if no users found for organization
+          }
+  
+  
+          // Emit notifications to each member of the organization
+          organizationUsers.forEach(user => {
+              const receiverSocketId = getReceiverSocketId(user._id.toString());
+              if (receiverSocketId) {
+                  io.to(receiverSocketId).emit("newOrganizationAnnouncement", {
+                      type: "announcement",
+                      message: "New announcement posted in your organization",
+                      posterName: announcement.postedBy,
+                      announcementHeader: announcement.header,
+                      timestamp: new Date().toISOString()
+                  });
+              } else {
+                  console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
+              }
+          });
+      } catch (error) {
+          console.error("Failed to retrieve organization or emit announcements due to an error:", error);
+      }
+  }
+  
 
     res.json(announcement);
   } catch (error) {

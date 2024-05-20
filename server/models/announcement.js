@@ -23,6 +23,10 @@ const announcementSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Community', 
   },
+  organizationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Organization'
+  },
   visibility: {
     everyone: { type: Boolean, default: false },
     staff: { type: Boolean, default: false },

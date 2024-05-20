@@ -50,6 +50,8 @@ export default function CreateAnnouncement() {
   const [expirationDate, setExpirationDate] = useState('');
   const [userCommunities, setUserCommunities] = useState([]);
   const [selectedCommunity, setSelectedCommunity] = useState('');
+  const [isOrganizationPost, setIsOrganizationPost] = useState(false);
+  const [organizationId, setOrganizationId] = useState(null);
 
   const adminType2 = localStorage.getItem('adminType');
 
@@ -117,6 +119,47 @@ export default function CreateAnnouncement() {
       fetchUserCommunities();
     }
   }, [user]);
+
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  };
+
+  useEffect(() => {
+    // Check if adminType is Organization Officer
+    if (adminType === 'Organization Officer') {
+        const fetchOrganizationId = async () => {
+            try {
+                const token = getToken();
+                const userId = user?.id;
+
+                if (!token || !userId) {
+                    return;
+                }
+
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                };
+                const response = await axios.get(`/organization-id/${userId}`, config); // Pass the userId as a parameter
+                if (response.data.organizationId) {
+                    setOrganizationId(response.data.organizationId);
+                }
+            } catch (error) {
+                console.error('Error fetching organization ID:', error);
+                toast.error('Failed to fetch organization ID');
+            }
+        };
+
+        // Call fetchOrganizationId only if adminType is Organization Officer
+        fetchOrganizationId();
+    }
+}, [user, adminType]);
+
+  
+
 
   const PromiseRenderer = ({ promise }) => {
     const [communityName, setCommunityName] = useState(null);
@@ -190,6 +233,10 @@ export default function CreateAnnouncement() {
             formData.append('postingDate', postingDate);
             formData.append('expirationDate', expirationDate);
             formData.append('communityId', selectedCommunity);
+
+            if (isOrganizationPost && organizationId) {
+              formData.append('organizationId', organizationId);
+          }
   
             // Post the announcement data to your server
             const response = await axios.post('/announcements', formData, {
@@ -242,6 +289,7 @@ export default function CreateAnnouncement() {
     }
   };
 
+
   const toggleModal = () => {
     setShowPostApprovalModal(!showPostApprovalModal);
   };
@@ -264,6 +312,10 @@ export default function CreateAnnouncement() {
 
   const handleCommunityChange = (event) => {
     setSelectedCommunity(event.target.value);
+  };
+
+  const handleOrganizationPostChange = (e) => {
+    setIsOrganizationPost(e.target.checked);
   };
 
   const renderVisibilityOptions = () => {
@@ -379,7 +431,23 @@ export default function CreateAnnouncement() {
                       onChange={handleExpirationDateChange}
                     />
                   </div>
+                
+                  {adminType === 'Organization Officer' && (
+                    <label className="flex justify-start mx-2">
+                      <input
+                        type="checkbox"
+                        className="checkbox checkbox-success"
+                        id="organizationPost"
+                        checked={isOrganizationPost}
+                        onChange={handleOrganizationPostChange}
+                      />
+                      <span className="label-text mx-1 text-gray-700">
+                        Post to Organization Only
+                      </span>
+                    </label>
+                  )}
 
+                {adminType === 'School Owner'&& (
                   <div className='flex my-3'>
                     <label htmlFor="community" className="block text-gray-700 text-left">Select Community:</label>
                     <select
@@ -396,7 +464,7 @@ export default function CreateAnnouncement() {
                       ))}
                     </select>
                   </div>
-
+                )}
                   
 
                 <div className="post_button flex justify-end">

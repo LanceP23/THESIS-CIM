@@ -4,7 +4,7 @@ const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser } = require('../controllers/authController');
-const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData } = require('../controllers/organizationController');
+const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId } = require('../controllers/organizationController');
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
@@ -43,6 +43,8 @@ router.get('/check-auth', checkAuth);
 router.get('/profile', getProfile);
 router.post('/create_organization', authenticateUser, createOrganization);
 router.post('/logout', logoutUser);
+
+//org
 router.get('/organization', getOrganization);
 router.put('/approve_officer/:orgId/:officerId', authenticateUser, approveOfficer);
 router.get('/organization/:orgName/potential_members', authenticateUser, getPotentialMembers);
@@ -51,6 +53,8 @@ router.get('/organization/:orgName/members', getAddedMembers);
 router.put('/organizations/:orgId/members/:memberId', updateOrganizationMember);
 router.delete('/organizations/:orgId/members/:memberId', deleteOrganizationMember);
 router.get('/organization-data/:userId',authenticateUser, fetchOrganizationData);
+router.get('/organization-id/:userId', authenticateUser, getOrganizationId);
+
 
 
 // Define the route for creating announcements with file upload

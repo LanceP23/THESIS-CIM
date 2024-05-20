@@ -271,6 +271,39 @@ const updateOrganizationMember = async (req, res) => {
       }
 };
 
+const getOrganizationId = async (req, res) => {
+    try {
+        const userId = req.params.userId; 
+        const user = await User.findById(userId);
+    
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Assuming the 'organization' field holds the name of the organization
+        const organizationName = user.organization;
+
+        if (!organizationName) {
+            return res.status(404).json({ error: 'Organization not found' });
+        }
+
+        // Find the organization by name
+        const organization = await Organization.findOne({ name: organizationName });
+
+        if (!organization) {
+            return res.status(404).json({ error: 'Organization not found' });
+        }
+
+        // Return the organization ID
+        return res.status(200).json({ organizationId: organization._id });
+        
+    } catch (error) {
+        console.error('Error fetching organization ID:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+  
+
 
 module.exports = {
     createOrganization,
@@ -282,5 +315,6 @@ module.exports = {
     getAddedMembers,
     updateOrganizationMember,
     deleteOrganizationMember,
-    fetchOrganizationData
+    fetchOrganizationData,
+    getOrganizationId
 };
