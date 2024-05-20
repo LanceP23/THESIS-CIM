@@ -79,6 +79,7 @@ const createAnnouncement = async (req, res) => {
 
     console.log('Inferred contentType:', contentType);
 
+
     const announcementData = {
       header,
       body,
@@ -215,8 +216,6 @@ const updateAnnouncementStatus = async (req, res) => {
     announcement.status = status;
     await announcement.save();
 
-
-
     if (status === 'approved') {
       // Find the user by their email (postedBy)
       const postingUser = await User.findOne({ studentemail: announcement.postedBy });
@@ -226,53 +225,100 @@ const updateAnnouncementStatus = async (req, res) => {
         if (receiverSocketId) {
           io.to(receiverSocketId).emit('announcementApproved', {
             type: 'announcement',
-            message: `Your announcement titled "${announcement.title}" has been approved.`,
+            message: `Your announcement titled "${announcement.header}" has been approved.`,
             announcementId: announcementId
           });
         }
       }
-    }
 
-    if (status === 'approved') {
+      if (!announcement.organizationId && !announcement.communityId) {
+        // Set visibility to everyone if no organizationId or communityId is provided
+        announcement.visibility = { everyone: true };
+        await announcement.save();
+
+        // Fetch all users and mobile users to send notifications
+        const allUsers = await User.find();
+        const allMobileUsers = await MobileUser.find();
+        const allUsersCombined = [...allUsers, ...allMobileUsers];
+
+        allUsersCombined.forEach(user => {
+          const receiverSocketId = getReceiverSocketId(user._id.toString());
+          if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newAnnouncement", {
+              type: "announcement",
+              message: "New announcement posted",
+              posterName: announcement.postedBy,
+              announcementHeader: announcement.header,
+              timestamp: new Date().toISOString()
+            });
+          } else {
+            console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
+          }
+        });
+      } else {
+        try {
+          if (announcement.organizationId) {
+            // Find the organization by ID
+            const organization = await Organization.findById(announcement.organizationId);
   
-      try {
-          // Find the organization by ID
-          const organization = await Organization.findById(announcement.organizationId);
-  
-          if (!organization) {
+            if (!organization) {
               console.log("Organization not found");
               return; // Return early if organization not found
-          }
+            }
   
-          // Fetch the list of members for the organization
-          const organizationUsers = await User.find({ _id: { $in: organization.members } });
+            // Fetch the list of members for the organization
+            const organizationUsers = await User.find({ _id: { $in: organization.members } });
   
-          if (organizationUsers.length === 0) {
+            if (organizationUsers.length === 0) {
               console.log("No users found for this organization. Organization may have no members.");
               return; // Return early if no users found for organization
-          }
+            }
   
-  
-          // Emit notifications to each member of the organization
-          organizationUsers.forEach(user => {
+            // Emit notifications to each member of the organization
+            organizationUsers.forEach(user => {
               const receiverSocketId = getReceiverSocketId(user._id.toString());
               if (receiverSocketId) {
-                  io.to(receiverSocketId).emit("newOrganizationAnnouncement", {
-                      type: "announcement",
-                      message: "New announcement posted in your organization",
-                      posterName: announcement.postedBy,
-                      announcementHeader: announcement.header,
-                      timestamp: new Date().toISOString()
-                  });
+                io.to(receiverSocketId).emit("newOrganizationAnnouncement", {
+                  type: "announcement",
+                  message: "New announcement posted in your organization",
+                  posterName: announcement.postedBy,
+                  announcementHeader: announcement.header,
+                  timestamp: new Date().toISOString()
+                });
               } else {
-                  console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
+                console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
               }
-          });
-      } catch (error) {
-          console.error("Failed to retrieve organization or emit announcements due to an error:", error);
-      }
-  }
+            });
+          } else if (announcement.communityId) {
+            // Fetch the list of members for the community
+            const communityMembers = await User.find({ communityId: announcement.communityId });
   
+            if (communityMembers.length === 0) {
+              console.log("No users found for this community. Community may have no members.");
+              return; // Return early if no users found for community
+            }
+  
+            // Emit notifications to each member of the community
+            communityMembers.forEach(user => {
+              const receiverSocketId = getReceiverSocketId(user._id.toString());
+              if (receiverSocketId) {
+                io.to(receiverSocketId).emit("newCommunityAnnouncement", {
+                  type: "announcement",
+                  message: "New announcement posted in your community",
+                  posterName: announcement.postedBy,
+                  announcementHeader: announcement.header,
+                  timestamp: new Date().toISOString()
+                });
+              } else {
+                console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
+              }
+            });
+          }
+        } catch (error) {
+          console.error("Failed to retrieve organization or community or emit announcements due to an error:", error);
+        }
+      }
+    }
 
     res.json(announcement);
   } catch (error) {
@@ -281,6 +327,7 @@ const updateAnnouncementStatus = async (req, res) => {
   }
 };
 
+//announcement approved
 const getApprovedAnnouncements = async (req, res) => {
   try {
     const approvedAnnouncements = await Announcement.find({ status: 'approved' })
