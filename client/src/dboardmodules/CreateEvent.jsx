@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid'; 
@@ -100,6 +100,8 @@ const CreateEvent = ({ defaultSelectable = true }) => {
     checkAuthStatus();
   }, [navigate]);
 
+
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -141,6 +143,8 @@ const CreateEvent = ({ defaultSelectable = true }) => {
   useEffect(() => {
     Modal.setAppElement('#root');
   }, []);
+
+  
 
   
 
@@ -505,23 +509,25 @@ const handleSelectEvent = (event) => {
 };
 
 
+
+
+
   return (
     <div>
 
       
 
+{!loading && (
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, ]}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         events={events}
-        eventClick={handleEventClick} 
-        selectable={selectable} // Set selectable based on state
+        eventClick={handleEventClick}
+        selectable={selectable}
         select={handleDateSelect}
-        
         className="calendar_component"
-        
-        
       />
+    )}
       
       
 

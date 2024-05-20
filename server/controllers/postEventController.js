@@ -1,5 +1,6 @@
 const Event = require('../models/event');
 const Organization = require('../models/organization');
+const Community = require('../models/community');
 const User = require('../models/user');
 const MobileUser = require('../models/mobileUser');
 const { getReceiverSocketId, io } = require('../socketManager');

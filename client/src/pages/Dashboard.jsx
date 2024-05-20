@@ -177,6 +177,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                 <div className=" p-3 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white ">
                 <h2 className='text-3xl border-b-2 border-gray-700 py-1'>My Community</h2>
 
+
                 <div className="container flex flex-row w-auto h-auto">
 
                 <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">

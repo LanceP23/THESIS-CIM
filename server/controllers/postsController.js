@@ -5,6 +5,7 @@ const User = require('../models/user');
 const axios = require('axios');
 const { getReceiverSocketId, io } = require('../socketManager');
 const Organization = require('../models/organization');
+const MobileUser = require('../models/mobileUser');
 
 
 
@@ -100,18 +101,25 @@ const createAnnouncement = async (req, res) => {
     await announcement.save();
 
     let targetUsers = [];
-
-    if (JSON.parse(visibility).staff) {
-      const staffUsers = await User.find({ position: { $exists: false }, organization: { $exists: false }, department: { $exists: false } });
-      targetUsers.push(...staffUsers);
-    }
-    if (JSON.parse(visibility).faculty) {
-      const facultyUsers = await User.find({ department: { $exists: true } });
-      targetUsers.push(...facultyUsers);
-    }
-    if (JSON.parse(visibility).students) {
-      const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
-      targetUsers.push(...studentUsers);
+    if (JSON.parse(visibility).everyone) {
+      // If visibility is set to everyone, target all users and mobile users
+      const allUsers = await User.find();
+      const allMobileUsers = await MobileUser.find();
+      targetUsers.push(...allUsers, ...allMobileUsers);
+    } else {
+      // Otherwise, target specific groups based on visibility settings
+      if (JSON.parse(visibility).staff) {
+        const staffUsers = await User.find({ position: { $exists: false }, organization: { $exists: false }, department: { $exists: false } });
+        targetUsers.push(...staffUsers);
+      }
+      if (JSON.parse(visibility).faculty) {
+        const facultyUsers = await User.find({ department: { $exists: true } });
+        targetUsers.push(...facultyUsers);
+      }
+      if (JSON.parse(visibility).students) {
+        const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
+        targetUsers.push(...studentUsers);
+      }
     }
 
 
