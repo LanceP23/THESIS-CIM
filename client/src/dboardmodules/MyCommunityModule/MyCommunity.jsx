@@ -37,7 +37,7 @@ export default function MyCommunity() {
           </div>
         </div>
         {hovered_Build_Community && (
-          <div className="absolute top-0 left-0 w-full h-full rounded-xl bg-green-800 bg-opacity-50 flex justify-center items-center transition duration-300 animate-fade-in"
+          <div className="absolute top-0 left-0 w-full h-full rounded-xl bg-green-800 bg-opacity-50 flex justify-center items-center transition duration-300 animate-fade-in cursor-pointer"
           onClick={handleBuildCommunity}
           >
             
@@ -61,7 +61,7 @@ export default function MyCommunity() {
           </div>
         </div>
         {hovered_View_Community && (
-          <div className="absolute top-0 left-0 w-full h-full rounded-xl bg-green-800  bg-opacity-50 flex justify-center items-center transition duration-300 animate-fade-in"
+          <div className="absolute top-0 left-0 w-full h-full rounded-xl bg-green-800  bg-opacity-50 flex justify-center items-center transition duration-300 animate-fade-in cursor-pointer"
           onClick={handleViewCommunity}
           >
             

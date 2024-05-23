@@ -18,6 +18,7 @@ const ViewCommunity = () => {
     }
     return token.split('=')[1];
   };
+  
 
   // Fetch community data when component loads
   useEffect(() => {
@@ -51,29 +52,79 @@ const ViewCommunity = () => {
     setViewCommunityId(prevId => (prevId === communityId ? null : communityId));
   };
 
+  
+
   return (
     <div>
+      <div className="bg-slate-200 my-5 rounded-xl p-3">
       {/* Loading state */}
       {loading && <p>Loading...</p>}
       {/* Display admin communities */}
       {!loading && adminCommunities.length === 0 && <p>No communities found.</p>}
       {!loading && adminCommunities.length > 0 && (
         <div>
-          <h2>Your Admin Communities</h2>
-          <ul>
+          <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 my-2'>Your Admin Communities</h2>
+          <div className='flex flex-row justify-between'>
+
+          
+          <div className=" max-w-full overflow-x-auto">
+  <table className=" max-w-full ">
+    {/* head */}
+    <thead className=''>
+      <tr>
+        
+        <th className='bg-green-500 text-white'>Community Name</th>
+        <th className='bg-green-500 text-white'>View posts</th>
+      </tr>
+    </thead>
+    <tbody className=''>
+      {/* row 1 */}
+      {adminCommunities.map(community => (
+      <tr key={community._id} className=' hover:bg-yellow-200'>
+        
+        <td className=' border-b-2 border-black'>
+          <div className="flex items-center gap-3">
+            <div className="avatar">
+              <div className="mask mask-squircle w-12 h-12">
+                <img src="https://img.daisyui.com/tailwind-css-component-profile-2@56w.png" alt="Avatar Tailwind CSS Component" />
+              </div>
+            </div>
+            <div>
+              <div className="font-bold">{community.name}</div>
+              <div className="text-sm opacity-50">United States</div>
+            </div>
+          </div>
+        </td>
+        
+        
+        <td className='border-b-2 border-black'>
+        <button onClick={() => handleViewCommunity(community._id)} className='btn btn-success btn-xs'>View</button>
+        </td>
+      </tr>
+      
+    ))}
+     
+    </tbody>
+  
+  </table>
+
+
+</div>
+<div className="divider lg:divider-horizontal divider-warning">OR</div> 
+          <div className=" w-3/4 max-w-full mx-auto p-4 bg-white shadow-md rounded-lg">
+          <h2 className="text-lg font-semibold mb-4 border-b-2 text-green-700 border-yellow-300">Recent Posts for Community</h2>
             {adminCommunities.map(community => (
-              <li key={community._id}>
-                {/* Render community details */}
-                <p>{community.name}</p>
-                {/* Add a button to view community details */}
-                <button onClick={() => handleViewCommunity(community._id)}>View</button>
-                {/* Conditionally render RecentPostCommunity based on viewCommunityId */}
+              <div key={community._id}>
+               
                 {viewCommunityId === community._id && <RecentPostCommunity communityId={community._id} />}
-              </li>
+              </div>
             ))}
-          </ul>
+          
+          </div>
+          </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

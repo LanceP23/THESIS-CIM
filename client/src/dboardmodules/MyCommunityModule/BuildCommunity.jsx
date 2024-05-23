@@ -170,7 +170,7 @@ export default function BuildCommunity() {
             <input
               type="text"
               id="communityName"
-              className="input input-bordered input-success input-md w-full text-white bg-slate-100 rounded-md shadow-xl"
+              className="input input-bordered input-success input-md w-full text-gray-700 bg-slate-100 rounded-md shadow-xl"
               value={communityName}
               onChange={(e) => setCommunityName(e.target.value)}
               required

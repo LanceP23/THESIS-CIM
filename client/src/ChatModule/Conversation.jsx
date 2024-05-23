@@ -13,14 +13,14 @@ const Conversation = ({ conversation, lastIdx }) => {
     return (
         <>
             <div
-                className={`custom-container ${isSelected ? 'selected' : ''}`}
+                className={`custom-container ${isSelected ? 'selected' : ''} `}
                 onClick={() => setSelectedConversation(conversation)}
             >
-                <div className={`container_1${isOnline ? 'online' : ''}`}>
-                    <div className='flex_container'>
+                <div className={`container_1${isOnline ? 'online' : ''} ` }>
+                    <div className='flex_container '>
                   
                    
-                        <p className='flex flex-row justify-normal text-md font-semibold'>  {isOnline ? <div className='online-dot'></div> : <div className='offline-dot'></div>}{conversation.name}</p>
+                        <p className='flex flex-row justify-normal text-md font-semibold cursor-pointer'>  {isOnline ? <div className='online-dot'></div> : <div className='offline-dot'></div>}{conversation.name}</p>
                         
                     </div>
                 </div>

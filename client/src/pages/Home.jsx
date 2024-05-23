@@ -9,7 +9,7 @@ export default function Home() {
    
   return (
     < >
-    <div className="bg-[url('../src/assets/web.png')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full">
+    <div className="bg-[url('../src/assets/home_image.jpg')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full">
         <Navbar/>
 
 
