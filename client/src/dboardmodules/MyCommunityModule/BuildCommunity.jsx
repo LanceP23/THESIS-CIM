@@ -2,12 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAQZQtWzdKepDwzzhOAw_F8A4xkhtwz9p0",
+  authDomain: "cim-storage.firebaseapp.com",
+  projectId: "cim-storage",
+  storageBucket: "cim-storage.appspot.com",
+  messagingSenderId: "616767248215",
+  appId: "1:616767248215:web:b554a837f3229fdc155012",
+  measurementId: "G-YN9S75JSNB"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
 
 export default function BuildCommunity() {
   const navigate = useNavigate();
   const [communityName, setCommunityName] = useState('');
   const [communityDescription, setCommunityDescription] = useState('');
   const [logoFile, setLogoFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [mobileUsers, setMobileUsers] = useState([]);
   const [adminUsers, setAdminUsers] = useState([]);
@@ -67,76 +85,87 @@ export default function BuildCommunity() {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    // Check if name and description are provided
     if (!communityName || !communityDescription) {
-        toast.error('Community name and description are required.');
+      toast.error('Community name and description are required.');
       return;
     }
   
-    // Fetch mobile and admin users
-    try {
-      const [mobileUsersResponse, adminUsersResponse] = await Promise.all([
-        axios.get('/get-mobile-users'),
-        axios.get('/get-users')
-      ]);
+    const storageRef = ref(storage, logoFile.name);
+    const uploadTask = uploadBytesResumable(storageRef, logoFile);
   
-      // Extract data from responses
-      const mobileUsersData = mobileUsersResponse.data;
-      const adminUsersData = adminUsersResponse.data;
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // Handle progress or other snapshot events if needed
+        // You can display progress using snapshot.bytesTransferred and snapshot.totalBytes
+      },
+      (error) => {
+        // Handle unsuccessful upload
+        toast.dismiss();
+        toast.error(`Error uploading media: ${error.message}`);
+        console.error('Error uploading media:', error);
+      },
+      async () => {
+        try {
+          const logoFile = await getDownloadURL(uploadTask.snapshot.ref);
+          const [mobileUsersResponse, adminUsersResponse] = await Promise.all([
+            axios.get('/get-mobile-users'),
+            axios.get('/get-users')
+          ]);
   
-      // Create FormData object to append logo and description
-      const formData = new FormData();
-      formData.append('name', communityName);
-      formData.append('description', communityDescription);
-      if (logoFile) {
-        formData.append('logo', logoFile);
-      }
+          const mobileUsersData = mobileUsersResponse.data;
+          const adminUsersData = adminUsersResponse.data;
   
-      // Check if selectedMembers is an array
-      if (!Array.isArray(selectedMembers)) {
-        toast.error('Selected members must be an array.');
-        return;
-      }
+          const formData = new FormData();
+          formData.append('name', communityName);
+          formData.append('description', communityDescription);
+          if (logoFile) {
+            formData.append('logo', logoFile);
+          }
   
-      // Generate members array using both mobile and admin users
-      const members = [];
-
-      // Iterate over selected members and push objects into the members array
-      selectedMembers.forEach(userId => {
-        const user = mobileUsersData.find(user => user._id === userId) || adminUsersData.find(user => user._id === userId);
-        if (user && user.adminType) {
-          members.push({ userId, userType: 'User',adminType: user.adminType, name: user.name });
-        } else {
-          members.push({ userId, userType: 'MobileUser', name: user.name });
+          if (!Array.isArray(selectedMembers)) {
+            toast.error('Selected members must be an array.');
+            return;
+          }
+  
+          const members = selectedMembers.map(userId => {
+            const user = mobileUsersData.find(user => user._id === userId) || adminUsersData.find(user => user._id === userId);
+            if (user) {
+              return {
+                userId,
+                userType: user.adminType ? 'User' : 'MobileUser',
+                adminType: user.adminType,
+                name: user.name
+              };
+            }
+            return null;
+          }).filter(member => member !== null);
+  
+          const onModel = members.some(member => member.userType === 'MobileUser') ? 'MobileUser' : 'User';
+  
+          formData.append('members', JSON.stringify(members));
+          formData.append('onModel', onModel);
+  
+          const token = getToken();
+          const response = await axios.post('/build-community', formData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+  
+          // Reset form fields
+          setCommunityName('');
+          setCommunityDescription('');
+          setLogoFile(null);
+          setSelectedMembers([]);
+          toast.success('Community created successfully.');
+        } catch (error) {
+          toast.error('Error creating community. Please try again later.');
+          console.error('Error creating community:', error);
         }
-      });
-  
-      // Determine the onModel value
-      const onModel = members.some(member => member.userType === 'MobileUser') ? 'MobileUser' : 'User';
-  
-      // Append members array to formData
-      formData.append('members', JSON.stringify(members));
-  
-      // Append onModel value to formData
-      formData.append('onModel', onModel);
-  
-  
-      const token = getToken();
-      const response = await axios.post('/build-community', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      // Reset form fields
-      setCommunityName('');
-      setCommunityDescription('');
-      setLogoFile(null);
-      setSelectedMembers([]);
-      toast.success('Community created successfully.');
-    } catch (error) {
-      toast.error('Error creating community. Please try again later.');
-    }
+      }
+    );
   };
 
   const handleBack = () => {

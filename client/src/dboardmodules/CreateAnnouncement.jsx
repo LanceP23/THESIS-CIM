@@ -189,9 +189,10 @@ export default function CreateAnnouncement() {
   };
 
   const handleSubmit = async () => {
-    if(submitting){
+    if (submitting) {
       return;
     }
+  
     try {
       setSubmitting(true);
       toast.loading('Uploading...');
@@ -200,83 +201,128 @@ export default function CreateAnnouncement() {
         throw new Error('No token found');
       }
   
-      // Ensure media file is selected
-      if (!media) {
-        throw new Error('No media file selected');
-      }
+      if (media) {
+        const storageRef = ref(storage, media.name);
+        // Upload the media file to Firebase storage
+        const uploadTask = uploadBytesResumable(storageRef, media);
   
-      const storageRef = ref(storage, media.name);
-      // Upload the media file to Firebase storage
-      const uploadTask = uploadBytesResumable(storageRef, media);
+        uploadTask.on('state_changed',
+          (snapshot) => {
+            // Handle upload progress if needed
+          },
+          (error) => {
+            // Handle unsuccessful upload
+            toast.dismiss();
+            throw new Error('Error uploading media:', error);
+          },
+          async () => {
+            // Handle successful upload
+            try {
+              // Get the download URL for the uploaded file
+              const mediaUrl = await getDownloadURL(uploadTask.snapshot.ref);
   
-
-      uploadTask.on('state_changed',
-        (snapshot) => {
-        },
-        (error) => {
-          // Handle unsuccessful upload
-          toast.dismiss();
-          throw new Error('Error uploading media:', error);
-        },
-        async () => {
-          // Handle successful upload
-          try {
-            // Get the download URL for the uploaded file
-            const mediaUrl = await getDownloadURL(uploadTask.snapshot.ref);
+              // Create form data with announcement details
+              const formData = new FormData();
+              formData.append('header', header);
+              formData.append('body', body);
+              formData.append('mediaUrl', mediaUrl); // Always append mediaUrl
+              formData.append('visibility', JSON.stringify(visibility));
+              formData.append('postingDate', postingDate);
+              formData.append('expirationDate', expirationDate);
+              formData.append('communityId', selectedCommunity);
   
-            // Create form data with announcement details
-            const formData = new FormData();
-            formData.append('header', header);
-            formData.append('body', body);
-            formData.append('mediaUrl', mediaUrl);
-            formData.append('visibility', JSON.stringify(visibility));
-            formData.append('postingDate', postingDate);
-            formData.append('expirationDate', expirationDate);
-            formData.append('communityId', selectedCommunity);
-
-            if (isOrganizationPost && organizationId) {
-              formData.append('organizationId', organizationId);
-          }
+              if (isOrganizationPost && organizationId) {
+                formData.append('organizationId', organizationId);
+              }
   
-            // Post the announcement data to your server
-            const response = await axios.post('/announcements', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${token.split('=')[1]}`,
-              },
-            });
+              // Post the announcement data to your server
+              const response = await axios.post('/announcements', formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  Authorization: `Bearer ${token.split('=')[1]}`,
+                },
+              });
   
-            // Reset form fields and image preview after successful submission
-            setHeader('');
-            setBody('');
-            setMedia(null);
-            setMediaPreview(null);
-            setVisibility('');
-            setPostingDate('')
-            setExpirationDate('')
-            setSelectedCommunity('');
+              // Reset form fields and image preview after successful submission
+              setHeader('');
+              setBody('');
+              setMedia(null);
+              setMediaPreview(null);
+              setVisibility('');
+              setPostingDate('')
+              setExpirationDate('')
+              setSelectedCommunity('');
   
-            // Show success message
-            if (adminType2 !== 'School Owner') {
-              toast.success('Your post is pending approval');
-            } else {
-              toast.success('Announcement created successfully');
+              // Show success message
+              if (adminType2 !== 'School Owner') {
+                toast.success('Your post is pending approval');
+              } else {
+                toast.success('Announcement created successfully');
+              }
+            } catch (error) {
+              // Handle errors during announcement submission
+              toast.error('Error creating announcement');
+              console.error('Error creating announcement:', error);
+            } finally {
+              setSubmitting(false);
             }
-          } catch (error) {
-            // Handle errors during announcement submission
-            toast.error('Error creating announcement');
-            console.error('Error creating announcement:', error);
-          }finally{
-            setSubmitting(false);
           }
+        );
+      } else {
+        // If no media is uploaded, handle the submission without media
+        try {
+          // Create form data with announcement details
+          const formData = new FormData();
+          formData.append('header', header);
+          formData.append('body', body);
+          formData.append('visibility', JSON.stringify(visibility));
+          formData.append('postingDate', postingDate);
+          formData.append('expirationDate', expirationDate);
+          formData.append('communityId', selectedCommunity);
+  
+          if (isOrganizationPost && organizationId) {
+            formData.append('organizationId', organizationId);
+          }
+  
+          // Post the announcement data to your server
+          const response = await axios.post('/announcements', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token.split('=')[1]}`,
+            },
+          });
+  
+          // Reset form fields after successful submission
+          setHeader('');
+          setBody('');
+          setMedia(null);
+          setMediaPreview(null);
+          setVisibility('');
+          setPostingDate('')
+          setExpirationDate('')
+          setSelectedCommunity('');
+  
+          // Show success message
+          if (adminType2 !== 'School Owner') {
+            toast.success('Your post is pending approval');
+          } else {
+            toast.success('Announcement created successfully');
+          }
+        } catch (error) {
+          // Handle errors during announcement submission
+          toast.error('Error creating announcement');
+          console.error('Error creating announcement:', error);
+        } finally {
+          setSubmitting(false);
         }
-      );
+      }
     } catch (error) {
       // Handle errors in token retrieval or media selection
       toast.error('Error creating announcement');
       console.error('Error creating announcement:', error);
     }
   };
+  
 
   const getCommunityName = async (communityId) => {
     try {
