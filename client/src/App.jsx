@@ -14,7 +14,6 @@ import CreateAnnouncement from './dboardmodules/CreateAnnouncement';
 import PostApproval from './dboardmodules/ManagePostSubModules/PostApproval';
 import Sidebar from './components/Sidebar';
 import ChatPage from './ChatModule/ChatPage';
-
 import React, {useContext, useState} from 'react';
 import { SocketContextProvider } from '../context/socketContext';
 import UserManagement from './mobileusermanagement/DisplayAllMobileAcc';
@@ -25,8 +24,10 @@ import RecentPostCommunity from './dboardmodules/MyCommunityModule/RecentPostCom
 import NotificationBell from './components/NotificationBell';
 import Navbar_2 from './components/Navbar_2';
 import address from 'address';
+import CreateEvent from './dboardmodules/CreateEvent';
+import Analytics_report from './dboardmodules/Analytics_report';
 
-const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.1.18:8000';
+const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.0.102:8000';
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 
@@ -57,6 +58,8 @@ function App() {
         <Route path="/community-landing" element={<MyCommunity />}  />
         <Route path="/build-community" element={<BuildCommunity/>} />
         <Route path="/view-community" element={<ViewCommunity/>} />
+        <Route path="/create-event" element={<CreateEvent/>} />
+        <Route path="/analytics-report" element={<Analytics_report/>} />
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>

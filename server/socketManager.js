@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const localIp = address.ip();
 const io = new Server(server, {
 	cors: {
-		origin: ["http://localhost:5173", "http://192.168.1.18:5173"],
+		origin: ["http://localhost:5173", "http://192.168.0.102:5173"],
 		methods: ["GET", "POST"],
 	},
 });

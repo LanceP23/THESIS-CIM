@@ -56,7 +56,7 @@ const Navbar_2 = () => {
   <div className="dropdown ">
 
   {/*swap swap-rotate*/} 
-  <label tabIndex={0} role="button" className="btn btn-square btn-success text-white" >
+  <label tabIndex={0} role="button" className="btn btn-square btn-ghost text-white" >
   
    {/* this hidden checkbox controls the state 
   <input type="checkbox" />*/}
@@ -116,7 +116,7 @@ const Navbar_2 = () => {
             </li>
 
             <li className=''>
-              <Link to="/dashboard" onClick={closeSidebar} className=''>
+              <Link to="/analytics-report" onClick={closeSidebar} className=''>
               <FontAwesomeIcon  className=''icon={faChartBar} />  
               <div className="">
               <h6 className=''>   Analytics Report</h6>

@@ -16,6 +16,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDashboard } from '@fortawesome/free-solid-svg-icons';
 import Navbar_2 from '../components/Navbar_2';
 import Navbar from '../components/Navbar';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
@@ -119,24 +121,22 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
             <div className="row_1 inline-flex flex-col">
 
                 <div className="p3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border">
-                    <div className="carousel w-full ">
-                            <div id="item1" className="carousel-item w-full">
-                                <img src="../src/assets/398569058_739544134860223_1719844830869562449_n.jpg" className=" w-full" />
-                            </div> 
-                            <div id="item2" className="carousel-item w-full">
-                                <img src="../src/assets/434168365_828389249309044_1058040744990472008_n.jpg" className="w-full" />
-                            </div> 
-                            <div id="item3" className="carousel-item w-full">
-                                <img src="../src/assets/439841626_847556550725647_7502073539968304278_n.jpg" className="w-full " />
-                            </div> 
-                           
-                    </div> 
-                        <div className="flex justify-center w-full py-2 gap-2">
-                            <a href="#item1" className="btn btn-xs">1</a> 
-                            <a href="#item2" className="btn btn-xs">2</a> 
-                            <a href="#item3" className="btn btn-xs">3</a> 
-                           
+                <Carousel showThumbs={false} autoPlay infiniteLoop  interval={10000}>
+                        <div>
+                        <img src="../src/assets/398569058_739544134860223_1719844830869562449_n.jpg" alt="Slide 1" className=' h-auto' />
+                        
                         </div>
+                        <div>
+                        <img src="../src/assets/434168365_828389249309044_1058040744990472008_n.jpg" alt="Slide 2" className=' max-h-full' />
+                      
+                        </div>
+                        <div>
+                        <img src="../src/assets/439841626_847556550725647_7502073539968304278_n.jpg" alt="Slide 3" />
+                        
+                        </div>
+                        
+                        
+                    </Carousel>
                     </div>
                 <div className=' p-3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border'>
                 <h2 className='text-3xl border-b-2 border-gray-700'>Analytics</h2>
@@ -239,12 +239,15 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
             </div>
 
                <div className="row_2 flex flex-col">
-               <div className="p-3 m-3 w-auto shadow-inner  rounded-3 bg-white">
+
+                
+               <div className="p-3 m-3 w-auto shadow-inner  rounded-3 bg-white transition-transform duration-300 ease-in-out transform hover:scale-95">
       
                 <CreateEvent defaultSelectable={false}/>
                 </div>
-                
+               
 
+                
                 <div className="p-2 m-3  w-auto shadow-inner  rounded-3 bg-white ">
                     <div className="flex border-b-2 border-gray-700">
                         <div className='online-dot m-2'></div>
@@ -253,6 +256,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         </div>
                     </div>
 
+
                     <div className=" py-2 ">
 
                     <Conversations conversations={{conversations}} className='active_'/>
@@ -260,6 +264,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                 
                 
                 </div>
+              
 
                 </div>
 
