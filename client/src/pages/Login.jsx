@@ -44,11 +44,12 @@ const Login = (  ) => {
             if (error) {
                 toast.error(error); 
             } else {
-                
                 localStorage.setItem('adminType', adminType);
-                window.location.reload();
-                navigate('/dashboard');
                 toast.success('Login Successful!');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                  }, 500);
+                
                 
             }
         } catch (error) {

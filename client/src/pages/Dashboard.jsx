@@ -252,7 +252,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                     <div className="flex border-b-2 border-gray-700">
                         <div className='online-dot m-2'></div>
                         <div className="">
-                        <h2 className='text-3xl '>Active User</h2>
+                        <h2 className='text-3xl '>User List</h2>
                         </div>
                     </div>
 

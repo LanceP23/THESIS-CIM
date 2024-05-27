@@ -115,7 +115,7 @@ const Analytics_report = () => {
             <div className="stats shadow">
   
                 <div className="stat place-items-center">
-                    <div className="stat-title">Downloads</div>
+                    <div className="stat-title">Players</div>
                     <div className="stat-value">31K</div>
                     <div className="stat-desc">From January 1st to February 1st</div>
                 </div>

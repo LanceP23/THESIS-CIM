@@ -29,14 +29,16 @@ export default function Sidebar() {
   const handleLogout = async () =>{
     try{
       await axios.post('/logout');
-      localStorage.removeItem('token');
       toast.success('Logout Successful.');
+      localStorage.removeItem('token');
       navigate('/login');
     } catch (error){
       console.error('Login failed: ', error);
       toast.error('Logout failed.');
     }
   }
+
+  
 
   return (
     <div>

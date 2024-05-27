@@ -27,7 +27,7 @@ import address from 'address';
 import CreateEvent from './dboardmodules/CreateEvent';
 import Analytics_report from './dboardmodules/Analytics_report';
 
-const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.0.102:8000';
+const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.102.153:8000';
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 

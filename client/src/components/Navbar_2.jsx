@@ -39,7 +39,12 @@ const Navbar_2 = () => {
       await axios.post('/logout');
       localStorage.removeItem('token');
       toast.success('Logout Successful.');
-      navigate('/login');
+      
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 500);
+      
+      
     } catch (error){
       console.error('Login failed: ', error);
       toast.error('Logout failed.');

@@ -13,11 +13,12 @@ export const SocketContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (user) {
+            
             // Define an array of URLs to attempt connecting
             const connectionURLs = [
              // Hardcoded IP address
                 "http://localhost:8000",//local
-                "http://192.168.0.102:8000" //local network
+                "http://192.168.102.153:8000" //local network
             ];
 
             // Attempt to connect using each URL until successful
@@ -54,3 +55,4 @@ export const SocketContextProvider = ({ children }) => {
         </socketContext.Provider>
     );
 };
+
