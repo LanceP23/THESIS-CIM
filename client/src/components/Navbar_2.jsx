@@ -4,7 +4,7 @@ import {toast} from 'react-hot-toast';
 import axios from 'axios';
 import { UserContext } from '../../context/userContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faPeopleArrows,  faChartBar, faComment, faLock, faBullhorn, faAddressCard, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faPeopleArrows,  faChartBar, faComment, faLock, faBullhorn, faAddressCard, faRightFromBracket, faCalendar, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import NotificationBell from './NotificationBell';
 
 const Navbar_2 = () => {
@@ -144,6 +144,17 @@ const Navbar_2 = () => {
               </div>
               </Link>
             </li>
+
+            <li className=''>
+              <Link to="/event-calendar" onClick={closeSidebar} className=''>
+              <FontAwesomeIcon className='navbar_icons' icon={faCalendarCheck} />  
+              <div className="">
+              <h6 className=''>Event Calendar Manager</h6> 
+              </div>
+              </Link>
+            </li>
+
+            
             <li className=''>
             {adminType === 'School Owner'?(
               <Link to="/register" className=''>

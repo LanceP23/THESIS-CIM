@@ -26,6 +26,7 @@ import Navbar_2 from './components/Navbar_2';
 import address from 'address';
 import CreateEvent from './dboardmodules/CreateEvent';
 import Analytics_report from './dboardmodules/Analytics_report';
+import Eventcalendar from './dboardmodules/MyCommunityModule/Eventcalendar';
 
 const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.102.153:8000';
 axios.defaults.baseURL = baseURL;
@@ -60,6 +61,7 @@ function App() {
         <Route path="/view-community" element={<ViewCommunity/>} />
         <Route path="/create-event" element={<CreateEvent/>} />
         <Route path="/analytics-report" element={<Analytics_report/>} />
+        <Route path="/event-calendar" element={<Eventcalendar/>} />
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>

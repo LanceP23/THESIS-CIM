@@ -120,7 +120,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
             <div className="row_1 inline-flex flex-col">
 
-                <div className="p3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border">
+                <div className="p3 m-3 w-auto h-full  shadow-md rounded-3 bg-slate-300 border">
                 <Carousel showThumbs={false} autoPlay infiniteLoop  interval={10000}>
                         <div>
                         <img src="../src/assets/398569058_739544134860223_1719844830869562449_n.jpg" alt="Slide 1" className=' h-auto' />

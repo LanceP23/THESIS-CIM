@@ -552,51 +552,51 @@ const handleSelectEvent = (event) => {
         <div className="   p-2 flex flex-1 flex-row justify-between column-gap-2 rounded-lg shadow-md shadow-black">
         <div className="    w-6/12 p-2 rounded-md  shadow-black flex flex-col row-gap-1">
           
-            <div className=" bg-slate-400 border-2 border-base-100 p-3 shadow-inner rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-110 animate-fade-in">
+            <div className=" bg-slate-400 border-2 border-base-100 p-3 shadow-inner rounded-lg  animate-fade-in">
                 <div className=" flex justify-center items-center ">
                   <label className=' text-lg text-white'> Event Name: </label> <label className='  p-2 rounded-md text-xl  font-extrabold italic '> {selectedEvent.title}</label>
                 </div>
 
                 <div className="flex justify-center items-center mx-1">
-                    <div className="div mx-1">
+                    <div className="div mx-1 p-0 border rounded-lg shadow-2xl transition-transform duration-300 ease-in-out transform hover:scale-110">
                       <label className='text-white'>Start Date:</label>  <label className='p-2 rounded-md text-xl  font-extrabold italic  '>{moment(selectedEvent.start).format('YYYY-MM-DD HH:mm:ss')}</label>
                     </div>
-                    <div className="div">
+                    <div className="div mx-1 p-0 border rounded-lg shadow-2xl transition-transform duration-300 ease-in-out transform hover:scale-110">
                       <label className='text-white'>End Date:</label> <label className='p-2 rounded-md text-xl  font-extrabold italic  '> {moment(selectedEvent.end).format('YYYY-MM-DD HH:mm:ss')}</label>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-slate-400 p-3 shadow-inner  rounded-sm animate-fade-in ">
+            <div className="bg-slate-400 border p-3 shadow-2xl rounded-sm animate-fade-in ">
       <div className="flex my-1 ">
       <label><strong className='text-white'>Event Type:</strong></label>  <label className=' '>{selectedEvent.extendedProps.eventType}</label>
       </div>
 
 
-      <div className="flex justify-start items-center my-3 animate-fade-in ">
-      <div className="flex my-3 mx-2">
+      <div className="flex flex-row justify-start items-center my-3 animate-fade-in ">
+      <div className="flex my-3 mx-1">
       <label> <strong className='text-white'>Organizer Type: </strong> </label><label className=''> {selectedEvent.extendedProps.organizerType}</label> 
       </div>
     
 
-      <div className="flex my-3">
-      <p><strong className='text-white'>Organizer Name:</strong></p> <label className=''>{selectedEvent.extendedProps.organizerName}</label>
+      <div className="flex my-2">
+      <p><strong className='text-white mx-1'>Organizer Name:</strong></p> <label className=''> {selectedEvent.extendedProps.organizerName}</label>
       </div>
       </div>
 
-      <div className="flex justify-start items-center my-3">
-
-      <div className="flex my-3">
-      <lab><strong className='text-white'>Committee: </strong></lab> <label className=''>{selectedEvent.extendedProps.committee}</label>
-      </div>
-
-      <div className="flex my-3 ">
-      <p> <strong className='text-white'>Committee Chairman:</strong></p> <label className=' '>{selectedEvent.extendedProps.committeeChairman}</label> 
-      </div>
-      </div>
+      <div className="flex flex-row justify-start items-center my-3">
 
       <div className="flex my-3">
-      <p><strong className='text-white'>Location:  </strong></p> <label className=' '>{selectedEvent.extendedProps.location}</label>
+      <lab><strong className='text-white'>Committee: </strong></lab> <label className=''> {selectedEvent.extendedProps.committee}</label>
+      </div>
+
+      <div className="flex my-3 mx-2 ">
+      <p> <strong className='text-white'>Committee Chairman: </strong></p> <label className=' '> {selectedEvent.extendedProps.committeeChairman}</label> 
+      </div>
+      </div>
+
+      <div className="flex my-3">
+      <p><strong className='text-white'>Location:  </strong></p> <label className=' '> {selectedEvent.extendedProps.location}</label>
       </div>
 
       <div className="flex my-3">
