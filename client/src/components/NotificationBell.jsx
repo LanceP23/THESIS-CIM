@@ -4,6 +4,9 @@ import useAnnouncementNotifications from '../hooks/useAnnouncementNotifications'
 import useEventNotifications from '../hooks/useEventNotifications';
 import useApprovalNotifications from '../hooks/useApprovalNotifications';
 import useOrganizationAnnouncementNotifications from '../hooks/useOrganizationAnnouncementNotifications';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faList } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const NotificationBell = ({ setTotalUnreadCount }) => {
     const messageNotifications = useNotifications();
@@ -118,7 +121,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
 
     return (
         <div className="notification-bell">
-            <h3 className='border-b-2'>Notifications</h3>
+            <h3 className='border-b-2 text-left'>Notifications</h3>
             <div className="notification-dropdown max-h-40 overflow-auto w-full">
                 {(unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount) > 0 && (
                     <span className="notification-count"></span>
@@ -197,7 +200,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                         ))}
                     </ul>
                 ) : (
-                    <p>No new notifications</p>
+                    <p className=' my-2'>No new notifications</p>
                 )}
             </div>
             {latestMessage && (
@@ -219,7 +222,14 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                 <div className="notification-popup">
                     <p>New organization announcement: {latestOrganizationAnnouncement.announcementHeader} by {latestOrganizationAnnouncement.posterName}</p>
                 </div>
+
             )}
+
+            <div className="flex flex-row justify-starts mt-1">
+                <Link to="/notif-module" className='btn-link p-0'>
+          <p className=''><FontAwesomeIcon  icon={faList} />   See all</p>
+          </Link>
+            </div>
         </div>
     );
 };

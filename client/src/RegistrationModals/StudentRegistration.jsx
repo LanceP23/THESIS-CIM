@@ -150,7 +150,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
           className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
         />
         </div>
-        <button type='submit'>Register</button>
+        <button type='submit' className=' btn btn-wide btn-success btn-sm mt-2'>Register</button>
       </form>
     </div>
   );

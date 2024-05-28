@@ -27,8 +27,9 @@ import address from 'address';
 import CreateEvent from './dboardmodules/CreateEvent';
 import Analytics_report from './dboardmodules/Analytics_report';
 import Eventcalendar from './dboardmodules/MyCommunityModule/Eventcalendar';
+import Notification_module from './components/Notification_module'
 
-const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.102.153:8000';
+const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.0.100:8000';
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 
@@ -62,6 +63,8 @@ function App() {
         <Route path="/create-event" element={<CreateEvent/>} />
         <Route path="/analytics-report" element={<Analytics_report/>} />
         <Route path="/event-calendar" element={<Eventcalendar/>} />
+        <Route path="/notif-module" element={<Notification_module/>} />
+
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>

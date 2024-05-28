@@ -1,12 +1,12 @@
 .fc .fc-col-header-cell{
     
-    background-color: green;
+ 
 }
 
 
 
 .fc .fc-col-header-cell {
-    background-color: beige; /* Yellow background */
+    /* Yellow background */
     color: yellowgreen; /* Black text color */
     font-weight: bold; /* Bold text */
   }
@@ -29,4 +29,8 @@
 
 .fc .fc-daygrid-day-events{
     cursor: pointer;
+}
+
+th{
+ background-color: khaki; 
 }

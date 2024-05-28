@@ -149,7 +149,7 @@ const Navbar_2 = () => {
               <Link to="/event-calendar" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='navbar_icons' icon={faCalendarCheck} />  
               <div className="">
-              <h6 className=''>Event Calendar Manager</h6> 
+              <h6 className=''>Event Calendar</h6> 
               </div>
               </Link>
             </li>
@@ -171,7 +171,9 @@ const Navbar_2 = () => {
    
   </div>
   <div className="flex-1">
-  <img src='../src/assets/logo.png' className=' h-auto w-28'></img>
+  <img src='../src/assets/logo.png' className=' h-auto w-24'></img>
+  <img src='../src/assets/CIM LOGO.png' className=' h-auto w-20 '></img>
+
   </div>
   <div className="flex flex-row">
   <div className="indicator">

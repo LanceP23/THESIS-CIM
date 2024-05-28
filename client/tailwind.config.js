@@ -10,6 +10,7 @@ export default {
         customyellow: '#f6e8295b',
         customRed: '#EF4444',
         customgreen_1: '#98D08F',
+        custom_header: 'khaki',
         bg_gradient: 'background: linear-gradient(to right, #98D08F, #8FD0A1, #D0D08F)',
       },
 

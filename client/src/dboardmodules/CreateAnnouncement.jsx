@@ -14,6 +14,7 @@ import CreateEvent from './CreateEvent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from '../../context/userContext';
+import Eventcalendar from '../dboardmodules/MyCommunityModule/Eventcalendar'
 
 
 const firebaseConfig = {
@@ -581,12 +582,10 @@ export default function CreateAnnouncement() {
         </div>
                     
 
-        <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Events"  />
-        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6"><CreateEvent/></div>
-
+       
         {adminType2 === 'School Owner' && (
   <>
-    <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Post Approval" />
+    <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600" aria-label="Post Approval" />
     <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">
       <PostApproval />
     </div>
