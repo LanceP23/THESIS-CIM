@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <nav className='flex flex-row justify-between'>
       <div className="flex flex-row justify-self-center">
-      <img src='../src/assets/logo.png' className=' h-auto w-28'></img>
+      <img src='../src/assets/CIM_FINAL.png' className=' mt-3 mx-3 h-auto w-28'></img>
       </div>
       
       <div className="links">

@@ -82,9 +82,9 @@ const Navbar_2 = () => {
 
             <Link to="/dashboard" onClick={closeSidebar} className=' ' >
               
-            <FontAwesomeIcon icon={faHome} className='' />  
+            <FontAwesomeIcon icon={faHome} className='text-yellow-500' />  
             <div className="">   
-            <h6 className=''>Dashboard</h6>
+            <h6 className='font-bold'>Dashboard</h6>
             </div>
             </Link>
 
@@ -93,9 +93,9 @@ const Navbar_2 = () => {
           <li className=''>
 
             <Link to="/createorg" onClick={closeSidebar} className=''> 
-            <FontAwesomeIcon className='navbar_icons' icon={faPeopleArrows} />   
+            <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
             <div className="">
-            <h6 className=''>  Manage Organization</h6>
+            <h6 className='font-bold'>  Manage Organization</h6>
             </div>
             </Link>
           </li>
@@ -104,52 +104,52 @@ const Navbar_2 = () => {
           
             <li className=''>
               <Link to="/community-landing" onClick={closeSidebar} className='' >
-              <FontAwesomeIcon className='navbar_icons' icon={faPeopleArrows} /> 
+              <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
               <div className="">
-              <h6 className=''>   My Community</h6>
+              <h6 className='font-bold'>   My Community</h6>
               </div>
               </Link>
             </li>
 
             <li className=''>
               <Link to="/campcomms" onClick={closeSidebar} className=' '>
-              <FontAwesomeIcon className='navbar_icons' icon={faComment} /> 
+              <FontAwesomeIcon className='text-yellow-500' icon={faComment} /> 
               <div className="">
-                <h6 className=''>Campus Comms </h6>  
+                <h6 className='font-bold'>Campus Comms </h6>  
                 </div>
               </Link>
             </li>
 
             <li className=''>
               <Link to="/analytics-report" onClick={closeSidebar} className=''>
-              <FontAwesomeIcon  className=''icon={faChartBar} />  
+              <FontAwesomeIcon  className='text-yellow-500'icon={faChartBar} />  
               <div className="">
-              <h6 className=''>   Analytics Report</h6>
+              <h6 className='font-bold'>   Analytics Report</h6>
               </div>
               </Link>
             </li>
             <li className=''>
               <Link to="/user-settings" onClick={closeSidebar} className=' '>
-              <FontAwesomeIcon className='navbar_icons' icon={faLock} /> 
+              <FontAwesomeIcon className='text-yellow-500' icon={faLock} /> 
               <div className="">
-                <h6 className=''>User Settings</h6>  
+                <h6 className='font-bold'>User Settings</h6>  
                 </div>
               </Link>
             </li>
             <li className=''>
               <Link to="/createannouncement" onClick={closeSidebar} className=''>
-              <FontAwesomeIcon className='navbar_icons' icon={faBullhorn} />  
+              <FontAwesomeIcon className='text-yellow-500' icon={faBullhorn} />  
               <div className="">
-              <h6 className=''> Post Management </h6> 
+              <h6 className='font-bold'> Post Management </h6> 
               </div>
               </Link>
             </li>
 
             <li className=''>
               <Link to="/event-calendar" onClick={closeSidebar} className=''>
-              <FontAwesomeIcon className='navbar_icons' icon={faCalendarCheck} />  
+              <FontAwesomeIcon className='text-yellow-500' icon={faCalendarCheck} />  
               <div className="">
-              <h6 className=''>Event Calendar</h6> 
+              <h6 className='font-bold'>Event Calendar</h6> 
               </div>
               </Link>
             </li>
@@ -158,9 +158,9 @@ const Navbar_2 = () => {
             <li className=''>
             {adminType === 'School Owner'?(
               <Link to="/register" className=''>
-                <FontAwesomeIcon  className='' icon={faAddressCard} />  
+                <FontAwesomeIcon  className='text-yellow-500' icon={faAddressCard} />  
                 <div className="">
-                <h6 className=''>  Account Registration</h6>
+                <h6 className=' font-bold'>  Account Registration</h6>
                 </div>
                 </Link>
             ):null}
@@ -171,8 +171,8 @@ const Navbar_2 = () => {
    
   </div>
   <div className="flex-1">
-  <img src='../src/assets/logo.png' className=' h-auto w-24'></img>
-  <img src='../src/assets/CIM LOGO.png' className=' h-auto w-20 '></img>
+
+  <img src='../src/assets/GIF_FINAL.gif' className=' h-full w-20 mt-3 mx-2 '></img>
 
   </div>
   <div className="flex flex-row">

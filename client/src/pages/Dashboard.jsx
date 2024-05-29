@@ -13,7 +13,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import moment from 'moment';
 import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDashboard } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck, faCalendarDay, faDashboard } from '@fortawesome/free-solid-svg-icons';
 import Navbar_2 from '../components/Navbar_2';
 import Navbar from '../components/Navbar';
 import { Carousel } from 'react-responsive-carousel';
@@ -138,8 +138,10 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         
                     </Carousel>
                     </div>
-                <div className=' p-3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border'>
-                <h2 className='text-3xl border-b-2 border-gray-700'>Analytics</h2>
+               
+                <div className=' p-3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border hover:shadow-2xl'>
+                <Link to="/analytics-report"className=''>   
+                <h2 className='text-3xl border-b-2 border-gray-700 hover:text-yellow-400 hover:border-yellow-400'>Analytics</h2>
 
                 <div className="inline-flex flex-row">
                     <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border">
@@ -153,7 +155,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                             <div className="stat-desc">21% more than last month</div>
                         </div>
                         
-                        </div>
+                   </div>
 
                     
 
@@ -172,10 +174,13 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                     
                 </div>
 
+                </Link>
                 </div>
+                
 
-                <div className=" p-3 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white ">
-                <h2 className='text-3xl border-b-2 border-gray-700 py-1'>My Community</h2>
+                <div className=" p-3 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white hover:shadow-2xl ">
+                <Link to="/community-landing"  className='' >
+                <h2 className='text-3xl border-b-2 border-gray-700 py-1 hover:text-yellow-400 hover:border-yellow-400'>My Community</h2>
 
 
                 <div className="container flex flex-row w-auto h-auto">
@@ -222,18 +227,12 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
           
                 
                 </div>
-                
 
-
-                
-                
-               
-  
-       
+                </Link>
 
               </div>
 
-                
+            
 
                 
             </div>
@@ -241,14 +240,25 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                <div className="row_2 flex flex-col">
 
                 
-               <div className="p-3 m-3 w-auto shadow-inner  rounded-3 bg-white transition-transform duration-300 ease-in-out transform hover:scale-95">
+               <div className="p-3 m-3 w-auto h-auto shadow-inner  rounded-3 bg-white hover:shadow-2xl">
+
+                <div className="div">
       
                 <CreateEvent defaultSelectable={false}/>
+                </div>
+
+                <div className=" mt-4">
+
+                        <Link to="/event-calendar" className='btn-link p-0 btn-success '>
+                        <p className=' text-green-400 hover:text-yellow-300'><FontAwesomeIcon  icon={faCalendarCheck} />   View Full Calendar</p>
+                        </Link>
+                </div>
                 </div>
                
 
                 
                 <div className="p-2 m-3  w-auto shadow-inner  rounded-3 bg-white ">
+                <Link to="/campcomms"  className=' '>
                     <div className="flex border-b-2 border-gray-700">
                         <div className='online-dot m-2'></div>
                         <div className="">
@@ -257,12 +267,12 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                     </div>
 
 
-                    <div className=" py-2 ">
+                    <div className=" py-2 hover:shadow-2xl ">
 
                     <Conversations conversations={{conversations}} className='active_'/>
                     </div>
                 
-                
+                </Link>
                 </div>
               
 

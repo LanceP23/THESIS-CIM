@@ -69,12 +69,12 @@ const Login = (  ) => {
     
 
     return (
-        <body className=" bg-[url('../src/assets/webwithLogo.png')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
+        <body className=" bg-[url('../src/assets/Cover_final.jpg')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
             <Navbar/>
            
        
     
-        <div className="login-form bg-[url('../src/assets/webwithLogo.png')] animate-fade-in ">
+        <div className="login-form bg-[url('../src/assets/webwithLogo.png')] animate-text-reveal ">
 
               
 

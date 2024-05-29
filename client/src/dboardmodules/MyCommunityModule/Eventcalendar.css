@@ -15,7 +15,7 @@
 .fc .fc-daygrid-day-number {
     color: yellowgreen; /* Example: Orange color */
     font-weight: bold; /* Optional: Make the date numbers bold */
-    padding-right: 20px;
+    padding-right: 15px;
   }
   
   /* Optional: Change color on hover */
@@ -33,4 +33,20 @@
 
 th{
  background-color: khaki; 
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
