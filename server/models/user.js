@@ -43,6 +43,10 @@ const userSchema = new Schema({
             return this.adminType === 'Program Head' || this.adminType === 'Instructor'; // required for faculty
         }
     },
+    notifications: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification'
+      }],
 },);
 
 const UserModel = mongoose.model('User', userSchema);

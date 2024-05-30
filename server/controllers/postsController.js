@@ -6,6 +6,8 @@ const axios = require('axios');
 const { getReceiverSocketId, io } = require('../socketManager');
 const Organization = require('../models/organization');
 const MobileUser = require('../models/mobileUser');
+const Notification = require('../models/notification');  
+const Community = require('../models/community');
 
 
 
@@ -52,23 +54,20 @@ const createAnnouncement = async (req, res) => {
   try {
     const { header, body, mediaUrl, visibility, postingDate, expirationDate, communityId, organizationId } = req.body;
     let contentType = null;
-
     let status = 'pending';
 
     if (req.user.adminType === 'School Owner') {
       if (postingDate && new Date(postingDate) > new Date()) {
         status = 'scheduled';
       } else {
-        status = 'approved'; 
+        status = 'approved';
       }
     }
 
-    // Extract contentType from uploaded file
     if (req.file && req.file.mimetype) {
       contentType = req.file.mimetype;
     }
 
-    // Extract contentType from mediaUrl
     if (mediaUrl) {
       const response = await axios.head(mediaUrl);
       const contentTypeFromUrl = response.headers['content-type'];
@@ -76,9 +75,6 @@ const createAnnouncement = async (req, res) => {
         contentType = contentTypeFromUrl;
       }
     }
-
-    console.log('Inferred contentType:', contentType);
-
 
     const announcementData = {
       header,
@@ -91,24 +87,26 @@ const createAnnouncement = async (req, res) => {
       postingDate,
       expirationDate,
     };
+
     if (communityId) {
       announcementData.communityId = communityId;
     }
-    if(organizationId){
+
+    if (organizationId) {
       announcementData.organizationId = organizationId;
     }
-    const announcement = new Announcement(announcementData);
 
+    const announcement = new Announcement(announcementData);
     await announcement.save();
 
     let targetUsers = [];
+    let recipientIds = [];
+
     if (JSON.parse(visibility).everyone) {
-      // If visibility is set to everyone, target all users and mobile users
       const allUsers = await User.find();
       const allMobileUsers = await MobileUser.find();
       targetUsers.push(...allUsers, ...allMobileUsers);
     } else {
-      // Otherwise, target specific groups based on visibility settings
       if (JSON.parse(visibility).staff) {
         const staffUsers = await User.find({ position: { $exists: false }, organization: { $exists: false }, department: { $exists: false } });
         targetUsers.push(...staffUsers);
@@ -121,40 +119,62 @@ const createAnnouncement = async (req, res) => {
         const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
         targetUsers.push(...studentUsers);
       }
+      if (communityId) {
+        const community = await Community.findById(communityId);
+        if (community) {
+          // Add community members to targetUsers
+          targetUsers.push(...community.members);
+        }
+      }
     }
 
+    // Extract recipient IDs from targetUsers
+    recipientIds = targetUsers.map(user => user._id);
 
+    const notificationDataTemplate = {
+      type: 'announcement',
+      message: 'New announcement posted',
+      posterName: req.user.name,
+      announcementHeader: header,
+      timestamp: new Date().toISOString(),
+      recipientIds: recipientIds,
+    };
+
+    const notification = new Notification(notificationDataTemplate);
+    await notification.save();
+
+    // Emit socket event to each user
     targetUsers.forEach(user => {
-      const receiverSocketId = getReceiverSocketId(user.id);
-      
+      const receiverSocketId = getReceiverSocketId(user._id);
       if (receiverSocketId) {
-        io.to(receiverSocketId).emit("newAnnouncement", {
-          type: "announcement",
-          message: "New announcement posted",
-          posterName: req.user.name,
-          announcementHeader: header,
-          timestamp: new Date().toISOString()
-        });
+        io.to(receiverSocketId).emit("newAnnouncement", notificationDataTemplate);
       }
     });
 
     if (communityId) {
-      const communityMembers = await User.find({ communityId });
-      communityMembers.forEach(user => {
-        const receiverSocketId = getReceiverSocketId(user.id);
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit("newCommunityAnnouncement", {
-            type: "announcement",
-            message: "New announcement posted in your community",
-            posterName: req.user.name,
-            announcementHeader: header,
-            timestamp: new Date().toISOString()
-          });
-        }
-      });
+      // Notify community members
+      const communityMembers = await Community.findById(communityId).populate('members.userId');
+      if (communityMembers) {
+        const communityNotificationData = {
+          ...notificationDataTemplate,
+          message: 'New announcement posted in your community',
+          recipientIds: communityMembers.members.map(member => member.userId._id), // Extracting IDs from member objects
+        };
+        const communityNotification = new Notification(communityNotificationData);
+        await communityNotification.save();
+    
+        communityMembers.members.forEach(member => {
+          const receiverSocketId = getReceiverSocketId(member.userId._id); // Using member._id to get the ID
+          if (receiverSocketId) {
+            console.log("Emitting newCommunityAnnouncement event for member:", member.userId._id);
+            io.to(receiverSocketId).emit("newCommunityAnnouncement", communityNotificationData);
+            console.log("emit success");
+          }
+        });
+      }
     }
     
-
+  
 
     res.status(201).json(announcement);
   } catch (error) {
@@ -162,6 +182,10 @@ const createAnnouncement = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
+
 
 
 
@@ -180,7 +204,7 @@ const getPendingAnnouncements = async (req, res) => {
 //update Status upon approval
 const updateAnnouncementStatus = async (req, res) => {
   try {
-    const { announcementId } = req.params; 
+    const { announcementId } = req.params;
     const { status } = req.body;
     console.log('Received Announcement ID:', announcementId);
     console.log('Received Status:', status);
@@ -228,9 +252,21 @@ const updateAnnouncementStatus = async (req, res) => {
             message: `Your announcement titled "${announcement.header}" has been approved.`,
             announcementId: announcementId
           });
+
+          // Store the notification in the database
+          const newNotification = new Notification({
+            type: 'other',
+            message: `Your announcement titled "${announcement.header}" has been approved.`,
+            recipientIds: [postingUser._id], // Note the array
+            posterName: announcement.postedBy,
+            announcementHeader: announcement.header,
+            announcementId: announcementId
+          });
+          await newNotification.save();
         }
       }
 
+      // Emit and store notifications for normal announcements
       if (!announcement.organizationId && !announcement.communityId) {
         // Set visibility to everyone if no organizationId or communityId is provided
         announcement.visibility = { everyone: true };
@@ -241,7 +277,7 @@ const updateAnnouncementStatus = async (req, res) => {
         const allMobileUsers = await MobileUser.find();
         const allUsersCombined = [...allUsers, ...allMobileUsers];
 
-        allUsersCombined.forEach(user => {
+        for (const user of allUsersCombined) {
           const receiverSocketId = getReceiverSocketId(user._id.toString());
           if (receiverSocketId) {
             io.to(receiverSocketId).emit("newAnnouncement", {
@@ -254,28 +290,42 @@ const updateAnnouncementStatus = async (req, res) => {
           } else {
             console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
           }
+        }
+
+        // Store the notification in the database
+        const allUserIds = allUsersCombined.map(user => user._id);
+        const newNotification = new Notification({
+          type: 'announcement',
+          message: 'New announcement posted',
+          recipientIds: allUserIds, // Note the array
+          posterName: announcement.postedBy,
+          announcementHeader: announcement.header,
+          announcementId: announcement._id
         });
+        await newNotification.save();
       } else {
         try {
           if (announcement.organizationId) {
             // Find the organization by ID
             const organization = await Organization.findById(announcement.organizationId);
-  
+
             if (!organization) {
               console.log("Organization not found");
               return; // Return early if organization not found
             }
-  
-            // Fetch the list of members for the organization
+
+            // Fetch the list of members and mobile members for the organization
             const organizationUsers = await User.find({ _id: { $in: organization.members } });
-  
-            if (organizationUsers.length === 0) {
+            const organizationMobileUsers = await MobileUser.find({ _id: { $in: organization.mobileMembers } });
+            const allOrganizationMembers = [...organizationUsers, ...organizationMobileUsers];
+
+            if (allOrganizationMembers.length === 0) {
               console.log("No users found for this organization. Organization may have no members.");
               return; // Return early if no users found for organization
             }
-  
+
             // Emit notifications to each member of the organization
-            organizationUsers.forEach(user => {
+            for (const user of allOrganizationMembers) {
               const receiverSocketId = getReceiverSocketId(user._id.toString());
               if (receiverSocketId) {
                 io.to(receiverSocketId).emit("newOrganizationAnnouncement", {
@@ -288,19 +338,32 @@ const updateAnnouncementStatus = async (req, res) => {
               } else {
                 console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
               }
+            }
+
+            // Store the notification in the database
+            const organizationMemberIds = allOrganizationMembers.map(user => user._id);
+            const newNotification = new Notification({
+              type: 'announcement',
+              message: 'New announcement posted in your organization',
+              recipientIds: organizationMemberIds, // Note the array
+              posterName: announcement.postedBy,
+              announcementHeader: announcement.header,
+              announcementId: announcement._id
             });
+            await newNotification.save();
           } else if (announcement.communityId) {
             // Fetch the list of members for the community
-            const communityMembers = await User.find({ communityId: announcement.communityId });
-  
+            const community = await Community.findById(announcement.communityId);
+            const communityMembers = community.members;
+
             if (communityMembers.length === 0) {
               console.log("No users found for this community. Community may have no members.");
               return; // Return early if no users found for community
             }
-  
+
             // Emit notifications to each member of the community
-            communityMembers.forEach(user => {
-              const receiverSocketId = getReceiverSocketId(user._id.toString());
+            for (const member of communityMembers) {
+              const receiverSocketId = getReceiverSocketId(member.userId.toString());
               if (receiverSocketId) {
                 io.to(receiverSocketId).emit("newCommunityAnnouncement", {
                   type: "announcement",
@@ -310,9 +373,21 @@ const updateAnnouncementStatus = async (req, res) => {
                   timestamp: new Date().toISOString()
                 });
               } else {
-                console.log(`No valid socket ID found for user ID: ${user._id}. User may not be connected.`);
+                console.log(`No valid socket ID found for user ID: ${member.userId}. User may not be connected.`);
               }
+            }
+
+            // Store the notification in the database
+            const communityMemberIds = communityMembers.map(member => member.userId);
+            const newNotification = new Notification({
+              type: 'announcement',
+              message: 'New announcement posted in your community',
+              recipientIds: communityMemberIds, // Note the array
+              posterName: announcement.postedBy,
+              announcementHeader: announcement.header,
+              announcementId: announcement._id
             });
+            await newNotification.save();
           }
         } catch (error) {
           console.error("Failed to retrieve organization or community or emit announcements due to an error:", error);
@@ -326,6 +401,9 @@ const updateAnnouncementStatus = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
 
 //announcement approved
 const getApprovedAnnouncements = async (req, res) => {

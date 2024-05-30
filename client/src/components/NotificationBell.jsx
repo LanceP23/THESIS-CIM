@@ -7,6 +7,7 @@ import useOrganizationAnnouncementNotifications from '../hooks/useOrganizationAn
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import useCommunityNotification from '../hooks/useCommunityNotification';
 
 const NotificationBell = ({ setTotalUnreadCount }) => {
     const messageNotifications = useNotifications();
@@ -14,6 +15,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
     const eventNotifications = useEventNotifications();
     const approvalNotifications = useApprovalNotifications();
     const organizationAnnouncementNotifications = useOrganizationAnnouncementNotifications();
+    const communityNotifications = useCommunityNotification(); 
     
     const [showDropdown, setShowDropdown] = useState(false);
     const [unreadMessageCount, setUnreadMessageCount] = useState(0);
@@ -21,10 +23,61 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
     const [unreadEventCount, setUnreadEventCount] = useState(0);
     const [unreadApprovalCount, setUnreadApprovalCount] = useState(0);
     const [unreadOrganizationAnnouncementCount, setUnreadOrganizationAnnouncementCount] = useState(0);
+    const [unreadCommunityNotificationCount, setUnreadCommunityNotificationCount] = useState(0);
     const [latestMessage, setLatestMessage] = useState(null); 
     const [latestEvent, setLatestEvent] = useState(null);
     const [latestApproval, setLatestApproval] = useState(null);
     const [latestOrganizationAnnouncement, setLatestOrganizationAnnouncement] = useState(null);
+    const [latestCommunityNotification, setLatestCommunityNotification] = useState(null);
+
+    useEffect(() => {
+        // Load notification data from local storage
+        const savedNotifications = JSON.parse(localStorage.getItem('notifications'));
+        if (savedNotifications) {
+            // Update state with saved notification data
+            setUnreadMessageCount(savedNotifications.unreadMessageCount || 0);
+            setUnreadAnnouncementCount(savedNotifications.unreadAnnouncementCount || 0);
+            setUnreadEventCount(savedNotifications.unreadEventCount || 0);
+            setUnreadApprovalCount(savedNotifications.unreadApprovalCount || 0);
+            setUnreadOrganizationAnnouncementCount(savedNotifications.unreadOrganizationAnnouncementCount || 0);
+            setUnreadCommunityNotificationCount(savedNotifications.unreadCommunityNotificationCount || 0);
+            setLatestMessage(savedNotifications.latestMessage || null);
+            setLatestEvent(savedNotifications.latestEvent || null);
+            setLatestApproval(savedNotifications.latestApproval || null);
+            setLatestOrganizationAnnouncement(savedNotifications.latestOrganizationAnnouncement || null);
+            setLatestCommunityNotification(savedNotifications.latestCommunityNotification || null);
+        }
+    }, []);
+
+    useEffect(() => {
+        // Save notification data to local storage whenever it changes
+        const notifications = {
+            unreadMessageCount,
+            unreadAnnouncementCount,
+            unreadEventCount,
+            unreadApprovalCount,
+            unreadOrganizationAnnouncementCount,
+            unreadCommunityNotificationCount,
+            latestMessage,
+            latestEvent,
+            latestApproval,
+            latestOrganizationAnnouncement,
+            latestCommunityNotification
+        };
+        localStorage.setItem('notifications', JSON.stringify(notifications));
+    }, [
+        unreadMessageCount,
+        unreadAnnouncementCount,
+        unreadEventCount,
+        unreadApprovalCount,
+        unreadOrganizationAnnouncementCount,
+        unreadCommunityNotificationCount,
+        latestMessage,
+        latestEvent,
+        latestApproval,
+        latestOrganizationAnnouncement,
+        latestCommunityNotification
+    ]);
 
     useEffect(() => {
         setUnreadMessageCount(messageNotifications.length);
@@ -45,6 +98,10 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
     useEffect(() => {
         setUnreadOrganizationAnnouncementCount(organizationAnnouncementNotifications.length);
     }, [organizationAnnouncementNotifications]);
+
+    useEffect(() => {
+        setUnreadCommunityNotificationCount(communityNotifications.length); 
+    }, [communityNotifications]);
 
     useEffect(() => {
         if (messageNotifications.length > 0) {
@@ -101,32 +158,47 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
         }
     }, [organizationAnnouncementNotifications]);
 
+    useEffect(() => {
+        if (communityNotifications.length > 0) {
+            setLatestCommunityNotification({
+                announcementHeader: communityNotifications[0].announcementHeader,
+                posterName: communityNotifications[0].posterName
+            });
+            setTimeout(() => {
+                setLatestCommunityNotification(null);
+            }, 5000);
+        }
+    }, [communityNotifications]);
+
+    useEffect(() => {
+        // Calculate total unread count
+        const totalUnreadCount = unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount + unreadCommunityNotificationCount;
+        setTotalUnreadCount(totalUnreadCount);
+    }, [unreadMessageCount, unreadAnnouncementCount, unreadEventCount, unreadApprovalCount, unreadOrganizationAnnouncementCount, unreadCommunityNotificationCount, setTotalUnreadCount]);
+
     const toggleDropdown = () => {
         setShowDropdown(prev => {
             if (!prev) {
+                // Reset notification counts when opening the dropdown
                 setUnreadMessageCount(0);
                 setUnreadAnnouncementCount(0);
                 setUnreadEventCount(0);
                 setUnreadApprovalCount(0);
                 setUnreadOrganizationAnnouncementCount(0);
+                setUnreadCommunityNotificationCount(0);
             }
             return !prev;
         });
     };
 
-    useEffect(() => {
-        const totalUnreadCount = unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount;
-        setTotalUnreadCount(totalUnreadCount);
-    }, [unreadMessageCount, unreadAnnouncementCount, unreadEventCount, unreadApprovalCount, unreadOrganizationAnnouncementCount, setTotalUnreadCount]);
-
     return (
         <div className="notification-bell">
             <h3 className='border-b-2 text-left'>Notifications</h3>
             <div className="notification-dropdown max-h-40 overflow-auto w-full">
-                {(unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount) > 0 && (
+                {(unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount+unreadCommunityNotificationCount) > 0 && (
                     <span className="notification-count"></span>
                 )}
-                {(messageNotifications.length + announcementNotifications.length + eventNotifications.length + organizationAnnouncementNotifications.length) > 0 ? (
+                {(messageNotifications.length + announcementNotifications.length + eventNotifications.length + organizationAnnouncementNotifications.length+communityNotifications.length) > 0 ? (
                     <ul>
                         {messageNotifications.map((notification, index) => (
                             <div className="flex justify-between my-3 border-b-2 pb-2" key={index}>
@@ -198,6 +270,21 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                                 </div>
                             </div>
                         ))}
+                        {console.log("Community Notifications:", communityNotifications)}
+                          {communityNotifications.map((notification, index) => (
+                            <div className="flex justify-between my-3" key={index}>
+                                <div className="avatar">
+                                    <div className="w-10 mask mask-squircle">
+                                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="avatar" />
+                                    </div>
+                                </div>
+                                <div className="div">
+                                    <li>
+                                        New community announcement: {notification.announcementHeader} by {notification.posterName}
+                                    </li>
+                                </div>
+                            </div>
+                        ))}
                     </ul>
                 ) : (
                     <p className=' my-2'>No new notifications</p>
@@ -223,6 +310,11 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                     <p>New organization announcement: {latestOrganizationAnnouncement.announcementHeader} by {latestOrganizationAnnouncement.posterName}</p>
                 </div>
 
+            )}
+            {latestCommunityNotification && (
+                <div className="notification-popup">
+                    <p>New community announcement: {latestCommunityNotification.announcementHeader} by {latestCommunityNotification.posterName}</p>
+                </div>
             )}
 
             <div className="flex flex-row justify-starts mt-1">

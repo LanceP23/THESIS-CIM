@@ -48,7 +48,7 @@ const announcementSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
 });
 
 announcementSchema.pre('save', function(next) {

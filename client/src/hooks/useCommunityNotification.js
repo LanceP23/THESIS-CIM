@@ -1,32 +1,30 @@
 import { useContext, useEffect, useState } from 'react';
 import { socketContext } from '../../context/socketContext';
 
-const useOrganizationAnnouncementNotifications = () => {
+const useCommunityNotification = () => {
     const { socket } = useContext(socketContext);
     const [notifications, setNotifications] = useState([]);
 
-    const handleNewOrganizationAnnouncement = (announcement) => {
+    const handleNewCommunityAnnouncement = (announcement) => {
         setNotifications(prevNotifications => [...prevNotifications, announcement]);
     };
 
     useEffect(() => {
         let isSubscribed = true;
 
-        if (isSubscribed) {
-            if (socket) {
-                socket.on("newOrganizationAnnouncement", handleNewOrganizationAnnouncement);
-            }
+        if (isSubscribed && socket) {
+            socket.on("newCommunityAnnouncement", handleNewCommunityAnnouncement);
         }
 
         return () => {
             isSubscribed = false;
             if (socket) {
-                socket.off("newOrganizationAnnouncement", handleNewOrganizationAnnouncement);
+                socket.off("newCommunityAnnouncement", handleNewCommunityAnnouncement);
             }
         };
-    }, [socket]);
+    }, [socket, handleNewCommunityAnnouncement]);
 
     return notifications;
 };
 
-export default useOrganizationAnnouncementNotifications;
+export default useCommunityNotification;
