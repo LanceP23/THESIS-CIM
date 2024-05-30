@@ -4,9 +4,9 @@ import './Navbar.css'
 
 export default function Navbar() {
   return (
-    <nav className='flex flex-row justify-between'>
+    <nav className='flex flex-row justify-between shadow-2xl'>
       <div className="flex flex-row justify-self-center">
-      <img src='../src/assets/CIM_FINAL.png' className=' mt-3 mx-3 h-auto w-28'></img>
+      <img src='../src/assets/CORPO_CIM/CORPO SIDE.png' className=' mt-7 mx-3 h-auto w-40'></img>
       </div>
       
       <div className="links">

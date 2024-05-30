@@ -300,7 +300,7 @@ export default function OrganizationReg() {
 
 
       {adminType !== 'Organization Officer'&&(
-      <div className=" bg-slate-100 p-3 my-5 rounded-3xl shadow-inner shadow-slate-950">
+      <div className=" bg-slate-100 p-3 my-5 rounded-2xl shadow-inner shadow-slate-950">
 
         <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faPeopleArrows} className=' text-yellow-500 mx-1'/>Manage Organizations</h2>
         

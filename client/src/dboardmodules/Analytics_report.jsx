@@ -6,7 +6,7 @@ const Analytics_report = () => {
   return (
     <div className='flex flex-row  my-5 w-full h-full animate-fade-in '>
         
-        <div className="bg-slate-100 p-3  rounded-3xl shadow-inner shadow-slate-950 w-full h-auto mx-2">
+        <div className="bg-slate-100 p-3  rounded-2xl shadow-inner shadow-slate-950 w-full h-auto mx-2">
             <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faChartBar} className=' text-yellow-500 mx-1'/>Analytics</h2>
 
             <div className="flex flex-col justify-between">
@@ -76,7 +76,7 @@ const Analytics_report = () => {
 
             <div className=" flex flex-row">
 
-                <div className=" bg-slate-100 p-3  rounded-3xl shadow-inner shadow-slate-950 w-full h-auto mx-2">
+                <div className=" bg-slate-100 p-3  rounded-2xl shadow-inner shadow-slate-950 w-full h-auto mx-2">
                 <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faChartBar} className=' text-yellow-500 mx-1'/>Reactions</h2>
 
                 <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-auto  shadow-md rounded-2 border">
@@ -93,7 +93,7 @@ const Analytics_report = () => {
 
 
                 </div>
-                <div className=" bg-slate-100 p-3  rounded-3xl shadow-inner shadow-slate-950 w-full h-auto mx-2">
+                <div className=" bg-slate-100 p-3  rounded-2xl shadow-inner shadow-slate-950 w-full h-auto mx-2">
                 <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faChartBar} className=' text-yellow-500 mx-1'/>Views</h2>
                 <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-auto shadow-md rounded-2 border">
                    
@@ -110,7 +110,7 @@ const Analytics_report = () => {
                 </div>
 
             </div>
-            <div className="bg-slate-100 p-3 mt-3 ml-1 rounded-3xl shadow-inner shadow-slate-950 h-full">
+            <div className="bg-slate-100 p-3 mt-3 ml-1 rounded-2xl shadow-inner shadow-slate-950 h-full">
             <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faChartBar} className=' text-yellow-500 mx-1'/>Minigames</h2>
             <div className="stats shadow">
   

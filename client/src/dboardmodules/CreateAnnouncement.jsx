@@ -400,12 +400,12 @@ export default function CreateAnnouncement() {
 
 
   return (
-    <div className='flex flex-row my-24 animate-fade-in'>
+    <div className='flex flex-row my-24 animate-fade-in '>
       <div className="main_container p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
       <div role="tablist" className="tabs tabs-lifted">
         <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 " aria-label="Announcements" />
         <div role="tabpanel" className="tab-content bg-green-600 shadow-lg rounded-md p-6">
-          <div className="annoucement_creation_container bg-white p-4 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border animate-fade-in ">
+          <div className=" shadow-inner annoucement_creation_container bg-white p-4 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  rounded-2 border animate-fade-in ">
           <h2 className='border-b border-gray-500 py-2 font-bold '>Create Announcement</h2>
                 <div>
                   <label className="label text-gray-700" htmlFor="header">Header:</label>

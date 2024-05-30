@@ -75,7 +75,7 @@ const Navbar_2 = () => {
   */}
 </label>
       
-<ul tabIndex={0} className="menu menu-sm dropdown-content mt-1 p-2 z-[1] shadow bg-green-800 transition duration-300 ease-out w-max grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 text-center">
+<ul tabIndex={0} className="menu menu-sm dropdown-content mt-1 p-2 z-[1] shadow bg-green-950 transition duration-300 ease-out w-max grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 text-center">
        
       <li className=' ' >
             
@@ -172,8 +172,10 @@ const Navbar_2 = () => {
   </div>
   <div className="flex-1">
 
-  <img src='../src/assets/GIF_FINAL.gif' className=' h-full w-20 mt-3 mx-2 '></img>
 
+<Link to="/dashboard" className=' btn-link '>
+  <img src='../src/assets/CORPO_CIM/CIM (1).gif' className=' h-full w-44 mt-5 mx-0  '/>
+  </Link>
   </div>
   <div className="flex flex-row">
   <div className="indicator">

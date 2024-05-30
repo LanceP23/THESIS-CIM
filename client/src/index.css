@@ -23,8 +23,7 @@
 
 body {
   margin: 0;
- 
-  background: linear-gradient(to right, #98D08F, rgb(221, 255, 153), #98D08F );
+  background: radial-gradient(circle, rgb(124, 255, 192) 0%, rgb(0, 0, 0) 100%);
   background-size: 200% 200%;
   animation: gradient 20s ease infinite;
 

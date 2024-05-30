@@ -12,6 +12,7 @@ export default {
         customgreen_1: '#98D08F',
         custom_header: 'khaki',
         bg_gradient: 'background: linear-gradient(to right, #98D08F, #8FD0A1, #D0D08F)',
+        green_gradient: 'background: linear-gradient(to right, rgba(0,191,99,1) 0%, rgba(0,0,0,1) 100%)',
       },
 
       boxShadow: {
