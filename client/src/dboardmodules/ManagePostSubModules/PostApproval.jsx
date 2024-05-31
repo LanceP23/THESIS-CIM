@@ -99,7 +99,7 @@ export default function PostApproval({ adminType }) {
         <div className="bg-white p-1 m-2 rounded-lg max-h-72 overflow-auto w-full">
         <ul>
        
-          {pendingAnnouncements.map((announcement) => (
+          {pendingAnnouncements.slice().reverse().map((announcement) => (
         
             <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)} >
               <div className="bg-white shadow-lg rounded-md m-3 p-2 transition-transform duration-300 ease-in-out transform hover:scale-95 active:bg-gray-500">

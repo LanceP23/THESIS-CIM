@@ -430,7 +430,7 @@ export default function OrganizationReg() {
                   <tr >
                     <th className=' bg-green-700 text-white text-left'> Member Name</th>
                     <th className=' bg-green-700 text-white text-left'>Position</th>
-                    <th className=' bg-green-700 text-white text-left'>fsfdds</th>
+                    <th className=' bg-green-700 text-white text-left'>Approval</th>
                   </tr>
 
                 </thead>
