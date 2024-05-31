@@ -10,7 +10,7 @@ const address = require('address');
 
 const localIp = address.ip();
 const corsOptions = {
-    origin: ['http://localhost:5173', 'http://192.168.0.132:5173'],
+    origin: ['http://localhost:5173', 'http://192.168.0.101:5173'],
     credentials: true,
 };
 const {app, server} =require('./socketManager');

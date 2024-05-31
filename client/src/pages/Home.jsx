@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import './Home.css'
 import { Carousel } from 'react-responsive-carousel';
 export default function Home() {
   // Add event listener to enable scrolling when component unmounts
+
+  useEffect(() => {
+    const handleTabKey = (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleTabKey);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('keydown', handleTabKey);
+    };
+  }, []);
 
   
    

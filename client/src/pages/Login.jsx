@@ -15,6 +15,33 @@ const Login = (  ) => {
         password: '',
     });
 
+    useEffect(() => {
+        const handleTabKey = (e) => {
+            const allowedIds = ['adminEmail', 'password', 'loginButton'];
+            if (e.key === 'Tab' && !allowedIds.includes(e.target.id)) {
+                e.preventDefault();
+            }
+        };
+
+        window.addEventListener('keydown', handleTabKey);
+
+        // Cleanup the event listener on component unmount
+        return () => {
+            window.removeEventListener('keydown', handleTabKey);
+        };
+    }, []);
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Tab') {
+            const form = e.target.form;
+            const index = Array.prototype.indexOf.call(form, e.target);
+            if (index === form.length - 1) {
+                e.preventDefault();
+                form.elements[0].focus();
+            }
+        }
+    };
+
     
 
     useEffect(() => {
@@ -82,21 +109,25 @@ const Login = (  ) => {
             <form onSubmit={loginAdmin} >
                 <label className='text-white'>Admin email</label>
                 <input
+                    id="adminEmail"
                     type="text"
                     placeholder="Enter Admin Email..."
                     value={data.studentemail}
                     onChange={(e) => setData({ ...data, studentemail: e.target.value })}
+                    onKeyDown={handleKeyDown}
                     className='input input-bordered input-accent w-full max-w-xs text-base-300 bg-white shadow-2xl'
                 />
                 <label className='text-white'>Password</label>
                 <input
+                    id = "password"
                     type="password"
                     placeholder="Enter Your Password"
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
+                    onKeyDown={handleKeyDown}
                     className='input input-bordered input-accent w-full max-w-xs text-base-300 bg-white shadow-2xl'
                 />
-                <button type="submit" className='login__button' >Login</button>
+                <button id = "loginButton" onKeyDown={handleKeyDown} type="submit" className='login__button' >Login</button>
             </form>
 
         
