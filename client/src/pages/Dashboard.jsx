@@ -120,7 +120,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
             <div className="row_1 inline-flex flex-col">
 
-                <div className="p3 m-3 w-auto h-full  shadow-md rounded-3 bg-slate-300 border">
+                <div className="p3 m-3 w-auto h-full  shadow-md rounded-3 bg-slate-300 border-2 ">
                 <Carousel showThumbs={false} autoPlay infiniteLoop  interval={10000}>
                         <div>
                         <img src="../src/assets/398569058_739544134860223_1719844830869562449_n.jpg" alt="Slide 1" className=' h-auto' />
@@ -139,12 +139,12 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                     </Carousel>
                     </div>
                
-                <div className=' p-3 m-3 w-auto h-full  shadow-md rounded-3 bg-white border hover:shadow-2xl'>
+                <div className=' p-3 m-3 w-auto h-full  shadow-md rounded-3 bg-custom-radial  hover:shadow-2xl bg-opacity-25 border-2'>
                 <Link to="/analytics-report"className=''>   
                 <h2 className='text-3xl border-b-2 border-gray-700 hover:text-yellow-400 hover:border-yellow-400'>Analytics</h2>
 
-                <div className="inline-flex flex-row">
-                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border">
+                <div className="inline-flex flex-row b">
+                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border bg-white">
                     <h6 className='text-3xl'>Recent Post</h6>
 
                     
@@ -159,7 +159,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                     
 
-                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
+                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border bg-white">
                     <h6 className='text-3xl'>Top Post</h6>
 
                     <div className="stat">
@@ -178,12 +178,12 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                 </div>
                 
 
-                <div className=" p-3 m-3  w-auto h-full shadow-inner shadow-md rounded-3 bg-white hover:shadow-2xl ">
+                <div className=" p-3 m-3  w-auto h-full  shadow-md rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2">
                 <Link to="/community-landing"  className='' >
                 <h2 className='text-3xl border-b-2 border-gray-700 py-1 hover:text-yellow-400 hover:border-yellow-400'>My Community</h2>
 
 
-                <div className="container flex flex-row w-auto h-auto">
+                <div className=" flex flex-row w-auto h-auto">
 
                 <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
                 <div className="flex flex-col gap-4 w-52">
@@ -240,9 +240,9 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                <div className="row_2 flex flex-col">
 
                 
-               <div className="p-3 m-3 w-auto h-auto shadow-inner  rounded-3 bg-white hover:shadow-2xl">
+               <div className="p-3 m-3 w-auto h-auto shadow-inner  rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25  border-2">
 
-                <div className="div">
+                <div className="">
       
                 <CreateEvent defaultSelectable={false}/>
                 </div>
@@ -257,7 +257,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                
 
                 
-                <div className="p-2 m-3  w-auto shadow-inner  rounded-3 bg-white ">
+                <div className="p-2 m-3  w-auto shadow-inner  rounded-3 bg-custom-radial bg-opacity-25 border-2">
                 <Link to="/campcomms"  className=' '>
                     <div className="flex border-b-2 border-gray-700">
                         <div className='online-dot m-2'></div>
@@ -267,9 +267,12 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                     </div>
 
 
-                    <div className=" py-2 hover:shadow-2xl ">
+                    <div className=" py-2 hover:shadow-2xl  ">
+
+                
 
                     <Conversations conversations={{conversations}} className='active_'/>
+                   
                     </div>
                 
                 </Link>

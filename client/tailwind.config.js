@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+
+      backgroundImage: {
+        'custom-radial': 'radial-gradient(circle at top left, rgba(124, 255, 192, 0.404) 0%, white 100%)',
+      },
       colors: {
         customyellow: '#f6e8295b',
         customRed: '#EF4444',

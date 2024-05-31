@@ -89,54 +89,8 @@ const Navbar_2 = () => {
             </Link>
 
           </li>
-          
+
           <li className=''>
-
-            <Link to="/createorg" onClick={closeSidebar} className=''> 
-            <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
-            <div className="">
-            <h6 className='font-bold'>  Manage Organization</h6>
-            </div>
-            </Link>
-          </li>
-
-  
-          
-            <li className=''>
-              <Link to="/community-landing" onClick={closeSidebar} className='' >
-              <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
-              <div className="">
-              <h6 className='font-bold'>   My Community</h6>
-              </div>
-              </Link>
-            </li>
-
-            <li className=''>
-              <Link to="/campcomms" onClick={closeSidebar} className=' '>
-              <FontAwesomeIcon className='text-yellow-500' icon={faComment} /> 
-              <div className="">
-                <h6 className='font-bold'>Campus Comms </h6>  
-                </div>
-              </Link>
-            </li>
-
-            <li className=''>
-              <Link to="/analytics-report" onClick={closeSidebar} className=''>
-              <FontAwesomeIcon  className='text-yellow-500'icon={faChartBar} />  
-              <div className="">
-              <h6 className='font-bold'>   Analytics Report</h6>
-              </div>
-              </Link>
-            </li>
-            <li className=''>
-              <Link to="/user-settings" onClick={closeSidebar} className=' '>
-              <FontAwesomeIcon className='text-yellow-500' icon={faLock} /> 
-              <div className="">
-                <h6 className='font-bold'>User Settings</h6>  
-                </div>
-              </Link>
-            </li>
-            <li className=''>
               <Link to="/createannouncement" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='text-yellow-500' icon={faBullhorn} />  
               <div className="">
@@ -153,6 +107,60 @@ const Navbar_2 = () => {
               </div>
               </Link>
             </li>
+
+              
+            <li className=''>
+              <Link to="/community-landing" onClick={closeSidebar} className='' >
+              <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
+              <div className="">
+              <h6 className='font-bold'>   My Community</h6>
+              </div>
+              </Link>
+            </li>
+
+            <li className=''>
+              <Link to="/analytics-report" onClick={closeSidebar} className=''>
+              <FontAwesomeIcon  className='text-yellow-500'icon={faChartBar} />  
+              <div className="">
+              <h6 className='font-bold'>   Analytics Report</h6>
+              </div>
+              </Link>
+            </li>
+
+            
+            <li className=''>
+              <Link to="/campcomms" onClick={closeSidebar} className=' '>
+              <FontAwesomeIcon className='text-yellow-500' icon={faComment} /> 
+              <div className="">
+                <h6 className='font-bold'>Campus Comms </h6>  
+                </div>
+              </Link>
+            </li>
+
+          
+          <li className=''>
+
+            <Link to="/createorg" onClick={closeSidebar} className=''> 
+            <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
+            <div className="">
+            <h6 className='font-bold'>  Manage Organization</h6>
+            </div>
+            </Link>
+          </li>
+
+  
+        
+
+        
+            <li className=''>
+              <Link to="/user-settings" onClick={closeSidebar} className=' '>
+              <FontAwesomeIcon className='text-yellow-500' icon={faLock} /> 
+              <div className="">
+                <h6 className='font-bold'>Mobile User Management</h6>  
+                </div>
+              </Link>
+            </li>
+            
 
             
             <li className=''>
