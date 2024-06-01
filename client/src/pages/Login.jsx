@@ -101,13 +101,20 @@ const Login = (  ) => {
            
        
     
-        <div className="login-form bg-[url('../src/assets/webwithLogo.png')] animate-text-reveal ">
+        <div className="login-form bg-[url('../src/assets/webwithLogo.png')] animate-text-reveal  ">
+
+            <div className="flex justify-center">
+
+            <img src='../src/assets/CORPO_CIM/LOGO_ONLY_cut.png' className='w-12 mb-2'/>
+
+            </div>
 
               
-
            
             <form onSubmit={loginAdmin} >
-                <label className='text-white'>Admin email</label>
+                
+                <div className="text-left">
+                <label className='text-white '>Administrator email</label>
                 <input
                     id="adminEmail"
                     type="text"
@@ -115,9 +122,12 @@ const Login = (  ) => {
                     value={data.studentemail}
                     onChange={(e) => setData({ ...data, studentemail: e.target.value })}
                     onKeyDown={handleKeyDown}
-                    className='input input-bordered input-accent w-full max-w-xs text-base-300 bg-white shadow-2xl'
+                    className='input input-bordered input-accent w-full max-w-sm text-base-300 bg-white shadow-2xl'
                 />
-                <label className='text-white'>Password</label>
+                </div>
+
+                <div className="text-left">
+                <label className='text-white '>Password</label>
                 <input
                     id = "password"
                     type="password"
@@ -125,10 +135,20 @@ const Login = (  ) => {
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
                     onKeyDown={handleKeyDown}
-                    className='input input-bordered input-accent w-full max-w-xs text-base-300 bg-white shadow-2xl'
+                    className='input input-bordered input-accent w-full max-w-sm text-base-300 bg-white shadow-2xl'
                 />
-                <button id = "loginButton" onKeyDown={handleKeyDown} type="submit" className='login__button' >Login</button>
+                </div>
+                
+
+                <div className="">
+               <button id = "loginButton" onKeyDown={handleKeyDown} type="submit" className='btn btn-wide btn-accent text-white mt-2' >Login</button>
+               </div>
             </form>
+            </div>
+
+         
+
+            
 
         
            
@@ -137,7 +157,7 @@ const Login = (  ) => {
             
            
             
-        </div>
+   
      
        
         </body>

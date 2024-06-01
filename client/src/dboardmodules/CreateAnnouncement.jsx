@@ -15,6 +15,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from '../../context/userContext';
 import Eventcalendar from '../dboardmodules/MyCommunityModule/Eventcalendar'
+import { Calendar } from '@fullcalendar/core';
+import listPlugin from '@fullcalendar/list';
 
 
 const firebaseConfig = {

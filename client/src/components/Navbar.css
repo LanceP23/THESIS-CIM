@@ -48,36 +48,17 @@ nav {
   background-color: #8fbc8fb4; /* Light yellow */
 }
 
-.register-form label,
-.login-form label {
-  display: block;
-  margin-bottom: 5px;
-}
 
 .register-form input[type="text"],
 .register-form input[type="password"],
 .login-form input[type="text"],
 .login-form input[type="password"] {
-  width: calc(100% - 22px);
+
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-.register-form button,
-.login-form button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #f0e68c; /* Khaki */
-  color: #fff;
-  cursor: pointer;
-}
 
-.register-form button:hover,
-.login-form button:hover {
-  background-color: #bdb76b; /* Dark khaki */
-}
   

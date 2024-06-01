@@ -3,6 +3,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CreateEvent from '../CreateEvent';
 import "./Eventcalendar.css"
+
 const Eventcalendar = () => {
   return (
     <div className='bg-slate-100 p-3 my-5 rounded-2xl shadow-inner shadow-slate-950  h-auto'>

@@ -519,8 +519,9 @@ const handleSelectEvent = (event) => {
 
 {!loading && (
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, ]}
+        initialView="dayGridMonth" 
+        
         events={events}
         eventClick={handleEventClick}
         selectable={selectable}
