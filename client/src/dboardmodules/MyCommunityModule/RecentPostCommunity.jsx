@@ -53,13 +53,13 @@ export default function RecentPostCommunity({ communityId }) {
           <div key={post._id} className="card lg:card-side bg-slate-100 shadow-xl p-0 mb-3 transition-transform duration-300 ease-in-out transform hover:scale-110">
           
       <figure>
-         {post.contentType.startsWith('image') ? (
+         {post.contentType && post.contentType.startsWith('image') ? (
                     <img src={post.mediaUrl} alt="Post Media" className="max-w-full h-full" />
-                  ) : post.contentType.startsWith('video') ? (
+                  ) : post.contentType && post.contentType.startsWith('video') ? (
                     <video controls className="max-w-full mx-auto mb-4">
                       <source src={post.mediaUrl} type={post.contentType} />
                     </video>
-                  ) : post.contentType.startsWith('audio') ? (
+                  ) : post.contentType && post.contentType.startsWith('audio') ? (
                     <audio controls className="max-w-full mx-auto mb-4">
                       <source src={post.mediaUrl} type={post.contentType} />
                     </audio>
