@@ -14,7 +14,7 @@ const {postEventController,getEventsController, putEventController, deleteEventC
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
 const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId } = require('../controllers/communityController');
-const{getNotifications}  = require('../controllers/notificationController');
+const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
 
 
 router.use(
@@ -105,6 +105,9 @@ router.get('/announcements/:communityId', authenticateUser, getAnnouncementsByCo
 
 //notification
 router.get('/notifications', getNotifications);
+router.get('/notifications/:id', getNotificationDetails);
+router.patch('/notifications/:id/read', markNotificationAsRead);
+router.patch('/notifications/markAllAsRead', markAllNotificationsAsRead);
 
 
 

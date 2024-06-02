@@ -61,6 +61,8 @@ const postEventController = async (req, res) => {
       message: "New event created",
       eventName: title,
       organizerName: organizerName,
+      timeStart: start,
+      timeEnd: end,
       timestamp: new Date().toISOString(),
       posterName: req.user.name, // Name of the user posting the event
     };
@@ -151,6 +153,8 @@ const postEventController = async (req, res) => {
           message: "New specialized event created",
           eventName: title,
           organizerName: organizerName,
+          timeStart: start,
+          timeEnd: end,
           timestamp: new Date().toISOString()
       };
   

@@ -136,6 +136,7 @@ const createAnnouncement = async (req, res) => {
       message: 'New announcement posted',
       posterName: req.user.name,
       announcementHeader: header,
+      announcementBody: body,
       timestamp: new Date().toISOString(),
       recipientIds: recipientIds,
     };

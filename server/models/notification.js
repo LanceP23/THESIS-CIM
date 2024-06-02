@@ -23,6 +23,12 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  announcementBody:{
+    type: String,
+  },
+  mediaLink:{
+    type: String,
+  },
   read: {
     type: Boolean,
     default: false,
@@ -30,6 +36,18 @@ const notificationSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
     default: Date.now,
+  },
+  eventName: {
+    type: String,
+  },
+  organizerName: {
+    type: String,
+  },
+  timeStart:{
+    type: Date,
+  },
+  timeEnd:{
+    type: Date
   },
 });
 
