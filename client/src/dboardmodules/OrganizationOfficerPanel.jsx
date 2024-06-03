@@ -64,7 +64,7 @@ export default function OrganizationOfficerPanel() {
   };
 
   return (
-    <div className="Manage_org_container">
+    <div className="Manage_org_container my-14">
       <h2>{organizationData && organizationData.organization}</h2>
       <div className="org_table_container">
         <table className="organization-table">

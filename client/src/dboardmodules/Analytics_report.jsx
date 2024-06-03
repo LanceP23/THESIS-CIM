@@ -1,73 +1,141 @@
-import React from 'react'
+import * as React from 'react';
+import { LineChart } from '@mui/x-charts/LineChart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
+import { BarChart } from '@mui/x-charts/BarChart';
+
+
+
+const chartSetting = {
+    xAxis: [
+      {
+        label: 'rainfall (mm)',
+      },
+    ],
+    width: 500,
+    height: 400,
+  };
+  const dataset = [
+    {
+      london: 59,
+      paris: 57,
+      newYork: 86,
+      seoul: 21,
+      month: 'Jan',
+    },
+    {
+      london: 50,
+      paris: 52,
+      newYork: 78,
+      seoul: 28,
+      month: 'Fev',
+    },
+    {
+      london: 47,
+      paris: 53,
+      newYork: 106,
+      seoul: 41,
+      month: 'Mar',
+    },
+    {
+      london: 54,
+      paris: 56,
+      newYork: 92,
+      seoul: 73,
+      month: 'Apr',
+    },
+    {
+      london: 57,
+      paris: 69,
+      newYork: 92,
+      seoul: 99,
+      month: 'May',
+    },
+    {
+      london: 60,
+      paris: 63,
+      newYork: 103,
+      seoul: 144,
+      month: 'June',
+    },
+    {
+      london: 59,
+      paris: 60,
+      newYork: 105,
+      seoul: 319,
+      month: 'July',
+    },
+    {
+      london: 65,
+      paris: 60,
+      newYork: 106,
+      seoul: 249,
+      month: 'Aug',
+    },
+    {
+      london: 51,
+      paris: 51,
+      newYork: 95,
+      seoul: 131,
+      month: 'Sept',
+    },
+    {
+      london: 60,
+      paris: 65,
+      newYork: 97,
+      seoul: 55,
+      month: 'Oct',
+    },
+    {
+      london: 67,
+      paris: 64,
+      newYork: 76,
+      seoul: 48,
+      month: 'Nov',
+    },
+    {
+      london: 61,
+      paris: 70,
+      newYork: 103,
+      seoul: 25,
+      month: 'Dec',
+    },
+  ];
+  
+  const valueFormatter = (value) => `${value}mm`;
+  
+
+
 
 const Analytics_report = () => {
   return (
+
+    
     <div className='flex flex-row  my-5 w-full h-full animate-fade-in '>
-        
+
         <div className="bg-slate-100 p-3  rounded-2xl shadow-inner shadow-slate-950 w-full h-auto mx-2">
             <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faChartBar} className=' text-yellow-500 mx-1'/>Analytics</h2>
 
             <div className="flex flex-col justify-between">
 
+            <h2 className='text-2xl text-green-800 pt-5'>Top Post </h2>
+
                 
-                    <div className="container flex flex-row w-auto h-auto">
-                        <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
-                            <div className="flex flex-col gap-4 w-52">
-                                <div className="flex gap-4 items-center">
-                                    <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
-                                        <div className="flex flex-col gap-4">
-                                        <div className="skeleton h-4 w-20"></div>
-                                        <div className="skeleton h-4 w-28"></div>
-                                    </div>
-                                </div>
-                                <div className="skeleton h-32 w-full"></div>
-                            </div>
-                        </div>
-                        
-                        <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
-                            <div className="flex flex-col gap-4 w-52">
-                                <div className="flex gap-4 items-center">
-                                    <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
-                                        <div className="flex flex-col gap-4">
-                                        <div className="skeleton h-4 w-20"></div>
-                                        <div className="skeleton h-4 w-28"></div>
-                                    </div>
-                                </div>
-                                <div className="skeleton h-32 w-full"></div>
-                            </div>
-                        </div>
-                    </div>
 
-
-                    <div className="container flex flex-row w-auto h-auto">
-                        <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
-                            <div className="flex flex-col gap-4 w-52">
-                                <div className="flex gap-4 items-center">
-                                    <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
-                                        <div className="flex flex-col gap-4">
-                                        <div className="skeleton h-4 w-20"></div>
-                                        <div className="skeleton h-4 w-28"></div>
-                                    </div>
-                                </div>
-                                <div className="skeleton h-32 w-full"></div>
-                            </div>
-                        </div>
-                        
-                        <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
-                            <div className="flex flex-col gap-4 w-52">
-                                <div className="flex gap-4 items-center">
-                                    <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
-                                        <div className="flex flex-col gap-4">
-                                        <div className="skeleton h-4 w-20"></div>
-                                        <div className="skeleton h-4 w-28"></div>
-                                    </div>
-                                </div>
-                                <div className="skeleton h-32 w-full"></div>
-                            </div>
-                        </div>
-                    </div>
+            <LineChart
+      xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+      series={[
+        {
+          data: [2, 5.5, 2, 8.5, 1.5, 5],
+          area: true,
+        },
+      ]}
+      width={500}
+      height={300}
+    />
+           
+           
+           
             </div>
 
         </div>
@@ -110,7 +178,7 @@ const Analytics_report = () => {
                 </div>
 
             </div>
-            <div className="bg-slate-100 p-3 mt-3 ml-1 rounded-2xl shadow-inner shadow-slate-950 h-full">
+            <div className=" flex flex-col bg-slate-100 p-3 mt-3 ml-1 rounded-2xl shadow-inner shadow-slate-950 h-full">
             <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faChartBar} className=' text-yellow-500 mx-1'/>Minigames</h2>
             <div className="stats shadow">
   
@@ -131,8 +199,25 @@ const Analytics_report = () => {
                     <div className="stat-value">1,200</div>
                     <div className="stat-desc">↘︎ 90 (14%)</div>
                 </div>
+
+
+
+                
+
+                
                 
                 </div>
+
+                
+        <div className="div">
+                        <BarChart
+            dataset={dataset}
+            yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
+            series={[{ dataKey: 'seoul', label: 'Seoul rainfall', valueFormatter }]}
+            layout="horizontal"
+            {...chartSetting}
+            />
+       </div>
             </div>
 
         </div>

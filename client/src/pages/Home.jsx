@@ -53,7 +53,7 @@ export default function Home() {
      
      <footer className='  w-full  position-fixed top left-0 right-0 bottom-0 h'>
         <h2 className=' p-2 text-white font-semibold font-serif text-sm shadow-inner animate-text-reveal text-center'>
-           Powered By St. Catherine Quezon City
+           Powered By College of St. Catherine Quezon City
         </h2>
 
          </footer>

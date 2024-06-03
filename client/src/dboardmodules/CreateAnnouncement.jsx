@@ -540,36 +540,38 @@ export default function CreateAnnouncement() {
                           <div className=" p-0">
                           
                           {announcement.contentType && announcement.contentType.startsWith('image') ? (
-                            <figure>
+                           
 
                             
-                            <img src={announcement.mediaUrl} alt="Announcement Media" className= ' w-1-2 m-0' /> 
-                            </figure>
+                            <img src={announcement.mediaUrl} alt="Announcement Media" className= ' max-w-xl h-full' /> 
+                           
                           ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
-                          <figure> <video controls>
+                          <figure> <video controls className='max-w-xl h-full'>
                               <source src={announcement.mediaUrl} type={announcement.contentType} />
                             </video>
                             </figure> 
                           ) : announcement.contentType && announcement.contentType.startsWith('audio') ?
                            (
-                            <audio controls>
+                            <audio controls className='max-w-xl h-full'>
                               <source src={announcement.mediaUrl} type={announcement.contentType} />
                             </audio>
                             
                            ):(
-                            <p>No media available</p>
+                            <p className='flex justify-center items-center border-2 border-white max-w-xl h-full'>No media available</p>
                           )}
                           </div>
                        
                       ) : (
-                        <p>No media available</p>
+                      
+                        <p className='flex justify-center items-center border-2 border-white '>No media available</p>
+                        
                       )}
                           <div className=" card-body">
-                            <h4 className='card-title w-full border-b border-gray-700'> {announcement.header}</h4>
-                            <div className="body_container  p-2 bg-white w-full h-32 rounded-md text-left overflow-auto max-h-full shadow-lg border-2">
+                            <h4 className='card-title w-full border-b border-yellow-400 text-green-500'> {announcement.header}</h4>
+                            <div className="body_container p-2 border-white w-full h-32 rounded-md text-left overflow-auto max-h-full shadow-lg border-2">
                             <p className=''> {announcement.body}</p>
                             </div>
-                            <div className="community_container  p-2 bg-white w-full my-2 rounded-md shadow-2xl">
+                            <div className="community_container  p-2 border-white w-full my-2 rounded-md shadow-2xl border-2">
                             <PromiseRenderer promise={communityNamePromise}  />
                             </div>
                           </div>

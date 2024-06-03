@@ -54,7 +54,7 @@ export default function RecentPostCommunity({ communityId }) {
           
       <figure>
          {post.contentType && post.contentType.startsWith('image') ? (
-                    <img src={post.mediaUrl} alt="Post Media" className="max-w-full h-full" />
+                    <img src={post.mediaUrl} alt="Post Media" className="max-w-xl h-full" />
                   ) : post.contentType && post.contentType.startsWith('video') ? (
                     <video controls className="max-w-full mx-auto mb-4">
                       <source src={post.mediaUrl} type={post.contentType} />
@@ -64,12 +64,12 @@ export default function RecentPostCommunity({ communityId }) {
                       <source src={post.mediaUrl} type={post.contentType} />
                     </audio>
                   ) : (
-                    <p className="text-gray-500">No media available</p>
+                    <p className="flex justify-center items-center border-2 border-white">No media available</p>
                   )}
       </figure>
       <div className="card-body p-2">
         <h2 className="card-title border-b-2 text-green-600 border-yellow-400 py-1">{post.header}</h2>
-        <p className=' max-h-40 max-w-xs overflow-auto bg-slate-100  text-left m-0'>{post.body}</p>
+        <p className=' max-h-40 max-w-xs overflow-auto bg-slate-100  text-left m-0 border-white border-2 shadow-lg'>{post.body}</p>
         
       </div>
    

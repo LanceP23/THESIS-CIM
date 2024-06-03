@@ -56,7 +56,7 @@ const ViewCommunity = () => {
 
   return (
     <div>
-      <div className="bg-slate-200 my-5 rounded-xl p-3">
+      <div className="bg-slate-200 my-5 rounded-xl p-3 ">
       {/* Loading state */}
       {loading && <p>Loading...</p>}
       {/* Display admin communities */}
@@ -67,25 +67,26 @@ const ViewCommunity = () => {
           <div className='flex flex-row justify-between'>
 
           
-          <div className=" max-w-full overflow-x-auto">
+          <div className=" max-w-full  max-h-96 overflow-auto  ">
   <table className=" max-w-full ">
     {/* head */}
-    <thead className=''>
+    <thead className='sticky top-0'>
       <tr>
         
         <th className='bg-green-500 text-white'>Community Name</th>
         <th className='bg-green-500 text-white'>View posts</th>
+        <th className='bg-green-500 text-white'>View Member</th>
       </tr>
     </thead>
-    <tbody className=''>
+    <tbody className=' '>
       {/* row 1 */}
       {adminCommunities.map(community => (
       <tr key={community._id} className=' hover:bg-yellow-200'>
         
         <td className=' border-b-2 border-black'>
           <div className="flex items-center gap-3">
-            <div className="avatar">
-              <div className="mask mask-squircle w-12 h-12">
+            <div className="avatar ">
+              <div className="mask mask-squircle w-12 h-12 ">
                 <img src = {community.logo || "https://img.daisyui.com/tailwind-css-component-profile-2@56w.png"} alt="Avatar Tailwind CSS Component" />
               </div>
             </div>
@@ -98,7 +99,11 @@ const ViewCommunity = () => {
         
         
         <td className='border-b-2 border-black'>
-        <button onClick={() => handleViewCommunity(community._id)} className='btn btn-success btn-xs'>View</button>
+        <button onClick={() => handleViewCommunity(community._id)} className='btn btn-success btn-sm'>Posts</button>
+        </td>
+
+        <td className='border-b-2 border-black'>
+        <button  className='btn btn-success btn-sm'>Members</button>
         </td>
       </tr>
       
@@ -110,7 +115,7 @@ const ViewCommunity = () => {
 
 
 </div>
-<div className="divider lg:divider-horizontal divider-warning">OR</div> 
+<div className="divider lg:divider-horizontal divider-warning"></div> 
           <div className=" w-3/4 max-w-full mx-auto p-4 bg-white shadow-md rounded-lg">
           <h2 className="text-lg font-semibold mb-4 border-b-2 text-green-700 border-yellow-300">Recent Posts for Community</h2>
             {adminCommunities.map(community => (

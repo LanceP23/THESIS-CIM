@@ -239,7 +239,7 @@ const StudentMobileUserReg = () => {
                 </label>
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-center">
                     <button type="submit" className='btn btn-success btn-wide btn-sm my-2 '>Register</button>
                 </div>
             </form>

@@ -102,8 +102,8 @@ export default function PostApproval({ adminType }) {
           {pendingAnnouncements.slice().reverse().map((announcement) => (
         
             <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)} >
-              <div className="bg-white shadow-lg rounded-md m-3 p-2 transition-transform duration-300 ease-in-out transform hover:scale-95 active:bg-gray-500">
-              <h3 className=' text-2xl m-1'> Header: <strong>{announcement.header}</strong></h3>
+              <div className="bg-white shadow-lg rounded-md m-3 p-2 transition-transform duration-300 ease-in-out transform hover:scale-95 cursor-pointer">
+              <h3 className=' text-2xl m-1 '> Header: <strong>{announcement.header}</strong></h3>
               <h3 className=''>Posted by: {announcement.postedBy}</h3>
               </div>
               {selectedAnnouncement && selectedAnnouncement._id === announcement._id && (
@@ -129,10 +129,10 @@ export default function PostApproval({ adminType }) {
           {selectedAnnouncement.mediaUrl && (
             <div className='flex'>
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
-                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' w-full h-auto shadow-xl ' />
+                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' max-w-xl h-full shadow-xl ' />
               )}
               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
-                <video controls className='w-full h-full'>
+                <video controls className='max-w-xl h-full'>
                   <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
                   Your browser does not support the video tag.
                 </video>
@@ -148,9 +148,9 @@ export default function PostApproval({ adminType }) {
           </figure>
 
           <div className="card-body">
-          <h2 className="card-title"> Title: {selectedAnnouncement.header}</h2>
-          <p className=' text-left'> <strong>Posted by: {selectedAnnouncement.postedBy}</strong></p>
-          <p className=' bg-white p-1 rounded-md shadow-2xl'>{selectedAnnouncement.body}</p>
+          <h2 className="card-title text-green-500 border-b-2 border-yellow-400 "> {selectedAnnouncement.header}</h2>
+          <p className=' text-left border-white border-2 shadow-lg p-2 rounded-md'> <strong>Posted by: {selectedAnnouncement.postedBy}</strong></p>
+          <p className=' text-left border-white border-2 shadow-lg p-2 rounded-md'>{selectedAnnouncement.body}</p>
 
           <div className="card-actions justify-end grid grid-cols-2">
              <button onClick={handleApproval} className='btn btn-success'>Approve</button>

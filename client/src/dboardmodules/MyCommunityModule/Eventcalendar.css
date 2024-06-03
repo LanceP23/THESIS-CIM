@@ -7,7 +7,7 @@
 
 .fc .fc-col-header-cell {
     /* Yellow background */
-    color: yellowgreen; /* Black text color */
+    color: black; /* Black text color */
     font-weight: bold; /* Bold text */
   }
 
@@ -32,7 +32,7 @@
 }
 
 th{
- background-color: khaki; 
+ background-color: yellowgreen; 
 }
 
 ::-webkit-scrollbar {

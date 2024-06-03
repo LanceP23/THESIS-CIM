@@ -86,8 +86,8 @@ const UserManagement = () => {
             <table>
                 <thead className=' sticky top-0'>
                     <tr>
-                        <th className='bg-green-700 text-white text-left'>Name</th>
                         <th className='bg-green-700 text-white text-left'>ID</th>
+                        <th className='bg-green-700 text-white text-left'>Name</th>
                         <th className='bg-green-700 text-white text-left'>Email</th>
                         <th className='bg-green-700 text-white text-left'>Education Level</th>
                         <th className='bg-green-700 text-white '>Additional Details</th>
@@ -97,24 +97,27 @@ const UserManagement = () => {
                 <tbody>
                 {filteredUsers.map((user, index) => (
           <tr key={user._id} className={index % 2 === 0 ? 'bg-gray-200' : 'bg-customyellow'}>
+            <td>{user._id}</td>
             <td>
               {user._id === editingUserId ? (
                 <input
                   type="text"
                   value={editedUserData.name}
                   onChange={(e) => setEditedUserData({ ...editedUserData, name: e.target.value })}
+                  className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
                 />
               ) : (
                 user.name
               )}
             </td>
-            <td>{user._id}</td>
+            
             <td>
               {user._id === editingUserId ? (
                 <input
                   type="text"
                   value={editedUserData.studentemail}
                   onChange={(e) => setEditedUserData({ ...editedUserData, studentemail: e.target.value })}
+                  className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
                 />
               ) : (
                 user.studentemail
@@ -126,6 +129,7 @@ const UserManagement = () => {
                   type="text"
                   value={editedUserData.educationLevel}
                   onChange={(e) => setEditedUserData({ ...editedUserData, educationLevel: e.target.value })}
+                  className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
                 />
               ) : (
                 user.educationLevel
