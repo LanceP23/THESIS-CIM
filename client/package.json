@@ -24,6 +24,7 @@
     "@fullcalendar/list": "^6.1.13",
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
+    "@mui/x-charts": "^7.6.1",
     "address": "^2.0.2",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",

@@ -4,7 +4,7 @@ const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser } = require('../controllers/authController');
-const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId } = require('../controllers/organizationController');
+const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName } = require('../controllers/organizationController');
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
@@ -55,6 +55,7 @@ router.put('/organizations/:orgId/members/:memberId', updateOrganizationMember);
 router.delete('/organizations/:orgId/members/:memberId', deleteOrganizationMember);
 router.get('/organization-data/:userId',authenticateUser, fetchOrganizationData);
 router.get('/organization-id/:userId', authenticateUser, getOrganizationId);
+router.get('/organization/:organizationId/announcements', getAnnouncementsByOrganizationName);
 
 
 

@@ -169,7 +169,6 @@ const Notification_module = () => {
                   <p><strong>Message:</strong> {selectedNotification.message}</p>
                   <p><strong>Title:</strong> {selectedNotification.announcementHeader}</p>
                   <p><strong>Description:</strong> {selectedNotification.announcementBody}</p>
-                  <p><strong>Timestamp:</strong> {new Date(selectedNotification.timestamp).toLocaleString()}</p>
                 </>
               )}
 

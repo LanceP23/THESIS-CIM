@@ -110,12 +110,25 @@ const Navbar_2 = () => {
 
               
             <li className=''>
+            {adminType === 'School Owner'?(
               <Link to="/community-landing" onClick={closeSidebar} className='' >
               <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
               <div className="">
               <h6 className='font-bold'>   My Community</h6>
               </div>
               </Link>
+              ):null}
+            </li>
+
+            <li className=''>
+            {adminType === 'Organization Officer'?(
+              <Link to="/createorg" onClick={closeSidebar} className='' >
+              <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
+              <div className="">
+              <h6 className='font-bold'>   My Community</h6>
+              </div>
+              </Link>
+              ):null}
             </li>
 
             <li className=''>
@@ -139,13 +152,14 @@ const Navbar_2 = () => {
 
           
           <li className=''>
-
+          {adminType === 'School Owner'?(
             <Link to="/createorg" onClick={closeSidebar} className=''> 
             <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
             <div className="">
             <h6 className='font-bold'>  Manage Organization</h6>
             </div>
             </Link>
+            ):null}
           </li>
 
   

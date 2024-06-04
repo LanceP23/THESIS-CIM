@@ -18,6 +18,7 @@ import Navbar_2 from '../components/Navbar_2';
 import Navbar from '../components/Navbar';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import CommCalendar from '../dboardmodules/CommCalendar';
 
 const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
@@ -28,6 +29,11 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
   const handleItemClick = (itemId) => {
     setActiveItem(itemId); // Update the active item when a navigation button is clicked
   };
+
+  const handleConversationClick = (conversationId) => {
+    // Navigate to the campcomms route with the conversation ID as a parameter
+    navigate(`/campcomms/${conversationId}`);
+};
     
 
     useEffect(() => {
@@ -244,7 +250,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                 <div className="">
       
-                <CreateEvent defaultSelectable={false}/>
+                <CommCalendar defaultSelectable={false}/>
                 </div>
 
                 <div className=" mt-4">
@@ -271,7 +277,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                 
 
-                    <Conversations conversations={{conversations}} className='active_'/>
+                    <Conversations conversations={{conversations}} className='active_' />
                    
                     </div>
                 

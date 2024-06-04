@@ -10,11 +10,16 @@ const Conversation = ({ conversation, lastIdx }) => {
 
     const isSelected = selectedConversation?.id === conversation._id;
 
+    const handleClick = () => {
+        // Preserve the existing setSelectedConversation logic
+        setSelectedConversation(conversation);
+    };
+
     return (
         <>
             <div
                 className={`custom-container ${isSelected ? 'selected' : ''} `}
-                onClick={() => setSelectedConversation(conversation)}
+                onClick={handleClick}
             >
                 <div className={`container_1${isOnline ? 'online' : ''} ` }>
                     <div className='flex_container '>

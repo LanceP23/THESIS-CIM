@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Organization = require('../models/organization');
 const User = require('../models/user');
+const Announcement = require('../models/announcement');
 
 const authenticateUser = (req, res, next) => {
     // Check if the authorization header exists
@@ -302,6 +303,30 @@ const getOrganizationId = async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+const getAnnouncementsByOrganizationName = async (req, res) => {
+    try {
+        const { organizationName } = req.params;
+
+        // Fetch the organization by name to get its ID
+        const organization = await Organization.findOne({ name: organizationName });
+        
+        if (!organization) {
+            return res.status(404).json({ error: 'Organization not found' });
+        }
+
+        const organizationId = organization._id;
+
+        // Fetch announcements filtered by organization ID
+        const announcements = await Announcement.find({ organizationId });
+        res.status(200).json(announcements);
+    } catch (error) {
+        console.error('Error fetching announcements by organization name:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+  
   
 
 
@@ -316,5 +341,6 @@ module.exports = {
     updateOrganizationMember,
     deleteOrganizationMember,
     fetchOrganizationData,
-    getOrganizationId
+    getOrganizationId,
+    getAnnouncementsByOrganizationName
 };

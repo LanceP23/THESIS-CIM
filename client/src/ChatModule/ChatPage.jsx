@@ -4,8 +4,16 @@ import MessageContainer from './MessageContainer';
 import './ChatPage.css' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faMessage } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
+import useGetConversations from '../hooks/useGetConversations';
 
 const ChatPage = () => {
+  const { conversationId } = useParams(); 
+  const { loading, conversations } = useGetConversations();
+
+  const selectedConversation = conversations.find(
+    (conversation) => conversation._id === conversationId
+  );
   
   return <div className=" bg-slate-100 my-5 rounded-lg shadow-inner animate-fade-in">
   
@@ -26,7 +34,7 @@ const ChatPage = () => {
     </div>
     <div className="divider divider-horizontal divider-warning mx-2"></div>
     <div className=" w-full ">
-    <MessageContainer/>
+    <MessageContainer />
     </div>
     </div>
     </div>
