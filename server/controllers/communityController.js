@@ -2,6 +2,7 @@ const Community = require('../models/community');
 const User = require('../models/user');
 const MobileUser = require('../models/mobileUser');
 const Announcement = require('../models/announcement');
+const {mongoose} = require('mongoose')
 
 // Controller function to build a new community
 const buildCommunity = async (req, res) => {
@@ -155,6 +156,94 @@ const fetchUsers = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   };
+  const getRandomAnnouncementsByAdminCommunities = async (req, res) => {
+    try {
+        // Get the name of the logged-in admin user
+        const adminName = req.user.name;
+
+        // Find all communities where the logged-in user is an admin
+        const adminCommunities = await Community.find({
+            'members.name': adminName, // Find communities where the admin's name matches
+            'members.role': 'admin'
+        });
+
+        let announcements;
+
+        if (adminCommunities.length === 1) {
+            // If the admin is a member of only one community, fetch all announcements for that community
+            const community = adminCommunities[0];
+            announcements = await Announcement.find({ communityId: community._id });
+            announcements = announcements.map(announcement => ({ announcement, community }));
+        } else {
+            // If the admin is a member of multiple communities, fetch a random announcement for each community
+            announcements = await Promise.all(adminCommunities.map(async (community) => {
+                // Get the total number of announcements for the community
+                const totalAnnouncements = await Announcement.countDocuments({ communityId: community._id });
+                // If there are no announcements, return null
+                if (totalAnnouncements === 0) {
+                    return null;
+                }
+                // Generate a random number within the total number of announcements
+                const randomIndex = Math.floor(Math.random() * totalAnnouncements);
+                // Find a random announcement based on the random index
+                const randomAnnouncement = await Announcement.findOne({ communityId: community._id }).skip(randomIndex);
+                return { announcement: randomAnnouncement, community };
+            }));
+        }
+
+        // Filter out null values in case some communities have no announcements
+        const filteredAnnouncements = announcements.filter(item => item !== null);
+
+        res.status(200).json(filteredAnnouncements);
+    } catch (error) {
+        console.error('Error fetching random announcements:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+const getAnnouncementCommunityMembers = async (req, res) => {
+  try {
+    // Get the name of the logged-in user
+    const userName = req.user.name;
+
+    // Find all communities where the logged-in user is a member
+    const memberCommunities = await Community.find({
+      'members': { $elemMatch: { name: userName, role: 'member' } }
+    });
+
+    // Function to retrieve a random announcement for a given community
+    const getRandomAnnouncement = async (community) => {
+      const totalAnnouncements = await Announcement.countDocuments({ communityId: community._id });
+      const randomIndex = Math.floor(Math.random() * totalAnnouncements);
+      return Announcement.findOne({ communityId: community._id }).skip(randomIndex);
+    };
+
+    let announcements;
+
+    if (memberCommunities.length === 1) {
+      // If the user is a member of only one community, fetch all announcements for that community
+      const community = memberCommunities[0];
+      const communityAnnouncements = await Announcement.find({ communityId: community._id });
+      announcements = communityAnnouncements.map(announcement => ({ announcement, community }));
+    } else {
+      // If the user is a member of multiple communities, fetch a random announcement for each community
+      announcements = await Promise.all(memberCommunities.map(async (community) => {
+        const randomAnnouncement = await getRandomAnnouncement(community);
+        return { announcement: randomAnnouncement, community };
+      }));
+    }
+
+    res.status(200).json(announcements);
+  } catch (error) {
+    console.error('Error fetching announcements:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+
 
 module.exports = {
   buildCommunity,
@@ -163,5 +252,7 @@ module.exports = {
   getAllCommunities,
   getCommunityById,
   getCommunityName,
-  getAnnouncementsByCommunityId
+  getAnnouncementsByCommunityId,
+  getRandomAnnouncementsByAdminCommunities,
+  getAnnouncementCommunityMembers
 };

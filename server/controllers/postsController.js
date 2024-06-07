@@ -159,15 +159,16 @@ const createAnnouncement = async (req, res) => {
         const communityNotificationData = {
           ...notificationDataTemplate,
           message: 'New announcement posted in your community',
-          recipientIds: communityMembers.members.map(member => member.userId._id), // Extracting IDs from member objects
+          recipientIds: communityMembers.members.map(member => member.userId.id), // Extracting IDs from member objects
         };
+        console.log(communityMembers);
         const communityNotification = new Notification(communityNotificationData);
         await communityNotification.save();
     
         communityMembers.members.forEach(member => {
-          const receiverSocketId = getReceiverSocketId(member.userId._id); // Using member._id to get the ID
+          const receiverSocketId = getReceiverSocketId(member.userId.id); // Using member._id to get the ID
           if (receiverSocketId) {
-            console.log("Emitting newCommunityAnnouncement event for member:", member.userId._id);
+            console.log("Emitting newCommunityAnnouncement event for member:", member.userId.id);
             io.to(receiverSocketId).emit("newCommunityAnnouncement", communityNotificationData);
             console.log("emit success");
           }

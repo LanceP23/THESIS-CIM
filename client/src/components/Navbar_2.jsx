@@ -109,27 +109,7 @@ const Navbar_2 = () => {
             </li>
 
               
-            <li className=''>
-            {adminType === 'School Owner'?(
-              <Link to="/community-landing" onClick={closeSidebar} className='' >
-              <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
-              <div className="">
-              <h6 className='font-bold'>   My Community</h6>
-              </div>
-              </Link>
-              ):null}
-            </li>
-
-            <li className=''>
-            {adminType === 'Organization Officer'?(
-              <Link to="/createorg" onClick={closeSidebar} className='' >
-              <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
-              <div className="">
-              <h6 className='font-bold'>   My Community</h6>
-              </div>
-              </Link>
-              ):null}
-            </li>
+            
 
             <li className=''>
               <Link to="/analytics-report" onClick={closeSidebar} className=''>
@@ -150,31 +130,32 @@ const Navbar_2 = () => {
               </Link>
             </li>
 
-          
-          <li className=''>
-          {adminType === 'School Owner'?(
-            <Link to="/createorg" onClick={closeSidebar} className=''> 
-            <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
-            <div className="">
-            <h6 className='font-bold'>  Manage Organization</h6>
-            </div>
-            </Link>
-            ):null}
-          </li>
-
+       
   
         
 
         
             <li className=''>
-              <Link to="/user-settings" onClick={closeSidebar} className=' '>
-              <FontAwesomeIcon className='text-yellow-500' icon={faLock} /> 
-              <div className="">
-                <h6 className='font-bold'>Mobile User Management</h6>  
+              {adminType === 'School Owner'?(
+                <Link to="/user-settings" onClick={closeSidebar} className=' '>
+                <FontAwesomeIcon className='text-yellow-500' icon={faLock} /> 
+                <div className="">
+                  <h6 className='font-bold'>Mobile User Management</h6>  
+                  </div>
+                </Link>
+              ):<>
+                <Link to="/createorg" onClick={closeSidebar} className='' >
+                <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
+                <div className="">
+                <h6 className='font-bold'>  Organizations </h6>
                 </div>
-              </Link>
+                </Link>        
+                </> }
             </li>
             
+
+            
+           
 
             
             <li className=''>
@@ -187,6 +168,35 @@ const Navbar_2 = () => {
                 </Link>
             ):null}
           </li>
+
+             
+          <li className=''>
+          {adminType === 'School Owner'?(
+            <Link to="/createorg" onClick={closeSidebar} className=''> 
+            <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
+            <div className="">
+            <h6 className='font-bold'>  Manage Organization</h6>
+            </div>
+            </Link>
+            ):null}
+          </li>
+
+          <li className=''>
+            {adminType === 'School Owner'?(
+              <Link to="/community-landing" onClick={closeSidebar} className='' >
+              <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
+              <div className="">
+              <h6 className='font-bold'>   My Community</h6>
+              </div>
+              </Link>
+              ):null}
+            </li>
+
+            
+
+
+
+
       </ul>
     </div>
 
@@ -196,7 +206,7 @@ const Navbar_2 = () => {
 
 
 <Link to="/dashboard" className=' btn-link '>
-  <img src='../src/assets/CORPO_CIM/CORPO SIDE_cut.png' className=' h-full w-36 mt-1 mx-0  '/>
+  <img src='../src/assets/CORPO_CIM/CORPO SIDE_cut.png' className=' h-full w-28 mt-1 mx-0  '/>
   </Link>
   </div>
   <div className="flex flex-row">
@@ -227,9 +237,28 @@ const Navbar_2 = () => {
       </div>
       <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">{userName}</a>
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-white">
-          <li>Admin Level: {adminType}</li>
+        <li><div
+    class="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+    <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+        <path fill-rule="evenodd"
+          d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+          clip-rule="evenodd"></path>
+      </svg>
+    </div>
+    <span class="ml-[18px]">{adminType}</span>
+  </div></li>
+      
           <li></li>
-          <li  onClick={handleLogout} className=' bg-red-600 rounded-lg'><a>Logout</a></li>
+          <li onClick={handleLogout} className='bg-red-600 rounded-lg flex items-center'>
+  <a>Logout 
+    <svg class="text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> 
+      <path stroke="none" d="M0 0h24v24H0z"/> 
+      <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /> 
+      <path d="M7 12h14l-3 -3m0 6l3 -3" /> 
+    </svg>
+  </a>
+</li>
       </ul>
     </div>
 

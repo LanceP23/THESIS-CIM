@@ -20,11 +20,16 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CommCalendar from '../dboardmodules/CommCalendar';
 
+
 const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
     const [adminType, setAdminType] = useState('');
     const [dashboardContent, setDashboardContent] = useState(null);
     const [activeItem, setActiveItem] = useState('item1'); // Initially set to the first item
+    const [recentPosts, setRecentPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [communityAnnouncements, setCommmunityAnnouncements] = useState([]);
+    
 
   const handleItemClick = (itemId) => {
     setActiveItem(itemId); // Update the active item when a navigation button is clicked
@@ -34,7 +39,36 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     // Navigate to the campcomms route with the conversation ID as a parameter
     navigate(`/campcomms/${conversationId}`);
 };
-    
+
+const getToken = () => {
+    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+    if (!token) {
+      throw new Error('Token not found');
+    }
+    return token.split('=')[1];
+  };
+
+  useEffect(() => {
+    const fetchRandomAnnouncements = async () => {
+      try {
+        const token = getToken();
+        const config = {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        };
+        const response = await axios.get('/random-announcements', config);
+        setRecentPosts(response.data);
+        
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching random community and recent posts:', error);
+      }
+    };
+
+    fetchRandomAnnouncements();
+  }, []);
+
 
     useEffect(() => {
         const storedAdminType = localStorage.getItem('adminType');
@@ -118,13 +152,13 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
             
            
 
-           <div className=" my-16 flex flex-row  w-auto h-full">
+           <div className=" my-16 h-full flex xl:flex-row flex-col md:flex-col sm:flex-col ">
 
             
 
        
 
-            <div className="row_1 inline-flex flex-col">
+            <div className="row_1 inline-flex flex-col xl:w-2/3 h-full ">
 
                 <div className="p3 m-3 w-auto h-full  shadow-md rounded-3 bg-slate-300 border-2 ">
                 <Carousel showThumbs={false} autoPlay infiniteLoop  interval={10000}>
@@ -145,12 +179,12 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                     </Carousel>
                     </div>
                
-                <div className=' p-3 m-3 w-auto h-full  shadow-md rounded-3 bg-custom-radial  hover:shadow-2xl bg-opacity-25 border-2'>
+                <div className=' p-3 m-3 w-auto h-full shadow-md rounded-3 bg-custom-radial  hover:shadow-2xl bg-opacity-25 border-2'>
                 <Link to="/analytics-report"className=''>   
                 <h2 className='text-3xl border-b-2 border-gray-700 hover:text-yellow-400 hover:border-yellow-400'>Analytics</h2>
 
-                <div className="inline-flex flex-row b">
-                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border bg-white">
+                <div className="flex flex-col xl:flex-row lg:flex-row md:flex-col sm:flex-col  justify-center ">
+                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-auto shadow-md rounded-2 border bg-white">
                     <h6 className='text-3xl'>Recent Post</h6>
 
                     
@@ -165,7 +199,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
                     
 
-                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border bg-white">
+                    <div className="p-2 my-2 w-auto md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border bg-white">
                     <h6 className='text-3xl'>Top Post</h6>
 
                     <div className="stat">
@@ -184,69 +218,47 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                 </div>
                 
 
-                <div className=" p-3 m-3  w-auto h-full  shadow-md rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2">
-                <Link to="/community-landing"  className='' >
+                <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2">
+                <Link to="/community-landing" className=''>
                 <h2 className='text-3xl border-b-2 border-gray-700 py-1 hover:text-yellow-400 hover:border-yellow-400'>My Community</h2>
-
-
-                <div className=" flex flex-row w-auto h-auto">
-
-                <div className=" p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
-                <div className="flex flex-col gap-4 w-52">
-                    <div className="flex gap-4 items-center">
-                        <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
-                        <div className="flex flex-col gap-4">
-                        <div className="skeleton h-4 w-20"></div>
-                        <div className="skeleton h-4 w-28"></div>
+                <div className="flex xl:flex-row lg:flex-row md:flex-col sm:flex-col w-auto h-auto md:w-2/4">
+                    {recentPosts
+                .filter(post => post.announcement && post.community) // Filter out posts without announcement or community
+                .slice(0, 3) // Limit to three posts
+                .map((post, index) => (
+                    <div key={index} className="p-0 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-full h-full max-h-auto shadow-md rounded-2 border flex justify-center">
+                        <div className="flex flex-col gap-4 w-auto">
+                            <div className="flex gap-4 justify-centerems-center h-[10rem] m-2">
+                                <img src={post.community.logo} alt="Community Logo" className="w-16 h-16 rounded-full" />
+                                <div className="flex flex-col gap-4">
+                                    <h3 className="xl:text-xl text-lg font-semibold text-green-800 border-b border-yellow-400 text-left">{post.community.name}</h3>
+                                    <p>{post.announcement.header}</p>
+                                </div>
+                            </div>
+                            <div>
+                                {post.announcement.contentType === 'image/gif' ? (
+                                    <img src={post.announcement.mediaUrl} alt="gif" className="w-auto rounded-lg" />
+                                ) : (
+                                    <video controls className="w-full h-96 rounded-lg">
+                                        <source src={post.announcement.mediaUrl} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                )}
+                            </div>
                         </div>
                     </div>
-                    <div className="skeleton h-32 w-full"></div>
-                    </div>
-                </div>
-
-                <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
-                <div className="flex flex-col gap-4 w-52">
-                    <div className="flex gap-4 items-center">
-                        <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
-                        <div className="flex flex-col gap-4">
-                        <div className="skeleton h-4 w-20"></div>
-                        <div className="skeleton h-4 w-28"></div>
-                        </div>
-                    </div>
-                    <div className="skeleton h-32 w-full"></div>
-                    </div>
-                </div>
-
-                <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  shadow-md rounded-2 border">
-                <div className="flex flex-col gap-4 w-52">
-                    <div className="flex gap-4 items-center">
-                        <div className="skeleton w-16 h-16 rounded-full shrink-0"></div>
-                        <div className="flex flex-col gap-4">
-                        <div className="skeleton h-4 w-20"></div>
-                        <div className="skeleton h-4 w-28"></div>
-                        </div>
-                    </div>
-                    <div className="skeleton h-32 w-full"></div>
-                    </div>
-                </div>
-
-          
-                
-                </div>
-
-                </Link>
-
-              </div>
-
-            
+                ))}
+        </div>
+    </Link>
+</div>
 
                 
             </div>
 
-               <div className="row_2 flex flex-col">
+               <div className="row_2 flex flex-col xl:w-1/3 lg:full float-right">
 
                 
-               <div className="p-3 m-3 w-auto h-auto shadow-inner  rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25  border-2">
+               <div className="p-3 m-3  w-auto h-auto shadow-inner  rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25  border-2 ">
 
                 <div className="">
       
@@ -309,3 +321,4 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 };
 
 export default Dashboard;
+ 

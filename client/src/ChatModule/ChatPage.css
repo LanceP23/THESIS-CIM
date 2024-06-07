@@ -10,12 +10,13 @@
     height: 15px;
     background-color: rgb(9, 255, 9);
     border-radius: 50%;
+    
   }
 
 .offline-dot {
     width: 15px;
     height: 15px;
-    background-color: #4a5568;
+   
     border-radius: 50%;
   }
  

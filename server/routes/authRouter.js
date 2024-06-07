@@ -13,9 +13,9 @@ const {postEventController,getEventsController, putEventController, deleteEventC
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
-const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId } = require('../controllers/communityController');
+const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
-
+const{getLikesDislikesandReactions} = require('../controllers/analyticsController');
 
 router.use(
     cors({
@@ -95,6 +95,7 @@ router.get('/mobile-users', getAllMobileUsers);
 router.put('/update-mobile-users/:userId',updateMobileUserById);
 router.delete('/delete-mobile-users/:userId',deleteMobileUserById);
 
+//community
 router.post('/build-community',authenticateUser,upload.none(), buildCommunity);
 router.get('/get-mobile-users', fetchMobileUsers);
 router.get('/get-users', fetchUsers);
@@ -102,6 +103,8 @@ router.get('/view-community', authenticateUser, getAllCommunities);
 router.get('/view-community/:id', authenticateUser, getCommunityById);
 router.get('/get-community-name/:communityId', getCommunityName);
 router.get('/announcements/:communityId', authenticateUser, getAnnouncementsByCommunityId);
+router.get('/random-announcements',authenticateUser, getRandomAnnouncementsByAdminCommunities);
+router.get('/member-announcements',authenticateUser, getAnnouncementCommunityMembers);
 
 
 //notification
@@ -110,8 +113,8 @@ router.get('/notifications/:id', getNotificationDetails);
 router.patch('/notifications/:id/read', markNotificationAsRead);
 router.patch('/notifications/markAllAsRead', markAllNotificationsAsRead);
 
-
-
+//analytics
+router.get('/announcements/:id/details', getLikesDislikesandReactions);
 
 module.exports = router;
 

@@ -138,31 +138,42 @@ const UserManagement = () => {
                             <td>
                                 {user.educationLevel === 'Grade School' && (
                                     <div className=' '>
-                                        <h2>Grade Level: {user.gradeLevel}</h2>
+                                        <div
+    class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-blue-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit">
+    <span class="">Grade Level: {user.gradeLevel}</span>
+  </div>
                                         <h2>Section: {user.section}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
                                     </div>
                                 )}
                                 {user.educationLevel === 'High School' && (
                                     <div className=''>
-                                        <h2>Year Level: {user.highSchoolYearLevel}</h2>
+                                        <div
+    class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-green-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit">
+    <span class="">Year Level: {user.highSchoolYearLevel}</span>
+  </div>
                                         <h2>Section: {user.section}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
                                     </div>
                                 )}
                                 {user.educationLevel === 'Senior High School' && (
                                     <div  className=''>
+                                         <div
+                                            class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-indigo-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit">
+                                            <span class="">Year Level: {user.seniorHighSchoolYearLevel}</span>
+                                        </div>
                                         <h2>Strand: {user.shsStrand}</h2>
-                                        <h2>Year Level: {user.seniorHighSchoolYearLevel}</h2>
-                                        <h2>Grade Level: {user.gradeLevel}</h2>
                                         <h2>Section: {user.section}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
                                     </div>
                                 )}
                                 {user.educationLevel === 'College' && (
                                     <div className=''>
+                                        <div
+    class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-amber-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-black w-fit">
+    <span class="">Year Level: {user.collegeYearLevel}</span>
+  </div>
                                         <h2>Course: {user.collegeCourse}</h2>
-                                        <h2>Year Level: {user.collegeYearLevel}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
                                     </div>
                                 )}

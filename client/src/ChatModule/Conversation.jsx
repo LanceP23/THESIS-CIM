@@ -25,7 +25,29 @@ const Conversation = ({ conversation, lastIdx }) => {
                     <div className='flex_container '>
                   
                    
-                        <p className='flex flex-row justify-normal text-md font-semibold cursor-pointer'>  {isOnline ? <div className='online-dot'></div> : <div className='offline-dot'></div>}{conversation.name}</p>
+                    <div className='flex flex-col justify-normal text-md font-semibold cursor-pointer text-left'>
+                    <p>{conversation.name}</p>
+                        {isOnline ?  
+                        <div
+                            class="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/20 w-fit ">
+                            <div class="absolute w-4 h-4 top-2/4 left-1 -translate-y-2/4">
+                            <span class="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']"></span>
+                        </div>
+                            <span class="ml-4">Online</span>
+                        </div> 
+                        : 
+                        <div
+                            class="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-red-900 uppercase rounded-md select-none whitespace-nowrap bg-red-500/20 w-fit">
+                            <div class="absolute w-4 h-4 top-2/4 left-1 -translate-y-2/4">
+                            <span class="mx-auto mt-1 block h-2 w-2 rounded-full bg-red-900 content-['']"></span>
+                            </div>
+                            <span class="ml-4">Offline</span>
+                        </div>
+                        }
+                        
+                    </div>
+
+                    
                         
                     </div>
                 </div>

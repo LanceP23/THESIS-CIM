@@ -13,7 +13,7 @@
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  background-color: #98D08F; 
+  background-color: rgb(124, 255, 192); 
 
 
 }
@@ -46,7 +46,7 @@ h1 {
     background-position: left center;
   }
   50% {
-    background-size: 200% 200%;
+    background-size: 160% 160%;
     background-position: right center;
   }
 }

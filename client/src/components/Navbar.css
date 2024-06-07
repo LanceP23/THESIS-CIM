@@ -1,5 +1,5 @@
 nav {
-    background: radial-gradient(circle, rgba(0,191,99,1) 0%, rgb(15, 15, 15) 100%);
+  background: radial-gradient(circle, rgba(0,191,99,1) 0%, rgba(0,191,99,1) 50%, rgb(15, 15, 15) 100%);
     padding: 10px 20px;
     display: flex;
     justify-content: flex-start;
