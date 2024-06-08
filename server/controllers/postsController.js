@@ -180,7 +180,7 @@ const createAnnouncement = async (req, res) => {
 
     res.status(201).json(announcement);
   } catch (error) {
-    console.error('Error creating announcement:', error);
+    console.error('Error creating announcement or notification:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
