@@ -16,6 +16,8 @@ const Notification_module = () => {
     return token.split('=')[1];
   };
 
+  
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -92,7 +94,7 @@ const Notification_module = () => {
           Notification
         </h2>
 
-        <div className="div">
+        <div className="overflow-auto max-h-">
           <table className="max-w-full">
             <thead className=''>
               <tr className=' '>

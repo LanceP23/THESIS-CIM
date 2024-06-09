@@ -19,6 +19,7 @@ import Navbar from '../components/Navbar';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CommCalendar from '../dboardmodules/CommCalendar';
+import AnalyticsDashboard from '../dboardmodules/AnalyticsDashboard';
 
 const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const navigate = useNavigate();
@@ -167,29 +168,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         <div className='p-3 m-3 w-auto h-full shadow-md rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2'>
                             <Link to="/analytics-report" className=''>
                                 <h2 className='text-3xl border-b-2 border-gray-700 hover:text-yellow-400 hover:border-yellow-400'>Analytics</h2>
-                                <div className="flex flex-col xl:flex-row lg:flex-row md:flex-col sm:flex-col justify-center">
-                                    <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-auto shadow-md rounded-2 border bg-white">
-                                        <h6 className='text-3xl'>Recent Post</h6>
-                                        <div className="stat">
-                                            <div className="stat-title">Total Page Views</div>
-                                            <div className="stat-value">89,400</div>
-                                            <div className="stat-desc">21% more than last month</div>
-                                        </div>
-                                    </div>
-                                    <div className="p-2 my-2 w-auto md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full shadow-md rounded-2 border bg-white">
-                                        <h6 className='text-3xl'>Top Post</h6>
-                                        <div className="stat">
-                                            <div className="stat-figure text-primary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                                </svg>
-                                            </div>
-                                            <div className="stat-title">Total Likes</div>
-                                            <div className="stat-value text-primary">25.6K</div>
-                                            <div className="stat-desc">21% more than last month</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <AnalyticsDashboard/>
                             </Link>
                         </div>
                         <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2">

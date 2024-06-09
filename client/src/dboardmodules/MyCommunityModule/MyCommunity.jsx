@@ -1,13 +1,30 @@
 import React,{useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MyCommunit.css'; 
-
+import axios from 'axios';
+import { useEffect } from 'react';
 
 export default function MyCommunity() {
 
   const [hovered_Build_Community, sethovered_Build_Community] = useState('');
   const [hovered_View_Community, setHovered_View_Community] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+        try {
+            const response = await axios.get('/check-auth');
+            if (!response.data.authenticated) {
+                // If not authenticated, redirect to login
+                navigate('/login');
+            } 
+        } catch (error) {
+            console.error('Error checking authentication status:', error);
+        }
+    };
+
+    checkAuthStatus();
+}, [navigate]);
 
   const handleBuildCommunity = () => {
     navigate('/build-community');

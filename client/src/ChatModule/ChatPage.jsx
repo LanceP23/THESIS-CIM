@@ -4,12 +4,31 @@ import MessageContainer from './MessageContainer';
 import './ChatPage.css' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faMessage } from '@fortawesome/free-solid-svg-icons';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useGetConversations from '../hooks/useGetConversations';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 const ChatPage = () => {
   const { conversationId } = useParams(); 
   const { loading, conversations } = useGetConversations();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+        try {
+            const response = await axios.get('/check-auth');
+            if (!response.data.authenticated) {
+                // If not authenticated, redirect to login
+                navigate('/login');
+            } 
+        } catch (error) {
+            console.error('Error checking authentication status:', error);
+        }
+    };
+
+    checkAuthStatus();
+}, [navigate]);
 
   const selectedConversation = conversations.find(
     (conversation) => conversation._id === conversationId

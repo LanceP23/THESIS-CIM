@@ -19,7 +19,7 @@ const CommunitySchema = new Schema({
     members: [{
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        refPath: 'onModel'
+        refPath: 'members.userType'
       },
       name: {
         type: String,

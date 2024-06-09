@@ -100,36 +100,30 @@ const createAnnouncement = async (req, res) => {
     await announcement.save();
 
     let targetUsers = [];
-    let recipientIds = [];
+    let recipientIds = new Set(); // Use a Set to avoid duplicates
 
-    if (JSON.parse(visibility).everyone) {
+    const parsedVisibility = JSON.parse(visibility);
+
+    if (parsedVisibility.everyone) {
       const allUsers = await User.find();
       const allMobileUsers = await MobileUser.find();
       targetUsers.push(...allUsers, ...allMobileUsers);
     } else {
-      if (JSON.parse(visibility).staff) {
+      if (parsedVisibility.staff) {
         const staffUsers = await User.find({ position: { $exists: false }, organization: { $exists: false }, department: { $exists: false } });
         targetUsers.push(...staffUsers);
       }
-      if (JSON.parse(visibility).faculty) {
+      if (parsedVisibility.faculty) {
         const facultyUsers = await User.find({ department: { $exists: true } });
         targetUsers.push(...facultyUsers);
       }
-      if (JSON.parse(visibility).students) {
+      if (parsedVisibility.students) {
         const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
         targetUsers.push(...studentUsers);
       }
-      if (communityId) {
-        const community = await Community.findById(communityId);
-        if (community) {
-          // Add community members to targetUsers
-          targetUsers.push(...community.members);
-        }
-      }
     }
 
-    // Extract recipient IDs from targetUsers
-    recipientIds = targetUsers.map(user => user._id);
+    targetUsers.forEach(user => recipientIds.add(user._id.toString()));
 
     const notificationDataTemplate = {
       type: 'announcement',
@@ -138,13 +132,12 @@ const createAnnouncement = async (req, res) => {
       announcementHeader: header,
       announcementBody: body,
       timestamp: new Date().toISOString(),
-      recipientIds: recipientIds,
+      recipientIds: Array.from(recipientIds), // Convert Set to Array
     };
 
     const notification = new Notification(notificationDataTemplate);
     await notification.save();
 
-    // Emit socket event to each user
     targetUsers.forEach(user => {
       const receiverSocketId = getReceiverSocketId(user._id);
       if (receiverSocketId) {
@@ -153,30 +146,49 @@ const createAnnouncement = async (req, res) => {
     });
 
     if (communityId) {
-      // Notify community members
-      const communityMembers = await Community.findById(communityId).populate('members.userId');
+      const communityMembers = await Community.findById(communityId).populate({
+        path: 'members.userId',
+        model: 'User'
+      });
+      const communityMobileMembers = await Community.findById(communityId).populate({
+        path: 'members.userId',
+        model: 'MobileUser'
+      });
+
+      const communityRecipientIds = new Set();
+
       if (communityMembers) {
-        const communityNotificationData = {
-          ...notificationDataTemplate,
-          message: 'New announcement posted in your community',
-          recipientIds: communityMembers.members.map(member => member.userId.id), // Extracting IDs from member objects
-        };
-        console.log(communityMembers);
-        const communityNotification = new Notification(communityNotificationData);
-        await communityNotification.save();
-    
-        communityMembers.members.forEach(member => {
-          const receiverSocketId = getReceiverSocketId(member.userId.id); // Using member._id to get the ID
-          if (receiverSocketId) {
-            console.log("Emitting newCommunityAnnouncement event for member:", member.userId.id);
-            io.to(receiverSocketId).emit("newCommunityAnnouncement", communityNotificationData);
-            console.log("emit success");
-          }
-        });
+        communityMembers.members
+          .filter(member => member.userId) // Ensure userId is not null
+          .forEach(member => communityRecipientIds.add(member.userId._id.toString()));
       }
+
+      if (communityMobileMembers) {
+        communityMobileMembers.members
+          .filter(member => member.userId) // Ensure userId is not null
+          .forEach(member => communityRecipientIds.add(member.userId._id.toString()));
+      }
+
+      // Remove any duplicates between general and community-specific recipients
+      communityRecipientIds.forEach(id => recipientIds.delete(id));
+
+      const communityNotificationData = {
+        ...notificationDataTemplate,
+        message: 'New announcement posted in your community',
+        recipientIds: Array.from(communityRecipientIds), // Convert Set to Array
+      };
+
+      const communityNotification = new Notification(communityNotificationData);
+      await communityNotification.save();
+
+      communityRecipientIds.forEach(id => {
+        const receiverSocketId = getReceiverSocketId(id);
+        console.log(id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newCommunityAnnouncement", communityNotificationData);
+        }
+      });
     }
-    
-  
 
     res.status(201).json(announcement);
   } catch (error) {
@@ -184,6 +196,8 @@ const createAnnouncement = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
 
 
 

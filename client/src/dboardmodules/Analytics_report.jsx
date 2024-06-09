@@ -1,15 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Axios from 'axios';
+import axios from 'axios';
+import Axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartLine, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { UserContext } from '../../context/userContext';
 import { format, parseISO } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+
 
 const Analytics_report = () => {
   const { user } = useContext(UserContext);
   const [analyticsData, setAnalyticsData] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+        try {
+            const response = await axios.get('/check-auth');
+            if (!response.data.authenticated) {
+                // If not authenticated, redirect to login
+                navigate('/login');
+            } 
+        } catch (error) {
+            console.error('Error checking authentication status:', error);
+        }
+    };
+
+    checkAuthStatus();
+}, [navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,19 +108,27 @@ const Analytics_report = () => {
             <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 h-auto shadow-md rounded-2 border">
               <div className="stat">
                 <div className="stat-figure text-primary">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current text-success">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                  </svg>
+                <div className="stat-icon">
+                  <FontAwesomeIcon icon={faThumbsUp} className="text-green-500" style={{ fontSize: '24px' }} />
+                </div>
                 </div>
                 <div className="stat-title">Total Likes</div>
                 <div className="stat-value text-primary text-success">{likes}</div>
+                
                 <div className="stat-desc">21% more than last month</div>
                 <div className="stat-title">Total Dislikes</div>
                 <div className="stat-value text-primary text-success">{dislikes}</div>
+                <div className="stat-icon">
+                  <FontAwesomeIcon icon={faThumbsDown} className="text-green-500" style={{ fontSize: '24px' }} />
+                </div>
                 <div className="stat-desc">21% more than last month</div>
 
                 <div className="stat-title">Like-to-Dislike Ratio</div>
                 <div className="stat-value text-primary text-success">{totalPosts > 0 ? (likes / dislikes).toFixed(2) : 0}</div>
+                
+
+                <div className="stat-title">Total Engagement</div>
+                <div className="stat-value text-primary text-success">{likes + dislikes}</div>
               </div>
             </div>
           </div>

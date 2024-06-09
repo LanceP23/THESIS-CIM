@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { UserContext } from '../../context/userContext';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function OrganizationOfficerPanel() {
   const { user } = useContext(UserContext);
@@ -12,7 +13,7 @@ export default function OrganizationOfficerPanel() {
   const [potentialMembers, setPotentialMembers] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]); 
   const modalRef = useRef();
-
+const navigate = useNavigate();
   const userWithId = { ...user, id: user?.id || '' };
 
   const getCookie = (name) => {
@@ -20,6 +21,25 @@ export default function OrganizationOfficerPanel() {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+        try {
+            const response = await axios.get('/check-auth');
+            if (!response.data.authenticated) {
+                // If not authenticated, redirect to login
+                navigate('/login');
+            } else {
+                // If authenticated, set the admin type
+                setAdminType(localStorage.getItem('adminType'));
+            }
+        } catch (error) {
+            console.error('Error checking authentication status:', error);
+        }
+    };
+
+    checkAuthStatus();
+}, [navigate]);
 
   
   useEffect(() => {
