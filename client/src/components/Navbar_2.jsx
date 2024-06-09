@@ -16,21 +16,7 @@ const Navbar_2 = () => {
 
   const userName = user ? user.name : '';
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-        try {
-            const response = await axios.get('/check-auth');
-            if (!response.data.authenticated) {
-                // If not authenticated, redirect to login
-                navigate('/login');
-            } 
-        } catch (error) {
-            console.error('Error checking authentication status:', error);
-        }
-    };
-
-    checkAuthStatus();
-}, [navigate]);
+ 
 
   useEffect (()=>{
     setIsOpen(false);
