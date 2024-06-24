@@ -402,13 +402,17 @@ export default function CreateAnnouncement() {
 
 
   return (
-    <div className='flex flex-row my-24 animate-fade-in '>
-      <div className="main_container p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
-      <div role="tablist" className="tabs tabs-lifted">
+    <div className='flex flex-row my-14 animate-fade-in '>
+      <div className="p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
+      <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>  <FontAwesomeIcon icon={faBullhorn} className=' text-yellow-500 mx-1 '/>Post Management</h2>
+      <div role="tablist" className="tabs tabs-lifted w-full">
         <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 " aria-label="Announcements" />
-        <div role="tabpanel" className="tab-content bg-green-600 shadow-lg rounded-md p-6">
-          <div className=" shadow-inner annoucement_creation_container bg-white p-4 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-auto h-full  rounded-2 border animate-fade-in ">
+        <div role="tabpanel" className="tab-content bg-green-600 shadow-lg rounded-md p-6 w-full">
+          <div className=" shadow-inner annoucement_creation_container bg-white p-4 my-2  max-w-full  h-full  rounded-2 border animate-fade-in ">
           <h2 className='border-b border-gray-500 py-2 font-bold '>Create Announcement</h2>
+         <div className="flex flex-row justify-around">
+          <div className="div">
+          
                 <div>
                   <label className="label text-gray-700" htmlFor="header">Header:</label>
                   <input
@@ -463,12 +467,13 @@ export default function CreateAnnouncement() {
                 <div className='flex justify-start my-2'>
                     <label className="label text-gray-700" htmlFor="postingDate">Posting Date:</label>
                     <input
-                      className="input input-success input-md text-white mx-4 shadow-md "
+                      className="input input-success input-md text-white ml-6 mr-1 shadow-md "
                       type="datetime-local"
                       id="postingDate"
                       value={postingDate}
                       onChange={handlePostingDateChange}
                     />
+                    <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Required</label>
                   </div>
                   <div className='flex justify-start'>
                     <label className="label text-gray-700" htmlFor="expirationDate">Expiration Date:</label>
@@ -479,6 +484,7 @@ export default function CreateAnnouncement() {
                       value={expirationDate}
                       onChange={handleExpirationDateChange}
                     />
+                     <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Required</label>
                   </div>
                 
                   {adminType === 'Organization Officer' && (
@@ -520,7 +526,14 @@ export default function CreateAnnouncement() {
                 <button className="btn btn-success px-16 my-4 size text-base " onClick={handleSubmit}>Post</button>
                 </div>
 
-                <h3 className="border-t-2 border-gray-500 py-2 font-bold">Recent Posts</h3>
+                </div>
+                <div className="divider divider-horizontal divider-warning my-2"></div>
+
+                <div className="div">
+
+                <h3 className=" border-gray-500 font-bold">Recent Posts</h3>
+
+                <div className="divider"></div>
 
                 <div className="recentpost_container overflow-auto max-h-96">
                 
@@ -532,7 +545,7 @@ export default function CreateAnnouncement() {
                       
                       // Render each announcement with its community name when available
                       return (
-                        <div key={announcement._id} className='card card-side bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-110 '>
+                        <div key={announcement._id} className='card card-side bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-105 '>
 
                         {announcement.mediaUrl ? (
                           
@@ -568,10 +581,10 @@ export default function CreateAnnouncement() {
                       )}
                           <div className=" card-body">
                             <h4 className='card-title w-full border-b border-yellow-400 text-green-500'> {announcement.header}</h4>
-                            <div className="body_container p-2 border-white w-full h-32 rounded-md text-left overflow-auto max-h-full shadow-lg border-2">
+                            <div className="body_container p-2  w-full h-32 rounded-md text-left overflow-auto max-h-full border-2">
                             <p className=''> {announcement.body}</p>
                             </div>
-                            <div className="community_container  p-2 border-white w-full my-2 rounded-md shadow-2xl border-2">
+                            <div className="community_container  p-2  w-full my-2 rounded-md border-2 text-left">
                             <PromiseRenderer promise={communityNamePromise}  />
                             </div>
                           </div>
@@ -582,6 +595,8 @@ export default function CreateAnnouncement() {
                     })}
                   </ul>
                 </div>
+          </div>
+          </div>
           </div>
         </div>
                     
@@ -599,12 +614,7 @@ export default function CreateAnnouncement() {
 
       </div>
 
-      <div className="community_calendar_container p-3 m-3 w-max h-full  shadow-md rounded-3 bg-white border">
-
-        <h2>Community Calendar</h2>
-        
-
-      </div>
+     
     </div>
   );
 

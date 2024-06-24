@@ -90,23 +90,23 @@ export default function PostApproval({ adminType }) {
 
   return (
     <div>
-      <h2 className=' border-b-2 border-black py-2 m-2'>Pending Announcements</h2>
+      <h2 className=' border-b-2 border-black py-2 m-2 font-bold'>Pending Announcements</h2>
       <button onClick={fetchPendingAnnouncements} className='btn btn-wide btn-success'>Fetch Pending Announcements</button>
-      <div className="">
+      <div className=" flex xl:flex-row lg:flex-col md:flex-col sm:flex-col justify-evenly my-3 ">
       {isLoading ? (
         <p >Loading pending announcements...</p>
 
         
       ) : pendingAnnouncements.length > 0 ? (
-        <div className="bg-white p-1 m-2 rounded-lg max-h-72 overflow-auto w-full">
+        <div className="bg-white p-1 m-2 rounded-lg max-h-72 overflow-auto xl:w-2/5 lg:w-full sm:w-full ">
         <ul>
        
           {pendingAnnouncements.slice().reverse().map((announcement) => (
         
-            <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)} >
-              <div className="bg-white shadow-lg rounded-md m-3 p-2 transition-transform duration-300 ease-in-out transform hover:scale-95 cursor-pointer">
-              <h3 className=' text-2xl m-1 '> Header: <strong>{announcement.header}</strong></h3>
-              <h3 className=''>Posted by: {announcement.postedBy}</h3>
+            <li key={announcement._id} onClick={() => handleAnnouncementClick(announcement)} className='' >
+              <div className="bg-white shadow-lg rounded-md m-3 p-2  transition-transform duration-300 ease-in-out transform hover:scale-95 cursor-pointer">
+              <h3 className=' text-2xl m-1 hover:text-green-600  '> Header: <strong>{announcement.header}</strong></h3>
+              <h3 className='hover:text-green-600  '>Posted by: <strong>{announcement.postedBy}</strong> </h3>
               </div>
               {selectedAnnouncement && selectedAnnouncement._id === announcement._id && (
                 <div>
@@ -151,8 +151,8 @@ export default function PostApproval({ adminType }) {
 
           <div className="card-body">
           <h2 className="card-title text-green-500 border-b-2 border-yellow-400 "> {selectedAnnouncement.header}</h2>
-          <p className=' text-left border-white border-2 shadow-lg p-2 rounded-md'> <strong>Posted by: {selectedAnnouncement.postedBy}</strong></p>
-          <p className=' text-left border-white border-2 shadow-lg p-2 rounded-md'>{selectedAnnouncement.body}</p>
+          <p className=' text-left p-2 rounded-md'> <strong>Posted by: {selectedAnnouncement.postedBy}</strong></p>
+          <p className=' text-left p-2 rounded-md'>{selectedAnnouncement.body}</p>
 
           <div className="card-actions justify-end grid grid-cols-2">
              <button onClick={handleApproval} className='btn btn-success'>Approve</button>

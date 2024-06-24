@@ -26,7 +26,7 @@ export default function Home() {
     <div >
     <Navbar/>
     <div className="bg-[url('../src/assets/CORPO_CIM/gradeint_cover.gif')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full">
-        <div className=' my-36  w-1/2 h-80 p-2 absolute left-16 bottom-28'>
+        <div className=' my-36  w-1/2 h-80 p-2 absolute left-16 '>
 
 
           <h2 className=' p-2 text-white font-semibold font-serif text-3xl shadow-inner animate-text-reveal text-left'>
