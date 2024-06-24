@@ -165,13 +165,13 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                 </div>
                             </Carousel>
                         </div>
-                        <div className='p-3 m-3 w-auto h-full shadow-md rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2'>
+                        <div className='p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-200  hover:shadow-2xl border-2'>
                             <Link to="/analytics-report" className=''>
                                 <h2 className='text-3xl border-b-2 border-gray-700 hover:text-yellow-400 hover:border-yellow-400'>Analytics</h2>
                                 <AnalyticsDashboard/>
                             </Link>
                         </div>
-                        <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2">
+                        <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-200  hover:shadow-2xl  border-2">
                             <Link to="/community-landing" className=''>
                                 <h2 className='text-3xl border-b-2 border-gray-700 py-1 hover:text-yellow-400 hover:border-yellow-400'>My Community</h2>
                                 <div className="flex xl:flex-row lg:flex-row md:flex-col sm:flex-col w-auto h-auto md:w-2/4">
@@ -212,7 +212,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         </div>
                     </div>
                     <div className="row_2 flex flex-col xl:w-1/3 lg:full float-right">
-                        <div className="p-3 m-3 w-auto h-auto shadow-inner rounded-3 bg-custom-radial hover:shadow-2xl bg-opacity-25 border-2">
+                        <div className="p-3 m-3 w-auto h-auto shadow-inner rounded-3 bg-slate-200  hover:shadow-2xl  border-2">
                             <div className="">
                                 <CommCalendar defaultSelectable={false} />
                             </div>
@@ -224,7 +224,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                 </Link>
                             </div>
                         </div>
-                        <div className="p-2 m-3 w-auto shadow-inner rounded-3 bg-custom-radial bg-opacity-25 border-2">
+                        <div className="p-2 m-3 w-auto shadow-inner rounded-3 bg-slate-200  border-2">
                             <Link to="/campcomms" className=''>
                                 <div className="flex border-b-2 border-gray-700">
                                     <div className='online-dot m-2'></div>

@@ -208,7 +208,7 @@ const Navbar_2 = () => {
 
 
 <Link to="/dashboard" className=' btn-link '>
-  <img src='../src/assets/CORPO_CIM/CORPO SIDE_cut.png' className=' h-full w-28 mt-1 mx-0  '/>
+  <img src='../src/assets/CORPO_CIM/CIM_2024.png' className=' h-full w-32 mt-1 mx-0  '/>
   </Link>
   </div>
   <div className="flex flex-row">

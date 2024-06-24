@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <nav className='flex flex-row justify-between shadow-2xl'>
       <div className="flex flex-row justify-self-center">
-      <img src='../src/assets/CORPO_CIM/CORPO SIDE_cut.png' className=' mt-1 mx-3 h-auto w-40'></img>
+      <img src='../src/assets/CORPO_CIM/CIM_2024.png' className=' mt-1 mx-3 h-auto w-40'></img>
       </div>
       
       <div className="links">
