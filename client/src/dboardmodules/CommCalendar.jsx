@@ -152,7 +152,7 @@ const CommCalendar = ({ defaultSelectable = true }) => {
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/organization');
+      const response = await axios.get('/organization');
       setOrganizations(response.data);
     } catch (error) {
       console.error('Error fetching organizations:', error);

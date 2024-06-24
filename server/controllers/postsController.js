@@ -103,10 +103,10 @@ const createAnnouncement = async (req, res) => {
     let recipientIds = new Set(); // Use a Set to avoid duplicates
 
     const parsedVisibility = JSON.parse(visibility);
-
+    const allMobileUsers = await MobileUser.find();
     if (parsedVisibility.everyone) {
       const allUsers = await User.find();
-      const allMobileUsers = await MobileUser.find();
+      
       targetUsers.push(...allUsers, ...allMobileUsers);
     } else {
       if (parsedVisibility.staff) {
@@ -119,7 +119,7 @@ const createAnnouncement = async (req, res) => {
       }
       if (parsedVisibility.students) {
         const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
-        targetUsers.push(...studentUsers);
+        targetUsers.push(...studentUsers, ...allMobileUsers);
       }
     }
 

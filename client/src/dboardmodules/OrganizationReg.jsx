@@ -95,7 +95,7 @@ export default function OrganizationReg() {
   
   const fetchOrganizations = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/organization');
+      const response = await axios.get('/organization');
       setOrganizations(response.data);
     } catch (error) {
       console.error('Error fetching organizations:', error);
@@ -107,7 +107,7 @@ export default function OrganizationReg() {
     try {
       setSelectedOrganization(orgName); 
       const token = getCookie('token');
-      const response = await axios.get(`http://localhost:8000/organization/${orgName}/potential_members`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.get(`/organization/${orgName}/potential_members`, { headers: { Authorization: `Bearer ${token}` } });
       setPotentialMembers(response.data);
       setShowPotentialMembersModal(true);
     } catch (error) {
@@ -125,7 +125,7 @@ export default function OrganizationReg() {
       }
       const encodedOrgName = encodeURIComponent(orgName);
       const response = await axios.post(
-          `http://localhost:8000/organization/${encodedOrgName}/add_members`,
+          `/organization/${encodedOrgName}/add_members`,
           { potentialMemberIds: [potentialMemberId] },
           { headers: { Authorization: `Bearer ${token}` } },
       );
@@ -143,7 +143,7 @@ export default function OrganizationReg() {
   
   const fetchMembers = async (orgName) => {
     try {
-      const response = await axios.get(`http://localhost:8000/organization/${orgName}/members`);
+      const response = await axios.get(`/organization/${orgName}/members`);
       const addedMembers = response.data.addedMembers;
       setMembers(addedMembers);
     } catch (error) {
@@ -173,7 +173,7 @@ export default function OrganizationReg() {
       }
   
       const response = await axios.put(
-        `http://localhost:8000/organizations/${activeOrgId}/members/${memberId}`, // Update the API endpoint URL
+        `/organizations/${activeOrgId}/members/${memberId}`, // Update the API endpoint URL
         updatedData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -201,7 +201,7 @@ export default function OrganizationReg() {
     try {
       const token = getCookie('token');
       const response = await axios.delete(
-        `http://localhost:8000/organizations/${activeOrgId}/members/${memberId}`,
+        `/organizations/${activeOrgId}/members/${memberId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status === 200) {

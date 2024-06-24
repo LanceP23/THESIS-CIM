@@ -230,7 +230,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                     )}
                     {(messageNotifications.length + announcementNotifications.length + eventNotifications.length + organizationAnnouncementNotifications.length+communityNotifications.length) > 0 ? (
                         <ul>
-                            {messageNotifications.map((notification, index) => (
+                            {messageNotifications.slice().reverse().map((notification, index) => (
                                 <div className="flex justify-between my-3 border-b-2 pb-2" key={index}>
                                     <div className="avatar">
                                         <div className="w-10 mask mask-squircle">

@@ -599,12 +599,7 @@ export default function CreateAnnouncement() {
 
       </div>
 
-      <div className="community_calendar_container p-3 m-3 w-max h-full  shadow-md rounded-3 bg-white border">
-
-        <h2>Community Calendar</h2>
-        
-
-      </div>
+      
     </div>
   );
 

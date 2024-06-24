@@ -142,7 +142,11 @@ const postEventController = async (req, res) => {
       const memberIds = communities.flatMap(community => community.members ? community.members.map(member => member.userId) : []);
   
       // Collect all mobile member IDs from these communities
-      const mobileMemberIds = communities.flatMap(community => community.mobileMembers ? community.mobileMembers.map(member => member.userId) : []);
+      const mobileMemberIds = communities.flatMap(community =>
+        community.members
+          .filter(member => member.userType === 'MobileUser')
+          .map(member => member.userId)
+      );
   
       // Find all users who are members of these communities
       const usersToNotify = await User.find({ _id: { $in: memberIds } });
@@ -169,8 +173,10 @@ const postEventController = async (req, res) => {
       // Send notifications to mobile users
       mobileUsersToNotify.forEach(mobileUser => {
           const receiverSocketId = getReceiverSocketId(mobileUser.id); 
+          console.log(mobileUser.id);
           if (receiverSocketId) {
-              io.to(receiverSocketId).emit("newEventMobile", notificationData);
+            console.log(receiverSocketId);
+              io.to(receiverSocketId).emit("newCommunityEventMobile", notificationData);
           }
       });
   

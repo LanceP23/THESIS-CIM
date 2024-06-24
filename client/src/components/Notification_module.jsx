@@ -162,7 +162,6 @@ const Notification_module = () => {
                   &times;
                 </button>
               </div>
-              <p><strong>From:</strong> {selectedNotification.posterName}</p>
               <p><strong>Type:</strong> {selectedNotification.type}</p>
               
               {selectedNotification.type === 'announcement' && (

@@ -151,7 +151,7 @@ const CreateEvent = ({ defaultSelectable = true }) => {
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/organization');
+      const response = await axios.get('/organization');
       setOrganizations(response.data);
     } catch (error) {
       console.error('Error fetching organizations:', error);
@@ -731,7 +731,6 @@ const handleSelectEvent = (event) => {
            <option value="">Select Event Type</option>
            <option value="institutional">Institutional</option>
            <option value="organizational">Organizational</option>
-           <option value="structural">Structural</option>
            <option value="specialized">Specialized</option>
          </select>
        </label>

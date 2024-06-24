@@ -106,7 +106,7 @@ const navigate = useNavigate();
       }
       const encodedOrgName = encodeURIComponent(organizationData.organization);
       const response = await axios.post(
-        `http://localhost:8000/organization/${encodedOrgName}/add_members`,
+        `/organization/${encodedOrgName}/add_members`,
         { potentialMemberIds: [potentialMemberId] },
         { headers: { Authorization: `Bearer ${token}` } },
       );
