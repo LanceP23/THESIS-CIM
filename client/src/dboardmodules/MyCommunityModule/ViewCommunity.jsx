@@ -66,7 +66,7 @@ const ViewCommunity = () => {
             <div className='flex flex-row justify-between'>
               <div className="max-w-full max-h-96 overflow-auto">
                 <table className="max-w-full">
-                  <thead className='sticky top-0'>
+                  <thead className='sticky top-0 z-10'>
                     <tr>
                       <th className='bg-green-500 text-white'>Community Name</th>
                       <th className='bg-green-500 text-white'>View Posts</th>

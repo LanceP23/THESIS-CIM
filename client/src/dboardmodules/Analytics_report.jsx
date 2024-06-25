@@ -94,14 +94,16 @@ const Analytics_report = () => {
   
 
   return (
-    <div className='flex flex-col md:flex-row my-5 w-full h-full animate-fade-in'>
+    <div className='flex flex-col  my-5 w-full h-full animate-fade-in'>
+
+      
       {totalPosts === 0 ? (
         <div className="text-center w-full">
           <p className="text-red-500">No analytics data available.</p>
         </div>
       ) : (
         <>
-          <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-full md:w-1/2 lg:w-1/3 mx-2 mb-4 md:mb-0">
+          <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-auto md:w-1/2 lg:w-1/3 mx-2 mb-4 md:mb-0">
             <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>
               <FontAwesomeIcon icon={faChartBar} className=' text-yellow-500 mx-1' />Reactions
             </h2>
@@ -135,7 +137,7 @@ const Analytics_report = () => {
 
           {/* BarChart for Total Likes and Dislikes */}
           {reactionsWithDates && reactionsWithDates.length > 0 && (
-            <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-full md:w-1/2 lg:w-1/3 mx-2 mb-4 md:mb-0">
+            <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-auto md:w-1/2 lg:w-1/3 mx-2 mb-4 md:mb-0">
             <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>
               <FontAwesomeIcon icon={faChartBar} className='text-yellow-500 mx-1' />User Reactions (Bar Chart)
             </h2>
@@ -163,7 +165,7 @@ const Analytics_report = () => {
 
           {/* LineChart for User Reactions Over Time */}
           {reactionsWithDates && reactionsWithDates.length > 0 && (
-            <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-full md:w-1/2 lg:w-1/3 mx-2">
+            <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-auto md:w-1/2 lg:w-1/3 mx-2">
               <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>
                 <FontAwesomeIcon icon={faChartLine} className=' text-yellow-500 mx-1' />User Reactions (Line Chart)
               </h2>

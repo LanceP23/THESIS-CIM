@@ -84,14 +84,14 @@ const UserManagement = () => {
 
             <div className="w-full max-h-96 overflow-auto">
             <table>
-                <thead className=' sticky top-0'>
-                    <tr>
-                        <th className='bg-green-700 text-white text-left'>ID</th>
+                <thead className=' sticky top-0 z-10'>
+                    <tr className=''>
+                        <th className='bg-green-700 text-white text-left '>ID</th>
                         <th className='bg-green-700 text-white text-left'>Name</th>
-                        <th className='bg-green-700 text-white text-left'>Email</th>
+                        <th className='bg-green-700 text-white text-left '>Email</th>
                         <th className='bg-green-700 text-white text-left'>Education Level</th>
-                        <th className='bg-green-700 text-white '>Additional Details</th>
-                        <th className='bg-green-700 text-white text-left'>Actions</th>
+                        <th className='bg-green-700 text-white z-10 '>Additional Details</th>
+                        <th className='bg-green-700 text-white text-left '>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -135,23 +135,21 @@ const UserManagement = () => {
                 user.educationLevel
               )}
             </td>
-                            <td>
+                            <td className='z-'>
                                 {user.educationLevel === 'Grade School' && (
                                     <div className=' '>
-                                        <div
-    class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-blue-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit">
-    <span class="">Grade Level: {user.gradeLevel}</span>
-  </div>
+                                        <div className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-blue-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit z-1">
+                                            <span className="">Grade Level: {user.gradeLevel}</span>
+                                         </div>
                                         <h2>Section: {user.section}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
                                     </div>
                                 )}
                                 {user.educationLevel === 'High School' && (
                                     <div className=''>
-                                        <div
-    class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-green-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit">
-    <span class="">Year Level: {user.highSchoolYearLevel}</span>
-  </div>
+                                        <div className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-green-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit z-1">
+                                            <span className="">Year Level: {user.highSchoolYearLevel}</span>
+                                        </div>
                                         <h2>Section: {user.section}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
                                     </div>
@@ -159,8 +157,8 @@ const UserManagement = () => {
                                 {user.educationLevel === 'Senior High School' && (
                                     <div  className=''>
                                          <div
-                                            class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-indigo-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit">
-                                            <span class="">Year Level: {user.seniorHighSchoolYearLevel}</span>
+                                            className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-indigo-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit z-1 ">
+                                            <span className="">Year Level: {user.seniorHighSchoolYearLevel}</span>
                                         </div>
                                         <h2>Strand: {user.shsStrand}</h2>
                                         <h2>Section: {user.section}</h2>
@@ -169,10 +167,9 @@ const UserManagement = () => {
                                 )}
                                 {user.educationLevel === 'College' && (
                                     <div className=''>
-                                        <div
-    class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-amber-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-black w-fit">
-    <span class="">Year Level: {user.collegeYearLevel}</span>
-  </div>
+                                        <div className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-amber-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white w-fit z-1">
+                                            <p className="">Year Level: {user.collegeYearLevel}</p>
+                                        </div>
                                         <h2>Course: {user.collegeCourse}</h2>
                                         <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
                                     </div>

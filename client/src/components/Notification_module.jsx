@@ -155,44 +155,44 @@ const Notification_module = () => {
 
         {selectedNotification && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-5 rounded-lg shadow-lg max-w-lg w-full mx-4">
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-2xl font-bold">{selectedNotification.announcementHeader}</h3>
-                <button onClick={closeModal} className="text-gray-600 hover:text-gray-900">
+            <div className=" bg-slate-200  pl-5 pr-2 pb-5  rounded-2xl shadow-lg max-w-lg w-full mx-4 text-left ">
+              <div className="flex justify-end my-0">
+            <button onClick={closeModal} className="text-gray-600 hover:text-gray-900 text-4xl">
                   &times;
                 </button>
+                </div>
+           
+              <div className="flex justify-between items-center mb-3 mt-1">
+                <h3 className="text-2xl font-bold text-green-700 border-b-4 border-yellow-500">Subject: {selectedNotification.announcementHeader}</h3>
+              
               </div>
-              <p><strong>From:</strong> {selectedNotification.posterName}</p>
-              <p><strong>Type:</strong> {selectedNotification.type}</p>
+              <p className='mt-2'><strong>From:</strong> {selectedNotification.posterName}</p>
+              <p className='mt-2'><strong>Type:</strong> {selectedNotification.type}</p>
               
               {selectedNotification.type === 'announcement' && (
                 <>
-                  <p><strong>From:</strong> {selectedNotification.posterName}</p>
-                  <p><strong>Message:</strong> {selectedNotification.message}</p>
-                  <p><strong>Title:</strong> {selectedNotification.announcementHeader}</p>
-                  <p><strong>Description:</strong> {selectedNotification.announcementBody}</p>
+                  <p className='mt-2'><strong>From:</strong> {selectedNotification.posterName}</p>
+                  <p className='mt-2'><strong>Message:</strong> {selectedNotification.message}</p>
+                  <p className='mt-2'><strong>Title:</strong> {selectedNotification.announcementHeader}</p>
+                  <p className='mt-2'><strong>Description:</strong> {selectedNotification.announcementBody}</p>
                 </>
               )}
 
               {selectedNotification.type === 'event' && (
                 <>
-                  <p><strong>By:</strong> {selectedNotification.posterName}</p>
-                  <p><strong>Title:</strong> {selectedNotification.eventName}</p>
-                  <p><strong>Starts at: </strong> {new Date(selectedNotification.timeStart).toLocaleString()}</p>
-                  <p><strong>Ends at: </strong> {new Date(selectedNotification.timeEnd).toLocaleString()}</p>
-                  <p><strong>Organizer:</strong> {selectedNotification.organizerName}</p>
+                  <p className='mt-2'><strong>By:</strong> {selectedNotification.posterName}</p>
+                  <p className='mt-2'><strong>Title:</strong> {selectedNotification.eventName}</p>
+                  <p className='mt-2'><strong>Starts at: </strong> {new Date(selectedNotification.timeStart).toLocaleString()}</p>
+                  <p className='mt-2'><strong>Ends at: </strong> {new Date(selectedNotification.timeEnd).toLocaleString()}</p>
+                  <p className='mt-2'><strong>Organizer:</strong> {selectedNotification.organizerName}</p>
 
                   
                 </>
               )}
 
 
-              <p><strong>Timestamp:</strong> {new Date(selectedNotification.timestamp).toLocaleString()}</p>
-              <div className="flex justify-end mt-4">
-                <button onClick={closeModal} className="px-4 py-2 bg-blue-500 text-white rounded">
-                  Close
-                </button>
-              </div>
+              <p className='mt-2'><strong>Timestamp:</strong> {new Date(selectedNotification.timestamp).toLocaleString()}</p>
+             
             </div>
           </div>
         )}
