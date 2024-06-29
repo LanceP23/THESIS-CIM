@@ -204,13 +204,22 @@ const Navbar_2 = () => {
 
    
   </div>
+
+  
   <div className="flex-1">
 
 
 <Link to="/dashboard" className=' btn-link '>
-  <img src='../src/assets/CORPO_CIM/CIM_2024.png' className=' h-full w-32 mt-1 mx-0  '/>
+  <img src='../src/assets/CORPO_CIM/CIM_2024.png' className='h-auto w-32 mt-1 mx-0 '/>
   </Link>
   </div>
+
+  <div className="flex flex-auto justify-start relative left-10">
+  <img src='../src/assets/CORPO_CIM/CSCQ_PLAIN_CUT_WHITE.png' className=' h-full xl:w-96 lg:w-72 md:w-60 sm:w-52  mt-1 mx-0 flex justify-center align-middle '/>
+
+  </div>
+
+ 
   <div className="flex flex-row">
   <div className="indicator">
   {totalUnreadCount > 0 && (

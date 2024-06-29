@@ -331,7 +331,7 @@ export default function BuildCommunity() {
         <div className="max-h-96 overflow-auto">
         <table className="w-full bg-white shadow-2xl rounded-2xl ">
           {/* Table Header */}
-          <thead className='sticky top-0'>
+          <thead className='sticky top-0 z-10'>
             <tr>
               <th className="bg-green-700 text-white">Name</th>
               <th className="bg-green-700 text-white">Email</th>
@@ -346,68 +346,68 @@ export default function BuildCommunity() {
                 <td className="border px-4 py-2">{user.studentemail}</td>
                 <td className="border px-4 py-2">
                 {user.adminType === 'School Owner' && (
-                  <div class="flex gap-2">
+                  <div className="flex gap-2">
                     <div
-                      class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-gray-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-                      <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+                      className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-gray-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+                      <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
                         <ShieldCheckIcon className="w-5 h-5" />
                       </div>
-                      <span class="ml-[18px]">School Owner</span>
+                      <span className="ml-[18px]">School Owner</span>
                     </div>
                   </div>
                 )}
                 {user.adminType === 'School Executive Admin' && (
-                  <div class="flex gap-2">
+                  <div className="flex gap-2">
                     <div
-                      class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-blue-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-                      <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+                      className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-blue-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+                      <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
                         <ShieldCheckIcon className="w-5 h-5" />
                       </div>
-                      <span class="ml-[18px]">School Executive Admin</span>
+                      <span className="ml-[18px]">School Executive Admin</span>
                     </div>
                   </div>
                 )}
                 {user.adminType === 'Program Head' && (
-                  <div class="flex gap-2">
+                  <div className="flex gap-2">
                     <div
-                      class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-green-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-                      <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+                      className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-green-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+                      <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
                         <AcademicCapIcon className="w-5 h-5" />
                       </div>
-                      <span class="ml-[18px]">Program Head</span>
+                      <span className="ml-[18px]">Program Head</span>
                     </div>
                   </div>
                 )}
                 {user.adminType === 'Organization Officer' && (
-                  <div class="flex gap-2">
+                  <div className="flex gap-2">
                     <div
-                      class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-purple-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-                      <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+                      className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-purple-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+                      <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
                         <UserGroupIcon className="w-5 h-5" />
                       </div>
-                      <span class="ml-[18px]">Organization Officer</span>
+                      <span className="ml-[18px]">Organization Officer</span>
                     </div>
                   </div>
                 )}
                 {user.adminType === 'Instructor' && (
-                  <div class="flex gap-2">
+                  <div className="flex gap-2">
                     <div
-                      class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-yellow-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-                      <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+                      className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-yellow-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+                      <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
                         <UsersIcon className="w-5 h-5" />
                       </div>
-                      <span class="ml-[18px]">Instructor</span>
+                      <span className="ml-[18px]">Instructor</span>
                     </div>
                   </div>
                 )}
                 {user.adminType === 'Student Government' && (
-                  <div class="flex gap-2">
+                  <div className="flex gap-2">
                     <div
-                      class="relative grid select-none items-center whitespace-nowrap rounded-lg bg-red-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-                      <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+                      className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-red-500 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+                      <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
                         <IdentificationIcon className="w-5 h-5" />
                       </div>
-                      <span class="ml-[18px]">Student Government</span>
+                      <span className="ml-[18px]">Student Government</span>
                     </div>
                   </div>
                 )}
