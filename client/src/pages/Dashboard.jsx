@@ -29,6 +29,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     const [recentPosts, setRecentPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [communityAnnouncements, setCommmunityAnnouncements] = useState([]);
+    const [adminLoginsToday, setAdminLoginsToday] = useState(0);
     
     const handleItemClick = (itemId) => {
         setActiveItem(itemId); // Update the active item when a navigation button is clicked
@@ -104,6 +105,25 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
 
         checkAuthStatus();
     }, [navigate]);
+
+    useEffect(() => {
+        const fetchAdminLoginsToday = async () => {
+            try {
+                const token = getToken();
+                const config = {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                };
+                const response = await axios.get('/admin-logins-today', config);
+                setAdminLoginsToday(response.data.loginCount);
+            } catch (error) {
+                console.error('Error fetching admin logins today:', error);
+            }
+        };
+
+        fetchAdminLoginsToday();
+    }, []);
 
     // Function to mock dashboard content based on user's role
     const mockDashboardContent = (role) => {
@@ -236,6 +256,11 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                     <Conversations conversations={{ conversations }} className='active_' />
                                 </div>
                             </Link>
+                        </div>
+                        <div className="mt-4">
+                            <p className='text-gray-700'>
+                                Number of admin logins today: {adminLoginsToday}
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -16,6 +16,7 @@ const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobile
 const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
 const{getLikesDislikesandReactions} = require('../controllers/analyticsController');
+const DailyLogin = require('../models/dailylogin'); 
 
 router.use(
     cors({
@@ -36,7 +37,7 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage });
 
-
+//auth related
 router.get('/', test);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
@@ -44,6 +45,18 @@ router.get('/check-auth', checkAuth);
 router.get('/profile', getProfile);
 router.post('/create_organization', authenticateUser, createOrganization);
 router.post('/logout', logoutUser);
+router.get('/admin-logins-today', async (req, res) => {
+  try {
+      const today = new Date(new Date().setHours(0, 0, 0, 0)); // set time to midnight of the current day
+      const dailyLogin = await DailyLogin.findOne({ date: today });
+
+      const loginCount = dailyLogin ? dailyLogin.loginCount : 0;
+      res.json({ loginCount });
+  } catch (error) {
+      console.error('Error fetching daily login count:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 //org
 router.get('/organization', getOrganization);

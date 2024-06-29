@@ -3,6 +3,7 @@ const MobileUser = require('../models/mobileUser')
 const{hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const DailyLogin = require('../models/dailylogin');
 
 
 const test = (req, res) =>{
@@ -160,6 +161,22 @@ const loginUser = async (req, res) => {
 
         if (!passwordMatch) {
             return res.status(401).json({ error: 'Invalid email or password' });
+        }
+        //count admin logged in
+        if (user.adminType) {
+            const today = new Date(new Date().setHours(0, 0, 0, 0)); // set time to midnight of the current day
+            let dailyLogin = await DailyLogin.findOne({ date: today });
+
+            if (!dailyLogin) {
+                dailyLogin = new DailyLogin({ date: today, loginCount: 0, loggedInUsers: [] });
+            }
+
+            // Check if user has already logged in today
+            if (!dailyLogin.loggedInUsers.includes(user._id)) {
+                dailyLogin.loginCount += 1;
+                dailyLogin.loggedInUsers.push(user._id);
+                await dailyLogin.save();
+            }
         }
 
         // Generate JWT token
