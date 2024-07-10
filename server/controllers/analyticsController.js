@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const User = require('../models/user'); // Assuming you have a User model
+const MobileUser = require('../models/mobileUser'); // Assuming you have a MobileUser model
 const Announcement = mongoose.model('Announcement'); // Assuming you have an Announcement model
+
+// Connect to the UserReaction collection directly
+const UserReaction = mongoose.connection.collection('userreactions');
 
 // Function to generate random dates within a specified range
 const generateRandomDates = () => {
@@ -13,6 +17,109 @@ const generateRandomDates = () => {
 
 // Generate random dates once when the file is imported
 const { lastMonth, range } = generateRandomDates();
+
+const countUserReactionsByEducationLevel = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // Find the user by userId to get their name
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const userName = user.name;
+
+        // Fetch announcements belonging to the specified user
+        const announcements = await Announcement.find({ postedBy: userName });
+
+        if (!announcements || announcements.length === 0) {
+            return res.status(404).send({ message: 'No announcements found for this user' });
+        }
+
+        const announcementIds = announcements.map(announcement => announcement._id);
+
+        const reactions = await UserReaction.aggregate([
+            { $match: { announcementId: { $in: announcementIds.map(id => mongoose.Types.ObjectId(id)) } } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'adminDetails'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'mobileusers',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'mobileUserDetails'
+                }
+            },
+            {
+                $addFields: {
+                    userDetails: {
+                        $cond: {
+                            if: { $gt: [{ $size: '$adminDetails' }, 0] },
+                            then: { $arrayElemAt: ['$adminDetails', 0] },
+                            else: { $arrayElemAt: ['$mobileUserDetails', 0] }
+                        }
+                    },
+                    userType: {
+                        $cond: {
+                            if: { $gt: [{ $size: '$adminDetails' }, 0] },
+                            then: 'admin',
+                            else: 'mobile'
+                        }
+                    }
+                }
+            }
+        ]).toArray();
+
+        const educationLevelCounters = {
+            gradeSchool: 0,
+            highSchool: 0,
+            seniorHighSchool: 0,
+            college: 0,
+            admin: 0
+        };
+
+        reactions.forEach(reaction => {
+            const userType = reaction.userType;
+            const userDetail = reaction.userDetails;
+
+            if (userType === 'admin') {
+                educationLevelCounters.admin++;
+            } else if (userType === 'mobile') {
+                switch (userDetail.educationLevel) {
+                    case 'Grade School':
+                        educationLevelCounters.gradeSchool++;
+                        break;
+                    case 'High School':
+                        educationLevelCounters.highSchool++;
+                        break;
+                    case 'Senior High School':
+                        educationLevelCounters.seniorHighSchool++;
+                        break;
+                    case 'College':
+                        educationLevelCounters.college++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        // Send the response
+        res.status(200).send({
+            educationLevelCounters
+        });
+    } catch (error) {
+        res.status(500).send({ message: 'Error counting user reactions by education level', error });
+    }
+};
 
 const getLikesDislikesandReactions = async (req, res) => {
     try {
@@ -67,5 +174,6 @@ const getLikesDislikesandReactions = async (req, res) => {
 };
 
 module.exports = {
-    getLikesDislikesandReactions
+    getLikesDislikesandReactions,
+    countUserReactionsByEducationLevel
 };
