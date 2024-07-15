@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const User = require('../models/user'); // Assuming you have a User model
-const MobileUser = require('../models/mobileUser'); // Assuming you have a MobileUser model
-const Announcement = mongoose.model('Announcement'); // Assuming you have an Announcement model
+const User = require('../models/user');
+const MobileUser = require('../models/mobileUser'); 
+const Announcement = mongoose.model('Announcement');
+const UserReaction = require('../models/userreactions');
 
-// Connect to the UserReaction collection directly
-const UserReaction = mongoose.connection.collection('userreactions');
+
 
 // Function to generate random dates within a specified range
 const generateRandomDates = () => {
@@ -21,27 +21,36 @@ const { lastMonth, range } = generateRandomDates();
 const countUserReactionsByEducationLevel = async (req, res) => {
     try {
         const userId = req.params.id;
+       
 
         // Find the user by userId to get their name
         const user = await User.findById(userId);
-
         if (!user) {
+           
             return res.status(404).send({ message: 'User not found' });
         }
 
         const userName = user.name;
+        
 
-        // Fetch announcements belonging to the specified user
-        const announcements = await Announcement.find({ postedBy: userName });
-
-        if (!announcements || announcements.length === 0) {
-            return res.status(404).send({ message: 'No announcements found for this user' });
-        }
-
-        const announcementIds = announcements.map(announcement => announcement._id);
-
+        // Fetch all reactions where the postedBy field in Announcement matches the user's name
         const reactions = await UserReaction.aggregate([
-            { $match: { announcementId: { $in: announcementIds.map(id => mongoose.Types.ObjectId(id)) } } },
+            {
+                $lookup: {
+                    from: 'announcements',
+                    localField: 'announcementId',
+                    foreignField: '_id',
+                    as: 'announcementDetails'
+                }
+            },
+            {
+                $unwind: '$announcementDetails'
+            },
+            {
+                $match: {
+                    'announcementDetails.postedBy': userName
+                }
+            },
             {
                 $lookup: {
                     from: 'users',
@@ -76,7 +85,7 @@ const countUserReactionsByEducationLevel = async (req, res) => {
                     }
                 }
             }
-        ]).toArray();
+        ]);
 
         const educationLevelCounters = {
             gradeSchool: 0,
@@ -86,7 +95,7 @@ const countUserReactionsByEducationLevel = async (req, res) => {
             admin: 0
         };
 
-        reactions.forEach(reaction => {
+        for (const reaction of reactions) {
             const userType = reaction.userType;
             const userDetail = reaction.userDetails;
 
@@ -110,16 +119,21 @@ const countUserReactionsByEducationLevel = async (req, res) => {
                         break;
                 }
             }
-        });
+        }
+        
 
-        // Send the response
-        res.status(200).send({
-            educationLevelCounters
-        });
+        const allZero = Object.values(educationLevelCounters).every(count => count === 0);
+        if (allZero) {
+            res.status(200).send({ message: 'No reactions found for this user\'s posts.' });
+        } else {
+            res.status(200).send({ educationLevelCounters });
+        }
     } catch (error) {
+        console.error('Error counting user reactions by education level', error);
         res.status(500).send({ message: 'Error counting user reactions by education level', error });
     }
 };
+
 
 const getLikesDislikesandReactions = async (req, res) => {
     try {

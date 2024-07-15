@@ -15,7 +15,7 @@ const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccoun
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
 const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
-const{getLikesDislikesandReactions} = require('../controllers/analyticsController');
+const{getLikesDislikesandReactions,countUserReactionsByEducationLevel} = require('../controllers/analyticsController');
 const DailyLogin = require('../models/dailylogin'); 
 
 router.use(
@@ -128,6 +128,7 @@ router.patch('/notifications/markAllAsRead', markAllNotificationsAsRead);
 
 //analytics
 router.get('/announcements/:id/details', getLikesDislikesandReactions);
+router.get('/user/:id/demographics',countUserReactionsByEducationLevel);
 
 module.exports = router;
 
