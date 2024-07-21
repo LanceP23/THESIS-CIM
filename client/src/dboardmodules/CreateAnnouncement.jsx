@@ -17,6 +17,7 @@ import { UserContext } from '../../context/userContext';
 import Eventcalendar from '../dboardmodules/MyCommunityModule/Eventcalendar'
 import { Calendar } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
+import ManageUserAnnouncement from './ManageUserAnnouncement';
 
 
 const firebaseConfig = {
@@ -406,7 +407,7 @@ export default function CreateAnnouncement() {
       <div className="p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>  <FontAwesomeIcon icon={faBullhorn} className=' text-yellow-500 mx-1 '/>Post Management</h2>
       <div role="tablist" className="tabs tabs-lifted w-full">
-        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 w-auto " aria-label="Announcements" />
+        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 w-auto " aria-label="Create Announcement" />
         <div role="tabpanel" className="tab-content bg-green-600 shadow-lg rounded-md p-6 w-auto">
           <div className=" shadow-inner annoucement_creation_container bg-white p-4 my-2  max-w-full  h-full  rounded-2 border animate-fade-in ">
           <h2 className='border-b border-gray-500 py-2 font-bold '>Create Announcement</h2>
@@ -473,7 +474,7 @@ export default function CreateAnnouncement() {
                       value={postingDate}
                       onChange={handlePostingDateChange}
                     />
-                    <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Required</label>
+                    <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Not Required</label>
                   </div>
                   <div className='flex justify-start'>
                     <label className="label text-gray-700" htmlFor="expirationDate">Expiration Date:</label>
@@ -599,6 +600,10 @@ export default function CreateAnnouncement() {
           </div>
           </div>
         </div>
+        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 w-auto " aria-label="Edit Posts" />
+        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">
+          <ManageUserAnnouncement/>
+          </div>
                     
 
        
