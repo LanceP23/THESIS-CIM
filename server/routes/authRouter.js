@@ -5,7 +5,7 @@ const cors = require('cors');
 const fs = require('fs');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName } = require('../controllers/organizationController');
-const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus, getUserAnnouncements } = require('../controllers/postsController');
+const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus, getUserAnnouncements, updateAnnouncement } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
 const {postEventController,getEventsController, putEventController, deleteEventController} = require('../controllers/postEventController');
@@ -79,6 +79,7 @@ router.get('/pending-announcements', authenticateUser, getPendingAnnouncements);
 router.put('/update-announcement-status/:announcementId', authenticateUser, updateAnnouncementStatus);
 router.get('/approved-announcements', authenticateUser, getApprovedAnnouncements);
 router.get('/fetch-user-announcements', authenticateUser,getUserAnnouncements);
+router.put('/update-post/:postId', authenticateUser, updateAnnouncement);
 
 //fetchingAdminAccounts
 router.get('/staff', getAllStaff);

@@ -56,6 +56,10 @@ const announcementSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 announcementSchema.pre('save', function(next) {

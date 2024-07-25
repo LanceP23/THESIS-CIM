@@ -446,11 +446,41 @@ const getUserAnnouncements = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+const updateAnnouncement = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { header, body } = req.body;
+
+    const announcement = await Announcement.findById(postId);
+
+    if (!announcement) {
+      return res.status(404).json({ message: 'Announcement not found' });
+    }
+
+    // Check if the user is authorized to edit this announcement
+    if (announcement.postedBy !== req.user.name) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    announcement.header = header;
+    announcement.body = body;
+    announcement.updatedAt = Date.now();
+
+    await announcement.save();
+
+    res.status(200).json({ message: 'Announcement updated successfully', announcement });
+  } catch (error) {
+    console.error('Error updating announcement:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 module.exports = {
   createAnnouncement,
   authenticate, 
   getPendingAnnouncements,
   updateAnnouncementStatus,
   getApprovedAnnouncements,
-  getUserAnnouncements
+  getUserAnnouncements,
+  updateAnnouncement
 };
