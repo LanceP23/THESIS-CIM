@@ -16,7 +16,7 @@ const MessageContainer = () => {
     <div className='flex flex-col '>
       {!selectedConversation?<NoChatSelected/>:(
         <>
-        <div className=' bg-green-500 rounded-lg p-4 shadow-2xl'>
+        <div className=' bg-slate-100 rounded-lg p-4 shadow-2xl'>
           <p className='text-xl'>To: <strong>{selectedConversation.name}</strong>{""}
         
           </p>

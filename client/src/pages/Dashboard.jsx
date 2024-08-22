@@ -13,7 +13,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import moment from 'moment';
 import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarCheck, faCalendarDay, faDashboard } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck, faCalendarDay, faDashboard, faUser } from '@fortawesome/free-solid-svg-icons';
 import Navbar_2 from '../components/Navbar_2';
 import Navbar from '../components/Navbar';
 import { Carousel } from 'react-responsive-carousel';
@@ -172,7 +172,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
             <div className="">
                 <div className=" my-16 h-full flex xl:flex-row flex-col md:flex-col sm:flex-col ">
                     <div className="row_1 inline-flex flex-col xl:w-2/3 h-full ">
-                        <div className="p3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-300 border-2 ">
+                        <div className="p3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100 border-2 ">
                             <Carousel showThumbs={false} autoPlay infiniteLoop interval={10000}>
                                 <div>
                                     <img src="../src/assets/398569058_739544134860223_1719844830869562449_n.jpg" alt="Slide 1" className=' h-auto' />
@@ -183,15 +183,16 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                 <div>
                                     <img src="../src/assets/439841626_847556550725647_7502073539968304278_n.jpg" alt="Slide 3" />
                                 </div>
+                             
                             </Carousel>
                         </div>
-                        <div className='p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-200  hover:shadow-2xl border-2'>
+                        <div className='p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2'>
                             <Link to="/analytics-report" className=''>
                                 <h2 className='text-3xl border-b-2 border-gray-700 hover:text-yellow-400 hover:border-yellow-400'>Analytics</h2>
                                 <AnalyticsDashboard/>
                             </Link>
                         </div>
-                        <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-200  hover:shadow-2xl  border-2">
+                        <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl  border-2">
                             <Link to="/community-landing" className=''>
                                 <h2 className='text-3xl border-b-2 border-gray-700 py-1 hover:text-yellow-400 hover:border-yellow-400'>My Community</h2>
                                 <div className="flex xl:flex-row lg:flex-row md:flex-col sm:flex-col w-auto h-auto md:w-2/4">
@@ -233,7 +234,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         </div>
                     </div>
                     <div className="row_2 flex flex-col xl:w-1/3 lg:full float-right">
-                        <div className="p-3 m-3 w-auto h-auto shadow-inner rounded-3 bg-slate-200  hover:shadow-2xl  border-2">
+                        <div className="p-3 m-3 w-auto h-auto shadow-inner rounded-3 bg-slate-100  hover:shadow-2xl  border-2">
                             <div className="">
                                 <CommCalendar defaultSelectable={false} />
                             </div>
@@ -245,7 +246,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                 </Link>
                             </div>
                         </div>
-                        <div className="p-2 m-3 w-auto shadow-inner rounded-3 bg-slate-200  border-2">
+                        <div className="p-2 m-3 my-2 w-auto shadow-inner rounded-3 bg-slate-100  border-2">
                             <Link to="/campcomms" className=''>
                                 <div className="flex border-b-2 border-gray-700">
                                     <div className='online-dot m-2'></div>
@@ -259,9 +260,22 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                             </Link>
                         </div>
                         <div className="mt-4">
-                            <p className='text-gray-700'>
-                                Number of admin logins today: {adminLoginsToday}
-                            </p>
+
+                        <div className="bg-slate-100 p-3  rounded-lg  shadow-slate-950 mx-3  mb-4 md:mb-0">
+                            <h2 className="text-2xl text-green-800 border-b-2 border-yellow-500 py-2">
+                            <FontAwesomeIcon className="text-yellow-500 mx-1" />Total Login 
+                            </h2>
+                            <div className="p-2 my-1 md:p-5 lg:p-10 md:m-2 lg:m-5 h-auto shadow-md rounded-2 border">
+                            <div className="stat items-center flex">
+                                <div className="stat-title text-stone-800">Number of admin logins today:</div>
+                                <div className="stat-value">{adminLoginsToday} <FontAwesomeIcon icon= {faUser} className=' text-green-500'/></div>
+                                
+                                
+                                
+                            </div>
+                            </div>
+                        </div>
+                          
                         </div>
                     </div>
                 </div>

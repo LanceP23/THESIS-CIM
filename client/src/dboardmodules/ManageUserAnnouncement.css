@@ -21,10 +21,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
-  .announcement-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+ 
   
   /* Header of the announcement */
   .announcement-header {
@@ -68,7 +65,7 @@
   .announcement-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 2px;
   }
   
   .announcement-actions .btn {

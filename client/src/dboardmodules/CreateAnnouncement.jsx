@@ -408,7 +408,7 @@ export default function CreateAnnouncement() {
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>  <FontAwesomeIcon icon={faBullhorn} className=' text-yellow-500 mx-1 '/>Post Management</h2>
       <div role="tablist" className="tabs tabs-lifted w-full">
         <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 w-auto " aria-label="Create Announcement" />
-        <div role="tabpanel" className="tab-content bg-green-600 shadow-lg rounded-md p-6 w-auto">
+        <div role="tabpanel" className="tab-content bg-green-100 shadow-lg rounded-md p-6 w-auto">
           <div className=" shadow-inner annoucement_creation_container bg-white p-4 my-2  max-w-full  h-full  rounded-2 border animate-fade-in ">
           <h2 className='border-b border-gray-500 py-2 font-bold '>Create Announcement</h2>
          <div className="flex xl:flex-row lg:flex-col justify-around">
@@ -536,7 +536,7 @@ export default function CreateAnnouncement() {
 
                 <div className="divider divider-warning"></div>
 
-                <div className="recentpost_container overflow-auto max-h-96">
+                <div className="recentpost_container overflow-auto max-h-[650px]">
                 
                   
                   <ul>
