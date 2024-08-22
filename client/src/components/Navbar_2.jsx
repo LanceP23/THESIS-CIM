@@ -240,7 +240,7 @@ const Navbar_2 = () => {
     <div className="dropdown dropdown-end">
       <div  className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
-          <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+          <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
         
         </div>
         
@@ -252,9 +252,9 @@ const Navbar_2 = () => {
     class="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
     <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-        <path fill-rule="evenodd"
+        <path fillRule="evenodd"
           d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-          clip-rule="evenodd"></path>
+          clipRule="evenodd"></path>
       </svg>
     </div>
     <span class="ml-[18px]">{adminType}</span>
@@ -263,7 +263,7 @@ const Navbar_2 = () => {
           <li></li>
           <li onClick={handleLogout} className='bg-red-600 rounded-lg flex items-center'>
   <a>Logout 
-    <svg class="text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> 
+    <svg class="text-white"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"> 
       <path stroke="none" d="M0 0h24v24H0z"/> 
       <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /> 
       <path d="M7 12h14l-3 -3m0 6l3 -3" /> 

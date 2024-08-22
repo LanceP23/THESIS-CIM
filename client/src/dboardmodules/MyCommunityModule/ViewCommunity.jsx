@@ -80,7 +80,7 @@ const ViewCommunity = () => {
                           <div className="flex items-center gap-3">
                             <div className="avatar">
                               <div className="mask mask-squircle w-12 h-12">
-                                <img src={community.logo || "https://img.daisyui.com/tailwind-css-component-profile-2@56w.png"} alt="Avatar" />
+                                <img src={community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Avatar" />
                               </div>
                             </div>
                             <div>

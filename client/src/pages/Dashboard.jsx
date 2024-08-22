@@ -202,27 +202,28 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                             <div key={index} className="p-0 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-full h-full max-h-auto shadow-md rounded-2 border flex justify-center">
                                                 <div className="flex flex-col gap-4 w-auto">
                                                     <div className="flex gap-4 justify-center items-center h-[10rem] m-2">
-                                                        <img src={post.community.logo} alt="Community Logo" className="w-16 h-16 rounded-full" />
+                                                        <img src={post.community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" } alt="Community Logo" className="w-16 h-16 rounded-full" />
                                                         <div className="flex flex-col gap-4">
                                                             <h3 className="xl:text-xl text-lg font-semibold text-green-800 border-b border-yellow-400 text-left">{post.community.name}</h3>
                                                             <p>{post.announcement.header}</p>
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        {post.announcement.mediaUrl ? (
-                                                            post.announcement.contentType === 'image/gif' ? (
-                                                                <img src={post.announcement.mediaUrl} alt="gif" className="w-auto rounded-lg" />
-                                                            ) : (
-                                                                <video controls className="w-full h-96 rounded-lg">
-                                                                    <source src={post.announcement.mediaUrl} type="video/mp4" />
-                                                                    Your browser does not support the video tag.
-                                                                </video>
-                                                            )
+                                                    {post.announcement.mediaUrl ? (
+                                                        post.announcement.contentType?.startsWith('image/') || /\.(jpg|jpeg|png|gif)$/i.test(post.announcement.mediaUrl) ? (
+                                                            <img src={post.announcement.mediaUrl} alt="image" className="w-auto rounded-lg" />
                                                         ) : (
-                                                            <div className="w-full h-96 flex items-center justify-center border rounded-lg">
-                                                                <p className="text-gray-500">{post.announcement.body}</p>
-                                                            </div>
-                                                        )}
+                                                            <video controls className="w-full h-96 rounded-lg">
+                                                                <source src={post.announcement.mediaUrl} type={post.announcement.contentType || 'video/mp4'} />
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        )
+                                                    ) : (
+                                                        <div className="w-full h-96 flex items-center justify-center border rounded-lg">
+                                                            <p className="text-gray-500">{post.announcement.body}</p>
+                                                        </div>
+                                                    )}
+
                                                     </div>
                                                 </div>
                                             </div>
