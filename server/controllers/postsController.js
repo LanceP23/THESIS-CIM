@@ -475,6 +475,26 @@ const updateAnnouncement = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+ const deleteAnnouncement = async(req,res) =>{
+  try{
+    const {postId} = req.params;
+
+    const announcement = await Announcement.findByIdAndDelete(postId);
+
+    if(!announcement){
+      return res.status(404).json({message: 'Announcement not found'});
+    }
+
+    if(announcement.postedBy!== req.user.name){
+      return res.status(403).json({message: 'Unauthorized'});
+    }
+
+    res.status(200).json({message:'Announcement deleted successfully', announcement});
+  }catch(error){
+    console.error('Error deleting announcement', error);
+    res.status(500).json({message:'Internal Server Error'})
+  }
+ }
 module.exports = {
   createAnnouncement,
   authenticate, 
@@ -482,5 +502,6 @@ module.exports = {
   updateAnnouncementStatus,
   getApprovedAnnouncements,
   getUserAnnouncements,
-  updateAnnouncement
+  updateAnnouncement,
+  deleteAnnouncement
 };

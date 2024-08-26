@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import toast from 'react-hot-toast'; 
 import './ManageUserAnnouncement.css';
 
 const ManageUserAnnouncement = () => {
@@ -63,12 +64,32 @@ const ManageUserAnnouncement = () => {
       }
     } catch (error) {
       console.error('Error updating announcement:', error);
+      toast.error('Failed to update announcement.');
     }
   };
 
-  const handleDelete = (postId) => {
-    // no functions yet
-    console.log('Delete post with ID:', postId);
+  const handleDelete = async (postId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) {
+      return; // Exit if the user cancels the deletion
+    }
+
+    try {
+      const token = getToken();
+      const response = await axios.delete(`/delete-post/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 200) {
+        setUserPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
+        toast.success('Announcement deleted successfully.');
+      }
+    } catch (error) {
+      console.error('Error deleting announcement:', error);
+      toast.error('Failed to delete announcement.');
+    }
   };
 
   if (loading) {
@@ -76,80 +97,79 @@ const ManageUserAnnouncement = () => {
   }
 
   return (
-    <div className="shadow-inner  bg-slate-300 p-4 my-2  max-w-full h-auto rounded-2 border animate-fade-in">
-      
-      <h2 className='border-b border-gray-500 py-2 font-bold mb-5 '>Your Announcements</h2>
-      <div className=" max-h-[700px] overflow-auto ">
-      {userPosts.length === 0 ? (
-        <p>No announcements found.</p>
-      ) : (
-        userPosts.map(post => (
-          <div key={post._id} className="max-w-full  my-5 p-4 bg-slate-100 rounded-lg shadow-sm border-3">
-            {editingPost === post._id ? (
-              <div className="edit-form">
-                <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Title:</label>
-                <input
-                  type="text"
-                  value={editHeader}
-                  onChange={(e) => setEditHeader(e.target.value)}
-                  className="input input-bordered input-success input-md w-full text-gray-700 bg-white rounded-md shadow-xl mb-2"
-                />
+    <div className="shadow-inner bg-slate-300 p-4 my-2 max-w-full h-auto rounded-2 border animate-fade-in">
+      <h2 className='border-b border-gray-500 py-2 font-bold mb-5'>Your Announcements</h2>
+      <div className="max-h-[700px] overflow-auto">
+        {userPosts.length === 0 ? (
+          <p>No announcements found.</p>
+        ) : (
+          userPosts.map(post => (
+            <div key={post._id} className="max-w-full my-5 p-4 bg-slate-100 rounded-lg shadow-sm border-3">
+              {editingPost === post._id ? (
+                <div className="edit-form">
+                  <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Title:</label>
+                  <input
+                    type="text"
+                    value={editHeader}
+                    onChange={(e) => setEditHeader(e.target.value)}
+                    className="input input-bordered input-success input-md w-full text-gray-700 bg-white rounded-md shadow-xl mb-2"
+                  />
 
-                <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Body:</label>
-                <textarea
-                  value={editBody}
-                  onChange={(e) => setEditBody(e.target.value)}
-                  className="textarea textarea-success w-full text-gray-700 bg-white rounded-md shadow-xl mb-2"
-                />
-                <div className="flex justify-end gap-2">
-                <button onClick={() => handleUpdate(post._id)} className="btn btn-info">Update</button>
-                <button onClick={() => setEditingPost(null)} className="btn btn-error">Cancel</button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="mb-4 text-2xl text-green-700 font-bold text-left border-b border-yellow-400">{post.header}</div>
-                <div className="mb-5 font-bold text-left px-3 ">{post.body}</div>
-                {post.mediaUrl && post.contentType && post.contentType.startsWith('image') && (
-                  <div className=" w-full ">
-                    <img src={post.mediaUrl} alt={post.header} className='w-auto  max-h-96 shadow-lg' />
-                  </div>
-                )}
-                {post.mediaUrl && post.contentType && post.contentType.startsWith('video') && (
-                  <div className=" w-full">
-                    <video controls className='w-auto  max-h-96 shadow-lg'>
-                      <source src={post.mediaUrl} type={post.contentType} />
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-                )}
-                {post.mediaUrl && post.contentType && post.contentType.startsWith('audio') && (
-                  <div className="w-full">
-                    <audio controls className='w-auto  max-h-96 shadow-lg'>
-                      <source src={post.mediaUrl} type={post.contentType} />
-                      Your browser does not support the audio element.
-                    </audio>
-                  </div>
-                )}
-                <div className="flex justify-between items-center text-sm text-gray-600">
-                  <div>
-                    <span>Posted on: {new Date(post.createdAt).toLocaleString()}</span>
-                    <span>Status: {post.status}</span>
-                  </div>
-                  <div className="flex justify-end gap-2 ">
-                    <button onClick={() => handleEdit(post)} className="btn btn-info">
-                      <FaEdit /> Edit
-                    </button>
-                    <button onClick={() => handleDelete(post._id)} className="btn btn-error">
-                      <FaTrashAlt /> Delete
-                    </button>
+                  <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Body:</label>
+                  <textarea
+                    value={editBody}
+                    onChange={(e) => setEditBody(e.target.value)}
+                    className="textarea textarea-success w-full text-gray-700 bg-white rounded-md shadow-xl mb-2"
+                  />
+                  <div className="flex justify-end gap-2">
+                    <button onClick={() => handleUpdate(post._id)} className="btn btn-info">Update</button>
+                    <button onClick={() => setEditingPost(null)} className="btn btn-error">Cancel</button>
                   </div>
                 </div>
-              </>
-            )}
-          </div>
-        ))
-      )}
+              ) : (
+                <>
+                  <div className="mb-4 text-2xl text-green-700 font-bold text-left border-b border-yellow-400">{post.header}</div>
+                  <div className="mb-5 font-bold text-left px-3">{post.body}</div>
+                  {post.mediaUrl && post.contentType && post.contentType.startsWith('image') && (
+                    <div className="w-full">
+                      <img src={post.mediaUrl} alt={post.header} className='w-auto max-h-96 shadow-lg' />
+                    </div>
+                  )}
+                  {post.mediaUrl && post.contentType && post.contentType.startsWith('video') && (
+                    <div className="w-full">
+                      <video controls className='w-auto max-h-96 shadow-lg'>
+                        <source src={post.mediaUrl} type={post.contentType} />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  )}
+                  {post.mediaUrl && post.contentType && post.contentType.startsWith('audio') && (
+                    <div className="w-full">
+                      <audio controls className='w-auto max-h-96 shadow-lg'>
+                        <source src={post.mediaUrl} type={post.contentType} />
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center text-sm text-gray-600">
+                    <div>
+                      <span>Posted on: {new Date(post.createdAt).toLocaleString()}</span>
+                      <span>Status: {post.status}</span>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <button onClick={() => handleEdit(post)} className="btn btn-info">
+                        <FaEdit /> Edit
+                      </button>
+                      <button onClick={() => handleDelete(post._id)} className="btn btn-error">
+                        <FaTrashAlt /> Delete
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
