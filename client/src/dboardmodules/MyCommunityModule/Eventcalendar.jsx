@@ -2,6 +2,7 @@ import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CreateEvent from '../CreateEvent';
+import ManageEvent from '../../pages/ManageEvent';
 import "./Eventcalendar.css"
 
 const Eventcalendar = () => {
@@ -11,6 +12,9 @@ const Eventcalendar = () => {
         <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 my-2'>  <FontAwesomeIcon icon={ faCalendarCheck} className=' text-yellow-500 mx-1'/>Event Calendar</h2>
        <div className='p-3'>
        <CreateEvent />
+       </div>
+       <div>
+        <ManageEvent/>
        </div>
     </div>
   )
