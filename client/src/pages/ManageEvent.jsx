@@ -4,9 +4,26 @@ import moment from 'moment';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import ReactModal from 'react-modal';
+import Modal from 'react-modal';
 
 const localizer = momentLocalizer(moment);
+
+const customStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 1000, 
+  },
+  content: {
+    width: 'auto',
+    height: 'auto',
+    maxWidth: 'full',
+    zIndex: 1001, 
+    margin: ' 5, 5, 5, 5', // Optional: ensure it's centered within any containing space
+    borderRadius: '8px', // Optional: add border-radius for aesthetics
+    padding: '20px', // Optional: add padding inside the modal
+    
+  },
+};
 
 const ManageEvent = () => {
   const [events, setEvents] = useState([]);
@@ -135,7 +152,7 @@ const ManageEvent = () => {
 
   return (
     <div className="manage-events-container">
-      <h2>Your Events</h2>
+      <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 mt-2 mb-2'>Your Events</h2>
       <Calendar
         localizer={localizer}
         events={events}
@@ -145,48 +162,65 @@ const ManageEvent = () => {
         views={{ agenda: true }} 
         defaultView={Views.AGENDA} 
         onSelectEvent={handleSelectEvent}
+        
       />
 
       {selectedEvent && (
-        <ReactModal
+        <Modal
           isOpen={isModalOpen}
           onRequestClose={closeModal}
           contentLabel="Event Details"
-          className="event-details-modal"
+          className=" z-50"
           overlayClassName="modal-overlay"
+
+         
+       
+          
         >
-          <div className="modal-header">
-            <h2>{editMode ? 'Edit Event' : 'Event Details'}</h2>
+          <div className=" border-b-2 border-yellow-500">
+            <h2 className='text-3xl text-green-800 '>{editMode ? 'Edit Event' : 'Event Details'}</h2>
           </div>
           <div className="modal-content">
             <div className="event-info">
               <div className="event-details-box">
                 {editMode ? (
                   <>
-                    <label>Event Name: <input name="title" value={eventForm.title} onChange={handleInputChange} /></label>
-                    <label>Start Date: <input type="datetime-local" name="start" value={eventForm.start} onChange={handleInputChange} /></label>
-                    <label>End Date: <input type="datetime-local" name="end" value={eventForm.end} onChange={handleInputChange} /></label>
+                  <div className="flex gap-2 mb-3">
+                    <label >
+                      Event Name: <input name="title" value={eventForm.title} onChange={handleInputChange} className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' />
+                    </label>
+                    
+                    <label>
+                      Start Date: <input type="datetime-local" name="start" value={eventForm.start} onChange={handleInputChange} className='input input-bordered input-success input-sm w-full text-white mx-1' />
+                    </label>
+                    <label>
+                      End Date: <input type="datetime-local" name="end" value={eventForm.end} onChange={handleInputChange} className='input input-bordered input-success input-sm w-full text-white mx-1' />
+                    </label>
+                    </div>
+
+                    <div className="flex gap-5">
                     <label>Event Type: 
-                      <select name="eventType" value={eventForm.eventType} onChange={handleInputChange}>
+                      <select name="eventType" value={eventForm.eventType} onChange={handleInputChange} className='flex flex-row w-full mt-1  py-2 px-3 border border-green-300 bg-white rounded-md shadow-md'>
                         <option value="institutional">Institutional</option>
                         <option value="organization">Organization</option>
                         <option value="specialized">Specialized</option>
                       </select>
                     </label>
                     <label>Organizer Type: 
-                      <select name="organizerType" value={eventForm.organizerType} onChange={handleInputChange}> {/* Update here */}
+                      <select name="organizerType" value={eventForm.organizerType} onChange={handleInputChange} className=' flex flex-row w-full mt-1  py-2 px-3 border border-green-300 bg-white rounded-md shadow-md'> {/* Update here */}
                         <option value="person">Person</option>
                         <option value="organization">Organization</option>
                         <option value="school">School</option>
                       </select>
                     </label>
-                    <label>Organizer Name: 
-                      <input name="organizerName" value={eventForm.organizerName} onChange={handleInputChange} />
+                    <label >Organizer Name: 
+                      <input name="organizerName" value={eventForm.organizerName} onChange={handleInputChange} className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl mt-2' />
                     </label>
+                    </div>
                   </>
                 ) : (
                   <>
-                    <h3>Event Name: <span>{selectedEvent.title}</span></h3>
+                    <h3><strong>Event Name:</strong> <span>{selectedEvent.title}</span></h3>
                     <p><strong>Start Date:</strong> {new Date(selectedEvent.start).toLocaleString()}</p>
                     <p><strong>End Date:</strong> {new Date(selectedEvent.end).toLocaleString()}</p>
                     <p><strong>Event Type:</strong> {selectedEvent.eventType}</p>
@@ -200,14 +234,20 @@ const ManageEvent = () => {
                 )}
               </div>
             </div>
-            <div className="participants-section">
-              <h3>Participants:</h3>
+            <div className=" mt-3">
+              <h3 className='text-xl text-green-800 border-b-2 border-yellow-500 w-fit '>Participants:</h3>
               {editMode ? (
                 eventForm.participants.map((participant, index) => (
-                  <div key={index} className="participant-card">
-                    <label>Name: <input value={participant.name} onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} /></label>
-                    <label>Section: <input value={participant.section} onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} /></label>
-                    <label>Type: <input value={participant.type} onChange={(e) => handleParticipantChange(index, 'type', e.target.value)} /></label>
+                  <div key={index} className="flex gap-3 mt-2">
+                    <label>
+                      Name: <input value={participant.name} onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' />
+                    </label>
+                    <label>
+                      Section: <input value={participant.section} onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' />
+                      </label>
+                    <label>
+                      Type: <input value={participant.type} onChange={(e) => handleParticipantChange(index, 'type', e.target.value)} className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-xl' />
+                      </label>
                   </div>
                 ))
               ) : (
@@ -228,18 +268,21 @@ const ManageEvent = () => {
           <div className="modal-footer">
             {editMode ? (
               <>
-                <button className="save-btn" onClick={handleSave}>Save</button>
-                <button onClick={closeModal} className="close-btn">Cancel</button>
+              <div className="flex gap-2">
+                <button className="btn btn-sm btn-success" onClick={handleSave}>Save</button>
+                <button onClick={closeModal} className="btn btn-sm btn-error">Cancel</button>
+              </div>
               </>
             ) : (
               <>
-                <button className="edit-btn" onClick={handleEdit}>Edit</button>
-                <button className="delete-btn" onClick={handleDelete}>Delete</button>
-                <button onClick={closeModal} className="close-btn">Close</button>
+              <div className="flex gap-2">
+                <button className="btn btn-sm btn-success" onClick={handleEdit}>Edit</button>
+                <button className="btn btn-sm btn-error" onClick={handleDelete}>Delete</button>
+              </div>
               </>
             )}
           </div>
-        </ReactModal>
+        </Modal>
       )}
     </div>
   );

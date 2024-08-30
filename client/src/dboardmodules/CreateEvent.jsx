@@ -513,7 +513,7 @@ const handleSelectEvent = (event) => {
 
 
   return (
-    <div>
+    <div className='z-0'>
 
       
 
@@ -526,7 +526,7 @@ const handleSelectEvent = (event) => {
         eventClick={handleEventClick}
         selectable={selectable}
         select={handleDateSelect}
-        className="calendar_component"
+        className="calendar_component z-30"
       />
     )}
       
