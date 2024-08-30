@@ -29,7 +29,7 @@ import Analytics_report from './dboardmodules/Analytics_report';
 import Eventcalendar from './dboardmodules/MyCommunityModule/Eventcalendar';
 import Notification_module from './components/Notification_module'
 
-const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.1.17:8000';
+const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.1.19:8000';
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 

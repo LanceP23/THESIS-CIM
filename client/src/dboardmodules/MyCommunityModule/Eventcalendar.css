@@ -51,21 +51,5 @@ th{
   background: #555;
 }
 
-/* Eventcalendar.css */
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
 
-li {
-  padding: 10px 20px;
-  margin: 0 5px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.tab-content {
-  padding-top: 20px;
-}
 

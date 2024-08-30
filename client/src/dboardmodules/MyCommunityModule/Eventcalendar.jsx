@@ -14,7 +14,7 @@ const Eventcalendar = () => {
        <CreateEvent />
        </div>
        <div>
-        <ManageEvent/>
+        <ManageEvent/>{/*need gawin tab pre diko magawa di nagrerender haha */ }
        </div>
     </div>
   )

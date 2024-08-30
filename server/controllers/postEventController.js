@@ -217,8 +217,10 @@ const putEventController = async (req, res) => {
     const { id } = req.params;
     const { title, start, end, eventType, organizerType, organizerName, participants, committee, committeeChairman, location, budget, viewCommunityId } = req.body;
 
+    console.log('Request Body:', req.body);
+
     // Validate required fields
-    if (!title || !start || !end || !eventType || !organizerType || !organizerName || !participants || !committee || !committeeChairman || !location || !budget) {
+    if (!title || !start || !end || !eventType || !organizerName || !participants || !committee || !committeeChairman || !location || !budget) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
