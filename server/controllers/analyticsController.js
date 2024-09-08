@@ -134,6 +134,198 @@ const countUserReactionsByEducationLevel = async (req, res) => {
     }
 };
 
+const countReactionsByDate = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // Find the user by userId to get their name
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const userName = user.name;
+
+        // Fetch reactions from UserReactions and ArchivedAnnouncements for the specified user
+        const userReactions = await UserReaction.aggregate([
+            {
+                $lookup: {
+                    from: 'announcements',
+                    localField: 'announcementId',
+                    foreignField: '_id',
+                    as: 'announcementDetails'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'archiveannouncements',
+                    localField: 'announcementId',
+                    foreignField: '_id',
+                    as: 'archivedAnnouncementDetails'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$announcementDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: '$archivedAnnouncementDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        { 'announcementDetails.postedBy': userName },
+                        { 'archivedAnnouncementDetails.postedBy': userName }
+                    ],
+                    dateReacted: { $exists: true, $ne: null }
+                }
+            },
+            {
+                $project: {
+                    reaction: 1,
+                    dateReacted: 1
+                }
+            }
+        ]);
+
+        // Aggregate reactions by date
+        const reactionsByDate = {};
+
+        userReactions.forEach(reaction => {
+            const date = reaction.dateReacted.toISOString().split('T')[0]; // Format date to 'YYYY-MM-DD'
+
+            if (!reactionsByDate[date]) {
+                reactionsByDate[date] = { likes: 0, dislikes: 0 };
+            }
+
+            if (reaction.reaction === 'like') {
+                reactionsByDate[date].likes += 1;
+            } else if (reaction.reaction === 'dislike') {
+                reactionsByDate[date].dislikes += 1;
+            }
+        });
+
+        // Format the data for the graph
+        const formattedData = Object.keys(reactionsByDate).map(date => ({
+            date,
+            likes: reactionsByDate[date].likes,
+            dislikes: reactionsByDate[date].dislikes
+        }));
+
+        res.status(200).send({ formattedData });
+    } catch (error) {
+        console.error('Error counting reactions by date', error);
+        res.status(500).send({ message: 'Error counting reactions by date', error });
+    }
+};
+
+
+const getUserReactionsWithDate = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // Find the user by userId to get their name
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const userName = user.name;
+
+        const reactionsWithDate = await UserReaction.aggregate([
+            {
+                $lookup: {
+                    from: 'announcements',
+                    localField: 'announcementId',
+                    foreignField: '_id',
+                    as: 'announcementDetails'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'archiveannouncements',
+                    localField: 'announcementId',
+                    foreignField: '_id',
+                    as: 'archiveAnnouncementDetails'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$announcementDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: '$archiveAnnouncementDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $match: {
+                    $and: [
+                        { dateReacted: { $exists: true, $ne: null } }, // only fetch the ones that has dateReacted kasi wala yung iba
+                        {
+                            $or: [
+                                { 'announcementDetails.postedBy': userName },
+                                { 'archiveAnnouncementDetails.postedBy': userName }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'adminDetails'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'mobileusers',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'mobileUserDetails'
+                }
+            },
+            {
+                $addFields: {
+                    userDetails: {
+                        $cond: {
+                            if: { $gt: [{ $size: '$adminDetails' }, 0] },
+                            then: { $arrayElemAt: ['$adminDetails', 0] },
+                            else: { $arrayElemAt: ['$mobileUserDetails', 0] }
+                        }
+                    },
+                    userType: {
+                        $cond: {
+                            if: { $gt: [{ $size: '$adminDetails' }, 0] },
+                            then: 'admin',
+                            else: 'mobile'
+                        }
+                    }
+                }
+            }
+        ]);
+
+        if (!reactionsWithDate.length) {
+            return res.status(404).send({ message: 'No reactions with dates found for this user\'s posts.' });
+        }
+        res.status(200).send({ reactionsWithDate });
+    } catch (error) {
+        console.error('Error fetching reactions with dates', error);
+        res.status(500).send({ message: 'Error fetching reactions with dates', error });
+    }
+};
+
 
 const getLikesDislikesandReactions = async (req, res) => {
     try {
@@ -189,5 +381,7 @@ const getLikesDislikesandReactions = async (req, res) => {
 
 module.exports = {
     getLikesDislikesandReactions,
-    countUserReactionsByEducationLevel
+    countUserReactionsByEducationLevel,
+    countReactionsByDate,
+    getUserReactionsWithDate
 };

@@ -1,20 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartLine, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import { BarChart } from '@mui/x-charts/BarChart';
-import { LineChart } from '@mui/x-charts/LineChart';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar } from 'recharts';
+import { PieChart, Pie, Cell, Label } from 'recharts';
 import { UserContext } from '../../context/userContext';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, startOfMonth, endOfMonth, startOfWeek, endOfWeek, startOfYear, endOfYear, isWithinInterval } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
 
-const Analytics_report = () => {
+const AnalyticsReport = () => {
   const { user } = useContext(UserContext);
   const [analyticsData, setAnalyticsData] = useState(null);
   const [demographicsData, setDemographicsData] = useState(null);
+  const [dateFilter, setDateFilter] = useState('monthly');
+  const [selectedMonth1, setSelectedMonth1] = useState('');
+  const [selectedMonth2, setSelectedMonth2] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,25 +29,22 @@ const Analytics_report = () => {
         console.error('Error checking authentication status:', error);
       }
     };
-
     checkAuthStatus();
   }, [navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [detailsResponse, demographicsResponse] = await Promise.all([
-          axios.get(`/announcements/${user.id}/details`),
+        const [analyticsResponse, demographicsResponse] = await Promise.all([
+          axios.get(`/count-reactions-date/${user.id}`),
           axios.get(`/user/${user.id}/demographics`)
         ]);
-
-        setAnalyticsData(detailsResponse.data);
+        setAnalyticsData(analyticsResponse.data);
         setDemographicsData(demographicsResponse.data.educationLevelCounters);
       } catch (error) {
         console.error('Error fetching analytics data:', error);
       }
     };
-
     if (user) {
       fetchData();
     }
@@ -56,194 +54,257 @@ const Analytics_report = () => {
     return <div>Loading...</div>;
   }
 
-  const { likes, dislikes, reactionsWithDates } = analyticsData;
+  const { formattedData } = analyticsData;
+  const totalPosts = formattedData.length;
+  const totalLikes = formattedData.reduce((sum, data) => sum + data.likes, 0);
+  const totalDislikes = formattedData.reduce((sum, data) => sum + data.dislikes, 0);
 
-  // Calculate total posts
-  const totalPosts = reactionsWithDates.length;
+  const avgLikesPerPost = totalPosts > 0 ? Math.round(totalLikes / totalPosts) : 0;
+  const avgDislikesPerPost = totalPosts > 0 ? Math.round(totalDislikes / totalPosts) : 0;
+  const likeDislikeRatio = totalDislikes > 0 ? (totalLikes / totalDislikes).toFixed(2) : totalLikes;
 
-  // Calculate average likes and dislikes per post
-  const avgLikesPerPost = totalPosts > 0 ? Math.round(likes / totalPosts) : 0;
-  const avgDislikesPerPost = totalPosts > 0 ? Math.round(dislikes / totalPosts) : 0;
+  const filteredReactionsWithDates = formattedData.filter(reaction => {
+    const date = parseISO(reaction.date);
+    switch (dateFilter) {
+      case 'weekly':
+        return isWithinInterval(date, { start: startOfWeek(new Date()), end: endOfWeek(new Date()) });
+      case 'monthly':
+        return isWithinInterval(date, { start: startOfMonth(new Date()), end: endOfMonth(new Date()) });
+      case 'yearly':
+        return isWithinInterval(date, { start: startOfYear(new Date()), end: endOfYear(new Date()) });
+      case 'custom':
+        if (!selectedMonth1 || !selectedMonth2) return true; 
+        const startDate1 = startOfMonth(new Date(new Date().getFullYear(), parseInt(selectedMonth1), 1));
+        const endDate1 = endOfMonth(new Date(new Date().getFullYear(), parseInt(selectedMonth1), 1));
+        const startDate2 = startOfMonth(new Date(new Date().getFullYear(), parseInt(selectedMonth2), 1));
+        const endDate2 = endOfMonth(new Date(new Date().getFullYear(), parseInt(selectedMonth2), 1));
+        return isWithinInterval(date, { start: startDate1, end: endDate1 }) || isWithinInterval(date, { start: startDate2, end: endDate2 });
+      default:
+        return true;
+    }
+  });
 
-  // Aggregate reactions by date
-  const reactionsByDate = reactionsWithDates.reduce((acc, reaction) => {
+  const reactionsByDate = filteredReactionsWithDates.reduce((acc, reaction) => {
     const date = format(parseISO(reaction.date), 'yyyy-MM-dd');
-    if (!acc[date]) {
-      acc[date] = { date, likes: 0, dislikes: 0 };
-    }
-    if (reaction.reaction === 'like') {
-      acc[date].likes += 1;
-    } else {
-      acc[date].dislikes += 1;
-    }
+    if (!acc[date]) acc[date] = { date, likes: 0, dislikes: 0 };
+    acc[date].likes += reaction.likes;
+    acc[date].dislikes += reaction.dislikes;
     return acc;
   }, {});
-
-  console.log('Reactions by Date:', reactionsByDate);
-
   const aggregatedReactions = Object.values(reactionsByDate);
 
-  const CustomTooltipContent = ({ payload }) => {
-    if (payload && payload.length) {
-      const data = payload[0].payload;
-      const formattedDate = format(parseISO(data.date), 'yyyy-MM-dd');
-      return (
-        <div className="custom-tooltip bg-white p-2 shadow-lg rounded">
-          <p>{`Date: ${formattedDate}`}</p>
-          <p>{`Likes: ${data.likes}`}</p>
-          <p>{`Dislikes: ${data.dislikes}`}</p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   const isDemographicsEmpty = Object.values(demographicsData).every(count => count === 0);
-
+  const totalDemographics = Object.values(demographicsData).reduce((sum, value) => sum + value, 0);
   const pieData = Object.entries(demographicsData)
     .filter(([key, value]) => value > 0)
     .map(([key, value], index) => ({
       name: key,
       value,
-      color: COLORS[index % COLORS.length]
+      color: COLORS[index % COLORS.length],
     }));
 
+  // Custom Label for Pie Chart
+  const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }) => {
+    const radius = outerRadius - 10;
+    const x = cx + radius * Math.cos((midAngle * Math.PI) / 180);
+    const y = cy + radius * Math.sin((midAngle * Math.PI) / 180);
+
+    return (
+      <text x={x} y={y} fill="#000000" textAnchor="middle" dominantBaseline="central">
+        {name} ({value})
+      </text>
+    );
+  };
+
+  // Generate textual interpretation for reactions
+  const generateReactionsInterpretation = () => {
+    let interpretation = '';
+
+    if (totalLikes > totalDislikes) {
+      interpretation += `Overall, the user engagement is positive with a total of ${totalLikes} likes compared to ${totalDislikes} dislikes. `;
+      interpretation += `The average likes per post is ${avgLikesPerPost}, which indicates a generally favorable response. `;
+    } else if (totalDislikes > totalLikes) {
+      interpretation += `The engagement is somewhat negative with ${totalLikes} likes and ${totalDislikes} dislikes. `;
+      interpretation += `The average dislikes per post is ${avgDislikesPerPost}, suggesting that content may need improvement. `;
+    } else {
+      interpretation += `The engagement is balanced with ${totalLikes} likes and ${totalDislikes} dislikes. `;
+    }
+
+    interpretation += `The like/dislike ratio is ${likeDislikeRatio}, indicating the overall sentiment of the content. `;
+
+    return interpretation;
+  };
+
+  // Generate textual interpretation for demographics
+  const generateDemographicsInterpretation = () => {
+    if (isDemographicsEmpty) {
+      return 'No demographic data available.';
+    }
+
+    let interpretation = 'The demographic distribution is as follows: ';
+
+    pieData.forEach((data) => {
+      interpretation += `${data.name} has ${data.value} individuals (${((data.value / totalDemographics) * 100).toFixed(2)}%). `;
+    });
+
+    return interpretation;
+  };
+
   return (
-    <div className='flex flex-col my-5 w-full h-full animate-fade-in'>
-      {totalPosts === 0 ? (
-        <div className="text-center w-full">
-          <p className="text-red-500">No analytics data available.</p>
+    <div className="p-6">
+      <h1 className="text-4xl font-bold mb-4">Online User Engagement Analytics Dashboard</h1>
+      <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
+
+      <div className="mb-6">
+        <label htmlFor="dateFilter" className="block text-gray-700 text-lg mb-2">Select Date Filter:</label>
+        <select
+          id="dateFilter"
+          value={dateFilter}
+          onChange={(e) => {
+            setDateFilter(e.target.value);
+            if (e.target.value !== 'custom') {
+              setSelectedMonth1('');
+              setSelectedMonth2('');
+            }
+          }}
+          className="p-2 border border-gray-300 rounded"
+        >
+          <option value="weekly">This Week</option>
+          <option value="monthly">This Month</option>
+          <option value="yearly">This Year</option>
+          <option value="custom">Compare Months</option>
+        </select>
+      </div>
+
+      {dateFilter === 'custom' && (
+        <div className="mb-6">
+          <label htmlFor="monthFilter1" className="block text-gray-700 text-lg mb-2">Select First Month:</label>
+          <select
+            id="monthFilter1"
+            value={selectedMonth1}
+            onChange={(e) => setSelectedMonth1(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          >
+            <option value="">Select a Month</option>
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
+            ))}
+          </select>
+
+          <label htmlFor="monthFilter2" className="block text-gray-700 text-lg mb-2 mt-4">Select Second Month:</label>
+          <select
+            id="monthFilter2"
+            value={selectedMonth2}
+            onChange={(e) => setSelectedMonth2(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          >
+            <option value="">Select a Month</option>
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
+            ))}
+          </select>
         </div>
-      ) : (
-        <>
-          <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-auto md:w-1/2 lg:w-1/3 mx-2 mb-4 md:mb-0">
-            <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>
-              <FontAwesomeIcon icon={faChartBar} className='text-yellow-500 mx-1' />Reactions
-            </h2>
-            <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 h-auto shadow-md rounded-2 border">
-              <div className="stat">
-                <div className="stat-figure text-primary">
-                  <div className="stat-icon">
-                    <FontAwesomeIcon icon={faThumbsUp} className="text-green-500" style={{ fontSize: '24px' }} />
-                  </div>
-                </div>
-                <div className="stat-title">Total Likes</div>
-                <div className="stat-value text-primary text-success">{likes}</div>
-                <div className="stat-desc">21% more than last month</div>
-                <div className="stat-title">Total Dislikes</div>
-                <div className="stat-value text-primary text-success">{dislikes}</div>
-                <div className="stat-icon">
-                  <FontAwesomeIcon icon={faThumbsDown} className="text-green-500" style={{ fontSize: '24px' }} />
-                </div>
-                <div className="stat-desc">21% more than last month</div>
-                <div className="stat-title">Like-to-Dislike Ratio</div>
-                <div className="stat-value text-primary text-success">{totalPosts > 0 ? (likes / dislikes).toFixed(2) : 0}</div>
-                <div className="stat-title">Total Engagement</div>
-                <div className="stat-value text-primary text-success">{likes + dislikes}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* BarChart for Total Likes and Dislikes */}
-          {reactionsWithDates && reactionsWithDates.length > 0 && (
-            <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-auto md:w-1/2 lg:w-1/3 mx-2 mb-4 md:mb-0">
-              <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>
-                <FontAwesomeIcon icon={faChartBar} className='text-yellow-500 mx-1' />User Reactions (Bar Chart)
-              </h2>
-              <BarChart
-                dataset={aggregatedReactions.map(reaction => ({
-                  date: reaction.date,
-                  likes: reaction.likes,
-                  dislikes: reaction.dislikes,
-                }))}
-                yAxis={[
-                  { scaleType: 'linear', dataKey: 'likes', label: 'Likes', ticks: true },
-                  { scaleType: 'linear', dataKey: 'dislikes', label: 'Dislikes', ticks: true }
-                ]}
-                series={[
-                  { dataKey: 'likes', label: 'Likes' },
-                  { dataKey: 'dislikes', label: 'Dislikes' }
-                ]}
-                tooltip={{ content: <CustomTooltipContent /> }}
-                className="w-full" 
-                height={300} 
-              />
-            </div>
-          )}
-
-          {/* LineChart for User Reactions Over Time */}
-          {reactionsWithDates && reactionsWithDates.length > 0 && (
-            <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-auto md:w-1/2 lg:w-1/3 mx-2">
-              <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>
-                <FontAwesomeIcon icon={faChartLine} className=' text-yellow-500 mx-1' />User Reactions (Line Chart)
-              </h2>
-              <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 h-auto shadow-md rounded-2 border">
-                <LineChart
-                  dataset={aggregatedReactions.map(reaction => ({
-                    date: reaction.date,
-                    likes: reaction.likes,
-                    dislikes: reaction.dislikes,
-                  }))}
-                  yAxis={[
-                    { scaleType: 'linear', dataKey: 'likes', label: 'Likes', ticks: true },
-                    { scaleType: 'linear', dataKey: 'dislikes', label: 'Dislikes', ticks: true }
-                  ]}
-                  series={[
-                    { dataKey: 'likes', label: 'Likes' },
-                    { dataKey: 'dislikes', label: 'Dislikes' }
-                  ]}
-                  tooltip={{ content: <CustomTooltipContent /> }}
-                  className="w-full" 
-                  height={300} 
-                />
-              </div>
-            </div>
-          )}
-        </>
       )}
 
-      {/* Demographics Section */}
-      <div className="bg-slate-100 p-3 rounded-2xl shadow-inner shadow-slate-950 w-auto md:w-1/2 lg:w-1/3 mx-2">
-        <h2 className='text-2xl text-green-800 border-b-2 border-yellow-500 py-2'>
-          <FontAwesomeIcon icon={faChartLine} className='text-yellow-500 mx-1' />User Demographics (Pie Chart)
-        </h2>
+      {/* General Overview Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <h3 className="text-xl font-semibold text-green-800">Total Likes</h3>
+          <p className="text-2xl text-green-600">{totalLikes}</p>
+        </div>
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <h3 className="text-xl font-semibold text-red-800">Total Dislikes</h3>
+          <p className="text-2xl text-red-600">{totalDislikes}</p>
+        </div>
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <h3 className="text-xl font-semibold text-blue-800">Average Likes per Post</h3>
+          <p className="text-2xl text-blue-600">{avgLikesPerPost}</p>
+        </div>
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <h3 className="text-xl font-semibold text-blue-800">Average Dislikes per Post</h3>
+          <p className="text-2xl text-blue-600">{avgDislikesPerPost}</p>
+        </div>
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <h3 className="text-xl font-semibold text-purple-800">Like/Dislike Ratio</h3>
+          <p className="text-2xl text-purple-600">{likeDislikeRatio}</p>
+        </div>
+      </div>
+
+      {/* Interpretation Section */}
+      <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4">Analysis</h2>
+        <p>{generateReactionsInterpretation()}</p>
+      </div>
+
+      {/* Chart Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4">Reactions by Date</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={aggregatedReactions}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="likes" stroke="#8884d8" />
+              <Line type="monotone" dataKey="dislikes" stroke="#ff7300" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4">Reactions Count by Date</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={aggregatedReactions}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="likes" fill="#8884d8" />
+              <Bar dataKey="dislikes" fill="#ff7300" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Demographics Pie Chart */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-semibold mb-4">User Demographics</h2>
         {isDemographicsEmpty ? (
-          <div className="text-center w-full">
-            <p className="text-red-500">No demographics data available.</p>
-          </div>
+          <p>No demographic data available.</p>
         ) : (
-          <div className="p-2 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 h-auto shadow-md rounded-2 border">
+          <div className="p-4 bg-white shadow-lg rounded-lg">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
                   data={pieData}
+                  dataKey="value"
+                  nameKey="name"
                   cx="50%"
                   cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}`}
-                  outerRadius={80}
+                  outerRadius={120}
                   fill="#8884d8"
-                  dataKey="value"
+                  labelLine={false}
+                  label={CustomLabel}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
+                  <Tooltip />
                 </Pie>
-                <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-            <div className="mt-4">
-              {pieData.map((entry, index) => (
-                <p key={`text-${index}`} className="text-lg">
-                  {`${entry.name.charAt(0).toUpperCase() + entry.name.slice(1)}: ${entry.value}`}
-                </p>
-              ))}
-            </div>
           </div>
         )}
+      </div>
+
+      {/* Demographics Interpretation */}
+      <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4">Demographics Analysis</h2>
+        <p>{generateDemographicsInterpretation()}</p>
       </div>
     </div>
   );
 };
 
-export default Analytics_report;
+export default AnalyticsReport;
