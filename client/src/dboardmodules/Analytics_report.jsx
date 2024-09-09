@@ -8,6 +8,8 @@ import { format, parseISO, startOfMonth, endOfMonth, startOfWeek, endOfWeek, sta
 import { useNavigate } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import toast from 'react-hot-toast'; // Import toast
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPercent, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
 
@@ -200,12 +202,17 @@ const AnalyticsReport = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold mb-4">Online User Engagement Analytics Dashboard</h1>
+    <div className="my-16">
+
+      <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
+  
+      <h1 className="text-4xl font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-left text-green-800">Online User Engagement Analytics Dashboard</h1>
       <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
 
-      <div className="mb-6">
-        <label htmlFor="dateFilter" className="block text-gray-700 text-lg mb-2">Select Date Filter:</label>
+      <div className=" flex flex-row ">
+
+      <div className=" mb-10 ">
+        <label htmlFor="dateFilter" className="block text-gray-700 text-lg mb-2 text-left">Select Date to Filter:</label>
         <select
           id="dateFilter"
           value={dateFilter}
@@ -216,7 +223,7 @@ const AnalyticsReport = () => {
               setSelectedMonth2('');
             }
           }}
-          className="p-2 border border-gray-300 rounded"
+          className="flex flex-row justify-items-center mt-1 mr-2 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
         >
           <option value="weekly">This Week</option>
           <option value="monthly">This Month</option>
@@ -226,13 +233,14 @@ const AnalyticsReport = () => {
       </div>
 
       {dateFilter === 'custom' && (
-        <div className="mb-6">
-          <label htmlFor="monthFilter1" className="block text-gray-700 text-lg mb-2">Select First Month:</label>
+        <div className="flex flex-row ">
+          <div className="flex flex-col">
+          <label htmlFor="monthFilter1" className="  text-gray-700 text-lg text-left ">Select First Month:</label>
           <select
             id="monthFilter1"
             value={selectedMonth1}
             onChange={(e) => setSelectedMonth1(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
+            className="flex flex-row justify-items-center mt-1 mr-2 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
           >
             <option value="">Select a Month</option>
             {Array.from({ length: 12 }, (_, i) => (
@@ -240,67 +248,67 @@ const AnalyticsReport = () => {
             ))}
           </select>
 
-          <label htmlFor="monthFilter2" className="block text-gray-700 text-lg mb-2 mt-4">Select Second Month:</label>
+          </div>
+
+          <div className="flex flex-col">
+          <label htmlFor="monthFilter2" className=" text-gray-700 text-lg text-left ">Select Second Month:</label>
           <select
             id="monthFilter2"
             value={selectedMonth2}
             onChange={(e) => setSelectedMonth2(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
+            className="flex flex-row justify-items-center mt-1  py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
           >
             <option value="">Select a Month</option>
             {Array.from({ length: 12 }, (_, i) => (
               <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
             ))}
           </select>
+          </div>
         </div>
       )}
 
+      </div>
+
       {/* General Overview Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className=" grid grid-rows-2  ">
+        <div className=" grid grid-cols-2 gap-3 mb-2 ">
         <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-green-800">Total Likes</h3>
+          <h3 className="text-xl font-semibold text-green-800">Total Likes  <FontAwesomeIcon icon={faThumbsUp} className="text-green-500" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-green-600">{totalLikes}</p>
         </div>
         <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-red-800">Total Dislikes</h3>
+          <h3 className="text-xl font-semibold text-red-800">Total Dislikes <FontAwesomeIcon icon={faThumbsDown} className="text-red-800" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-red-600">{totalDislikes}</p>
         </div>
+
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
         <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-blue-800">Average Likes per Post</h3>
+          <h3 className="text-xl font-semibold text-blue-800">Average Likes per Post <FontAwesomeIcon icon={faThumbsUp} className="text-blue-800" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-blue-600">{avgLikesPerPost}</p>
         </div>
         <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-blue-800">Average Dislikes per Post</h3>
+          <h3 className="text-xl font-semibold text-blue-800">Average Dislikes per Post <FontAwesomeIcon icon={faThumbsDown} className="text-blue-800" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-blue-600">{avgDislikesPerPost}</p>
         </div>
         <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-purple-800">Like/Dislike Ratio</h3>
+          <h3 className="text-xl font-semibold text-purple-800">Like/Dislike Ratio <FontAwesomeIcon icon={faPercent} className="text-purple-800" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-purple-600">{likeDislikeRatio}</p>
+        </div>
         </div>
       </div>
 
-      {/* Generate Analysis Button */}
-      <div className="mb-6">
-        <button
-          onClick={generateAnalysis}
-          disabled={loading}
-          className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
-        >
-          {loading ? 'Generating Analysis...' : 'Generate Analysis'}
-        </button>
       </div>
 
-      {/* Interpretation Section */}
-      <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">Analysis</h2>
-        <div dangerouslySetInnerHTML={{ __html: analysis }} />
+      <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
 
-      </div>
+     
 
       {/* Chart Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Reactions by Date</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions by Date</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={aggregatedReactions}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -314,7 +322,7 @@ const AnalyticsReport = () => {
         </div>
 
         <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Reactions Count by Date</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions Count by Date</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={aggregatedReactions}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -328,9 +336,39 @@ const AnalyticsReport = () => {
         </div>
       </div>
 
+       {/* Generate Analysis Button */}
+       <div className="mb-6">
+        <button
+          onClick={generateAnalysis}
+          disabled={loading}
+          className="btn btn-success"
+        >
+          {loading ? (<span className="loading loading-spinner loading-xs"></span>):( 'Generate An Analysis')}
+        </button>
+      </div>
+
+      {/* Interpretation Section */}
+      <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Analysis</h2>
+        {loading ? (
+    <div className="flex w-52 flex-col gap-4">
+    <span className="loading loading-dots loading-lg"></span>
+    <div className="skeleton h-4 w-28"></div>
+    <div className="skeleton h-4 w-full"></div>
+    <div className="skeleton h-4 w-full"></div>
+  </div>
+  ) : (
+    <div className=' text-justify font-bold' dangerouslySetInnerHTML={{ __html: analysis }} />
+  )}
+      </div>
+
+      </div>
+
+      <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
+
       {/* Demographics Pie Chart */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-4">User Demographics</h2>
+        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
         {isDemographicsEmpty ? (
           <p>No demographic data available.</p>
         ) : (
@@ -359,7 +397,7 @@ const AnalyticsReport = () => {
         )}
       </div>
 
-      
+      </div>
     </div>
   );
 };
