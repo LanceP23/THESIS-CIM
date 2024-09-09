@@ -24,6 +24,7 @@
     "@fullcalendar/list": "^6.1.13",
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
+    "@google/generative-ai": "^0.17.1",
     "@heroicons/react": "^1.0.6",
     "@mui/x-charts": "^7.6.1",
     "address": "^2.0.2",

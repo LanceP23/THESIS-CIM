@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { BarChart, Bar } from 'recharts';
-import { PieChart, Pie, Cell, Label } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 import { UserContext } from '../../context/userContext';
 import { format, parseISO, startOfMonth, endOfMonth, startOfWeek, endOfWeek, startOfYear, endOfYear, isWithinInterval } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import toast from 'react-hot-toast'; // Import toast
 
 const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
 
@@ -16,6 +18,8 @@ const AnalyticsReport = () => {
   const [dateFilter, setDateFilter] = useState('monthly');
   const [selectedMonth1, setSelectedMonth1] = useState('');
   const [selectedMonth2, setSelectedMonth2] = useState('');
+  const [analysis, setAnalysis] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,6 +53,85 @@ const AnalyticsReport = () => {
       fetchData();
     }
   }, [user]);
+
+  const generateAnalysis = async () => {
+    setLoading(true);
+  
+    try {
+      const genAI = new GoogleGenerativeAI('AIzaSyD-iL9rGmRvrfU1-7oALDKJ78bmq2wOKJg');
+      const model = await genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  
+      const requestBody = {
+        contents: [
+          {
+            parts: [
+              {
+                text: `Analyze user engagement data:
+  
+                * Total Likes: ${totalLikes}
+                * Total Dislikes: ${totalDislikes}
+                * Average Likes per Post: ${avgLikesPerPost}
+                * Average Dislikes per Post: ${avgDislikesPerPost}
+                * Like/Dislike Ratio: ${likeDislikeRatio}
+  
+                * Demographic Data: ${pieData.map(data => `${data.name}: ${data.value}`).join(', ')}
+  
+                Provide a concise analysis of user engagement and sentiment.`
+              }
+            ],
+            role: 'user'  
+          }
+        ],
+      
+        safetySettings: [
+          {
+            category: 'HARM_CATEGORY_HATE_SPEECH', // wag moko murahin boss kupal kaba
+            threshold: 'BLOCK_LOW_AND_ABOVE', 
+          },
+          {
+            category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', // wag kang bastos pare
+            threshold: 'BLOCK_MEDIUM_AND_ABOVE', 
+          }
+        ],
+        // config
+        generationConfig: {
+          stopSequences: ['###'], 
+          maxOutputTokens: 500, 
+          temperature: 0.7,
+          topP: 0.9, 
+          topK: 40 
+        }
+      };
+  
+      console.log('Request Body:', requestBody);
+  
+      const response = await model.generateContentStream(requestBody);
+    
+      let analysisText = '';
+      for await (const chunk of response.stream) {
+        analysisText += chunk.text(); 
+      }
+  
+     
+      const cleanedText = analysisText
+        .replace(/^\s*#*\s*/gm, '') 
+        .replace(/\*\*(.*?)\*\*/g, '$1') 
+        .replace(/\*(.*?)\*/g, '$1') 
+        .replace(/^\s*[-*]\s*/gm, ''); 
+  
+      setAnalysis(cleanedText || 'No analysis text available.');
+    } catch (error) {
+      console.error('Error generating analysis:', error);
+      toast.error('Failed to generate analysis.');
+      setAnalysis('Failed to generate analysis.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
+
+
 
   if (!analyticsData || !demographicsData) {
     return <div>Loading...</div>;
@@ -114,40 +197,6 @@ const AnalyticsReport = () => {
         {name} ({value})
       </text>
     );
-  };
-
-  // Generate textual interpretation for reactions
-  const generateReactionsInterpretation = () => {
-    let interpretation = '';
-
-    if (totalLikes > totalDislikes) {
-      interpretation += `Overall, the user engagement is positive with a total of ${totalLikes} likes compared to ${totalDislikes} dislikes. `;
-      interpretation += `The average likes per post is ${avgLikesPerPost}, which indicates a generally favorable response. `;
-    } else if (totalDislikes > totalLikes) {
-      interpretation += `The engagement is somewhat negative with ${totalLikes} likes and ${totalDislikes} dislikes. `;
-      interpretation += `The average dislikes per post is ${avgDislikesPerPost}, suggesting that content may need improvement. `;
-    } else {
-      interpretation += `The engagement is balanced with ${totalLikes} likes and ${totalDislikes} dislikes. `;
-    }
-
-    interpretation += `The like/dislike ratio is ${likeDislikeRatio}, indicating the overall sentiment of the content. `;
-
-    return interpretation;
-  };
-
-  // Generate textual interpretation for demographics
-  const generateDemographicsInterpretation = () => {
-    if (isDemographicsEmpty) {
-      return 'No demographic data available.';
-    }
-
-    let interpretation = 'The demographic distribution is as follows: ';
-
-    pieData.forEach((data) => {
-      interpretation += `${data.name} has ${data.value} individuals (${((data.value / totalDemographics) * 100).toFixed(2)}%). `;
-    });
-
-    return interpretation;
   };
 
   return (
@@ -230,10 +279,22 @@ const AnalyticsReport = () => {
         </div>
       </div>
 
+      {/* Generate Analysis Button */}
+      <div className="mb-6">
+        <button
+          onClick={generateAnalysis}
+          disabled={loading}
+          className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+        >
+          {loading ? 'Generating Analysis...' : 'Generate Analysis'}
+        </button>
+      </div>
+
       {/* Interpretation Section */}
       <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-4">Analysis</h2>
-        <p>{generateReactionsInterpretation()}</p>
+        <div dangerouslySetInnerHTML={{ __html: analysis }} />
+
       </div>
 
       {/* Chart Section */}
@@ -298,13 +359,10 @@ const AnalyticsReport = () => {
         )}
       </div>
 
-      {/* Demographics Interpretation */}
-      <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">Demographics Analysis</h2>
-        <p>{generateDemographicsInterpretation()}</p>
-      </div>
+      
     </div>
   );
 };
 
 export default AnalyticsReport;
+
