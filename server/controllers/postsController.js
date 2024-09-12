@@ -434,6 +434,18 @@ const getApprovedAnnouncements = async (req, res) => {
   }
 };
 
+const getRecentAnnouncements = async (req, res) => {
+  try {
+    const approvedAnnouncements = await Announcement.find({ status: 'approved' })
+      .sort({ createdAt: -1 }) 
+      .limit(10); 
+    res.json(approvedAnnouncements);
+  } catch (error) {
+    console.error('Error fetching approved announcements:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const getUserAnnouncements = async (req, res) => {
   try {
     // Fetch the logged-in user's announcements
@@ -503,5 +515,6 @@ module.exports = {
   getApprovedAnnouncements,
   getUserAnnouncements,
   updateAnnouncement,
-  deleteAnnouncement
+  deleteAnnouncement,
+  getRecentAnnouncements
 };
