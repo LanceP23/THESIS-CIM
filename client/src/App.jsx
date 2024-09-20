@@ -28,6 +28,8 @@ import CreateEvent from './dboardmodules/CreateEvent';
 import Analytics_report from './dboardmodules/Analytics_report';
 import Eventcalendar from './dboardmodules/MyCommunityModule/Eventcalendar';
 import Notification_module from './components/Notification_module'
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import AOS styles
 
 const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://192.168.0.100:8000';
 axios.defaults.baseURL = baseURL;
