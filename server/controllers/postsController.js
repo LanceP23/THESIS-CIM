@@ -8,6 +8,7 @@ const Organization = require('../models/organization');
 const MobileUser = require('../models/mobileUser');
 const Notification = require('../models/notification');  
 const Community = require('../models/community');
+const PostComments = require('../models/postComments');
 
 
 
@@ -76,6 +77,7 @@ const createAnnouncement = async (req, res) => {
       }
     }
 
+
     const announcementData = {
       header,
       body,
@@ -83,6 +85,7 @@ const createAnnouncement = async (req, res) => {
       contentType,
       status,
       postedBy: req.user.name,
+      posterId: req.user.id,
       visibility: JSON.parse(visibility),
       postingDate,
       expirationDate,
@@ -438,7 +441,8 @@ const getRecentAnnouncements = async (req, res) => {
   try {
     const approvedAnnouncements = await Announcement.find({ status: 'approved' })
       .sort({ createdAt: -1 }) 
-      .limit(10); 
+      .limit(10);
+      
     res.json(approvedAnnouncements);
   } catch (error) {
     console.error('Error fetching approved announcements:', error);
@@ -507,6 +511,19 @@ const updateAnnouncement = async (req, res) => {
     res.status(500).json({message:'Internal Server Error'})
   }
  }
+
+ const getCommentsByAnnouncementId = async (req, res) => {
+  try {
+    const { announcementId } = req.params;    
+    const comments = await PostComments.find({ announcementId }).populate('userId', 'name'); 
+
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: 'Server error while fetching comments' });
+  }
+};
+
 module.exports = {
   createAnnouncement,
   authenticate, 
@@ -516,5 +533,6 @@ module.exports = {
   getUserAnnouncements,
   updateAnnouncement,
   deleteAnnouncement,
-  getRecentAnnouncements
+  getRecentAnnouncements,
+  getCommentsByAnnouncementId 
 };

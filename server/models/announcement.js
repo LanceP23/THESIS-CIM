@@ -19,6 +19,11 @@ const announcementSchema = new mongoose.Schema({
     type:String,
     required:true
   },
+  posterId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'User',
+    required: true,
+  },
   communityId: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Community', 

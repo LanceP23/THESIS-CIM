@@ -10,6 +10,7 @@ const ManageUserAnnouncement = () => {
   const [editingPost, setEditingPost] = useState(null);
   const [editHeader, setEditHeader] = useState('');
   const [editBody, setEditBody] = useState('');
+  const [postComments, setPostComments] = useState({});
 
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
@@ -92,6 +93,23 @@ const ManageUserAnnouncement = () => {
     }
   };
 
+  const fetchComments = async (postId) => {
+    try {
+      const token = getToken();
+      const response = await axios.get(`/${postId}/comments`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setPostComments((prevComments) => ({
+        ...prevComments,
+        [postId]: response.data
+      }));
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -151,6 +169,22 @@ const ManageUserAnnouncement = () => {
                       </audio>
                     </div>
                   )}
+
+                  <div className="comments-section mt-4">
+                    <h4 className="text-lg font-semibold">Comments:</h4>
+                    <button onClick={() => fetchComments(post._id)} className="btn btn-sm btn-success">Load Comments</button>
+                    {postComments[post._id] && postComments[post._id].length > 0 ? (
+                      <ul className="comments-list mt-2">
+                        {postComments[post._id].map(comment => (
+                          <li key={comment._id} className="bg-white p-2 mb-2 rounded shadow">
+                            <p className="text-gray-700">{comment.text}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>No comments yet.</p>
+                    )}
+                  </div>
                   <div className="flex justify-between items-center text-sm text-gray-600">
                     <div>
                       <span>Posted on: {new Date(post.createdAt).toLocaleString()}</span>
