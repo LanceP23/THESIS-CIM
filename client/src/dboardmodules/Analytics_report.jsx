@@ -202,7 +202,7 @@ const AnalyticsReport = () => {
   };
 
   return (
-    <div className="my-16">
+    <div className="mt-16 p-3">
 
       <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
   

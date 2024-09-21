@@ -23,6 +23,8 @@
 
 body {
   margin: 0;
+  padding: 0;
+ 
   
   background: radial-gradient(circle, rgb(124, 255, 192) 0%, rgb(0, 0, 0) 100%);
   background-size: 200% 200%;

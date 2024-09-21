@@ -122,7 +122,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between mt-7 p-3">
     <div className='  bg-slate-100 my-5 rounded-lg shadow-inner p-2'>
 
     

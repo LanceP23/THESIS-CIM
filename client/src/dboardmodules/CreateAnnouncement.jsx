@@ -403,7 +403,7 @@ export default function CreateAnnouncement() {
 
 
   return (
-    <div className='flex flex-row my-14 animate-fade-in '>
+    <div className='flex flex-row mt-16 animate-fade-in '>
       <div className="p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>  <FontAwesomeIcon icon={faBullhorn} className=' text-yellow-500 mx-1 '/>Post Management</h2>
       <div role="tablist" className="tabs tabs-lifted w-full">

@@ -56,8 +56,8 @@ const ViewCommunity = () => {
   };
 
   return (
-    <div>
-      <div className="bg-slate-200 my-5 rounded-xl p-3">
+    <div className='mt-16 p-3'>
+      <div className="bg-slate-200 rounded-xl p-3">
         {loading && <p>Loading...</p>}
         {!loading && adminCommunities.length === 0 && <p>No communities found.</p>}
         {!loading && adminCommunities.length > 0 && (
