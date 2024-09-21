@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     AOS.init({
-      duration: 1200, // Duration of the animations
+      duration: 1500, // Duration of the animations
       // You can add other configuration options here
       once: false,
 
@@ -39,21 +39,21 @@ export default function Home() {
 
 
   return (
-    <div className="">
+    <div className=" w-full flex flex-wrap overflow-x-hidden">
       {/* Navbar */}
       <Navbar />
 
-      <div className=" w-full h-[95vh]">
+      <div className=" flex w-full h-[95vh] ">
   {recentAnnouncements.length > 0 ? (
     <Carousel showThumbs={false} infiniteLoop autoPlay interval={5000} className="w-full">
       {recentAnnouncements.slice(0, 5).map((announcement) => (
         <div
           key={announcement._id}
-          className="pt-20 shadow-lg w-full h-[95vh] relative bg-green-950"
+          className="pt-20 shadow-lg w-auto h-[95vh] relative bg-green-950"
         >
           {/* Media Section */}
           {announcement.mediaUrl ? (
-            <div className="lg:w-full flex items-center justify-center relative"> {/* Centering media and making it relative */}
+            <div className="lg:w-full flex items-center justify-center relative flex-wrap"> {/* Centering media and making it relative */}
               {announcement.contentType && announcement.contentType.startsWith('image') ? (
                 <>
                   <img
@@ -69,7 +69,7 @@ export default function Home() {
                 </>
               ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
                 <>
-                  <video controls className="w-full h-[80vh] object-cover rounded-lg">
+                  <video controls className="w-screen h-[80vh] object-cover rounded-lg">
                     <source src={announcement.mediaUrl} type={announcement.contentType} />
                   </video>
                   {/* Text Overlay */}
@@ -103,7 +103,7 @@ export default function Home() {
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('../src/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-screen flex justify-center items-center text-center relative ">
+          <div className="hero-section bg-[url('../src/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[95vh] flex justify-center items-center text-center relative ">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70"></div>
         <div className="hero-content z-10 flex"   >
           <h1 className="text-white font-bold text-5xl md:text-6xl mb-6 " data-aos="fade-right" >Stay Connected with Campus Life</h1>
@@ -111,18 +111,67 @@ export default function Home() {
         </div>
       </div>
 
-      <div className=" hero-section bg-[url('../src/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full h-screen flex justify-center items-center text-center relative" >
-        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70" ></div>
-        <div className="flex lg:flex-row md:flex-col sm:flex-col gap-5 "  data-aos="fade-up">
-          <div className="card glass w-96">
+        {/* App Hero Section*/ }
+      <div className="w-full h-[95vh] bg-green-950">
+      
+
+       <div className="flex ">
+          <div className="hero-content relative z-10 ">
+                <div className="absolute inset-0">
+                  <img
+                    src="../src/assets/CORPO_CIM/HOME_ASSET (6).png"
+                    alt="car!"
+                    className=" w-[50vw] h-full opacity-30 "
+                    data-aos="flip-right"
+                  />
+                </div>
+
+                <div className="flex flex-col relative">
+                  {/* Background div for opacity */}
+                  <div className="absolute inset-0 bg-black opacity-50 rounded-lg z-10 " data-aos="fade-right" />
+
+                  <div className="text-left z-20 p-6">
+                    <h1 className="text-white font-bold text-5xl text-left mb-6" data-aos="fade-right">
+                      CIM Application
+                    </h1>
+                    <div className="w-[50vw]">
+                      <p className="text-white font-sm text-md text-left relative z-20" data-aos="fade-right">
+                        Experience our app on the go with our mobile version, available for download now. Whether you are at home or on the move, stay connected and enjoy seamless functionality across all your devices.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+
+
+              <div className="">
+              <img
+                      src="../src/assets/CORPO_CIM/HOME_ASSET (2).png"
+                      alt="car!"
+                      className=' w-[50vw] h-[95vh] opacity-45'
+                      data-aos="fade-left" />
+
+              </div>
+
+        </div>
+        
+
+       </div>
+
+      <div className=" hero-section bg-[url('../src/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative" >
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70 " ></div>
+        <div className="flex lg:flex-row md:flex-col sm:flex-col flex-wrap gap-5 "  data-aos="fade-up">
+          <div className="card glass w-96 p-3">
 
             <figure>
               <img
-                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                alt="car!" />
+                src="../src/assets/CORPO_CIM/HOME_ASSET (1).png"
+                alt="car!" 
+                className=' w-32 h-auto'/>
             </figure>
             <div className="card-body">
-              <h2 className="card-title text-white text-center border-b-2 border-yellow-500">Unified Campus Media platform for Announcements and Events</h2>
+              <h2 className="card-title text-white text-center border-b-2 border-yellow-500 ">Unified Campus Media platform for Announcements and Events</h2>
               <p className='text-gray-300'>A centralized, regulated platform providing 
                 real-time updates to keep everyone informed and engaged with campus events.
                </p>
@@ -130,29 +179,31 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="card glass w-96">
+          <div className="card glass w-96 p-3">
             <figure>
               <img
-                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                alt="car!" />
+                src="../src/assets/CORPO_CIM/HOME_ASSET(10).png"
+                alt="car!" 
+                className=' w-32 h-auto'/>
             </figure>
-            <div className="card-body ">
+            <div className="card-body m-0">
               <h2 className="card-title text-white text-center border-b-2 border-yellow-500">Mobile Application for Easy Access </h2>
-              <p className='text-gray-300'> Catherinians can download the CIM mobile app to easily access the latest campus announcements and events, 
+              <p className='text-gray-300'> Catherinians can download the <strong> CIM mobile app </strong> to easily access the latest campus announcements and events, 
                 staying informed about everything the school has to offer.</p>
              
             </div>
           </div>
 
-          <div className="card glass w-96">
+          <div className="card glass w-96 p-3">
             <figure>
               <img
-                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                alt="car!" />
+                src="../src/assets/CORPO_CIM/HOME_ASSET (7).png"
+                alt="car!"
+                className=' w-20 h-auto' />
             </figure>
             <div className="card-body">
               <h2 className="card-title text-white text-center text-md border-b-2 border-yellow-500">Interactive Announcements for Enhanced User Engagement</h2>
-              <p className='text-gray-300'>Users can enjoy a participative experience that 
+              <p className='text-gray-300'>Catherinians can enjoy a participative experience that 
                 captures their attention through simple games about certain events.</p>
              
             </div>
@@ -171,7 +222,9 @@ export default function Home() {
 
       </div>
 
-      <div className="w-full h-[10vh] bg-green-950 flex items-center justify-end px-3 gap-3"  >
+      
+
+      <div className="w-full h-[10vh] bg-green-900 flex items-center justify-end px-3 gap-3"  >
 
         <div className="text-white text-md animate-fade-in" >
           <p>Created and powered by College of St. Catherine Quezon City</p>

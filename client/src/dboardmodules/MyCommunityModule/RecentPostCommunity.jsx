@@ -69,7 +69,7 @@ export default function RecentPostCommunity({ communityId }) {
       </figure>
       <div className="card-body p-2">
         <h2 className="card-title border-b-2 text-green-600 border-yellow-400 py-1">{post.header}</h2>
-        <p className=' max-h-40 max-w-xs overflow-auto bg-slate-100  text-left m-0 border-white border-2 shadow-lg'>{post.body}</p>
+        <p className=' max-h-40 max-w-xs overflow-auto text-left m-0  '>{post.body}</p>
         
       </div>
    

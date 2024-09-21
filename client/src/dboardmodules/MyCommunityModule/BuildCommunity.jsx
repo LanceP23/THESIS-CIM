@@ -191,7 +191,7 @@ export default function BuildCommunity() {
 
   return (
 
-    <div className="flex relative m-0 ">
+    <div className="flex relative  mt-10 p-2 ">
     <div className=" bg-slate-200 my-5 rounded-xl p-3 ">
     <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 my-2'>Build Community</h2>
       <div className="flex flex-row">
@@ -432,7 +432,7 @@ export default function BuildCommunity() {
             
     </div>
     
-    <div className="bg-slate-200 my-5  rounded-xl p-3 shadow-xl max-h-full max-w-md fixed right-9">
+    <div className="bg-slate-200 my-5  rounded-xl p-3 shadow-xl max-h-full max-w-md fixed right-9 z-20">
          {/* Selected Members */}
       <div className="w-full max-w-lg mt-8">
         <div className="flex flex-row justify-between">

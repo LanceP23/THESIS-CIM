@@ -35,7 +35,8 @@ export default function MyCommunity() {
   };
   
   return (
-    <div className=" bg-slate-200 rounded-xl my-5 p-2 animate-fade-in">
+    <div className="p-3">
+    <div className=" bg-slate-200 rounded-xl mt-16 p-2 animate-fade-in">
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>Welcome to the Community Management Module</h2>
       
       <div className="flex justify-around m-4"> 
@@ -92,6 +93,7 @@ export default function MyCommunity() {
        
         
       </div>
+    </div>
     </div>
   );
 }
