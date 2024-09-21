@@ -110,6 +110,33 @@ const ManageUserAnnouncement = () => {
     }
   };
 
+  const handleDeleteComment = async (commentId, postId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this comment?");
+    if (!confirmDelete) {
+      return; 
+    }
+
+    try {
+      const token = getToken();
+      const response = await axios.delete(`/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 200) {
+        setPostComments((prevComments) => ({
+          ...prevComments,
+          [postId]: prevComments[postId].filter(comment => comment._id !== commentId)
+        }));
+        toast.success('Comment deleted successfully.');
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      toast.error('Failed to delete comment.');
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -178,6 +205,13 @@ const ManageUserAnnouncement = () => {
                         {postComments[post._id].map(comment => (
                           <li key={comment._id} className="bg-white p-2 mb-2 rounded shadow">
                             <p className="text-gray-700">{comment.text}</p>
+                            <p className="text-sm text-gray-500">- {comment.userId.name}, {new Date(comment.createdAt).toLocaleString()}</p>
+                            <button
+                              onClick={() => handleDeleteComment(comment._id, post._id)}
+                              className="btn btn-error btn-sm mt-2"
+                            >
+                              <FaTrashAlt /> Delete Comment
+                            </button>
                           </li>
                         ))}
                       </ul>

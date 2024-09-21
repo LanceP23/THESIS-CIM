@@ -524,6 +524,29 @@ const updateAnnouncement = async (req, res) => {
   }
 };
 
+const deleteComments = async (req, res) => {
+  try {
+    const { commentId } = req.params; 
+    const userId = req.user.id; 
+
+    // Find the comment to check ownership
+    const comment = await PostComments.findById(commentId);
+
+    if (!comment) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+
+    // If the user is authorized, delete the comment
+    await PostComments.findByIdAndDelete(commentId);
+
+    res.status(200).json({ message: 'Comment deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    res.status(500).json({ error: 'Server error while deleting comment' });
+  }
+};
+
+
 module.exports = {
   createAnnouncement,
   authenticate, 
@@ -534,5 +557,6 @@ module.exports = {
   updateAnnouncement,
   deleteAnnouncement,
   getRecentAnnouncements,
-  getCommentsByAnnouncementId 
+  getCommentsByAnnouncementId,
+  deleteComments 
 };
