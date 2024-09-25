@@ -8,6 +8,7 @@ import { convertLength } from '@mui/material/styles/cssUtils';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faFacebookMessenger } from '@fortawesome/free-brands-svg-icons';
 import {faMessage}from '@fortawesome/free-solid-svg-icons';
 
 
@@ -231,11 +232,18 @@ export default function Home() {
         </div>
 
       <button className="btn btn-circle btn-outline">
-       <FontAwesomeIcon icon={faMessage} className='text-yellow-500 text-lg'/>
+         <a href="https://www.facebook.com/CollegeofStCatherine" target="_blank" rel="noopener noreferrer">
+         <FontAwesomeIcon icon={faFacebook} className='text-yellow-500 text-lg' />
+         </a>
+      
+      
       </button>
 
       <button className="btn btn-circle btn-outline">
-       <FontAwesomeIcon icon={faMessage} className='text-yellow-500 text-lg '/>
+      <a href="https://www.messenger.com/t/254530691580913?fbclid=IwY2xjawFbc_9leHRuA2FlbQIxMAABHZHk-iowlkmHed3RcJZJpr_O7pJPT9N7Oki6wefpy6urXGImbQKGfnvApQ_aem_U_zzNH0VYiOOCqqsgE2hgQ" target="_blank" rel="noopener noreferrer">
+      <FontAwesomeIcon icon={faFacebookMessenger} className='text-yellow-500 text-lg '/>
+      </a>
+       
       </button>
       </div>
 
