@@ -16,6 +16,10 @@ const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobile
 const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
 const{getLikesDislikesandReactions,countUserReactionsByEducationLevel, countReactionsByDate, getUserReactionsWithDate} = require('../controllers/analyticsController');
+const { countCommunityTotalReactions, 
+  countCommunityReactionsByEducationLevel, 
+  countCommunityReactionsByDate 
+} = require('../controllers/communityAnalyticsController');
 const DailyLogin = require('../models/dailylogin'); 
 
 router.use(
@@ -137,5 +141,10 @@ router.get('/announcements/:id/details', getLikesDislikesandReactions);
 router.get('/user/:id/demographics',countUserReactionsByEducationLevel);
 router.get('/count-reactions-date/:id', countReactionsByDate);
 router.get('/reactions-with-date/:id', getUserReactionsWithDate);
+// community analytics 
+router.get('/community/:communityId/reactions', countCommunityTotalReactions); 
+router.get('/community/:communityId/reactions/education-level', countCommunityReactionsByEducationLevel); 
+router.get('/community/:communityId/reactions/date', countCommunityReactionsByDate); 
+
 module.exports = router;
 

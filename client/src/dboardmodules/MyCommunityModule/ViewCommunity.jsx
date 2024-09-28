@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../../context/userContext';
-import RecentPostCommunity from './RecentPostCommunity'; 
+import RecentPostCommunity from './RecentPostCommunity';
+import MyCommunityAnalytics from './MyCommuityAnalytics'; // Import the analytics component
 
 const ViewCommunity = () => {
   // State variables
@@ -9,8 +10,8 @@ const ViewCommunity = () => {
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [viewCommunityId, setViewCommunityId] = useState(null);
-  const [viewMembersCommunityId, setViewMembersCommunityId] = useState(null);
+  const [viewCommunityId, setViewCommunityId] = useState(null); // ID for the active view
+  const [activeView, setActiveView] = useState(null); // Track the active view type ('posts', 'members', 'analytics')
 
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
@@ -47,12 +48,16 @@ const ViewCommunity = () => {
     fetchCommunityData();
   }, [user]);
 
-  const handleViewCommunity = (communityId) => {
-    setViewCommunityId(prevId => (prevId === communityId ? null : communityId));
-  };
-
-  const handleViewMembers = (communityId) => {
-    setViewMembersCommunityId(prevId => (prevId === communityId ? null : communityId));
+  // Handle button click for viewing community posts, members, and analytics
+  const handleView = (communityId, viewType) => {
+    if (viewCommunityId === communityId && activeView === viewType) {
+      // Close the currently active section if it's clicked again
+      setViewCommunityId(null);
+      setActiveView(null);
+    } else {
+      setViewCommunityId(communityId);
+      setActiveView(viewType);
+    }
   };
 
   return (
@@ -71,6 +76,7 @@ const ViewCommunity = () => {
                       <th className='bg-green-500 text-white'>Community Name</th>
                       <th className='bg-green-500 text-white'>View Posts</th>
                       <th className='bg-green-500 text-white'>View Members</th>
+                      <th className='bg-green-500 text-white'>Analytics</th> {/* New column for analytics */}
                     </tr>
                   </thead>
                   <tbody>
@@ -90,29 +96,51 @@ const ViewCommunity = () => {
                           </div>
                         </td>
                         <td className='border-b-2 border-black'>
-                          <button onClick={() => handleViewCommunity(community._id)} className='btn btn-success btn-sm'>Posts</button>
+                          <button
+                            onClick={() => handleView(community._id, 'posts')}
+                            className='btn btn-success btn-sm'
+                          >
+                            Posts
+                          </button>
                         </td>
                         <td className='border-b-2 border-black'>
-                          <button onClick={() => handleViewMembers(community._id)} className='btn btn-success btn-sm'>Members</button>
+                          <button
+                            onClick={() => handleView(community._id, 'members')}
+                            className='btn btn-success btn-sm'
+                          >
+                            Members
+                          </button>
+                        </td>
+                        <td className='border-b-2 border-black'>
+                          <button
+                            onClick={() => handleView(community._id, 'analytics')}
+                            className='btn btn-success btn-sm'
+                          >
+                            View Analytics
+                          </button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+
               <div className="divider lg:divider-horizontal divider-warning"></div>
+
               <div className="w-3/4 max-w-full mx-auto p-4 bg-white shadow-md rounded-lg">
-                <h2 className="text-lg font-semibold mb-4 border-b-2 text-green-700 border-yellow-300">Recent Posts for Community</h2>
+                <h2 className="text-lg font-semibold mb-4 border-b-2 text-green-700 border-yellow-300">
+                  {activeView === 'posts' && "Recent Posts for Community"}
+                  {activeView === 'members' && "Members of Community"}
+                  {activeView === 'analytics' && "Community Analytics"}
+                </h2>
+
                 {adminCommunities.map(community => (
                   <div key={community._id}>
-                    {viewCommunityId === community._id && <RecentPostCommunity communityId={community._id} />}
-                  </div>
-                ))}
-                {adminCommunities.map(community => (
-                  <div key={community._id}>
-                    {viewMembersCommunityId === community._id && (
+                    {viewCommunityId === community._id && activeView === 'posts' && (
+                      <RecentPostCommunity communityId={community._id} />
+                    )}
+                    {viewCommunityId === community._id && activeView === 'members' && (
                       <div>
-                        <h2 className="text-lg font-semibold mb-4 border-b-2 text-green-700 border-yellow-300">Members</h2>
                         <ul>
                           {community.members.map(member => (
                             <li key={member.userId} className="mb-2">
@@ -131,6 +159,9 @@ const ViewCommunity = () => {
                           ))}
                         </ul>
                       </div>
+                    )}
+                    {viewCommunityId === community._id && activeView === 'analytics' && (
+                      <MyCommunityAnalytics communityId={community._id} />
                     )}
                   </div>
                 ))}
