@@ -78,7 +78,7 @@ const AnalyticsReport = () => {
   
                 * Demographic Data: ${pieData.map(data => `${data.name}: ${data.value}`).join(', ')}
   
-                Provide a concise analysis of user engagement and sentiment.`
+                Provide a concise analysis of user engagement and sentiment. Provide suggestions as well seperate it in two paragraphs, one for analysis and one for suggestions`
               }
             ],
             role: 'user'  

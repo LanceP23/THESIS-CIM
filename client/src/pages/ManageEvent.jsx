@@ -152,7 +152,7 @@ const ManageEvent = () => {
 
   return (
     <div className="manage-events-container">
-      <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 mt-2 mb-2'>Your Events</h2>
+      <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 mt-2 mb-2'>Manage Events</h2>
       <Calendar
         localizer={localizer}
         events={events}

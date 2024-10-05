@@ -45,7 +45,7 @@ export default function Home() {
       <Navbar />
 
       <div className=" flex w-full h-[95vh] ">
-  {recentAnnouncements.length > 0 ? (
+      {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
     <Carousel showThumbs={false} infiniteLoop autoPlay interval={5000} className="w-full">
       {recentAnnouncements.slice(0, 5).map((announcement) => (
         <div

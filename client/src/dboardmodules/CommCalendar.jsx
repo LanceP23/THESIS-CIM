@@ -108,34 +108,38 @@ const CommCalendar = ({ defaultSelectable = true }) => {
       try {
         setLoading(true);
         const response = await axios.get('/fetch-event');
-        const formattedEvents = response.data.map(event => {
-          return {
+        console.log('Response:', response);
+        
+        if (response.status === 200 && Array.isArray(response.data)) {
+          const formattedEvents = response.data.map(event => ({
             title: `${moment(event.start).format('h:mma')} - ${event.title}`,
             start: event.start,
             end: event.end,
             eventType: event.eventType,
             organizerType: event.organizerType,
             organizerName: event.organizerName,
-            participants: event.participant, // Update participants field
+            participants: event.participant,
             committee: event.committee,
             committeeChairman: event.committeeChairman,
             location: event.location,
             budget: event.budget,
             viewCommunityId: event.viewCommunityId,
-            ...event, 
-          };
-        });
-        setEvents(formattedEvents);
+            ...event,
+          }));
+          setEvents(formattedEvents);
+        } else {
+          console.error('Unexpected response data:', response.data);
+        }
       } catch (error) {
         console.error('Error fetching events:', error);
       } finally {
         setLoading(false);
       }
     };
-    
   
     fetchEvents();
   }, []);
+  
 
   useEffect(() => {
     fetchOrganizations();
