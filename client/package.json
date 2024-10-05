@@ -28,6 +28,7 @@
     "@google/generative-ai": "^0.17.1",
     "@heroicons/react": "^1.0.6",
     "@mui/x-charts": "^7.6.1",
+    "@vitejs/plugin-react": "^4.3.2",
     "address": "^2.0.2",
     "aos": "^2.3.4",
     "axios": "^1.6.7",
