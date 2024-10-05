@@ -6,6 +6,7 @@ export const socketContext = createContext();
 export const useSocketContext = () => {
     return useContext(socketContext);
 }
+
 export const SocketContextProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
@@ -14,10 +15,9 @@ export const SocketContextProvider = ({ children }) => {
     useEffect(() => {
         if (user) {
             
-            // Define an array of URLs to attempt connecting
+            // Use environment variable to dynamically set the connection URL
             const connectionURLs = [
-             // Hardcoded IP address
-                "http://localhost:8000"
+                process.env.REACT_APP_API_URL || "http://localhost:8000"  // Use env variable or fallback to localhost
             ];
 
             // Attempt to connect using each URL until successful
@@ -54,4 +54,3 @@ export const SocketContextProvider = ({ children }) => {
         </socketContext.Provider>
     );
 };
-
