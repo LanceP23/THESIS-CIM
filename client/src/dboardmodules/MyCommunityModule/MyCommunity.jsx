@@ -46,7 +46,7 @@ export default function MyCommunity() {
         onMouseEnter={() => sethovered_Build_Community(true)} 
         onMouseLeave={() => sethovered_Build_Community(false)}
       >
-        <img src="../src/assets/community.jpg" alt="" className='w-full shadow-2xl'/>
+        <img src="/assets/community.jpg" alt="" className='w-full shadow-2xl'/>
         <div className="card-body">
           <h2 className="card-title">Build Community</h2>
           <p className='text-left'>Create a vibrant community within CIM. Your ideas, passion, and involvement are the keys in building a collaborative and inclusive environment.</p>
@@ -70,7 +70,7 @@ export default function MyCommunity() {
         onMouseEnter={() => setHovered_View_Community(true)} 
         onMouseLeave={() => setHovered_View_Community(false)}
       >
-        <img src="../src/assets/commu.png" alt="" className='w-full shadow-2xl'/>
+        <img src="/assets/commu.png" alt="" className='w-full shadow-2xl'/>
         <div className="card-body">
           <h2 className="card-title">View Community</h2>
           <p className='text-left'>Discover the vibrant community within CIM. Connect, engage, and see how you can make a difference today.</p>

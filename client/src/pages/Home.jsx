@@ -104,7 +104,7 @@ export default function Home() {
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('../src/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[95vh] flex justify-center items-center text-center relative ">
+          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[95vh] flex justify-center items-center text-center relative ">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70"></div>
         <div className="hero-content z-10 flex"   >
           <h1 className="text-white font-bold text-5xl md:text-6xl mb-6 " data-aos="fade-right" >Stay Connected with Campus Life</h1>
@@ -120,7 +120,7 @@ export default function Home() {
           <div className="hero-content relative z-10 ">
                 <div className="absolute inset-0">
                   <img
-                    src="../src/assets/CORPO_CIM/HOME_ASSET (6).png"
+                    src="/assets/CORPO_CIM/HOME_ASSET (6).png"
                     alt="car!"
                     className=" w-[50vw] h-full opacity-30 "
                     data-aos="flip-right"
@@ -148,7 +148,7 @@ export default function Home() {
 
               <div className="">
               <img
-                      src="../src/assets/CORPO_CIM/HOME_ASSET (2).png"
+                      src="/assets/CORPO_CIM/HOME_ASSET (2).png"
                       alt="car!"
                       className=' w-[50vw] h-[95vh] opacity-45'
                       data-aos="fade-left" />
@@ -160,14 +160,14 @@ export default function Home() {
 
        </div>
 
-      <div className=" hero-section bg-[url('../src/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative" >
+      <div className=" hero-section bg-[url('/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative" >
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70 " ></div>
         <div className="flex lg:flex-row md:flex-col sm:flex-col flex-wrap gap-5 "  data-aos="fade-up">
           <div className="card glass w-96 p-3">
 
             <figure>
               <img
-                src="../src/assets/CORPO_CIM/HOME_ASSET (1).png"
+                src="/assets/CORPO_CIM/HOME_ASSET (1).png"
                 alt="car!" 
                 className=' w-32 h-auto'/>
             </figure>
@@ -183,7 +183,7 @@ export default function Home() {
           <div className="card glass w-96 p-3">
             <figure>
               <img
-                src="../src/assets/CORPO_CIM/HOME_ASSET(10).png"
+                src="/assets/CORPO_CIM/HOME_ASSET(10).png"
                 alt="car!" 
                 className=' w-32 h-auto'/>
             </figure>
@@ -198,7 +198,7 @@ export default function Home() {
           <div className="card glass w-96 p-3">
             <figure>
               <img
-                src="../src/assets/CORPO_CIM/HOME_ASSET (7).png"
+                src="/assets/CORPO_CIM/HOME_ASSET (7).png"
                 alt="car!"
                 className=' w-20 h-auto' />
             </figure>

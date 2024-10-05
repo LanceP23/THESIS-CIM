@@ -175,13 +175,13 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         <div className="p3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100 border-2 ">
                             <Carousel showThumbs={false} autoPlay infiniteLoop interval={10000}>
                                 <div>
-                                    <img src="../src/assets/398569058_739544134860223_1719844830869562449_n.jpg" alt="Slide 1" className=' h-auto' />
+                                    <img src="/assets/398569058_739544134860223_1719844830869562449_n.jpg" alt="Slide 1" className=' h-auto' />
                                 </div>
                                 <div>
-                                    <img src="../src/assets/434168365_828389249309044_1058040744990472008_n.jpg" alt="Slide 2" className=' max-h-full' />
+                                    <img src="/assets/434168365_828389249309044_1058040744990472008_n.jpg" alt="Slide 2" className=' max-h-full' />
                                 </div>
                                 <div>
-                                    <img src="../src/assets/439841626_847556550725647_7502073539968304278_n.jpg" alt="Slide 3" />
+                                    <img src="/assets/439841626_847556550725647_7502073539968304278_n.jpg" alt="Slide 3" />
                                 </div>
                              
                             </Carousel>

@@ -24,6 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
+app.use('/assets', express.static(path.join(__dirname, '..client/dist/assets')));
 
 // Routes
 app.use('/', require('./routes/authRouter'));

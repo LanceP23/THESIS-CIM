@@ -96,16 +96,16 @@ const Login = (  ) => {
     
 
     return (
-        <body className=" bg-[url('../src/assets/CORPO_CIM/gradeint_cover.gif')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
+        <body className=" bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
             <Navbar/>
            
        
     
-        <div className="login-form bg-[url('../src/assets/webwithLogo.png')] animate-text-reveal  ">
+        <div className="login-form bg-[url('/assets/webwithLogo.png')] animate-text-reveal  ">
 
             <div className="flex justify-center">
 
-            <img src='../src/assets/CORPO_CIM/LOGO_ONLY_cut.png' className='w-12 mb-2'/>
+            <img src='/assets/CORPO_CIM/LOGO_ONLY_cut.png' className='w-12 mb-2'/>
 
             </div>
 
