@@ -144,7 +144,7 @@ const registerUser = async (req, res) => {
 };
 
 //Login ep
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const loginUser = async (req, res) => {
     try {
