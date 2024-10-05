@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npx vite build",
+    "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -58,6 +58,7 @@
     "recharts": "^2.12.7",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "vite": "^5.2.7",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
