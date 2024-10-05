@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
-   "build": "npm --prefix ../client ci && npm --prefix ../client run build",
-  "postinstall": "npm --prefix ../client ci && npm --prefix ../client run build"
+   "build": "npm --prefix ../client install && npm --prefix ../client run build",
+  "postinstall": "npm --prefix ../client install && npm --prefix ../client run build"
   },
   "author": "",
   "license": "ISC",
