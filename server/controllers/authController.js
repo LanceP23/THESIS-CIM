@@ -7,7 +7,7 @@ const DailyLogin = require('../models/dailylogin');
 
 
 const test = (req, res) =>{
-    res.json("Hello World Test")
+    res.json("Hello World Test");
 }
 //Registration ep
 const registerUser = async (req, res) => {

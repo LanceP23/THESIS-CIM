@@ -42,7 +42,7 @@ const storage = multer.diskStorage({
   const upload = multer({ storage });
 
 //auth related
-router.get('/', test);
+router.get('/test', test);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/check-auth', checkAuth);
