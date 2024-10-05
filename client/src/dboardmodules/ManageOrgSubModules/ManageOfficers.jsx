@@ -12,7 +12,7 @@ export default function ManageOfficers() {
 
   const fetchOfficers = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/officers/pending');
+      const response = await axios.get('/officers/pending');
       setOfficers(response.data);
       setLoading(false);
     } catch (error) {
@@ -24,7 +24,7 @@ export default function ManageOfficers() {
 
   const handleApproveOfficer = async (officerId) => {
     try {
-      await axios.put(`http://localhost:8000/approve_officer/${officerId}`);
+      await axios.put(`/approve_officer/${officerId}`);
       setOfficers(officers.filter(officer => officer._id !== officerId));
       toast.success('Officer approved successfully');
     } catch (error) {

@@ -265,7 +265,7 @@ export default function OrganizationReg() {
     try {
       // Retrieve token from cookie
       const token = getCookie('token');
-      const response = await axios.post('http://localhost:8000/create_organization', newOrganization, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.post('/create_organization', newOrganization, { headers: { Authorization: `Bearer ${token}` } });
       if (response.status === 200) {
         toast.success('Organization created successfully');
         setNewOrganization({
