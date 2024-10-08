@@ -84,6 +84,7 @@ export default function Register() {
   return (
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <div className='register-form'>
       <Navbar />
       <form onSubmit={registerAdmin}>
@@ -157,6 +158,11 @@ export default function Register() {
 =======
     <div>
       <Sidebar adminType={data.adminType} /> {/* Pass adminType as prop */}
+=======
+    <div className=" mt-7 p-3">
+      <div className="flex justify-between">
+    <div className='  bg-slate-100 mt-5 rounded-lg shadow-inner p-2'>
+>>>>>>> Stashed changes
 
       <div className="button_container">
       <button onClick={() => handleRegistrationType('staff')} className = 'register_button'>Staff Registration</button>
@@ -208,11 +214,34 @@ export default function Register() {
 <<<<<<< Updated upstream
        
       </div>
+<<<<<<< Updated upstream
 
       
 >>>>>>> Stashed changes
 =======
+=======
+      <div className="divider divider-warning"></div>
+
+      
+
+    
+      </div>
+      <div className="mx-3 ">
+    <div className=' bg-gradient-to-r from-white to-green-200 p-4 my-5 rounded-lg shadow-2xl '>
+>>>>>>> Stashed changes
         
+      </div>
+    </div>
+
+    
+
+      <div className=" bg-slate-100  rounded-lg shadow-inner ">
+      <div className=" w-full">
+        
+        <RegisteredAccounts />
+        </div>
+      
+
       </div>
 
       </div>
