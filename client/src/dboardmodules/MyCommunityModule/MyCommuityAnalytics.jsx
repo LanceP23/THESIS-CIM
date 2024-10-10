@@ -3,13 +3,10 @@ import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { PieChart, Pie, Cell, Label } from 'recharts';
 import { parseISO, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
-
 const COLORS = ['#E38627', '#C13C37', '#6A2133', '#42A5F5', '#66BB6A'];
-
 const MyCommunityAnalytics = ({ communityId }) => {
   const [communityData, setCommunityData] = useState(null);
   const [dateFilter, setDateFilter] = useState('monthly'); // 'monthly' filter by default
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,11 +14,9 @@ const MyCommunityAnalytics = ({ communityId }) => {
           console.warn('communityId is not available for fetching data:', communityId);
           return;
         }
-
         const reactionsResponse = await axios.get(`/community/${communityId}/reactions`);
         const educationResponse = await axios.get(`/community/${communityId}/reactions/education-level`);
         const dateResponse = await axios.get(`/community/${communityId}/reactions/date`);
-
         setCommunityData({
           totalReactions: reactionsResponse.data,
           reactionsByEducationLevel: educationResponse.data.educationLevelCounters,
@@ -31,17 +26,12 @@ const MyCommunityAnalytics = ({ communityId }) => {
         console.error('Error fetching community data:', error);
       }
     };
-
     fetchData();
   }, [communityId]);
-
   if (!communityData) {
     return <div>Loading...</div>;
   }
-
   const { reactionsByEducationLevel, formattedData } = communityData;
-
-
   const filteredData = Array.isArray(formattedData)
     ? formattedData.filter((data) => {
         const date = parseISO(data.date);
@@ -55,25 +45,20 @@ const MyCommunityAnalytics = ({ communityId }) => {
         }
       })
     : [];
-
-
   // Prepare pie chart data
   const pieData = Object.entries(reactionsByEducationLevel).map(([key, value], index) => ({
     name: key,
     value,
     color: COLORS[index % COLORS.length],
   })).filter(entry => entry.value > 0); // Filter out zero values to avoid showing empty slices
-
-
   return (
-    <div className="mt-16 p-3">
-      <h1 className="text-4xl font-bold mb-4 text-left text-green-800">My Community Analytics</h1>
-
-      <div className="mb-4">
-        <label className="text-xl font-semibold text-green-800" htmlFor="dateFilter">Filter by:</label>
+    <div className="mt-16 p-3 w-full">
+   
+      <div className="mb-4 text-left">
+        <label className="text-lg font-semibold  " htmlFor="dateFilter">Filter by:</label>
         <select
           id="dateFilter"
-          className="ml-2 p-2 border border-gray-300 rounded"
+          className="flex flex-row justify-items-center mt-1 mr-2 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
         >
@@ -81,7 +66,6 @@ const MyCommunityAnalytics = ({ communityId }) => {
           <option value="all">All</option>
         </select>
       </div>
-
       <div className="p-4 bg-white shadow-lg rounded-lg mb-6">
         <h2 className="text-2xl font-semibold mb-4 text-green-800">Reactions by Date</h2>
         {filteredData.length > 0 ? (
@@ -99,7 +83,6 @@ const MyCommunityAnalytics = ({ communityId }) => {
           <div>No data available for this period.</div>
         )}
       </div>
-
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
         <div className="p-4 bg-white shadow-lg rounded-lg">
@@ -132,5 +115,4 @@ const MyCommunityAnalytics = ({ communityId }) => {
     </div>
   );
 };
-
 export default MyCommunityAnalytics;

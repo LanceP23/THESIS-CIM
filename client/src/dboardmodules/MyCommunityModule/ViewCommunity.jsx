@@ -3,7 +3,6 @@ import axios from 'axios';
 import { UserContext } from '../../../context/userContext';
 import RecentPostCommunity from './RecentPostCommunity';
 import MyCommunityAnalytics from './MyCommuityAnalytics'; // Import the analytics component
-
 const ViewCommunity = () => {
   // State variables
   const [adminCommunities, setAdminCommunities] = useState([]);
@@ -12,7 +11,6 @@ const ViewCommunity = () => {
   const [error, setError] = useState(null);
   const [viewCommunityId, setViewCommunityId] = useState(null); // ID for the active view
   const [activeView, setActiveView] = useState(null); // Track the active view type ('posts', 'members', 'analytics')
-
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
     if (!token) {
@@ -20,7 +18,6 @@ const ViewCommunity = () => {
     }
     return token.split('=')[1];
   };
-
   // Fetch community data when component loads
   useEffect(() => {
     const fetchCommunityData = async () => {
@@ -32,11 +29,9 @@ const ViewCommunity = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
         const userCommunities = response.data.filter(community => {
           return community.members.some(member => member.userId === currentUserId && member.role === 'admin');
         });
-
         setAdminCommunities(userCommunities);
         setLoading(false);
       } catch (error) {
@@ -44,10 +39,8 @@ const ViewCommunity = () => {
         setLoading(false);
       }
     };
-
     fetchCommunityData();
   }, [user]);
-
   // Handle button click for viewing community posts, members, and analytics
   const handleView = (communityId, viewType) => {
     if (viewCommunityId === communityId && activeView === viewType) {
@@ -59,7 +52,6 @@ const ViewCommunity = () => {
       setActiveView(viewType);
     }
   };
-
   return (
     <div className='mt-16 p-3'>
       <div className="bg-slate-200 rounded-xl p-3">
@@ -68,15 +60,15 @@ const ViewCommunity = () => {
         {!loading && adminCommunities.length > 0 && (
           <div>
             <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 my-2'>Your Admin Communities</h2>
-            <div className='flex flex-row justify-between'>
+            <div className='flex flex-col justify-between'>
               <div className="max-w-full max-h-96 overflow-auto">
                 <table className="max-w-full">
                   <thead className='sticky top-0 z-10'>
                     <tr>
-                      <th className='bg-green-500 text-white'>Community Name</th>
-                      <th className='bg-green-500 text-white'>View Posts</th>
-                      <th className='bg-green-500 text-white'>View Members</th>
-                      <th className='bg-green-500 text-white'>Analytics</th> {/* New column for analytics */}
+                      <th className='bg-green-500 text-white text-left'>Community Name</th>
+                      <th className='bg-green-500 text-white text-left'>View Posts</th>
+                      <th className='bg-green-500 text-white text-left'>View Members</th>
+                      <th className='bg-green-500 text-white text-left'>Analytics</th> {/* New column for analytics */}
                     </tr>
                   </thead>
                   <tbody>
@@ -124,16 +116,13 @@ const ViewCommunity = () => {
                   </tbody>
                 </table>
               </div>
-
               <div className="divider lg:divider-horizontal divider-warning"></div>
-
-              <div className="w-3/4 max-w-full mx-auto p-4 bg-white shadow-md rounded-lg">
+              <div className="w-full mx-auto mt-5 p-4 bg-white shadow-md rounded-lg">
                 <h2 className="text-lg font-semibold mb-4 border-b-2 text-green-700 border-yellow-300">
                   {activeView === 'posts' && "Recent Posts for Community"}
                   {activeView === 'members' && "Members of Community"}
                   {activeView === 'analytics' && "Community Analytics"}
                 </h2>
-
                 {adminCommunities.map(community => (
                   <div key={community._id}>
                     {viewCommunityId === community._id && activeView === 'posts' && (
@@ -173,5 +162,4 @@ const ViewCommunity = () => {
     </div>
   );
 };
-
 export default ViewCommunity;

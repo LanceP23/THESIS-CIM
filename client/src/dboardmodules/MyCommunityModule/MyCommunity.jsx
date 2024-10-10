@@ -3,13 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import './MyCommunit.css'; 
 import axios from 'axios';
 import { useEffect } from 'react';
-
 export default function MyCommunity() {
-
   const [hovered_Build_Community, sethovered_Build_Community] = useState('');
   const [hovered_View_Community, setHovered_View_Community] = useState('');
   const navigate = useNavigate();
-
   useEffect(() => {
     const checkAuthStatus = async () => {
         try {
@@ -22,24 +19,21 @@ export default function MyCommunity() {
             console.error('Error checking authentication status:', error);
         }
     };
-
     checkAuthStatus();
 }, [navigate]);
-
   const handleBuildCommunity = () => {
     navigate('/build-community');
   };
-
   const handleViewCommunity = () => {
     navigate('/view-community');
   };
   
   return (
-    <div className="p-3">
-    <div className=" bg-slate-200 rounded-xl mt-16 p-2 animate-fade-in">
-      <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>Welcome to the Community Management Module</h2>
+    <div className="pl-10 pr-10 pt-3">
+    <div className=" bg-slate-200 rounded-xl mt-16 p-2 animate-fade-in w-full ">
+      <h2 className='text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl  text-green-800 border-b-2 border-yellow-500 py-2'>Welcome to the Community Management Module</h2>
       
-      <div className="flex justify-around m-4"> 
+      <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row justify-around m-4 w-full"> 
       
       <div 
         className="card w-96 glass p-0 relative transition-transform duration-300 ease-in-out transform hover:scale-95 shadow-2xl" 
@@ -48,8 +42,8 @@ export default function MyCommunity() {
       >
         <img src="/assets/community.jpg" alt="" className='w-full shadow-2xl'/>
         <div className="card-body">
-          <h2 className="card-title">Build Community</h2>
-          <p className='text-left'>Create a vibrant community within CIM. Your ideas, passion, and involvement are the keys in building a collaborative and inclusive environment.</p>
+          <h2 className="card-title border-b-2 border-yellow-500 text-green-700">Build Community</h2>
+          <p className='text-justify text-gray-600 '>Create a vibrant community within CIM. Your ideas, passion, and involvement are the keys in building a collaborative and inclusive environment.</p>
           <div className="card-actions justify-end">
            
           </div>
@@ -63,8 +57,6 @@ export default function MyCommunity() {
           </div>
         )}
       </div>
-
-
       <div 
         className="card w-96 glass p-0 relative transition-transform duration-300 ease-in-out transform hover:scale-95 shadow-2xl" 
         onMouseEnter={() => setHovered_View_Community(true)} 
@@ -72,8 +64,8 @@ export default function MyCommunity() {
       >
         <img src="/assets/commu.png" alt="" className='w-full shadow-2xl'/>
         <div className="card-body">
-          <h2 className="card-title">View Community</h2>
-          <p className='text-left'>Discover the vibrant community within CIM. Connect, engage, and see how you can make a difference today.</p>
+          <h2 className="card-title  border-b-2 border-yellow-500 text-green-700">View Community</h2>
+          <p className='text-justify text-gray-600'>Discover the vibrant community within CIM. Connect, engage, and see how you can make a difference today.</p>
           <div className="card-actions justify-end">
             
           </div>
@@ -87,8 +79,6 @@ export default function MyCommunity() {
           </div>
         )}
       </div>
-
-
           
        
         

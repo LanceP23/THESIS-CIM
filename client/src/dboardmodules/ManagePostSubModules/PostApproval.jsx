@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-
 export default function PostApproval({ adminType }) {
   const [pendingAnnouncements, setPendingAnnouncements] = useState([]);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-
   
   const fetchPendingAnnouncements = async () => {
     try {
@@ -31,11 +28,9 @@ export default function PostApproval({ adminType }) {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
     fetchPendingAnnouncements();
   }, [adminType]); // Refetch pending announcements when adminType changes
-
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
     if (!token) {
@@ -43,11 +38,9 @@ export default function PostApproval({ adminType }) {
     }
     return token.split('=')[1];
   };
-
   const handleAnnouncementClick = (announcement) => {
     setSelectedAnnouncement(announcement);
   };
-
   const handleApproval = async () => {
     try {
       const token = getToken();
@@ -67,7 +60,6 @@ export default function PostApproval({ adminType }) {
       toast.error('Error approving announcement');
     }
   };
-
   const handleRejection = async () => {
     try {
       const token = getToken();
@@ -87,15 +79,53 @@ export default function PostApproval({ adminType }) {
       toast.error('Error rejecting announcement');
     }
   };
-
   return (
     <div>
       <h2 className=' border-b-2 border-black py-2 m-2 font-bold'>Pending Announcements</h2>
       <button onClick={fetchPendingAnnouncements} className='btn btn-wide btn-success'>Fetch Pending Announcements</button>
-      <div className=" flex xl:flex-row lg:flex-col md:flex-col sm:flex-col justify-evenly my-3 ">
+      <div className=" flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row justify-evenly my-3 ">
+      {selectedAnnouncement && (
+         
+         <div className="card lg:card-side bg-slate-100 shadow-xl p-0">
+          
+           <figure>
+           {selectedAnnouncement.mediaUrl && (
+             <div className='flex'>
+               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
+                 <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' max-w-xl h-full shadow-xl ' />
+               )}
+               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
+                 <video controls className='max-w-xl h-full'>
+                   <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
+                   Your browser does not support the video tag.
+                 </video>
+               )}
+               {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('audio') && (
+                 <audio controls className='w-full h-full'>
+                   <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
+                   Your browser does not support the video tag.
+                 </audio>
+               )}
+             </div>
+           )}
+           </figure>
+ 
+           <div className="card-body">
+           <h2 className="card-title text-green-700 border-b-2 border-yellow-400 "> {selectedAnnouncement.header}</h2>
+           <p className=' text-left text-gray-700 p-2 rounded-md'> <strong>Posted by: {selectedAnnouncement.postedBy}</strong></p>
+           <p className=' text-left text-gray-700 p-2 rounded-md'>{selectedAnnouncement.body}</p>
+ 
+           <div className="card-actions justify-end grid grid-cols-2">
+              <button onClick={handleApproval} className='btn btn-success'>Approve</button>
+                   <button onClick={handleRejection} className='btn btn-error'>Reject</button>
+                   </div>
+ 
+           </div>
+          
+         </div>
+       )}
       {isLoading ? (
         <p >Loading pending announcements...</p>
-
         
       ) : pendingAnnouncements.length > 0 ? (
         <div className="bg-white p-1 m-2 rounded-lg max-h-72 overflow-auto xl:w-2/5 lg:w-full sm:w-full ">
@@ -122,47 +152,7 @@ export default function PostApproval({ adminType }) {
       ) : (
         <p>No pending announcements</p>
       )}
-      {selectedAnnouncement && (
-         
-
-        <div className="card lg:card-side bg-slate-100 shadow-xl p-0">
-         
-          <figure>
-          {selectedAnnouncement.mediaUrl && (
-            <div className='flex'>
-              {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
-                <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' max-w-xl h-full shadow-xl ' />
-              )}
-              {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
-                <video controls className='max-w-xl h-full'>
-                  <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-              {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('audio') && (
-                <audio controls className='w-full h-full'>
-                  <source src={selectedAnnouncement.mediaUrl} type={selectedAnnouncement.contentType} />
-                  Your browser does not support the video tag.
-                </audio>
-              )}
-            </div>
-          )}
-          </figure>
-
-          <div className="card-body">
-          <h2 className="card-title text-green-500 border-b-2 border-yellow-400 "> {selectedAnnouncement.header}</h2>
-          <p className=' text-left p-2 rounded-md'> <strong>Posted by: {selectedAnnouncement.postedBy}</strong></p>
-          <p className=' text-left p-2 rounded-md'>{selectedAnnouncement.body}</p>
-
-          <div className="card-actions justify-end grid grid-cols-2">
-             <button onClick={handleApproval} className='btn btn-success'>Approve</button>
-                  <button onClick={handleRejection} className='btn btn-error'>Reject</button>
-                  </div>
-
-          </div>
-         
-        </div>
-      )}
+      
       </div>
     </div>
   );

@@ -6,22 +6,17 @@ import { UserContext } from '../../context/userContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faPeopleArrows,  faChartBar, faComment, faLock, faBullhorn, faAddressCard, faRightFromBracket, faCalendar, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import NotificationBell from './NotificationBell';
-
 const Navbar_2 = () => {
     const { user } = useContext(UserContext);
   const adminType = user ? user.adminType : null;
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const [totalUnreadCount, setTotalUnreadCount] = useState(0); 
-
   const userName = user ? user.name : '';
-
  
-
   useEffect (()=>{
     setIsOpen(false);
   },[adminType]);
-
   
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -31,7 +26,6 @@ const Navbar_2 = () => {
       document.querySelector('.link_container').classList.add('open');
     }
   }
-
   const closeSidebar = () => {
     setIsOpen(false);
    
@@ -57,11 +51,8 @@ const Navbar_2 = () => {
     <nav className='navbar_2 h-16 ' >
       <div className="navbar  ">
         <div className="flex">
-
   
-
   <div className="dropdown ">
-
   {/*swap swap-rotate*/} 
   <label tabIndex={0} role="button" className="btn btn-square btn-ghost text-white" >
   
@@ -81,7 +72,6 @@ const Navbar_2 = () => {
        
       <li className=' ' >
             
-
             <Link to="/dashboard" onClick={closeSidebar} className=' ' >
               
             <FontAwesomeIcon icon={faHome} className='text-yellow-500' />  
@@ -89,9 +79,7 @@ const Navbar_2 = () => {
             <h6 className='font-bold'>Dashboard</h6>
             </div>
             </Link>
-
           </li>
-
           <li className=''>
               <Link to="/createannouncement" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='text-yellow-500' icon={faBullhorn} />  
@@ -100,7 +88,6 @@ const Navbar_2 = () => {
               </div>
               </Link>
             </li>
-
             <li className=''>
               <Link to="/event-calendar" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='text-yellow-500' icon={faCalendarCheck} />  
@@ -109,10 +96,8 @@ const Navbar_2 = () => {
               </div>
               </Link>
             </li>
-
               
             
-
             <li className=''>
               <Link to="/analytics-report" onClick={closeSidebar} className=''>
               <FontAwesomeIcon  className='text-yellow-500'icon={faChartBar} />  
@@ -121,7 +106,6 @@ const Navbar_2 = () => {
               </div>
               </Link>
             </li>
-
             
             <li className=''>
               <Link to="/campcomms" onClick={closeSidebar} className=' '>
@@ -131,11 +115,9 @@ const Navbar_2 = () => {
                 </div>
               </Link>
             </li>
-
        
   
         
-
         
             <li className=''>
               {adminType === 'School Owner'?(
@@ -155,10 +137,8 @@ const Navbar_2 = () => {
                 </> }
             </li>
             
-
             
            
-
             
             <li className=''>
             {adminType === 'School Owner'?(
@@ -170,7 +150,6 @@ const Navbar_2 = () => {
                 </Link>
             ):null}
           </li>
-
              
           <li className=''>
           {adminType === 'School Owner'?(
@@ -182,7 +161,6 @@ const Navbar_2 = () => {
             </Link>
             ):null}
           </li>
-
           <li className=''>
             {adminType === 'School Owner'?(
               <Link to="/community-landing" onClick={closeSidebar} className='' >
@@ -193,32 +171,20 @@ const Navbar_2 = () => {
               </Link>
               ):null}
             </li>
-
             
-
-
-
-
       </ul>
     </div>
-
    
   </div>
-
   
   <div className="flex-1">
-
-
 <Link to="/dashboard" className=' btn-link '>
-  <img src='/assets/CORPO_CIM/CIM_2024.png' className='h-auto w-32 mt-1 mx-0 '/>
+  <img src='/assets/CORPO_CIM/CIM_2024.png' className='h-auto w-24 sm:28 md:32 lg:32 xl:32  mt-1 mx-0 '/>
   </Link>
   </div>
-
-  <div className="flex flex-auto justify-start relative left-10">
-  <img src='/assets/CORPO_CIM/CSCQ_PLAIN_CUT_WHITE.png' className=' h-full xl:w-96 lg:w-72 md:w-60 sm:w-52  mt-1 mx-0 flex justify-center align-middle '/>
-
+  <div className="flex flex-auto justify-start relative left-10 hidden lg:block">
+  <img src='/assets/CORPO_CIM/CSCQ_PLAIN_CUT_WHITE.png' className=' h-full w-96  mt-1 mx-0 flex justify-center align-middle '/>
   </div>
-
  
   <div className="flex flex-row">
   <div className="indicator">
@@ -234,13 +200,12 @@ const Navbar_2 = () => {
           <NotificationBell setTotalUnreadCount={setTotalUnreadCount}/>
         </ul>
     </button>
-
     </div>
     
-    <div className="dropdown dropdown-end">
+    <div className="dropdown dropdown-end  ">
       <div  className="btn btn-ghost btn-circle avatar">
-        <div className="w-10 rounded-full">
-          <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        <div className="w-10 rounded-full ">
+          <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" className='' />
         
         </div>
         
@@ -248,48 +213,40 @@ const Navbar_2 = () => {
       </div>
       <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">{userName}</a>
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-white">
-        <li><div
-    class="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-    <div class="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-        <path fillRule="evenodd"
-          d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-          clipRule="evenodd"></path>
-      </svg>
-    </div>
-    <span class="ml-[18px]">{adminType}</span>
-  </div></li>
+        <li>
+          <div className="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+            <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                <path fillRule="evenodd"
+                  d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                  clipRule="evenodd"></path>
+              </svg>
+            </div>
+          <span className="ml-[18px]">{adminType}</span>
+  </div>
+  </li>
       
           <li></li>
           <li onClick={handleLogout} className='bg-red-600 rounded-lg flex items-center'>
-  <a>Logout 
-    <svg class="text-white"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"> 
-      <path stroke="none" d="M0 0h24v24H0z"/> 
-      <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /> 
-      <path d="M7 12h14l-3 -3m0 6l3 -3" /> 
-    </svg>
-  </a>
-</li>
+                <a>Logout 
+                  <svg className="text-white"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"> 
+                    <path stroke="none" d="M0 0h24v24H0z"/> 
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /> 
+                    <path d="M7 12h14l-3 -3m0 6l3 -3" /> 
+                  </svg>
+                </a>
+          </li>
       </ul>
     </div>
-
    
     
   
   </div>
-
-
-
-
        
         </div>
        
-
        
-
-
     </nav>
   )
 }
-
 export default Navbar_2

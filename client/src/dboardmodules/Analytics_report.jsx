@@ -10,9 +10,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import toast from 'react-hot-toast'; // Import toast
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPercent, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-
 const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
-
 const AnalyticsReport = () => {
   const { user } = useContext(UserContext);
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -23,7 +21,6 @@ const AnalyticsReport = () => {
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
-
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -37,7 +34,6 @@ const AnalyticsReport = () => {
     };
     checkAuthStatus();
   }, [navigate]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,7 +51,6 @@ const AnalyticsReport = () => {
       fetchData();
     }
   }, [user]);
-
   const generateAnalysis = async () => {
     setLoading(true);
   
@@ -132,22 +127,16 @@ const AnalyticsReport = () => {
   };
   
   
-
-
-
   if (!analyticsData || !demographicsData) {
     return <div>Loading...</div>;
   }
-
   const { formattedData } = analyticsData;
   const totalPosts = formattedData.length;
   const totalLikes = formattedData.reduce((sum, data) => sum + data.likes, 0);
   const totalDislikes = formattedData.reduce((sum, data) => sum + data.dislikes, 0);
-
   const avgLikesPerPost = totalPosts > 0 ? Math.round(totalLikes / totalPosts) : 0;
   const avgDislikesPerPost = totalPosts > 0 ? Math.round(totalDislikes / totalPosts) : 0;
   const likeDislikeRatio = totalDislikes > 0 ? (totalLikes / totalDislikes).toFixed(2) : totalLikes;
-
   const filteredReactionsWithDates = formattedData.filter(reaction => {
     const date = parseISO(reaction.date);
     switch (dateFilter) {
@@ -168,7 +157,6 @@ const AnalyticsReport = () => {
         return true;
     }
   });
-
   const reactionsByDate = filteredReactionsWithDates.reduce((acc, reaction) => {
     const date = format(parseISO(reaction.date), 'yyyy-MM-dd');
     if (!acc[date]) acc[date] = { date, likes: 0, dislikes: 0 };
@@ -177,7 +165,6 @@ const AnalyticsReport = () => {
     return acc;
   }, {});
   const aggregatedReactions = Object.values(reactionsByDate);
-
   const isDemographicsEmpty = Object.values(demographicsData).every(count => count === 0);
   const totalDemographics = Object.values(demographicsData).reduce((sum, value) => sum + value, 0);
   const pieData = Object.entries(demographicsData)
@@ -187,30 +174,24 @@ const AnalyticsReport = () => {
       value,
       color: COLORS[index % COLORS.length],
     }));
-
   // Custom Label for Pie Chart
   const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }) => {
     const radius = outerRadius - 10;
     const x = cx + radius * Math.cos((midAngle * Math.PI) / 180);
     const y = cy + radius * Math.sin((midAngle * Math.PI) / 180);
-
     return (
       <text x={x} y={y} fill="#000000" textAnchor="middle" dominantBaseline="central">
         {name} ({value})
       </text>
     );
   };
-
   return (
     <div className="mt-16 p-3">
-
       <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
   
-      <h1 className="text-4xl font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-left text-green-800">Online User Engagement Analytics Dashboard</h1>
+      <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-left text-green-800">Online User Engagement Analytics Dashboard</h1>
       <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
-
-      <div className=" flex flex-row ">
-
+      <div className=" flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row ">
       <div className=" mb-10 ">
         <label htmlFor="dateFilter" className="block text-gray-700 text-lg mb-2 text-left">Select Date to Filter:</label>
         <select
@@ -231,9 +212,8 @@ const AnalyticsReport = () => {
           <option value="custom">Compare Months</option>
         </select>
       </div>
-
       {dateFilter === 'custom' && (
-        <div className="flex flex-row ">
+        <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row mb-2">
           <div className="flex flex-col">
           <label htmlFor="monthFilter1" className="  text-gray-700 text-lg text-left ">Select First Month:</label>
           <select
@@ -247,9 +227,7 @@ const AnalyticsReport = () => {
               <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
             ))}
           </select>
-
           </div>
-
           <div className="flex flex-col">
           <label htmlFor="monthFilter2" className=" text-gray-700 text-lg text-left ">Select Second Month:</label>
           <select
@@ -266,12 +244,10 @@ const AnalyticsReport = () => {
           </div>
         </div>
       )}
-
       </div>
-
       {/* General Overview Section */}
-      <div className=" grid grid-rows-2  ">
-        <div className=" grid grid-cols-2 gap-3 mb-2 ">
+      <div className=" grid grid-rows-1  ">
+        <div className=" grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2  gap-3 mb-2 ">
         <div className="p-4 bg-white shadow-lg rounded-lg">
           <h3 className="text-xl font-semibold text-green-800">Total Likes  <FontAwesomeIcon icon={faThumbsUp} className="text-green-500" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-green-600">{totalLikes}</p>
@@ -280,10 +256,9 @@ const AnalyticsReport = () => {
           <h3 className="text-xl font-semibold text-red-800">Total Dislikes <FontAwesomeIcon icon={faThumbsDown} className="text-red-800" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-red-600">{totalDislikes}</p>
         </div>
-
         </div>
-
-        <div className="grid grid-cols-3 gap-3">
+        
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-3">
         <div className="p-4 bg-white shadow-lg rounded-lg">
           <h3 className="text-xl font-semibold text-blue-800">Average Likes per Post <FontAwesomeIcon icon={faThumbsUp} className="text-blue-800" style={{ fontSize: '24px' }} /></h3>
           <p className="text-2xl text-blue-600">{avgLikesPerPost}</p>
@@ -298,13 +273,9 @@ const AnalyticsReport = () => {
         </div>
         </div>
       </div>
-
       </div>
-
       <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
-
      
-
       {/* Chart Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="p-4 bg-white shadow-lg rounded-lg">
@@ -320,7 +291,6 @@ const AnalyticsReport = () => {
             </LineChart>
           </ResponsiveContainer>
         </div>
-
         <div className="p-4 bg-white shadow-lg rounded-lg">
           <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions Count by Date</h2>
           <ResponsiveContainer width="100%" height={300}>
@@ -335,7 +305,6 @@ const AnalyticsReport = () => {
           </ResponsiveContainer>
         </div>
       </div>
-
        {/* Generate Analysis Button */}
        <div className="mb-6">
         <button
@@ -346,7 +315,6 @@ const AnalyticsReport = () => {
           {loading ? (<span className="loading loading-spinner loading-xs"></span>):( 'Generate An Analysis')}
         </button>
       </div>
-
       {/* Interpretation Section */}
       <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Analysis</h2>
@@ -361,11 +329,8 @@ const AnalyticsReport = () => {
     <div className=' text-justify font-bold' dangerouslySetInnerHTML={{ __html: analysis }} />
   )}
       </div>
-
       </div>
-
       <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
-
       {/* Demographics Pie Chart */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
@@ -396,11 +361,8 @@ const AnalyticsReport = () => {
           </div>
         )}
       </div>
-
       </div>
     </div>
   );
 };
-
 export default AnalyticsReport;
-

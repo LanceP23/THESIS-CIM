@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import UpdateUser from './UpdateAdmin';
 import DeleteUser from './DeleteAdmin';
-
 const StudentAccounts = () => {
   const [studentAccounts, setStudentAccounts] = useState([]);
-
   useEffect(() => {
     fetchStudentAccounts();
   }, []);
-
   const fetchStudentAccounts = async () => {
     try {
       const response = await axios.get('/students'); // Fetch student accounts from the backend
@@ -18,22 +15,16 @@ const StudentAccounts = () => {
       console.error('Error fetching student accounts:', error);
     }
   };
-
   const handleUpdateUser = (updatedUser) => {
     setStudentAccounts(studentAccounts.map(user => (user._id === updatedUser._id ? updatedUser : user)));
   };
-
   const handleDeleteUser = (userId) => {
     setStudentAccounts(studentAccounts.filter(user => user._id !== userId));
   };
-
   return (
     <div>
-
 <h2 className='text-lg border-b-2 border-warning text-gray-700 font-semibold'>Student Accounts</h2>
-
-<div className=" max-h-96 max-w-4xl overflow-auto ">
-
+<div className=" max-h-96 w-full overflow-auto ">
 <table className="w-full bg-white shadow-2xl rounded-2xl ">
     {/* Table Header */}
     <thead className='sticky top-0'>
@@ -76,7 +67,6 @@ const StudentAccounts = () => {
       ))}
     </tbody>
   </table>
-
  
       
       </div>
@@ -86,5 +76,4 @@ const StudentAccounts = () => {
     </div>
   );
 };
-
 export default StudentAccounts;

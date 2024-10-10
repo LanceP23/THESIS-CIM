@@ -3,11 +3,9 @@ import useSendMessage from '../hooks/useSendMessage';
 import './ChatPage.css' 
 import {faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 const MessageInput = () => {
     const [message, setMessage] = useState("");
     const{loading, sendMessage} = useSendMessage();
-
     const handleSubmit = async (e) =>{
         e.preventDefault();
         if(!message) return;
@@ -30,16 +28,12 @@ const MessageInput = () => {
        
        <div className="">
         <button type='submit' className='sent_button'>
-        {loading? <div className=''></div>:<i> <FontAwesomeIcon icon={faPaperPlane} className=' mx-2 text-xl text-base-300 transition-transform duration-300 ease-in-out transform hover:scale-125 hover:text-green-500 shadow-lg shadow-black'/></i>}
+        {loading? <div className=''></div>:<i> <FontAwesomeIcon icon={faPaperPlane} className=' mx-2 text-xl text-slate-50 transition-transform duration-300 ease-in-out transform hover:scale-125 hover:text-green-500 shadow-lg shadow-black'/></i>}
         </button>
         </div>
-
       </div>
         
     </form>
   )
 }
-
 export default MessageInput
-
-

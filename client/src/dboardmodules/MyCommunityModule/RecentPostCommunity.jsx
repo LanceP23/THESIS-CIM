@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 export default function RecentPostCommunity({ communityId }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
     if (!token) {
@@ -13,7 +11,6 @@ export default function RecentPostCommunity({ communityId }) {
     }
     return token.split('=')[1];
   };
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -24,7 +21,6 @@ export default function RecentPostCommunity({ communityId }) {
             Authorization: `Bearer ${token}`,
           },
         });
-
         // Retrieve only the last 3 posts
         const lastThreePosts = response.data.slice(-3);
         setPosts(lastThreePosts);
@@ -34,29 +30,25 @@ export default function RecentPostCommunity({ communityId }) {
         setLoading(false);
       }
     };
-
     fetchPosts();
   }, [communityId]);
-
   return (
     <div className="  ">
       
-
       <div className=" p-14 max-h-96 overflow-auto">
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
       {!loading && !error && (
-
         
       <div className=''>
         {posts.map((post) => (
-          <div key={post._id} className="card lg:card-side bg-slate-100 shadow-xl p-0 mb-3 transition-transform duration-300 ease-in-out transform hover:scale-110">
+          <div key={post._id} className="card lg:card-side bg-slate-100 shadow-xl p-0 mb-5 transition-transform duration-300 ease-in-out transform hover:scale-110">
           
       <figure>
          {post.contentType && post.contentType.startsWith('image') ? (
-                    <img src={post.mediaUrl} alt="Post Media" className="max-w-xl h-full" />
+                    <img src={post.mediaUrl} alt="Post Media" className="w-full h-full" />
                   ) : post.contentType && post.contentType.startsWith('video') ? (
-                    <video controls className="max-w-full mx-auto mb-4">
+                    <video controls className="w-full mx-auto mb-4">
                       <source src={post.mediaUrl} type={post.contentType} />
                     </video>
                   ) : post.contentType && post.contentType.startsWith('audio') ? (
@@ -69,12 +61,11 @@ export default function RecentPostCommunity({ communityId }) {
       </figure>
       <div className="card-body p-2">
         <h2 className="card-title border-b-2 text-green-600 border-yellow-400 py-1">{post.header}</h2>
-        <p className=' max-h-40 max-w-xs overflow-auto text-left m-0  '>{post.body}</p>
+        <p className=' max-h-40  overflow-auto text-left m-0 text-gray-600  text-justify  '>{post.body}</p>
         
       </div>
    
       </div>
-
       ))}
       </div>
       )}
