@@ -57,6 +57,21 @@ const announcementSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  minigame: {
+    type: String,
+    enum: ['CIM Wordle', 'Coming Soon'], // add games nlng
+    default: null
+  },
+  minigameWord: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        // Only validate if minigame is "CIM Wordle"
+        return this.minigame !== 'CIM Wordle' || (v && v.length === 5);
+      },
+      message: 'The word must be exactly 5 letters for CIM Wordle.'
+    }
+  },
   createdAt: {
     type: Date,
     default: Date.now

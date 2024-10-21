@@ -13,7 +13,7 @@ const {postEventController,getEventsController, putEventController, deleteEventC
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
-const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers } = require('../controllers/communityController');
+const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers, removeMemberFromCommunity } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
 const{getLikesDislikesandReactions,countUserReactionsByEducationLevel, countReactionsByDate, getUserReactionsWithDate} = require('../controllers/analyticsController');
 const { countCommunityTotalReactions, 
@@ -128,7 +128,7 @@ router.get('/get-community-name/:communityId', getCommunityName);
 router.get('/announcements/:communityId', authenticateUser, getAnnouncementsByCommunityId);
 router.get('/random-announcements',authenticateUser, getRandomAnnouncementsByAdminCommunities);
 router.get('/member-announcements',authenticateUser, getAnnouncementCommunityMembers);
-
+router.delete('/community/:communityId/member/:memberId', removeMemberFromCommunity);
 
 //notification
 router.get('/notifications', getNotifications);

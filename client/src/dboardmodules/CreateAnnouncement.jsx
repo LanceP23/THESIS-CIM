@@ -56,6 +56,8 @@ export default function CreateAnnouncement() {
   const [selectedCommunity, setSelectedCommunity] = useState('');
   const [isOrganizationPost, setIsOrganizationPost] = useState(false);
   const [organizationId, setOrganizationId] = useState(null);
+  const [selectedMinigame, setSelectedMinigame] = useState('');
+  const [minigameWord, setMinigameWord] = useState('');
 
   const adminType2 = localStorage.getItem('adminType');
 
@@ -192,6 +194,14 @@ export default function CreateAnnouncement() {
     setMediaPreview(URL.createObjectURL(file));
   };
 
+  const handleMinigameChange = (e) => {
+    setSelectedMinigame(e.target.value);
+  };
+  
+  const handleMinigameWordChange = (e) => {
+    setMinigameWord(e.target.value);
+  };
+
   const handleSubmit = async () => {
     if (submitting) {
       return;
@@ -205,9 +215,30 @@ export default function CreateAnnouncement() {
         throw new Error('No token found');
       }
   
+      // Create form data with announcement details
+      const formData = new FormData();
+      formData.append('header', header);
+      formData.append('body', body);
+      formData.append('visibility', JSON.stringify(visibility));
+      formData.append('postingDate', postingDate);
+      formData.append('expirationDate', expirationDate);
+      formData.append('communityId', selectedCommunity);
+  
+      // Append the minigame and minigameWord if they are selected
+      if (selectedMinigame) {
+        formData.append('minigame', selectedMinigame);
+      }
+      if (minigameWord) {
+        formData.append('minigameWord', minigameWord);
+      }
+  
+      if (isOrganizationPost && organizationId) {
+        formData.append('organizationId', organizationId);
+      }
+  
+      // Handle media upload
       if (media) {
         const storageRef = ref(storage, media.name);
-        // Upload the media file to Firebase storage
         const uploadTask = uploadBytesResumable(storageRef, media);
   
         uploadTask.on('state_changed',
@@ -215,31 +246,15 @@ export default function CreateAnnouncement() {
             // Handle upload progress if needed
           },
           (error) => {
-            // Handle unsuccessful upload
             toast.dismiss();
             throw new Error('Error uploading media:', error);
           },
           async () => {
             // Handle successful upload
             try {
-              // Get the download URL for the uploaded file
               const mediaUrl = await getDownloadURL(uploadTask.snapshot.ref);
-  
-              // Create form data with announcement details
-              const formData = new FormData();
-              formData.append('header', header);
-              formData.append('body', body);
               formData.append('mediaUrl', mediaUrl); // Always append mediaUrl
-              formData.append('visibility', JSON.stringify(visibility));
-              formData.append('postingDate', postingDate);
-              formData.append('expirationDate', expirationDate);
-              formData.append('communityId', selectedCommunity);
   
-              if (isOrganizationPost && organizationId) {
-                formData.append('organizationId', organizationId);
-              }
-  
-              // Post the announcement data to your server
               const response = await axios.post('/announcements', formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
@@ -247,24 +262,9 @@ export default function CreateAnnouncement() {
                 },
               });
   
-              // Reset form fields and image preview after successful submission
-              setHeader('');
-              setBody('');
-              setMedia(null);
-              setMediaPreview(null);
-              setVisibility('');
-              setPostingDate('')
-              setExpirationDate('')
-              setSelectedCommunity('');
-  
-              // Show success message
-              if (adminType2 !== 'School Owner') {
-                toast.success('Your post is pending approval');
-              } else {
-                toast.success('Announcement created successfully');
-              }
+              resetFormFields();
+              showSuccessMessage(adminType2);
             } catch (error) {
-              // Handle errors during announcement submission
               toast.error('Error creating announcement');
               console.error('Error creating announcement:', error);
             } finally {
@@ -275,20 +275,6 @@ export default function CreateAnnouncement() {
       } else {
         // If no media is uploaded, handle the submission without media
         try {
-          // Create form data with announcement details
-          const formData = new FormData();
-          formData.append('header', header);
-          formData.append('body', body);
-          formData.append('visibility', JSON.stringify(visibility));
-          formData.append('postingDate', postingDate);
-          formData.append('expirationDate', expirationDate);
-          formData.append('communityId', selectedCommunity);
-  
-          if (isOrganizationPost && organizationId) {
-            formData.append('organizationId', organizationId);
-          }
-  
-          // Post the announcement data to your server
           const response = await axios.post('/announcements', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -296,24 +282,9 @@ export default function CreateAnnouncement() {
             },
           });
   
-          // Reset form fields after successful submission
-          setHeader('');
-          setBody('');
-          setMedia(null);
-          setMediaPreview(null);
-          setVisibility('');
-          setPostingDate('')
-          setExpirationDate('')
-          setSelectedCommunity('');
-  
-          // Show success message
-          if (adminType2 !== 'School Owner') {
-            toast.success('Your post is pending approval');
-          } else {
-            toast.success('Announcement created successfully');
-          }
+          resetFormFields();
+          showSuccessMessage(adminType2);
         } catch (error) {
-          // Handle errors during announcement submission
           toast.error('Error creating announcement');
           console.error('Error creating announcement:', error);
         } finally {
@@ -321,11 +292,34 @@ export default function CreateAnnouncement() {
         }
       }
     } catch (error) {
-      // Handle errors in token retrieval or media selection
       toast.error('Error creating announcement');
       console.error('Error creating announcement:', error);
     }
   };
+  
+  // Function to reset form fields
+  const resetFormFields = () => {
+    setHeader('');
+    setBody('');
+    setMedia(null);
+    setMediaPreview(null);
+    setVisibility('');
+    setPostingDate('');
+    setExpirationDate('');
+    setSelectedCommunity('');
+    setSelectedMinigame(''); 
+    setMinigameWord('');
+  };
+  
+  // Function to show success message based on admin type
+  const showSuccessMessage = (adminType) => {
+    if (adminType !== 'School Owner') {
+      toast.success('Your post is pending approval');
+    } else {
+      toast.success('Announcement created successfully');
+    }
+  };
+  
   
 
   const getCommunityName = async (communityId) => {
@@ -521,6 +515,32 @@ export default function CreateAnnouncement() {
                     </select>
                   </div>
                 )}
+
+              <div className="my-3">
+                    <label className="label text-gray-700">Select Minigame:</label>
+                    <select
+                      value={selectedMinigame}
+                      onChange={handleMinigameChange}
+                      className="select select-bordered w-full max-w-xs"
+                    >
+                      <option value="">Select a minigame</option>
+                      <option value="CIM Wordle">CIM Wordle</option>
+                      <option value="Coming Soon">Coming Soon</option>
+                    </select>
+                  </div>
+                  {selectedMinigame === 'CIM Wordle' && (
+                    <div className="my-3">
+                      <label className="label text-gray-700" htmlFor="minigameWord">Enter 5-Letter Word:</label>
+                      <input
+                        className="input input-bordered input-success input-md w-full"
+                        type="text"
+                        id="minigameWord"
+                        value={minigameWord}
+                        onChange={handleMinigameWordChange}
+                        maxLength={5}
+                      />
+                    </div>
+                  )}
                   
 
                 <div className="post_button flex justify-end">

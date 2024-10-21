@@ -53,10 +53,23 @@ r
 // Create Announcement
 const createAnnouncement = async (req, res) => {
   try {
-    const { header, body, mediaUrl, visibility, postingDate, expirationDate, communityId, organizationId } = req.body;
+    const {
+      header,
+      body,
+      mediaUrl,
+      visibility,
+      postingDate,
+      expirationDate,
+      communityId,
+      organizationId,
+      minigame,        
+      minigameWord     
+    } = req.body;
+
     let contentType = null;
     let status = 'pending';
 
+    // Determine status based on admin type and posting date
     if (req.user.adminType === 'School Owner') {
       if (postingDate && new Date(postingDate) > new Date()) {
         status = 'scheduled';
@@ -65,6 +78,7 @@ const createAnnouncement = async (req, res) => {
       }
     }
 
+    // Set contentType based on file or media URL
     if (req.file && req.file.mimetype) {
       contentType = req.file.mimetype;
     }
@@ -77,7 +91,12 @@ const createAnnouncement = async (req, res) => {
       }
     }
 
+    // Validate minigameWord if minigame is "CIM Wordle"
+    if (minigame === 'CIM Wordle' && (!minigameWord || minigameWord.length !== 5)) {
+      return res.status(400).json({ error: 'The minigame word must be exactly 5 letters for CIM Wordle.' });
+    }
 
+    // Prepare the announcement data
     const announcementData = {
       header,
       body,
@@ -89,8 +108,11 @@ const createAnnouncement = async (req, res) => {
       visibility: JSON.parse(visibility),
       postingDate,
       expirationDate,
+      minigame: minigame || null,          
+      minigameWord: minigameWord || null   
     };
 
+    // Add optional fields
     if (communityId) {
       announcementData.communityId = communityId;
     }
@@ -99,6 +121,7 @@ const createAnnouncement = async (req, res) => {
       announcementData.organizationId = organizationId;
     }
 
+    // Create and save the announcement
     const announcement = new Announcement(announcementData);
     await announcement.save();
 
@@ -107,9 +130,10 @@ const createAnnouncement = async (req, res) => {
 
     const parsedVisibility = JSON.parse(visibility);
     const allMobileUsers = await MobileUser.find();
+
+    // Determine target users based on visibility settings
     if (parsedVisibility.everyone) {
       const allUsers = await User.find();
-      
       targetUsers.push(...allUsers, ...allMobileUsers);
     } else {
       if (parsedVisibility.staff) {
@@ -126,8 +150,10 @@ const createAnnouncement = async (req, res) => {
       }
     }
 
+    // Add target users to recipientIds
     targetUsers.forEach(user => recipientIds.add(user._id.toString()));
 
+    // Notification data template
     const notificationDataTemplate = {
       type: 'announcement',
       message: 'New announcement posted',
@@ -138,9 +164,11 @@ const createAnnouncement = async (req, res) => {
       recipientIds: Array.from(recipientIds), // Convert Set to Array
     };
 
+    // Create and save notification
     const notification = new Notification(notificationDataTemplate);
     await notification.save();
 
+    // Emit notifications to connected users
     targetUsers.forEach(user => {
       const receiverSocketId = getReceiverSocketId(user._id);
       if (receiverSocketId) {
@@ -148,6 +176,7 @@ const createAnnouncement = async (req, res) => {
       }
     });
 
+    // Handle community-specific notifications if a communityId is provided
     if (communityId) {
       const communityMembers = await Community.findById(communityId).populate({
         path: 'members.userId',
@@ -172,7 +201,7 @@ const createAnnouncement = async (req, res) => {
           .forEach(member => communityRecipientIds.add(member.userId._id.toString()));
       }
 
-      // Remove any duplicates between general and community-specific recipients
+      // Remove duplicates between general and community-specific recipients
       communityRecipientIds.forEach(id => recipientIds.delete(id));
 
       const communityNotificationData = {
@@ -186,19 +215,20 @@ const createAnnouncement = async (req, res) => {
 
       communityRecipientIds.forEach(id => {
         const receiverSocketId = getReceiverSocketId(id);
-        console.log(id);
         if (receiverSocketId) {
           io.to(receiverSocketId).emit("newCommunityAnnouncement", communityNotificationData);
         }
       });
     }
 
+    // Respond with the created announcement
     res.status(201).json(announcement);
   } catch (error) {
     console.error('Error creating announcement or notification:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
@@ -529,14 +559,12 @@ const deleteComments = async (req, res) => {
     const { commentId } = req.params; 
     const userId = req.user.id; 
 
-    // Find the comment to check ownership
     const comment = await PostComments.findById(commentId);
 
     if (!comment) {
       return res.status(404).json({ error: 'Comment not found' });
     }
 
-    // If the user is authorized, delete the comment
     await PostComments.findByIdAndDelete(commentId);
 
     res.status(200).json({ message: 'Comment deleted successfully' });

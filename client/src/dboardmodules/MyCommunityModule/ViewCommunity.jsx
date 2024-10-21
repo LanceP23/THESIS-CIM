@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { UserContext } from '../../../context/userContext';
 import RecentPostCommunity from './RecentPostCommunity';
 import MyCommunityAnalytics from './MyCommuityAnalytics'; // Import the analytics component
@@ -52,6 +53,60 @@ const ViewCommunity = () => {
       setActiveView(viewType);
     }
   };
+
+  const handleRemoveMember = async (communityId, memberId) => {
+    const token = getToken();
+    try {
+      await axios.delete(`/community/${communityId}/member/${memberId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success('Member removed successfully');
+
+      // Update state to reflect the member removal
+      setAdminCommunities(prevCommunities =>
+        prevCommunities.map(community => {
+          if (community._id === communityId) {
+            return {
+              ...community,
+              members: community.members.filter(member => member.userId !== memberId),
+            };
+          }
+          return community;
+        })
+      );
+    } catch (error) {
+      toast.error('Failed to remove member');
+      console.error(error);
+    }
+  };
+
+  const confirmRemoveMember = (communityId, memberId) => {
+    toast((t) => (
+      <div>
+        <p>Are you sure you want to remove this member?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              handleRemoveMember(communityId, memberId);
+              toast.dismiss(t.id);
+            }}
+            className="btn btn-success btn-sm"
+          >
+            Yes
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="btn btn-danger btn-sm"
+          >
+            No
+          </button>
+        </div>
+      </div>
+    ));
+  };
+  
   return (
     <div className='mt-16 p-3'>
       <div className="bg-slate-200 rounded-xl p-3">
@@ -125,10 +180,7 @@ const ViewCommunity = () => {
                 </h2>
                 {adminCommunities.map(community => (
                   <div key={community._id}>
-                    {viewCommunityId === community._id && activeView === 'posts' && (
-                      <RecentPostCommunity communityId={community._id} />
-                    )}
-                    {viewCommunityId === community._id && activeView === 'members' && (
+                   {viewCommunityId === community._id && activeView === 'members' && (
                       <div>
                         <ul>
                           {community.members.map(member => (
@@ -143,6 +195,12 @@ const ViewCommunity = () => {
                                   <div className="font-bold">{member.name}</div>
                                   <div className="text-sm opacity-50">{member.role}</div>
                                 </div>
+                                <button
+                                 onClick={() => confirmRemoveMember(community._id, member.userId)}
+                                  className="btn btn-error btn-sm ml-4"
+                                >
+                                  Remove
+                                </button>
                               </div>
                             </li>
                           ))}

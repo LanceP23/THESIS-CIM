@@ -241,6 +241,33 @@ const getAnnouncementCommunityMembers = async (req, res) => {
   }
 };
 
+const removeMemberFromCommunity = async (req, res) => {
+  try {
+      const { communityId, memberId } = req.params;
+
+      const community = await Community.findById(communityId);
+      if (!community) {
+          return res.status(404).json({ error: 'Community not found' });
+      }
+
+      const memberIndex = community.members.findIndex(
+          (member) => member.userId.toString() === memberId
+      );
+
+      if (memberIndex === -1) {
+          return res.status(404).json({ error: 'Member not found in the community' });
+      }
+      community.members.splice(memberIndex, 1);
+
+      // Save the updated community
+      await community.save();
+
+      res.status(200).json({ message: 'Member removed successfully', community });
+  } catch (error) {
+      console.error('Error removing member from community:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 
 
@@ -254,5 +281,6 @@ module.exports = {
   getCommunityName,
   getAnnouncementsByCommunityId,
   getRandomAnnouncementsByAdminCommunities,
-  getAnnouncementCommunityMembers
+  getAnnouncementCommunityMembers,
+  removeMemberFromCommunity
 };
