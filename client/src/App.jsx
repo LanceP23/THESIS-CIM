@@ -31,7 +31,7 @@ import Notification_module from './components/Notification_module'
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
 
-const baseURL = process.env.REACT_APP_BACKEND_URL ;
+const baseURL = process.env.REACT_APP_BACKEND_URL;
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 

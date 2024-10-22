@@ -6,7 +6,7 @@ import RecentPostCommunity from './RecentPostCommunity';
 import MyCommunityAnalytics from './MyCommuityAnalytics'; // Import the analytics component
 
 
-const navigate = useNavigate();
+
 const ViewCommunity = () => {
   // State variables
   const [adminCommunities, setAdminCommunities] = useState([]);
