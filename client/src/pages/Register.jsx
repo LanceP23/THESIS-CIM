@@ -122,13 +122,14 @@ export default function Register() {
   }
 
   return (
-    <div className="flex justify-between mt-7 p-3">
-    <div className='  bg-slate-100 my-5 rounded-lg shadow-inner p-2'>
+    <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row justify-between mt-7 p-3">
+      <div className="flex flex-col">
+    <div className='  bg-slate-100 my-5 rounded-lg shadow-inner p-3 '>
 
     
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faAddressCard} className=' text-yellow-500 mx-1'/>Account Registration</h2>
 
-      <div className="flex">
+      <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
       <div className="bg-gradient-to-r from-white to-green-200 p-4 m-4 rounded-lg shadow-2xl">
       <StudentMobileUserReg/>
       </div>
@@ -186,19 +187,22 @@ export default function Register() {
       </div>
 
       </div>
-      <div className="divider divider-warning"></div>
-
-      <div className="">
-        <RegisteredAccounts />
-        </div>
+      
+     
 
       
     </div>
 
+    <div className="bg-slate-100 rounded-lg shadow-inner p-2">
+        <RegisteredAccounts />
+        </div>
+
+        </div>
+
     <div className="mx-3 ">
-    <div className=' bg-gradient-to-r from-white to-green-200 p-4 my-5 rounded-lg shadow-2xl '>
+    <div className='flex flex-col bg-gradient-to-r from-white to-green-200 p-4 my-5 rounded-lg shadow-2xl '>
         
-        <div>
+        <div className=' flex flex-col'>
           <label htmlFor="academicYear">Academic Year:</label>
           <input
             type="text"
@@ -206,10 +210,10 @@ export default function Register() {
             value={academicYear}
             onChange={(e) => setAcademicYear(e.target.value)}
             placeholder="Enter academic year"
-            className='input input-bordered input-success w-full max-w-xs text-white'
+            className='input input-bordered input-success w-full text-white'
           />
         </div>
-        <div>
+        <div className='flex flex-col'>
           <label htmlFor="schoolSemester">School Semester:</label>
           <input
             type="text"
@@ -217,7 +221,7 @@ export default function Register() {
             value={schoolSemester}
             onChange={(e) => setSchoolSemester(e.target.value)}
             placeholder="Enter school semester"
-            className='input input-bordered input-success w-full max-w-xs text-white'
+            className='input input-bordered input-success w-full  text-white'
           />
         </div>
         <div className='my-3'>

@@ -195,7 +195,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl  border-2">
                             <Link to="/community-landing" className=''>
                                 <h2 className='text-3xl border-b-2 border-gray-700 py-1 hover:text-yellow-400 hover:border-yellow-400'>My Community</h2>
-                                <div className="flex xl:flex-row lg:flex-row md:flex-col sm:flex-col w-auto h-auto md:w-2/4">
+                                <div className="flex flex-col xl:flex-row lg:flex-row md:flex-col sm:flex-col w-auto h-auto md:w-2/4">
                                     {recentPosts
                                         .filter(post => post.announcement && post.community) // Filter out posts without announcement or community
                                         .slice(0, 3) // Limit to three posts
@@ -262,12 +262,12 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                         <div className="mt-4">
 
                         <div className="bg-slate-100 p-3  rounded-lg  shadow-slate-950 mx-3  mb-4 md:mb-0">
-                            <h2 className="text-2xl text-green-800 border-b-2 border-yellow-500 py-2">
+                            <h2 className="text-2xl text-black border-b-2 border-black py-2">
                             <FontAwesomeIcon className="text-yellow-500 mx-1" />Total Login 
                             </h2>
                             <div className="p-2 my-1 md:p-5 lg:p-10 md:m-2 lg:m-5 h-auto shadow-md rounded-2 border">
                             <div className="stat items-center flex">
-                                <div className="stat-title text-stone-800">Number of admin logins today:</div>
+                                <div className="stat-title text-gray-500 hidden sm:hidden md:block lg:block xl:block">Number of admin logins today:</div>
                                 <div className="stat-value">{adminLoginsToday} <FontAwesomeIcon icon= {faUser} className=' text-green-500'/></div>
                                 
                                 

@@ -370,7 +370,7 @@ export default function CreateAnnouncement() {
           <div className="label my-0 py-0">
             <label className="label text-gray-700" htmlFor="body">Visibility:</label>
           </div>
-          <div className="radio_buttons flex">
+          <div className="radio_buttons flex flex-wrap">
             <label className="flex justify-start mx-2">
               <input type="checkbox" className="checkbox checkbox-success" name="everyone" checked={visibility.everyone} onChange={handleVisibilityChange} />
               <span className="label-text mx-1 text-gray-700 "><i className="fa fa-users"></i> Everyone</span>
@@ -397,15 +397,15 @@ export default function CreateAnnouncement() {
 
 
   return (
-    <div className='flex flex-row mt-16 animate-fade-in '>
-      <div className="p-3 m-3 w-full h-full  shadow-md rounded-3 bg-white border ">
+    <div className=' p-4 animate-fade-in '>
+      <div className="p-3 pr-5 mt-20 w-full h-full shadow-md rounded-3 bg-white border ">
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>  <FontAwesomeIcon icon={faBullhorn} className=' text-yellow-500 mx-1 '/>Post Management</h2>
       <div role="tablist" className="tabs tabs-lifted w-full">
-        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 w-auto " aria-label="Create Announcement" />
-        <div role="tabpanel" className="tab-content bg-green-100 shadow-lg rounded-md p-6 w-auto">
-          <div className=" shadow-inner annoucement_creation_container bg-white p-4 my-2  max-w-full  h-full  rounded-2 border animate-fade-in ">
+        <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 " aria-label="Create Announcement" />
+        <div role="tabpanel" className="tab-content bg-green-100 shadow-lg rounded-md p-2  ">
+          <div className="  annoucement_creation_container  p-2 w-full h-full  animate-fade-in ">
           <h2 className='border-b border-gray-500 py-2 font-bold '>Create Announcement</h2>
-         <div className="flex xl:flex-row lg:flex-col justify-around">
+         <div className="flex flex-col  justify-around w-full ">
           <div className="flex flex-col">
           
                 <div>
@@ -459,18 +459,18 @@ export default function CreateAnnouncement() {
 
                 {renderVisibilityOptions()}
                 
-                <div className='flex justify-start my-2'>
+                <div className='flex flex-wrap justify-start my-2'>
                     <label className="label text-gray-700" htmlFor="postingDate">Posting Date:</label>
                     <input
-                      className="input input-success input-md text-white ml-6 mr-1 shadow-md "
+                      className="input input-success input-md text-white ml-2 sm:ml-2 md:ml-6 lg:ml-6 xl:ml-6 mr-1 shadow-md "
                       type="datetime-local"
                       id="postingDate"
                       value={postingDate}
                       onChange={handlePostingDateChange}
                     />
-                    <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Not Required</label>
+                    <label className="label text-red-500 opacity-50 text-xs " htmlFor="expirationDate">*Not Required</label>
                   </div>
-                  <div className='flex justify-start'>
+                  <div className='flex flex-wrap justify-start'>
                     <label className="label text-gray-700" htmlFor="expirationDate">Expiration Date:</label>
                     <input
                       className="input input-success input-md text-white mx-1 shadow-md "
@@ -479,7 +479,7 @@ export default function CreateAnnouncement() {
                       value={expirationDate}
                       onChange={handleExpirationDateChange}
                     />
-                     <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Required</label>
+                     <label className="label text-red-500 opacity-50 text-xs " htmlFor="expirationDate">*Required</label>
                   </div>
                 
                   {adminType === 'Organization Officer' && (
@@ -516,12 +516,12 @@ export default function CreateAnnouncement() {
                   </div>
                 )}
 
-              <div className="my-3">
+              <div className="flex my-3">
                     <label className="label text-gray-700">Select Minigame:</label>
                     <select
                       value={selectedMinigame}
                       onChange={handleMinigameChange}
-                      className="select select-bordered w-full max-w-xs"
+                      className="flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md  "
                     >
                       <option value="">Select a minigame</option>
                       <option value="CIM Wordle">CIM Wordle</option>
@@ -529,10 +529,10 @@ export default function CreateAnnouncement() {
                     </select>
                   </div>
                   {selectedMinigame === 'CIM Wordle' && (
-                    <div className="my-3">
+                    <div className="flex my-3">
                       <label className="label text-gray-700" htmlFor="minigameWord">Enter 5-Letter Word:</label>
                       <input
-                        className="input input-bordered input-success input-md w-full"
+                        className="input input-bordered input-success input-md w-full text-gray-700 bg-white rounded-md shadow-xl"
                         type="text"
                         id="minigameWord"
                         value={minigameWord}
@@ -550,13 +550,13 @@ export default function CreateAnnouncement() {
                 </div>
                 <div className="divider divider-horizontal divider-warning my-2"></div>
 
-                <div className="div">
+                <div className="div ">
 
-                <h3 className=" border-gray-500 font-bold mt-3 text-left">Recent Posts</h3>
+                <h3 className="  font-bold mt-3 text-left">Recent Posts</h3>
 
                 <div className="divider divider-warning"></div>
 
-                <div className="recentpost_container overflow-auto max-h-[650px]">
+                <div className=" overflow-auto max-h-[100vh] w-full">
                 
                   
                   <ul>
@@ -566,7 +566,7 @@ export default function CreateAnnouncement() {
                       
                       // Render each announcement with its community name when available
                       return (
-                        <div key={announcement._id} className='card card-side bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-105 '>
+                        <div key={announcement._id} className='card bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-105 sm:card md:card-side lg:card-side xl:card-side'>
 
                         {announcement.mediaUrl ? (
                           
@@ -577,7 +577,7 @@ export default function CreateAnnouncement() {
                            
 
                             
-                            <img src={announcement.mediaUrl} alt="Announcement Media" className= ' max-w-xl h-full' /> 
+                            <img src={announcement.mediaUrl} alt="Announcement Media" className= ' max-w-[45vw] h-full' /> 
                            
                           ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
                           <figure> <video controls className='max-w-xl h-full'>
@@ -586,7 +586,7 @@ export default function CreateAnnouncement() {
                             </figure> 
                           ) : announcement.contentType && announcement.contentType.startsWith('audio') ?
                            (
-                            <audio controls className='max-w-xl h-full'>
+                            <audio controls className='max-w-xl h-full '>
                               <source src={announcement.mediaUrl} type={announcement.contentType} />
                             </audio>
                             
@@ -601,8 +601,8 @@ export default function CreateAnnouncement() {
                         
                       )}
                           <div className=" card-body">
-                            <h4 className='card-title w-full border-b border-yellow-400 text-green-500'> {announcement.header}</h4>
-                            <div className="body_container p-2  w-full h-32 rounded-md text-left overflow-auto max-h-full border-2">
+                            <h4 className='card-title w-full border-b border-yellow-400 text-green-800'> {announcement.header}</h4>
+                            <div className="body_container p-2 w-full h-32 rounded-md text-left overflow-auto max-h-full border-2">
                             <p className=''> {announcement.body}</p>
                             </div>
                             <div className="community_container  p-2  w-full my-2 rounded-md border-2 text-left">

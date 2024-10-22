@@ -191,7 +191,7 @@ export default function BuildCommunity() {
 
   return (
 
-    <div className="flex relative  mt-10 p-2 ">
+    <div className="flex flex-col w-full sm:w-full md:w-full lg:w-[75vw] xl:w-[75vw] mt-10 p-2 ">
     <div className=" bg-slate-200 my-5 rounded-xl p-3 ">
     <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 my-2'>Build Community</h2>
       <div className="flex flex-row">
@@ -432,11 +432,11 @@ export default function BuildCommunity() {
             
     </div>
     
-    <div className="bg-slate-200 my-5  rounded-xl p-3 shadow-xl max-h-full max-w-md fixed right-9 z-20">
+    <div className="bg-slate-200 my-5 rounded-xl p-3 shadow-xl max-h-full max-w-md fixed right-3 z-20 opacity-80">
          {/* Selected Members */}
-      <div className="w-full max-w-lg mt-8">
+      <div className="w-full max-w-lg mt-1">
         <div className="flex flex-row justify-between">
-        <h2 className="text-lg font-bold mb-4">Selected Members</h2>
+        <h2 className="flex text-lg font-bold mb-4 border-b border-black">Selected Members</h2>
         <button onClick={() => setSelectedMembers([])} className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Remove All</button>
         </div>
        

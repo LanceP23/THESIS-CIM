@@ -4,6 +4,9 @@ import toast from 'react-hot-toast';
 import { UserContext } from '../../../context/userContext';
 import RecentPostCommunity from './RecentPostCommunity';
 import MyCommunityAnalytics from './MyCommuityAnalytics'; // Import the analytics component
+
+
+const navigate = useNavigate();
 const ViewCommunity = () => {
   // State variables
   const [adminCommunities, setAdminCommunities] = useState([]);
@@ -12,6 +15,7 @@ const ViewCommunity = () => {
   const [error, setError] = useState(null);
   const [viewCommunityId, setViewCommunityId] = useState(null); // ID for the active view
   const [activeView, setActiveView] = useState(null); // Track the active view type ('posts', 'members', 'analytics')
+ 
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
     if (!token) {
@@ -105,16 +109,26 @@ const ViewCommunity = () => {
         </div>
       </div>
     ));
+
+    
   };
+
+
+
+  
+
+  
   
   return (
     <div className='mt-16 p-3'>
+      
       <div className="bg-slate-200 rounded-xl p-3">
         {loading && <p>Loading...</p>}
         {!loading && adminCommunities.length === 0 && <p>No communities found.</p>}
         {!loading && adminCommunities.length > 0 && (
           <div>
             <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 my-2'>Your Admin Communities</h2>
+            
             <div className='flex flex-col justify-between'>
               <div className="max-w-full max-h-96 overflow-auto">
                 <table className="max-w-full">
@@ -217,6 +231,8 @@ const ViewCommunity = () => {
           </div>
         )}
       </div>
+
+      
     </div>
   );
 };

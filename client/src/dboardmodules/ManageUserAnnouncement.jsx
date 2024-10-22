@@ -136,7 +136,7 @@ const ManageUserAnnouncement = () => {
     setIsModalOpen(false);
   };
   return (
-    <div className="shadow-inner bg-slate-100 p-4 my-2 max-w-full h-auto rounded-2 border animate-fade-in">
+    <div className=" p-4 my-2 max-w-full h-auto rounded-2 animate-fade-in">
       <h2 className='border-b border-gray-500 py-2 font-bold mb-2'>Your Announcements</h2>
       <div className="max-h-[700px] overflow-auto">
         {userPosts.length === 0 ? (

@@ -13,7 +13,8 @@
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  background-color: rgb(124, 255, 192); 
+  background: radial-gradient(circle, rgb(124, 255, 192) 0%, rgb(0, 0, 0) 100%);
+  animation: gradient 20s ease infinite;
 
 
 }

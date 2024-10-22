@@ -33,7 +33,7 @@ const StaffAccounts = () => {
 
       <div className=" max-h-96 overflow-auto ">
 
-      <table className="w-full bg-white shadow-2xl rounded-2xl ">
+      <table className="w-full overflow-x-auto bg-white shadow-2xl rounded-2xl ">
           {/* Table Header */}
           <thead className='sticky top-0'>
             <tr>

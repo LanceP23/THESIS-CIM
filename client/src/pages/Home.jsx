@@ -40,11 +40,11 @@ export default function Home() {
 
 
   return (
-    <div className=" w-full flex flex-wrap overflow-x-hidden">
+    <div className=" w-full flex flex-wrap overflow-x-hidden overflow-y-hidden">
       {/* Navbar */}
       <Navbar />
 
-      <div className=" flex w-full h-[95vh] ">
+      <div className=" flex w-full h-[96vh] ">
       {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
     <Carousel showThumbs={false} infiniteLoop autoPlay interval={5000} className="w-full">
       {recentAnnouncements.slice(0, 5).map((announcement) => (
@@ -104,7 +104,7 @@ export default function Home() {
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[95vh] flex justify-center items-center text-center relative ">
+          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative ">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70"></div>
         <div className="hero-content z-10 flex"   >
           <h1 className="text-white font-bold text-5xl md:text-6xl mb-6 " data-aos="fade-right" >Stay Connected with Campus Life</h1>
@@ -113,29 +113,42 @@ export default function Home() {
       </div>
 
         {/* App Hero Section*/ }
-      <div className="w-full h-[95vh] bg-green-950">
+      <div className="w-full max-h-[95vh] bg-green-950 ">
       
 
-       <div className="flex ">
-          <div className="hero-content relative z-10 ">
-                <div className="absolute inset-0">
-                  <img
-                    src="/assets/CORPO_CIM/HOME_ASSET (6).png"
-                    alt="car!"
-                    className=" w-[50vw] h-full opacity-30 "
-                    data-aos="flip-right"
-                  />
-                </div>
+       <div className="flex flex-row ">
+          <div className="hero-content relative z-10 md:items-center md:justify-center ">
+                 {/* Top Image (Visible on smaller screens) */}
+              <div className="absolute inset-0 justify-center hidden sm:block md:block lg:block xl:block">
+                <img
+                  src="/assets/CORPO_CIM/HOME_ASSET (6).png"
+                  alt="car!"
+                  className="w-[50vw] h-full opacity-30"
+                  data-aos="flip-right"
+                />
+              </div>
 
-                <div className="flex flex-col relative">
+              {/* Bottom Image (Visible on larger screens) */}
+              <div className="absolute inset-0 justify-self-end block sm:hidden md:hidden lg:hidden xl:hidden">
+                <img
+                  src="/assets/CORPO_CIM/HOME_ASSET (2).png"
+                  alt="car!"
+                  className="max-w-[70vw] max-h-[50vh] opacity-50"
+                  data-aos="fade-left"
+                />
+              </div>
+
+              
+
+                <div className="flex flex-col relative justify-center md:items-center md:justify-center  ">
                   {/* Background div for opacity */}
                   <div className="absolute inset-0 bg-black opacity-50 rounded-lg z-10 " data-aos="fade-right" />
 
-                  <div className="text-left z-20 p-6">
+                  <div className="text-left z-20 p-6 ">
                     <h1 className="text-white font-bold text-5xl text-left mb-6" data-aos="fade-right">
                       CIM Application
                     </h1>
-                    <div className="w-[50vw]">
+                    <div className="w-[50vw] ">
                       <p className="text-white font-sm text-md text-left relative z-20" data-aos="fade-right">
                         Experience our app on the go with our mobile version, available for download now. Whether you are at home or on the move, stay connected and enjoy seamless functionality across all your devices.
                       </p>
@@ -145,12 +158,14 @@ export default function Home() {
 
             </div>
 
+            
 
-              <div className="">
+
+              <div className="hidden sm:block md:block lg:block xl:block ">
               <img
                       src="/assets/CORPO_CIM/HOME_ASSET (2).png"
                       alt="car!"
-                      className=' w-[50vw] h-[95vh] opacity-45'
+                      className=' w-[45vw] h-[95vh] opacity-45 '
                       data-aos="fade-left" />
 
               </div>
@@ -160,68 +175,48 @@ export default function Home() {
 
        </div>
 
-      <div className=" hero-section bg-[url('/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative" >
-        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70 " ></div>
-        <div className="flex lg:flex-row md:flex-col sm:flex-col flex-wrap gap-5 "  data-aos="fade-up">
-          <div className="card glass w-96 p-3">
+       <div className=" bg-[url('/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full max-h-[280vh] flex justify-center items-center text-center relative p-4" >
+    <div className="absolute inset-0 bg-black opacity-70"></div>
 
-            <figure>
-              <img
-                src="/assets/CORPO_CIM/HOME_ASSET (1).png"
-                alt="car!" 
-                className=' w-32 h-auto'/>
+    <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row gap-4" data-aos="fade-up">
+
+        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-96 xl:w-96 p-3 sm:card-side md:card-side lg:card xl:card">
+            <figure className=''>
+                <img src="/assets/CORPO_CIM/HOME_ASSET (1).png" alt="car!" className='w-32 h-auto sm:w-full md:w-full lg:w-32 xl:w-32 ' />
             </figure>
             <div className="card-body">
-              <h2 className="card-title text-white text-center border-b-2 border-yellow-500 ">Unified Campus Media platform for Announcements and Events</h2>
-              <p className='text-gray-300'>A centralized, regulated platform providing 
-                real-time updates to keep everyone informed and engaged with campus events.
-               </p>
-             
+                <h2 className="card-title text-white text-center border-b-2 border-yellow-500">Unified Campus Media platform for Announcements and Events</h2>
+                <p className='text-gray-300'>
+                    A centralized, regulated platform providing real-time updates to keep everyone informed and engaged with campus events.
+                </p>
             </div>
-          </div>
-
-          <div className="card glass w-96 p-3">
-            <figure>
-              <img
-                src="/assets/CORPO_CIM/HOME_ASSET(10).png"
-                alt="car!" 
-                className=' w-32 h-auto'/>
-            </figure>
-            <div className="card-body m-0">
-              <h2 className="card-title text-white text-center border-b-2 border-yellow-500">Mobile Application for Easy Access </h2>
-              <p className='text-gray-300'> Catherinians can download the <strong> CIM mobile app </strong> to easily access the latest campus announcements and events, 
-                staying informed about everything the school has to offer.</p>
-             
-            </div>
-          </div>
-
-          <div className="card glass w-96 p-3">
-            <figure>
-              <img
-                src="/assets/CORPO_CIM/HOME_ASSET (7).png"
-                alt="car!"
-                className=' w-20 h-auto' />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title text-white text-center text-md border-b-2 border-yellow-500">Interactive Announcements for Enhanced User Engagement</h2>
-              <p className='text-gray-300'>Catherinians can enjoy a participative experience that 
-                captures their attention through simple games about certain events.</p>
-             
-            </div>
-          </div>
-
-
-
         </div>
 
+        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-96 xl:w-96 p-3 sm:card-side md:card-side lg:card xl:card">
+            <figure>
+                <img src="/assets/CORPO_CIM/HOME_ASSET(10).png" alt="car!" className='w-32 h-auto sm:w-full md:w-full lg:w-32 xl:w-32' />
+            </figure>
+            <div className="card-body m-0">
+                <h2 className="card-title text-white text-center border-b-2 border-yellow-500">Mobile Application for Easy Access</h2>
+                <p className='text-gray-300'>
+                    Catherinians can download the <strong>CIM mobile app</strong> to easily access the latest campus announcements and events, staying informed about everything the school has to offer.
+                </p>
+            </div>
+        </div>
 
-
-
-
-
-
-
-      </div>
+        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-96 xl:w-96 p-3 sm:card-side md:card-side lg:card xl:card">
+            <figure>
+                <img src="/assets/CORPO_CIM/HOME_ASSET (7).png" alt="car!" className='w-20 h-auto sm:w-full md:w-full lg:w-32 xl:w-20' />
+            </figure>
+            <div className="card-body">
+                <h2 className="card-title text-white text-center text-md border-b-2 border-yellow-500">Interactive Announcements for Enhanced User Engagement</h2>
+                <p className='text-gray-300'>
+                    Catherinians can enjoy a participative experience that captures their attention through simple games about certain events.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
       
 

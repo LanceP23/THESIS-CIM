@@ -31,7 +31,7 @@ const ChatPage = () => {
   );
   
   return <div className="p-3">
-  <div className=" bg-slate-100 mt-16 mx-5  rounded-lg shadow-inner animate-fade-in">
+  <div className=" bg-slate-100 mt-16 mx-2  rounded-lg shadow-inner animate-fade-in">
   
   <div className=" p-2 ">
    <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faComment} className=' text-yellow-500 mx-1'/>CampusComms</h2>
@@ -43,7 +43,7 @@ const ChatPage = () => {
     </div>
     <div className="divider divider-horizontal sm:divider-vertical md:divider-horizontal lg:divider-horizontal xl:divider-horizontal divider-warning mx-2"></div>
     
-    <div className="w-2/4 sm:w-full md:w-2/4 lg:w-2/4 xl:w-2/4 sm:mt-5 ">
+    <div className="w-full sm:w-full md:w-2/4 lg:w-2/4 xl:w-2/4 mt-4 sm:mt-5 md:mt-5 lg:mt-0 xl:mt-0 ">
       
     <SearchUser/>
     </div>

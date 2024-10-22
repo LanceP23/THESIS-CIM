@@ -29,14 +29,14 @@ export default function MyCommunity() {
   };
   
   return (
-    <div className="pl-10 pr-10 pt-3">
+    <div className=" p-5 pt-3">
     <div className=" bg-slate-200 rounded-xl mt-16 p-2 animate-fade-in w-full ">
       <h2 className='text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl  text-green-800 border-b-2 border-yellow-500 py-2'>Welcome to the Community Management Module</h2>
       
-      <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row justify-around m-4 w-full"> 
+      <div className=" py-3 grid grid-cols-1 sm: md: lg:grid lg:grid-cols-2 xl:grid xl:grid-cols-2 justify-center justify-items-center  w-full"> 
       
       <div 
-        className="card w-96 glass p-0 relative transition-transform duration-300 ease-in-out transform hover:scale-95 shadow-2xl" 
+        className=" my-2  sm:my-1 md:my-1 lg:my-0 xl:my-0 card w-96 glass p-0 relative transition-transform duration-300 ease-in-out transform hover:scale-95 shadow-2xl " 
         onMouseEnter={() => sethovered_Build_Community(true)} 
         onMouseLeave={() => sethovered_Build_Community(false)}
       >
@@ -58,11 +58,11 @@ export default function MyCommunity() {
         )}
       </div>
       <div 
-        className="card w-96 glass p-0 relative transition-transform duration-300 ease-in-out transform hover:scale-95 shadow-2xl" 
+        className="my-2 sm:my-1 md:my-1 lg:my-0 xl:my-0 card w-96 glass p-0 relative transition-transform duration-300 ease-in-out transform hover:scale-95 shadow-2xl" 
         onMouseEnter={() => setHovered_View_Community(true)} 
         onMouseLeave={() => setHovered_View_Community(false)}
       >
-        <img src="/assets/commu.png" alt="" className='w-full shadow-2xl'/>
+        <img src="/assets/commu.png" alt="" className=' h-auto w-full'/>
         <div className="card-body">
           <h2 className="card-title  border-b-2 border-yellow-500 text-green-700">View Community</h2>
           <p className='text-justify text-gray-600'>Discover the vibrant community within CIM. Connect, engage, and see how you can make a difference today.</p>
