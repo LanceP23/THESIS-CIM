@@ -637,11 +637,11 @@ export default function CreateAnnouncement() {
                 <div className="grid grid-cols-2 shadow-inner">
                   <div className="max-w-[50vw] p-3 shadow-inner">
                     <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} />
-                    <label className="mx-2"> Likes</label>
+                    <label className="mx-2">{announcement.likes} Likes </label>
                   </div>
                   <div className="max-w-[50vw] p-3 shadow-inner">
                     <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsDown} />
-                    <label className="mx-2"> Dislikes</label>
+                    <label className="mx-2">{announcement.dislikes} Dislikes </label>
                   </div>
                 </div>
               </div>

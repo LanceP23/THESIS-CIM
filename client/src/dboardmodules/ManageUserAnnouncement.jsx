@@ -228,11 +228,11 @@ const ManageUserAnnouncement = () => {
                   <div className="grid grid-cols-2 my-1 shadow-inner shadow-sm">
                     <div className="max-w-[50vw] p-3 shadow-inner">
                       <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} />
-                      <label className="mx-2"> Likes</label>
+                      <label className="mx-2">{post.likes} Likes</label>
                     </div>
                     <div className="max-w-[50vw] p-3 shadow-inner">
                       <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsDown} />
-                      <label className="mx-2"> Dislikes</label>
+                      <label className="mx-2"> {post.dislikes} Dislikes</label>
                     </div>
                   </div>
 
