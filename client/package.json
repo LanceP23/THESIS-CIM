@@ -38,6 +38,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "date-fns": "^3.6.0",
+    "file-saver": "^2.0.5",
     "firebase": "^10.10.0",
     "framer-motion": "^11.1.7",
     "internal-ip": "^8.0.0",

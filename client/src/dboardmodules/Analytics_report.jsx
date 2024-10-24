@@ -9,7 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import toast from 'react-hot-toast'; // Import toast
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPercent, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faPercent, faThumbsDown, faThumbsUp, faDownload } from '@fortawesome/free-solid-svg-icons';
+import {saveAs} from 'file-saver';
+
 const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
 const AnalyticsReport = () => {
   const { user } = useContext(UserContext);
@@ -185,9 +187,67 @@ const AnalyticsReport = () => {
       </text>
     );
   };
+
+  const exportData = () => {
+    // Prepare data for Likes and Dislikes CSV
+    const likesDislikesCsvRows = [];
+    const likesDislikesHeaders = ['Date', 'Likes', 'Dislikes'];
+
+    // Add headers to Likes and Dislikes CSV
+    likesDislikesCsvRows.push(likesDislikesHeaders.join(','));
+
+    // Add Likes and Dislikes data to CSV
+    aggregatedReactions.forEach(reaction => {
+        const row = [
+            reaction.date,
+            reaction.likes,
+            reaction.dislikes
+        ];
+        likesDislikesCsvRows.push(row.join(','));
+    });
+
+    // Create Likes and Dislikes CSV
+    const likesDislikesCsvString = likesDislikesCsvRows.join('\n');
+    const likesDislikesBlob = new Blob([likesDislikesCsvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(likesDislikesBlob, 'likes_dislikes_data.csv');
+
+    // Prepare data for Demographics CSV
+    const demographicsCsvRows = [];
+    const demographicsHeaders = ['Grade School', 'High School', 'Senior High School', 'College', 'Admin'];
+
+    // Add headers to Demographics CSV
+    demographicsCsvRows.push(demographicsHeaders.join(','));
+
+    // Add demographic data to CSV
+    const demographicsRow = [
+        demographicsData.gradeSchool || 0,
+        demographicsData.highSchool || 0,
+        demographicsData.seniorHighSchool || 0,
+        demographicsData.college || 0,
+        demographicsData.admin || 0
+    ];
+    demographicsCsvRows.push(demographicsRow.join(','));
+
+    // Create Demographics CSV
+    const demographicsCsvString = demographicsCsvRows.join('\n');
+    const demographicsBlob = new Blob([demographicsCsvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(demographicsBlob, 'demographics_data.csv');
+};
+
   return (
     <div className="mt-16 p-3">
       <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
+
+      <div className="mb-6">
+  <button
+    onClick={exportData}
+    className="bg-green-500 text-white hover:bg-green-600 flex items-center px-4 py-2 rounded"
+    aria-label="Download Data"
+  >
+    <FontAwesomeIcon icon={faDownload} className="mr-2" />
+    Download
+  </button>
+</div>
   
       <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-left text-green-800">Online User Engagement Analytics Dashboard</h1>
       <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
@@ -363,6 +423,8 @@ const AnalyticsReport = () => {
       </div>
       </div>
     </div>
+
+    
   );
 };
 export default AnalyticsReport;
