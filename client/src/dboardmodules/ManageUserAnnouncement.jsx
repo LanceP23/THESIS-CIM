@@ -247,6 +247,8 @@ const ManageUserAnnouncement = () => {
                             <div className="div text-left">
                             <p className="text-gray-700">{comment.text}</p>
                             <p className="text-sm text-gray-500">- {comment.userId.name}, {new Date(comment.createdAt).toLocaleString()}</p>
+                            </div>
+                            <div className="mx-3">
                             <button
                               onClick={() => handleDeleteComment(comment._id, post._id)}
                               className="btn btn-error btn-sm mt-2"
@@ -261,15 +263,15 @@ const ManageUserAnnouncement = () => {
                       <p>No comments yet.</p>
                     )}
                   </div>
-                  <div className="flex justify-between flex-col sm:flex-row md-flex-row lg:flex-row xl:flex-row items-center text-xs  text-gray-600">
-                    <div className='mb-2'>
+
+                  {/* Post Info and Edit/Delete */}
+                  <div className="flex justify-between items-center text-xs text-gray-600">
                     <div className="mb-2">
                       <span>Posted on: {new Date(post.createdAt).toLocaleString()}</span>
                       <span>Status: {post.status}</span>
                     </div>
                     <div className="flex justify-end gap-2">
                       <button onClick={() => handleEdit(post)} className="btn btn-info">
-                        <FaEdit /> Edit
                         <FaEdit /> Edit Post
                       </button>
                       <button onClick={() => handleDelete(post._id)} className="btn btn-error">
@@ -284,6 +286,20 @@ const ManageUserAnnouncement = () => {
         )}
 
         {/* Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="relative bg-white rounded-lg shadow-lg w-[60vw] max-h-[70vh] p-3">
+              <button
+                onClick={closeModal}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 focus:outline-none text-4xl"
+              >
+                &times;
+              </button>
+              <div className="flex justify-center items-center">
+                <img src={selectedImage} alt="Selected" className="w-full h-[60vh] rounded-md shadow-lg" />
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
