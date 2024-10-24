@@ -5,6 +5,28 @@ export default function PostApproval({ adminType }) {
   const [pendingAnnouncements, setPendingAnnouncements] = useState([]);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+
+
+  const openModal = (imgSrc) => {
+    setSelectedImage(imgSrc);
+    setModalOpen(true);
+    document.body.style.overflow = "hidden"; // Disable scrolling
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedImage("");
+    document.body.style.overflow = "auto"; // Re-enable scrolling
+  };
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "auto"; // Reset scroll when component unmounts
+    };
+  }, []);  
+
   
   const fetchPendingAnnouncements = async () => {
     try {
@@ -83,16 +105,16 @@ export default function PostApproval({ adminType }) {
     <div>
       <h2 className=' border-b-2 border-black py-2 m-2 font-bold'>Pending Announcements</h2>
       <button onClick={fetchPendingAnnouncements} className='btn btn-wide btn-success'>Fetch Pending Announcements</button>
-      <div className=" flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row justify-evenly my-3 ">
+      <div className=" flex flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-row justify-evenly my-3 ">
       {selectedAnnouncement && (
          
-         <div className="card lg:card-side bg-slate-100 shadow-xl p-0">
+         <div className="card md:card-side lg:card-side xl:card-side bg-slate-100 shadow-xl p-0">
           
            <figure>
            {selectedAnnouncement.mediaUrl && (
              <div className='flex'>
                {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
-                 <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' max-w-xl h-full shadow-xl ' />
+                 <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' max-w-xl  h-full shadow-xl '  onClick={() => openModal(selectedAnnouncement.mediaUrl)} />
                )}
                {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
                  <video controls className='max-w-xl h-full'>
@@ -128,7 +150,7 @@ export default function PostApproval({ adminType }) {
         <p >Loading pending announcements...</p>
         
       ) : pendingAnnouncements.length > 0 ? (
-        <div className="bg-white p-1 m-2 rounded-lg max-h-72 overflow-auto xl:w-2/5 lg:w-full sm:w-full ">
+        <div className="bg-white p-1 m-2 rounded-lg max-h-72 overflow-auto xl:w-2/5 w-full">
         <ul>
        
           {pendingAnnouncements.slice().reverse().map((announcement) => (
@@ -154,6 +176,27 @@ export default function PostApproval({ adminType }) {
       )}
       
       </div>
+
+       {/* Modal */}
+       {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg shadow-lg w-[60vw] max-h-[70vh]  p-3">
+            {/* Close button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 focus:outline-none text-4xl "
+            >
+              &times;
+            </button>
+
+            {/* Modal image */}
+            <div className=" justify-center items-center">
+              <img src={selectedImage} alt="Selected" className=" w-full h-[60vh]  rounded-md shadow-lg object-fit" />
+            </div>
+          </div>
+        </div>
+      )}
+                
     </div>
   );
 }

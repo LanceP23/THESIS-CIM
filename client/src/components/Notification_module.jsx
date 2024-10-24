@@ -154,19 +154,27 @@ const Notification_module = () => {
         </div>
 
         {selectedNotification && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className=" bg-slate-200  pl-5 pr-2 pb-5  rounded-2xl shadow-lg max-w-lg w-full mx-4 text-left ">
-              <div className="flex justify-end my-0">
-            <button onClick={closeModal} className="text-gray-600 hover:text-gray-900 text-4xl">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-24">
+            <div className=" bg-slate-200 p-3 rounded-2xl shadow-lg max-w-[80vw] max-h-[70vh] text-left overflow-y-auto ">
+
+           
+              <div className="flex justify-around">
+              
+          
+              <div className="grid grid-cols-2 mb-3 mt-1">
+                <h3 className="text-lg font-bold text-green-700 border-b-4 border-yellow-500">Subject: {selectedNotification.announcementHeader}</h3>
+              
+              </div>
+              <div className="justify-end my-0">
+
+              <button onClick={closeModal} className="text-gray-600 hover:text-gray-900 text-4xl justify-end">
                   &times;
                 </button>
                 </div>
-           
-              <div className="flex justify-between items-center mb-3 mt-1">
-                <h3 className="text-2xl font-bold text-green-700 border-b-4 border-yellow-500">Subject: {selectedNotification.announcementHeader}</h3>
-              
               </div>
-              <p><strong>Type:</strong> {selectedNotification.type}</p>
+
+             
+             <p><strong>Type:</strong> {selectedNotification.type}</p>
               <p className='mt-2'><strong>From:</strong> {selectedNotification.posterName}</p>
               <p className='mt-2'><strong>Type:</strong> {selectedNotification.type}</p>
               
@@ -193,8 +201,13 @@ const Notification_module = () => {
 
 
               <p className='mt-2'><strong>Timestamp:</strong> {new Date(selectedNotification.timestamp).toLocaleString()}</p>
+
+
+             </div>
+              
              
-            </div>
+             
+           
           </div>
         )}
       </div>

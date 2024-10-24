@@ -34,7 +34,7 @@ const NoChatSelected=()=>{
     
     return(
         <div className='max-h-96'>
-            <div className=' bg-slate-50 rounded-xl shadow-inner p-4 shadow-xl w-full mx-2'>
+            <div className=' bg-slate-900 rounded-xl shadow-inner p-4 shadow-xl w-full text-gray-300'>
                 <h1>Welcome</h1>
                 <p>Select Users to start chatting!</p>
             </div>

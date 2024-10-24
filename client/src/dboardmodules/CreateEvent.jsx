@@ -651,7 +651,7 @@ const handleSelectEvent = (event) => {
     <h2 className=' text-3xl'>Create Event on :  {selectedDate && ( 
      <h2 value={startDate} onChange={(e) => setStartDate(e.target.value)}> Start Date: <strong>{selectedDate.start} </strong>   </h2>
       )}</h2>
-    <div className=' bg-gradient-to-r from-white to-green-200 flex flex-row justify-around rounded-xl p-3 shadow-inner shadow-xl animate-fade-in'>
+    <div className=' bg-gradient-to-r from-white to-green-200 flex flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-row justify-around rounded-xl p-3 shadow-inner shadow-xl animate-fade-in '>
 
      <div className=" flex flex-col text-left items-start">
       <div className=' flex flex-row'>
@@ -671,18 +671,19 @@ const handleSelectEvent = (event) => {
          />
        
        </div>
-       <div className='event_content_3'>
+       <div className='event_content_3 flex flex-wrap'>
+        <div className=" mb-2">
        <label>
          <strong>Start Time:</strong> 
        </label>
          <input type="time"  value={startTime} onChange={(e) => setStartTime(e.target.value)}  className='input input-bordered input-success input-sm  text-white mx-1'  />
-      
-      
+         </div>
+      <div className="div">
        <label>
          <strong>End Time: </strong>
        </label>
          <input type="time"  value={endTime} onChange={(e) => setEndTime(e.target.value)}  className='input input-bordered input-success input-sm  text-white mx-1' />
-       
+         </div>
      </div>
      <div className='event_content_2'>
        <label>
@@ -720,7 +721,7 @@ const handleSelectEvent = (event) => {
 
      </div>
 
-     <div className="divider divider-horizontal divider-success"></div>
+     <div className="divider divider-horizontal sm:divider-vertical md:divider-vertical lg:divider-vertical xl:divider-horizontal divider-success"></div>
 
      <div className="second_column">
      <div className="  border-black flex flex-col justify-start text-left overflow-auto max-w-full max-h-96 p-3">
@@ -750,11 +751,11 @@ const handleSelectEvent = (event) => {
                <div key={index} className=' border shadow-lg my-1 p-1'>
                  <label>
                    <strong>Participant Name:</strong>
-                   <input type="text" value={participant.name} className='file-input file-input-bordered file-input-success file-input-sm w-52  max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
+                   <input type="text" value={participant.name} className='file-input file-input-bordered file-input-success file-input-sm w-52  bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
                  </label>
                  <label>
                    <strong>Section:</strong>
-                   <input type="text" value={participant.section} className='file-input file-input-bordered file-input-success file-input-sm w-52 max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
+                   <input type="text" value={participant.section} className='file-input file-input-bordered file-input-success file-input-sm w-52  bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
                  </label>
                  <button onClick={() => removeParticipant(index)} className='btn btn-error my-1'>Remove Participant</button>
                </div>
@@ -769,11 +770,11 @@ const handleSelectEvent = (event) => {
                  <div className="border-1 shadow-lg p-1 m-1">
                  <label>
                    <strong>Group Name:</strong>
-                   <input type="text" value={participant.name} className='file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
+                   <input type="text" value={participant.name} className='file-input file-input-bordered file-input-success file-input-sm w-full  bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'name', e.target.value)} />
                  </label>
                  <label>
                    <strong>Section:</strong>
-                   <input type="text" value={participant.section} className='file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
+                   <input type="text" value={participant.section} className='file-input file-input-bordered file-input-success file-input-sm w-full bg-white rounded-md shadow-xl' onChange={(e) => handleParticipantChange(index, 'section', e.target.value)} />
                  </label>
 
                  </div>
@@ -812,7 +813,7 @@ const handleSelectEvent = (event) => {
   {eventType === 'specialized' && (
        <div className="event_content_8">
          <label htmlFor="participantCommunity"><strong>Participant Community:</strong></label>
-         <select id="participantCommunity" multiple value={selectedCommunities.map(community => community._id)} onChange={handleCommunityChange}>
+         <select id="participantCommunity" className='text-white' multiple value={selectedCommunities.map(community => community._id)} onChange={handleCommunityChange}>
            {adminCommunities.map(community => (
              <option key={community._id} value={community._id}>{community.name}</option>
            ))}
@@ -857,14 +858,14 @@ const handleSelectEvent = (event) => {
          </select>
        </label>
      </div>
-     <div className='event_content_14'>
+     <div className='event_content_14  items-start flex flex-wrap'>
        <label>
          <strong>Organizer Name:</strong>
-         <input type="text" value={organizerName} className='file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl' onChange={(e) => setOrganizerName(e.target.value)} />
+         <input type="text" value={organizerName} className='file-input file-input-bordered file-input-success file-input-sm w-full   bg-white rounded-md shadow-xl' onChange={(e) => setOrganizerName(e.target.value)} />
        </label>
      </div>
-    </div>
-    </div>
+      </div>
+      </div>
     </div>
     <button onClick={handleEventCreate} className='btn btn-success float-end btn-md p3 m-4 btn-wide'>Create</button>
     

@@ -12,12 +12,13 @@ import 'firebase/storage';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import CreateEvent from './CreateEvent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { faBullhorn, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from '../../context/userContext';
 import Eventcalendar from '../dboardmodules/MyCommunityModule/Eventcalendar'
 import { Calendar } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
 import ManageUserAnnouncement from './ManageUserAnnouncement';
+import { FaReact } from 'react-icons/fa';
 
 
 const firebaseConfig = {
@@ -32,6 +33,8 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage(firebaseApp);
+
+
 
 export default function CreateAnnouncement() {
   const {user} = useContext(UserContext);
@@ -60,6 +63,27 @@ export default function CreateAnnouncement() {
   const [minigameWord, setMinigameWord] = useState('');
 
   const adminType2 = localStorage.getItem('adminType');
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+
+  const openModal = (imgSrc) => {
+    setSelectedImage(imgSrc);
+    setModalOpen(true);
+    document.body.style.overflow = "hidden"; // Disable scrolling
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedImage("");
+    document.body.style.overflow = "auto"; // Re-enable scrolling
+  };
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "auto"; // Reset scroll when component unmounts
+    };
+  }, []);  
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -400,7 +424,7 @@ export default function CreateAnnouncement() {
     <div className=' p-4 animate-fade-in '>
       <div className="p-3 pr-5 mt-20 w-full h-full shadow-md rounded-3 bg-white border ">
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>  <FontAwesomeIcon icon={faBullhorn} className=' text-yellow-500 mx-1 '/>Post Management</h2>
-      <div role="tablist" className="tabs tabs-lifted w-full">
+      <div role="tablist" className="tabs tabs-lifted w-full z-0">
         <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 " aria-label="Create Announcement" />
         <div role="tabpanel" className="tab-content bg-green-100 shadow-lg rounded-md p-2  ">
           <div className="  annoucement_creation_container  p-2 w-full h-full  animate-fade-in ">
@@ -557,71 +581,104 @@ export default function CreateAnnouncement() {
                 <div className="divider divider-warning"></div>
 
                 <div className=" overflow-auto max-h-[100vh] w-full">
+                <ul>
+        {approvedAnnouncements.slice(0, 3).map((announcement) => {
+          const communityNamePromise = announcement.communityId
+            ? getCommunityName(announcement.communityId)
+            : Promise.resolve(null);
+
+          return (
+            <div
+              key={announcement._id}
+              className="card bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-105 sm:card md:card-side lg:card-side xl:card-side"
+            >
+              {announcement.mediaUrl ? (
+                <div className="p-0">
+                  {announcement.contentType && announcement.contentType.startsWith("image") ? (
+                    <img
+                      src={announcement.mediaUrl}
+                      alt="Announcement Media"
+                      className=" w-[50vw] h-full cursor-pointer"
+                      onClick={() => openModal(announcement.mediaUrl)}
+                    />
+                  ) : announcement.contentType && announcement.contentType.startsWith("video") ? (
+                    <figure>
+                      <video controls className="max-w-xl h-full">
+                        <source src={announcement.mediaUrl} type={announcement.contentType} />
+                      </video>
+                    </figure>
+                  ) : announcement.contentType && announcement.contentType.startsWith("audio") ? (
+                    <audio controls className="max-w-xl h-full">
+                      <source src={announcement.mediaUrl} type={announcement.contentType} />
+                    </audio>
+                  ) : (
+                    <p className="flex justify-center items-center border-2 border-white max-w-xl h-full">
+                      No media available
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p className="flex justify-center items-center border-2 border-white">No media available</p>
+              )}
+
+              <div className="w-full">
+                <div className="card-body">
+                  <h4 className="card-title w-full border-b border-yellow-400 text-green-800">
+                    {announcement.header}
+                  </h4>
+                  <div className="body_container p-2 w-full h-32 rounded-md text-left overflow-auto max-h-full border-2">
+                    <p>{announcement.body}</p>
+                  </div>
+                  <div className="community_container p-2 w-full my-2 rounded-md border-2 text-left">
+                    <PromiseRenderer promise={communityNamePromise} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 shadow-inner">
+                  <div className="max-w-[50vw] p-3 shadow-inner">
+                    <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} />
+                    <label className="mx-2"> Likes</label>
+                  </div>
+                  <div className="max-w-[50vw] p-3 shadow-inner">
+                    <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsDown} />
+                    <label className="mx-2"> Dislikes</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </ul>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg shadow-lg w-[60vw] max-h-[70vh]  p-3">
+            {/* Close button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 focus:outline-none text-4xl "
+            >
+              &times;
+            </button>
+
+            {/* Modal image */}
+            <div className=" justify-center items-center">
+              <img src={selectedImage} alt="Selected" className=" w-full h-[60vh]  rounded-md shadow-lg" />
+            </div>
+          </div>
+        </div>
+      )}
                 
                   
-                  <ul>
-                    {approvedAnnouncements.slice(0, 3).map((announcement) => {
-                      // Create a promise for fetching the community name
-                      const communityNamePromise = announcement.communityId ? getCommunityName(announcement.communityId) : Promise.resolve(null);
-                      
-                      // Render each announcement with its community name when available
-                      return (
-                        <div key={announcement._id} className='card bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-105 sm:card md:card-side lg:card-side xl:card-side'>
-
-                        {announcement.mediaUrl ? (
-                          
-                              
-                          <div className=" p-0">
-                          
-                          {announcement.contentType && announcement.contentType.startsWith('image') ? (
-                           
-
-                            
-                            <img src={announcement.mediaUrl} alt="Announcement Media" className= ' max-w-[45vw] h-full' /> 
-                           
-                          ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
-                          <figure> <video controls className='max-w-xl h-full'>
-                              <source src={announcement.mediaUrl} type={announcement.contentType} />
-                            </video>
-                            </figure> 
-                          ) : announcement.contentType && announcement.contentType.startsWith('audio') ?
-                           (
-                            <audio controls className='max-w-xl h-full '>
-                              <source src={announcement.mediaUrl} type={announcement.contentType} />
-                            </audio>
-                            
-                           ):(
-                            <p className='flex justify-center items-center border-2 border-white max-w-xl h-full'>No media available</p>
-                          )}
-                          </div>
-                       
-                      ) : (
-                      
-                        <p className='flex justify-center items-center border-2 border-white '>No media available</p>
-                        
-                      )}
-                          <div className=" card-body">
-                            <h4 className='card-title w-full border-b border-yellow-400 text-green-800'> {announcement.header}</h4>
-                            <div className="body_container p-2 w-full h-32 rounded-md text-left overflow-auto max-h-full border-2">
-                            <p className=''> {announcement.body}</p>
-                            </div>
-                            <div className="community_container  p-2  w-full my-2 rounded-md border-2 text-left">
-                            <PromiseRenderer promise={communityNamePromise}  />
-                            </div>
-                          </div>
-                         
-                          
-                        </div>
-                      );
-                    })}
-                  </ul>
+                 
                 </div>
           </div>
           </div>
           </div>
         </div>
         <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 w-auto " aria-label="Edit Posts" />
-        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">
+        <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6 ">
           <ManageUserAnnouncement/>
           </div>
                     
@@ -629,8 +686,8 @@ export default function CreateAnnouncement() {
        
         {adminType2 === 'School Owner' && (
   <>
-    <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 " aria-label="Post Approval" />
-    <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6">
+    <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600  " aria-label="Post Approval" />
+    <div role="tabpanel" className="tab-content bg-green-100 border-base-300 rounded-box p-6 ">
       <PostApproval />
     </div>
   </>

@@ -176,17 +176,17 @@ const AnalyticsReport = () => {
       value,
       color: COLORS[index % COLORS.length],
     }));
-  // Custom Label for Pie Chart
-  const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }) => {
-    const radius = outerRadius - 10;
-    const x = cx + radius * Math.cos((midAngle * Math.PI) / 180);
-    const y = cy + radius * Math.sin((midAngle * Math.PI) / 180);
-    return (
-      <text x={x} y={y} fill="#000000" textAnchor="middle" dominantBaseline="central">
-        {name} ({value})
-      </text>
-    );
-  };
+ // Custom Label for Pie Chart (Now positions labels outside the pie chart)
+ const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }) => {
+  const radius = outerRadius + 20; // Position label outside the pie chart
+  const x = cx + radius * Math.cos((midAngle * Math.PI) / 180);
+  const y = cy + radius * Math.sin((midAngle * Math.PI) / 180);
+  return (
+    <text x={x} y={y} fill="#000000" textAnchor="middle" dominantBaseline="central">
+      {name} ({value})
+    </text>
+  );
+};
 
   const exportData = () => {
     // Prepare data for Likes and Dislikes CSV
@@ -235,7 +235,7 @@ const AnalyticsReport = () => {
 };
 
   return (
-    <div className="mt-16 p-3">
+    <div className="mt-16 p-1">
       <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
 
       <div className="mb-6">
@@ -393,34 +393,50 @@ const AnalyticsReport = () => {
       <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
       {/* Demographics Pie Chart */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
-        {isDemographicsEmpty ? (
-          <p>No demographic data available.</p>
-        ) : (
-          <div className="p-4 bg-white shadow-lg rounded-lg">
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={120}
-                  fill="#8884d8"
-                  labelLine={false}
-                  label={CustomLabel}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                  <Tooltip />
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-      </div>
+          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
+          {isDemographicsEmpty ? (
+            <p>No demographic data available.</p>
+          ) : (
+          <div className="flex">
+
+                 
+              <div className=" bg-white shadow-lg rounded-lg w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2" >
+
+              <div className="m-4 flex flex-col text-left font-semibold text-lg p-2 mx-2">
+                  <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Users:</h3>
+                    {pieData.map((entry, index) => (
+                      <div key={`label-${index}`} style={{ color: entry.color }}>
+                        {entry.name}: {entry.value}
+                  </div>
+                ))}
+              </div>
+              <div className="bg-gray-400 rounded-xl">
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={120}
+                      fill="#8884d8"
+                      labelLine={false}
+                      label={CustomLabel}
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                      <Tooltip />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                </div>
+              </div>
+              
+            </div>
+          )}
+        </div>
       </div>
     </div>
 

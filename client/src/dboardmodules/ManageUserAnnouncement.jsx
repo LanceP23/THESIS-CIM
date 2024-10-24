@@ -3,6 +3,8 @@ import axios from 'axios';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import toast from 'react-hot-toast'; 
 import './ManageUserAnnouncement.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 const ManageUserAnnouncement = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,6 +12,10 @@ const ManageUserAnnouncement = () => {
   const [editHeader, setEditHeader] = useState('');
   const [editBody, setEditBody] = useState('');
   const [postComments, setPostComments] = useState({});
+  // Function to open the modal and display the selected image
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+  
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
     if (!token) {
@@ -17,6 +23,14 @@ const ManageUserAnnouncement = () => {
     }
     return token.split('=')[1];
   };
+
+    // Cleanup: reset body scroll when component unmounts
+    useEffect(() => {
+      return () => {
+        document.body.style.overflow = "auto";
+      };
+    }, []);
+   
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
@@ -125,24 +139,33 @@ const ManageUserAnnouncement = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-   // Function to open the modal and display the selected image
-   const openModal = (imageUrl) => {
-    setSelectedImage(imageUrl);
-    setIsModalOpen(true);
-  };
-  // Function to close the modal
-  const closeModal = () => {
-    setSelectedImage(null);
-    setIsModalOpen(false);
-  };
+   
+ 
+   // Function to open modal and disable scrolling
+   const openModal = (imgSrc) => {
+     setSelectedImage(imgSrc);
+     setModalOpen(true);
+     document.body.style.overflow = "hidden"; // Disable scrolling
+   };
+ 
+   // Function to close modal and enable scrolling
+   const closeModal = () => {
+     setModalOpen(false);
+     setSelectedImage("");
+     document.body.style.overflow = "auto"; // Re-enable scrolling
+   };
+ 
+   // Cleanup: reset body scroll when component unmounts
+  
+ 
   return (
-    <div className=" p-4 my-2 max-w-full h-auto rounded-2 animate-fade-in">
-      <h2 className='border-b border-gray-500 py-2 font-bold mb-2'>Your Announcements</h2>
+     <div className="p-4 my-2 max-w-full h-auto rounded-2 animate-fade-in">
+      <h2 className="border-b border-gray-500 py-2 font-bold mb-2">Your Announcements</h2>
       <div className="max-h-[700px] overflow-auto">
         {userPosts.length === 0 ? (
           <p>No announcements found.</p>
         ) : (
-          userPosts.map(post => (
+          userPosts.map((post) => (
             <div key={post._id} className="w-full my-5 p-4 bg-white rounded-lg shadow-sm border-3">
               {editingPost === post._id ? (
                 <div className="edit-form">
@@ -167,65 +190,87 @@ const ManageUserAnnouncement = () => {
               ) : (
                 <>
                   <div className="mb-2 text-2xl text-green-700 font-bold text-left border-b border-yellow-400">{post.header}</div>
-                  <div className="mb-2 font-bold text-left  text-gray-700">{post.body}</div>
+                  <div className="mb-2 font-bold text-left text-gray-700">{post.body}</div>
+
+                  {/* Image */}
                   {post.mediaUrl && post.contentType && post.contentType.startsWith('image') && (
-                    <div className="w-full">
-                      <img src={post.mediaUrl} alt={post.header} className='w-auto h-72 shadow-lg ' />
+                    <div className="w-full cursor-pointer">
+                      <img
+                        src={post.mediaUrl}
+                        alt={post.header}
+                        className="w-auto h-72 shadow-lg"
+                        onClick={() => openModal(post.mediaUrl)}
+                      />
                     </div>
                   )}
+
+                  {/* Video */}
                   {post.mediaUrl && post.contentType && post.contentType.startsWith('video') && (
                     <div className="w-full">
-                      <video controls className='w-auto max-h-96 shadow-lg'>
-                        <source src={post.mediaUrl} type={post.contentType} />
+                      <video controls className="w-auto max-h-96 shadow-lg">
+                        <source src={post.mediaUrl} type={post.contentType} onClick={() => openModal(post.mediaUrl)} />
                         Your browser does not support the video tag.
                       </video>
                     </div>
                   )}
+
+                  {/* Audio */}
                   {post.mediaUrl && post.contentType && post.contentType.startsWith('audio') && (
                     <div className="w-full">
-                      <audio controls className='w-auto max-h-96 shadow-lg'>
-                        <source src={post.mediaUrl} type={post.contentType} />
+                      <audio controls className="w-auto max-h-96 shadow-lg">
+                        <source src={post.mediaUrl} type={post.contentType}  onClick={() => openModal(post.mediaUrl)}/>
                         Your browser does not support the audio element.
                       </audio>
                     </div>
                   )}
-                  <div className="comments-section mt-4 ">
-                  <h4 className="text-lg font-semibold">Comments:</h4>
-                  <button onClick={() => fetchComments(post._id)} className="btn btn-sm btn-success">Load Comments</button>
-                    
-                   
-                   
+
+                  {/* Likes and Dislikes */}
+                  <div className="grid grid-cols-2 my-1 shadow-inner shadow-sm">
+                    <div className="max-w-[50vw] p-3 shadow-inner">
+                      <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} />
+                      <label className="mx-2"> Likes</label>
+                    </div>
+                    <div className="max-w-[50vw] p-3 shadow-inner">
+                      <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsDown} />
+                      <label className="mx-2"> Dislikes</label>
+                    </div>
+                  </div>
+
+                  {/* Comments Section */}
+                  <div className="comments-section mt-4">
+                    <h4 className="text-lg font-semibold">Comments:</h4>
+                    <button onClick={() => fetchComments(post._id)} className="btn btn-sm btn-success">Load Comments</button>
                     {postComments[post._id] && postComments[post._id].length > 0 ? (
-                      
-                      <div className="div">
                       <ul className="comments-list mt-2">
-                        {postComments[post._id].map(comment => (
-                          
-                          <li key={comment._id} className=" bg-slate-200 p-2 mb-2 rounded shadow">
+                        {postComments[post._id].map((comment) => (
+                          <li key={comment._id} className="bg-slate-200 p-2 mb-2 rounded shadow flex ">
+                            <div className="div text-left">
                             <p className="text-gray-700">{comment.text}</p>
                             <p className="text-sm text-gray-500">- {comment.userId.name}, {new Date(comment.createdAt).toLocaleString()}</p>
                             <button
                               onClick={() => handleDeleteComment(comment._id, post._id)}
                               className="btn btn-error btn-sm mt-2"
                             >
-                              <FaTrashAlt /> Delete Comment
+                              <FaTrashAlt />
                             </button>
+                            </div>
                           </li>
                         ))}
                       </ul>
-                      </div>
                     ) : (
                       <p>No comments yet.</p>
                     )}
                   </div>
                   <div className="flex justify-between flex-col sm:flex-row md-flex-row lg:flex-row xl:flex-row items-center text-xs  text-gray-600">
                     <div className='mb-2'>
+                    <div className="mb-2">
                       <span>Posted on: {new Date(post.createdAt).toLocaleString()}</span>
                       <span>Status: {post.status}</span>
                     </div>
                     <div className="flex justify-end gap-2">
                       <button onClick={() => handleEdit(post)} className="btn btn-info">
                         <FaEdit /> Edit
+                        <FaEdit /> Edit Post
                       </button>
                       <button onClick={() => handleDelete(post._id)} className="btn btn-error">
                         <FaTrashAlt /> Delete
@@ -236,6 +281,9 @@ const ManageUserAnnouncement = () => {
               )}
             </div>
           ))
+        )}
+
+        {/* Modal */}
         )}
       </div>
     </div>

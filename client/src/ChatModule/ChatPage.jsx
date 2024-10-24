@@ -30,7 +30,7 @@ const ChatPage = () => {
     (conversation) => conversation._id === conversationId
   );
   
-  return <div className="p-3">
+  return <div className="p-1">
   <div className=" bg-slate-100 mt-16 mx-2  rounded-lg shadow-inner animate-fade-in">
   
   <div className=" p-2 ">

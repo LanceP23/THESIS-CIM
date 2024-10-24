@@ -40,11 +40,11 @@ export default function Home() {
 
 
   return (
-    <div className=" w-full flex flex-wrap overflow-x-hidden overflow-y-hidden">
+    <div className=" w-full flex flex-wrap overflow-x-hidden overflow-y-hidden ">
       {/* Navbar */}
       <Navbar />
 
-      <div className=" flex w-full h-[96vh] ">
+      <div className=" flex w-full h-[87vh]  ">
       {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
     <Carousel showThumbs={false} infiniteLoop autoPlay interval={5000} className="w-full">
       {recentAnnouncements.slice(0, 5).map((announcement) => (
@@ -63,7 +63,7 @@ export default function Home() {
                     className="w-full h-[85vh] object-cover opacity-45 "
                   />
                   {/* Text Overlay */}
-                  <div className="absolute bottom-0 left-0 pt-2 p-4 w-full text-center bg-black bg-opacity-50  ">
+                  <div className="absolute bottom-14 left-0 pt-2 p-4 w-full text-center bg-black bg-opacity-50  ">
                     <h4 className="font-semibold text-2xl mb-2 text-white border-b-2 border-yellow-500">{announcement.header}</h4>
                     <p className="text-md text-white">{announcement.body}</p>
                   </div>
@@ -104,7 +104,7 @@ export default function Home() {
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative ">
+          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative  ">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70"></div>
         <div className="hero-content z-10 flex"   >
           <h1 className="text-white font-bold text-5xl md:text-6xl mb-6 " data-aos="fade-right" >Stay Connected with Campus Life</h1>
@@ -178,11 +178,11 @@ export default function Home() {
        <div className=" bg-[url('/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full max-h-[280vh] flex justify-center items-center text-center relative p-4" >
     <div className="absolute inset-0 bg-black opacity-70"></div>
 
-    <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row gap-4" data-aos="fade-up">
+    <div className="flex flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-row gap-4" data-aos="fade-up">
 
-        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-96 xl:w-96 p-3 sm:card-side md:card-side lg:card xl:card">
+        <div className="card glass w-96 sm:w-[80vw] md:w-[80vw] lg:w-[80vw] xl:w-96 p-3 sm:card-side md:card-side lg:card-side xl:card">
             <figure className=''>
-                <img src="/assets/CORPO_CIM/HOME_ASSET (1).png" alt="car!" className='w-32 h-auto sm:w-full md:w-full lg:w-32 xl:w-32 ' />
+                <img src="/assets/CORPO_CIM/HOME_ASSET (1).png" alt="car!" className='w-32 h-auto sm:w-full md:w-full lg:w-full xl:w-32 ' />
             </figure>
             <div className="card-body">
                 <h2 className="card-title text-white text-center border-b-2 border-yellow-500">Unified Campus Media platform for Announcements and Events</h2>
@@ -192,9 +192,9 @@ export default function Home() {
             </div>
         </div>
 
-        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-96 xl:w-96 p-3 sm:card-side md:card-side lg:card xl:card">
+        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-[80vw] xl:w-96 p-3 sm:card-side md:card-side lg:card-side xl:card">
             <figure>
-                <img src="/assets/CORPO_CIM/HOME_ASSET(10).png" alt="car!" className='w-32 h-auto sm:w-full md:w-full lg:w-32 xl:w-32' />
+                <img src="/assets/CORPO_CIM/HOME_ASSET(10).png" alt="car!" className='w-32 h-auto sm:w-full md:w-full lg:w-full xl:w-32' />
             </figure>
             <div className="card-body m-0">
                 <h2 className="card-title text-white text-center border-b-2 border-yellow-500">Mobile Application for Easy Access</h2>
@@ -204,9 +204,9 @@ export default function Home() {
             </div>
         </div>
 
-        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-96 xl:w-96 p-3 sm:card-side md:card-side lg:card xl:card">
+        <div className="card glass w-96 sm:w-[80vw] md:[80vw] lg:w-[80vw] xl:w-96 p-3 sm:card-side md:card-side lg:card-side xl:card">
             <figure>
-                <img src="/assets/CORPO_CIM/HOME_ASSET (7).png" alt="car!" className='w-20 h-auto sm:w-full md:w-full lg:w-32 xl:w-20' />
+                <img src="/assets/CORPO_CIM/HOME_ASSET (7).png" alt="car!" className='w-20 h-auto sm:w-full md:w-full lg:w-full xl:w-20' />
             </figure>
             <div className="card-body">
                 <h2 className="card-title text-white text-center text-md border-b-2 border-yellow-500">Interactive Announcements for Enhanced User Engagement</h2>
