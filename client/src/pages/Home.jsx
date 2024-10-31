@@ -44,7 +44,7 @@ export default function Home() {
       {/* Navbar */}
       <Navbar />
 
-      <div className=" flex w-full h-[87vh]  ">
+      <div className=" flex w-full h-[95vh]  ">
       {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
     <Carousel showThumbs={false} infiniteLoop autoPlay interval={5000} className="w-full">
       {recentAnnouncements.slice(0, 5).map((announcement) => (
@@ -63,7 +63,7 @@ export default function Home() {
                     className="w-full h-[85vh] object-cover opacity-45 "
                   />
                   {/* Text Overlay */}
-                  <div className="absolute bottom-14 left-0 pt-2 p-4 w-full text-center bg-black bg-opacity-50  ">
+                  <div className="absolute bottom-5 left-0 pt-2 p-4 w-full text-center bg-black bg-opacity-50  ">
                     <h4 className="font-semibold text-2xl mb-2 text-white border-b-2 border-yellow-500">{announcement.header}</h4>
                     <p className="text-md text-white">{announcement.body}</p>
                   </div>

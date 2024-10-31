@@ -331,8 +331,8 @@ export default function BuildCommunity() {
         <div className="max-h-96 overflow-auto">
         <table className="w-full bg-white shadow-2xl rounded-2xl ">
           {/* Table Header */}
-          <thead className='sticky top-0 z-10'>
-            <tr>
+          <thead className='sticky top-0 z-10 '>
+            <tr className=''>
               <th className="bg-green-700 text-white">Name</th>
               <th className="bg-green-700 text-white">Email</th>
               <th className="bg-green-700 text-white">Admin Type</th>
