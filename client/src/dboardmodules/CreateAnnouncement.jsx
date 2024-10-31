@@ -598,7 +598,7 @@ export default function CreateAnnouncement() {
                     <img
                       src={announcement.mediaUrl}
                       alt="Announcement Media"
-                      className=" w-[50vw] h-full cursor-pointer"
+                      className=" w-[50vw] max-h-[55vh] object-cover cursor-pointer"
                       onClick={() => openModal(announcement.mediaUrl)}
                     />
                   ) : announcement.contentType && announcement.contentType.startsWith("video") ? (
@@ -621,7 +621,7 @@ export default function CreateAnnouncement() {
                 <p className="flex justify-center items-center border-2 border-white">No media available</p>
               )}
 
-              <div className="w-full">
+              <div className="w-full flex flex-col ">
                 <div className="card-body">
                   <h4 className="card-title w-full border-b border-yellow-400 text-green-800">
                     {announcement.header}
@@ -634,7 +634,7 @@ export default function CreateAnnouncement() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 shadow-inner">
+                <div className="grid grid-cols-2 shadow-inner ">
                   <div className="max-w-[50vw] p-3 shadow-inner">
                     <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} />
                     <label className="mx-2">{announcement.likes} Likes </label>
@@ -653,18 +653,27 @@ export default function CreateAnnouncement() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-white rounded-lg shadow-lg w-[60vw] max-h-[70vh]  p-3">
+          <div className="relative  rounded-lg shadow-lg w-[60vw] max-h-[80vh]  ">
             {/* Close button */}
-            <button
-              onClick={closeModal}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 focus:outline-none text-4xl "
-            >
-              &times;
+           
+            <button className="btn btn-circle btn-sm absolute top-2 right-2  " onClick={closeModal}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
             </button>
 
             {/* Modal image */}
             <div className=" justify-center items-center">
-              <img src={selectedImage} alt="Selected" className=" w-full h-[60vh]  rounded-md shadow-lg" />
+              <img src={selectedImage} alt="Selected" className=" w-full h-[88vh] rounded-md shadow-lg" />
             </div>
           </div>
         </div>
