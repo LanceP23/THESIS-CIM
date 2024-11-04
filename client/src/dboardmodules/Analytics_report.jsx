@@ -21,7 +21,13 @@ const AnalyticsReport = () => {
   const [selectedMonth1, setSelectedMonth1] = useState('');
   const [selectedMonth2, setSelectedMonth2] = useState('');
   const [analysis, setAnalysis] = useState('');
+  const [commentsData, setCommentsData] = useState([]);
+  const [commentAnalysis, setCommentAnalysis] = useState('');
   const [loading, setLoading] = useState(false); // Add loading state
+  const [activeTab, setActiveTab] = useState('engagement');
+  const [totalMiniGamesPlayed, setTotalMiniGamesPlayed] = useState(null);
+  const [totalMiniGameWins, setTotalMiniGameWins] = useState(null);
+  const [averageScore, setAverageScor] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -49,10 +55,15 @@ const AnalyticsReport = () => {
         console.error('Error fetching analytics data:', error);
       }
     };
+  
     if (user) {
-      fetchData();
+      fetchData(); // Fetch initially
+      const interval = setInterval(fetchData, 10000); // Poll every 10 seconds
+  
+      return () => clearInterval(interval); 
     }
   }, [user]);
+  
   const generateAnalysis = async () => {
     setLoading(true);
   
@@ -170,23 +181,36 @@ const AnalyticsReport = () => {
   const isDemographicsEmpty = Object.values(demographicsData).every(count => count === 0);
   const totalDemographics = Object.values(demographicsData).reduce((sum, value) => sum + value, 0);
   const pieData = Object.entries(demographicsData)
-    .filter(([key, value]) => value > 0)
-    .map(([key, value], index) => ({
-      name: key,
-      value,
-      color: COLORS[index % COLORS.length],
-    }));
- // Custom Label for Pie Chart (Now positions labels outside the pie chart)
- const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }) => {
-  const radius = outerRadius + 20; // Position label outside the pie chart
-  const x = cx + radius * Math.cos((midAngle * Math.PI) / 180);
-  const y = cy + radius * Math.sin((midAngle * Math.PI) / 180);
-  return (
-    <text x={x} y={y} fill="#000000" textAnchor="middle" dominantBaseline="central">
-      {name} ({value})
-    </text>
-  );
+  .filter(([key, value]) => value > 0)
+  .map(([key, value], index) => ({
+    name: key,
+    value,
+    color: COLORS[index % COLORS.length],
+  }));
+
+  const CustomLabel = ({ cx, cy, midAngle, outerRadius, percent, name, value }) => {
+    const radius = outerRadius + 20;
+    const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
+    const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
+    return (
+      <text x={x} y={y} fill="#000" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
+        {`${name} (${value})`}
+      </text>
+    );
+  };
+  
+  
+
+const fetchCommentsData = async () => {
+  try {
+    const response = await axios.get(`/comments/${user.id}`);
+    setCommentsData(response.data.comments);
+  } catch (error) {
+    console.error('Error fetching comments data:', error);
+  }
 };
+
+
 
   const exportData = () => {
     // Prepare data for Likes and Dislikes CSV
@@ -235,212 +259,254 @@ const AnalyticsReport = () => {
 };
 
   return (
-    <div className="mt-16 p-1">
-      <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
-
+  <div className="mt-16 p-1">
+    <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100 hover:shadow-2xl border-2 animate-fade-in">
       <div className="mb-6">
-  <button
-    onClick={exportData}
-    className="bg-green-500 text-white hover:bg-green-600 flex items-center px-4 py-2 rounded"
-    aria-label="Download Data"
-  >
-    <FontAwesomeIcon icon={faDownload} className="mr-2" />
-    Download
-  </button>
-</div>
-  
-      <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-left text-green-800">Online User Engagement Analytics Dashboard</h1>
-      <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
-      <div className=" flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row ">
-      <div className=" mb-10 ">
-        <label htmlFor="dateFilter" className="block text-gray-700 text-lg mb-2 text-left">Select Date to Filter:</label>
-        <select
-          id="dateFilter"
-          value={dateFilter}
-          onChange={(e) => {
-            setDateFilter(e.target.value);
-            if (e.target.value !== 'custom') {
-              setSelectedMonth1('');
-              setSelectedMonth2('');
-            }
-          }}
-          className="flex flex-row justify-items-center mt-1 mr-2 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
+        <button
+          onClick={exportData}
+          className="bg-green-500 text-white hover:bg-green-600 flex items-center px-4 py-2 rounded"
+          aria-label="Download Data"
         >
-          <option value="weekly">This Week</option>
-          <option value="monthly">This Month</option>
-          <option value="yearly">This Year</option>
-          <option value="custom">Compare Months</option>
-        </select>
+          <FontAwesomeIcon icon={faDownload} className="mr-2" />
+          Download
+        </button>
       </div>
-      {dateFilter === 'custom' && (
-        <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row mb-2">
-          <div className="flex flex-col">
-          <label htmlFor="monthFilter1" className="  text-gray-700 text-lg text-left ">Select First Month:</label>
-          <select
-            id="monthFilter1"
-            value={selectedMonth1}
-            onChange={(e) => setSelectedMonth1(e.target.value)}
-            className="flex flex-row justify-items-center mt-1 mr-2 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
-          >
-            <option value="">Select a Month</option>
-            {Array.from({ length: 12 }, (_, i) => (
-              <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
-            ))}
-          </select>
+  
+      <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-left text-green-800">
+        Online User Engagement Analytics Dashboard
+      </h1>
+      <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
+      
+      {/* Tab Navigation */}
+      <div className="flex mb-4">
+        <button
+          className={`px-4 py-2 font-semibold ${activeTab === 'engagement' ? 'border-b-2 border-green-600' : 'text-gray-600'}`}
+          onClick={() => setActiveTab('engagement')}
+        >
+          User Engagement
+        </button>
+        <button
+          className={`px-4 py-2 font-semibold ${activeTab === 'minigame' ? 'border-b-2 border-green-600' : 'text-gray-600'}`}
+          onClick={() => setActiveTab('minigame')}
+        >
+          Minigame Analytics
+        </button>
+      </div>
+
+      {/* User Engagement Tab Content */}
+      {activeTab === 'engagement' && (
+        <div>
+          <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row ">
+            <div className="mb-10">
+              <label htmlFor="dateFilter" className="block text-gray-700 text-lg mb-2 text-left">Select Date to Filter:</label>
+              <select
+                id="dateFilter"
+                value={dateFilter}
+                onChange={(e) => {
+                  setDateFilter(e.target.value);
+                  if (e.target.value !== 'custom') {
+                    setSelectedMonth1('');
+                    setSelectedMonth2('');
+                  }
+                }}
+                className="flex flex-row justify-items-center mt-1 mr-2 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
+              >
+                <option value="weekly">This Week</option>
+                <option value="monthly">This Month</option>
+                <option value="yearly">This Year</option>
+                <option value="custom">Compare Months</option>
+              </select>
+            </div>
+            {dateFilter === 'custom' && (
+              <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row mb-2">
+                <div className="flex flex-col">
+                  <label htmlFor="monthFilter1" className="text-gray-700 text-lg text-left">Select First Month:</label>
+                  <select
+                    id="monthFilter1"
+                    value={selectedMonth1}
+                    onChange={(e) => setSelectedMonth1(e.target.value)}
+                    className="flex flex-row justify-items-center mt-1 mr-2 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
+                  >
+                    <option value="">Select a Month</option>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="monthFilter2" className="text-gray-700 text-lg text-left">Select Second Month:</label>
+                  <select
+                    id="monthFilter2"
+                    value={selectedMonth2}
+                    onChange={(e) => setSelectedMonth2(e.target.value)}
+                    className="flex flex-row justify-items-center mt-1 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
+                  >
+                    <option value="">Select a Month</option>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
-          <div className="flex flex-col">
-          <label htmlFor="monthFilter2" className=" text-gray-700 text-lg text-left ">Select Second Month:</label>
-          <select
-            id="monthFilter2"
-            value={selectedMonth2}
-            onChange={(e) => setSelectedMonth2(e.target.value)}
-            className="flex flex-row justify-items-center mt-1  py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
-          >
-            <option value="">Select a Month</option>
-            {Array.from({ length: 12 }, (_, i) => (
-              <option key={i} value={i}>{format(new Date(0, i), 'MMMM')}</option>
-            ))}
-          </select>
+
+          {/* General Overview Section */}
+          <div className="grid grid-rows-1">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 mb-2">
+              <div className="p-4 bg-white shadow-lg rounded-lg">
+                <h3 className="text-xl font-semibold text-green-800">Total Likes <FontAwesomeIcon icon={faThumbsUp} className="text-green-500" style={{ fontSize: '24px' }} /></h3>
+                <p className="text-2xl text-green-600">{totalLikes}</p>
+              </div>
+              <div className="p-4 bg-white shadow-lg rounded-lg">
+                <h3 className="text-xl font-semibold text-red-800">Total Dislikes <FontAwesomeIcon icon={faThumbsDown} className="text-red-800" style={{ fontSize: '24px' }} /></h3>
+                <p className="text-2xl text-red-600">{totalDislikes}</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-3">
+              <div className="p-4 bg-white shadow-lg rounded-lg">
+                <h3 className="text-xl font-semibold text-blue-800">Average Likes per Post <FontAwesomeIcon icon={faThumbsUp} className="text-blue-800" style={{ fontSize: '24px' }} /></h3>
+                <p className="text-2xl text-blue-600">{avgLikesPerPost}</p>
+              </div>
+              <div className="p-4 bg-white shadow-lg rounded-lg">
+                <h3 className="text-xl font-semibold text-blue-800">Average Dislikes per Post <FontAwesomeIcon icon={faThumbsDown} className="text-blue-800" style={{ fontSize: '24px' }} /></h3>
+                <p className="text-2xl text-blue-600">{avgDislikesPerPost}</p>
+              </div>
+              <div className="p-4 bg-white shadow-lg rounded-lg">
+                <h3 className="text-xl font-semibold text-purple-800">Like/Dislike Ratio <FontAwesomeIcon icon={faPercent} className="text-purple-800" style={{ fontSize: '24px' }} /></h3>
+                <p className="text-2xl text-purple-600">{likeDislikeRatio}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="p-4 bg-white shadow-lg rounded-lg">
+              <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions by Date</h2>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={aggregatedReactions}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="likes" stroke="#8884d8" />
+                  <Line type="monotone" dataKey="dislikes" stroke="#ff7300" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="p-4 bg-white shadow-lg rounded-lg">
+              <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions Count by Date</h2>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={aggregatedReactions}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="likes" fill="#8884d8" />
+                  <Bar dataKey="dislikes" fill="#ff7300" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Generate Analysis Button */}
+          <div className="mb-6">
+            <button
+              onClick={generateAnalysis}
+              disabled={loading}
+              className="btn btn-success"
+            >
+              {loading ? (<span className="loading loading-spinner loading-xs"></span>):( 'Generate An Analysis')}
+            </button>
+          </div>
+
+          
+
+          {/* Interpretation Section */}
+          <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
+            <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Analysis</h2>
+            {loading ? (
+              <div className="flex w-52 flex-col gap-4">
+                <span className="loading loading-dots loading-lg"></span>
+                <div className="skeleton h-4 w-28"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="skeleton h-4 w-full"></div>
+              </div>
+            ) : (
+              <div className='text-justify font-bold' dangerouslySetInnerHTML={{ __html: analysis }} />
+            )}
+          </div>
+
+          <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100 hover:shadow-2xl border-2 animate-fade-in">
+        {/* Demographics Pie Chart */}
+        <div className="mb-6">
+      <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
+      {isDemographicsEmpty ? (
+        <p>No demographic data available.</p>
+      ) : (
+        <div className="flex">
+          <div className="bg-white shadow-lg rounded-lg w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+            <div className="m-4 flex flex-col text-left font-semibold text-lg p-2 mx-2">
+              <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Users:</h3>
+              {pieData.map((entry, index) => (
+                <div key={`label-${index}`} style={{ color: entry.color }}>
+                  {entry.name}: {entry.value}
+                </div>
+              ))}
+            </div>
+            <div className="bg-gray-400 rounded-xl">
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={120}
+                    fill="#8884d8"
+                    labelLine={false}
+                    label={CustomLabel} // Use custom label
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                    <Tooltip />
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       )}
-      </div>
-      {/* General Overview Section */}
-      <div className=" grid grid-rows-1  ">
-        <div className=" grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2  gap-3 mb-2 ">
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-green-800">Total Likes  <FontAwesomeIcon icon={faThumbsUp} className="text-green-500" style={{ fontSize: '24px' }} /></h3>
-          <p className="text-2xl text-green-600">{totalLikes}</p>
-        </div>
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-red-800">Total Dislikes <FontAwesomeIcon icon={faThumbsDown} className="text-red-800" style={{ fontSize: '24px' }} /></h3>
-          <p className="text-2xl text-red-600">{totalDislikes}</p>
-        </div>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-3">
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-blue-800">Average Likes per Post <FontAwesomeIcon icon={faThumbsUp} className="text-blue-800" style={{ fontSize: '24px' }} /></h3>
-          <p className="text-2xl text-blue-600">{avgLikesPerPost}</p>
-        </div>
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-blue-800">Average Dislikes per Post <FontAwesomeIcon icon={faThumbsDown} className="text-blue-800" style={{ fontSize: '24px' }} /></h3>
-          <p className="text-2xl text-blue-600">{avgDislikesPerPost}</p>
-        </div>
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-purple-800">Like/Dislike Ratio <FontAwesomeIcon icon={faPercent} className="text-purple-800" style={{ fontSize: '24px' }} /></h3>
-          <p className="text-2xl text-purple-600">{likeDislikeRatio}</p>
-        </div>
-        </div>
-      </div>
-      </div>
-      <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
-     
-      {/* Chart Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions by Date</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={aggregatedReactions}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="likes" stroke="#8884d8" />
-              <Line type="monotone" dataKey="dislikes" stroke="#ff7300" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="p-4 bg-white shadow-lg rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions Count by Date</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={aggregatedReactions}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="likes" fill="#8884d8" />
-              <Bar dataKey="dislikes" fill="#ff7300" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-       {/* Generate Analysis Button */}
-       <div className="mb-6">
-        <button
-          onClick={generateAnalysis}
-          disabled={loading}
-          className="btn btn-success"
-        >
-          {loading ? (<span className="loading loading-spinner loading-xs"></span>):( 'Generate An Analysis')}
-        </button>
-      </div>
-      {/* Interpretation Section */}
-      <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Analysis</h2>
-        {loading ? (
-    <div className="flex w-52 flex-col gap-4">
-    <span className="loading loading-dots loading-lg"></span>
-    <div className="skeleton h-4 w-28"></div>
-    <div className="skeleton h-4 w-full"></div>
-    <div className="skeleton h-4 w-full"></div>
-  </div>
-  ) : (
-    <div className=' text-justify font-bold' dangerouslySetInnerHTML={{ __html: analysis }} />
-  )}
-      </div>
-      </div>
-      <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100  hover:shadow-2xl border-2 animate-fade-in">
-      {/* Demographics Pie Chart */}
-      <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
-          {isDemographicsEmpty ? (
-            <p>No demographic data available.</p>
-          ) : (
-          <div className="flex">
-
-                 
-              <div className=" bg-white shadow-lg rounded-lg w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2" >
-
-              <div className="m-4 flex flex-col text-left font-semibold text-lg p-2 mx-2">
-                  <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Users:</h3>
-                    {pieData.map((entry, index) => (
-                      <div key={`label-${index}`} style={{ color: entry.color }}>
-                        {entry.name}: {entry.value}
-                  </div>
-                ))}
-              </div>
-              <div className="bg-gray-400 rounded-xl">
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={120}
-                      fill="#8884d8"
-                      labelLine={false}
-                      label={CustomLabel}
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                      <Tooltip />
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-                </div>
-              </div>
-              
-            </div>
-          )}
-        </div>
-      </div>
     </div>
+      </div>
+        </div>
 
-    
-  );
+        
+      )}
+
+
+      {/* Mini Game Analytics Tab Content */}
+      {activeTab === 'minigame' && (
+        <div>
+          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Minigame Analytics</h2>
+          {/* Replace the following with actual mini game analytics content */}
+          <p className="text-gray-600 mb-4">This section provides insights into user interactions and metrics for mini games.</p>
+          {/* Example statistics */}
+          <div className="p-4 bg-white shadow-lg rounded-lg mb-4">
+            <h3 className="text-xl font-semibold text-green-800">Total Mini Games Played: <span className="text-green-600">{totalMiniGamesPlayed}</span></h3>
+            <h3 className="text-xl font-semibold text-red-800">Total Mini Game Wins: <span className="text-red-600">{totalMiniGameWins}</span></h3>
+            <h3 className="text-xl font-semibold text-blue-800">Average Score: <span className="text-blue-600">{averageScore}</span></h3>
+          </div>
+          {/* Additional charts and insights can be added here */}
+        </div>
+      )}
+      
+     
+    </div>
+  </div>
+);
+
 };
 export default AnalyticsReport;

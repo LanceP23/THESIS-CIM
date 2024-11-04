@@ -19,7 +19,7 @@ export function extractDateTime(dateString) {
 
     if (isToday) {
         // Return only the time in 12-hour format
-        return formatTime(date);
+        return `Today at ${formatTime(date)}`;
     } else {
         // Return the full date in "MMM D, YYYY" format along with time
         const formattedDate = date.toLocaleDateString('en-US', {

@@ -327,6 +327,40 @@ const getAnnouncementsByOrganizationName = async (req, res) => {
 };
 
   
+const getOrganizationAnnouncement = async (req, res) => {
+    try {
+      // Retrieve user ID from the request object, set by the authenticateUser middleware
+      const userId = req.params.userId; 
+      if (!userId) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
+  
+      // Find the organization of the user based on their userId
+      const userOrganization = await Organization.findOne({ members: userId });
+      if (!userOrganization) {
+        return res.status(404).json({ message: 'User organization not found' });
+      }
+  
+      // Log the user's organization ID for debugging purposes
+      console.log('User Organization ID:', userOrganization._id);
+  
+      // Fetch announcements for the organization where the organizationId matches
+      const announcements = await Announcement.find({
+        organizationId: userOrganization._id,  // Use organization ID to fetch announcements
+        status: 'approved',        // Ensure the announcement visibility is approved
+      });
+  
+      // Log fetched announcements for debugging
+      console.log('Fetched Announcements:', announcements);
+  
+      // Return the announcements found
+      res.status(200).json(announcements);
+    } catch (error) {
+      console.error('Error fetching organization announcements:', error);
+      res.status(500).json({ message: 'An error occurred while fetching announcements' });
+    }
+  };
+  
   
 
 
@@ -342,5 +376,6 @@ module.exports = {
     deleteOrganizationMember,
     fetchOrganizationData,
     getOrganizationId,
-    getAnnouncementsByOrganizationName
+    getAnnouncementsByOrganizationName,
+    getOrganizationAnnouncement
 };

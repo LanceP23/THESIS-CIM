@@ -4,12 +4,11 @@ const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser } = require('../controllers/authController');
-const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName } = require('../controllers/organizationController');
+const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName, getOrganizationAnnouncement } = require('../controllers/organizationController');
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus, getUserAnnouncements, updateAnnouncement, deleteAnnouncement, getRecentAnnouncements, getCommentsByAnnouncementId, deleteComments } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
 const {postEventController,getEventsController, putEventController, deleteEventController} = require('../controllers/postEventController');
-
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
@@ -73,6 +72,7 @@ router.delete('/organizations/:orgId/members/:memberId', deleteOrganizationMembe
 router.get('/organization-data/:userId',authenticateUser, fetchOrganizationData);
 router.get('/organization-id/:userId', authenticateUser, getOrganizationId);
 router.get('/organization/:organizationId/announcements', getAnnouncementsByOrganizationName);
+router.get('/organization-announcements/:userId',authenticateUser, getOrganizationAnnouncement);
 
 
 
