@@ -202,9 +202,9 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
 
     useEffect(() => {
         // Calculate total unread count
-        const totalUnreadCount = unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount + unreadCommunityNotificationCount;
+        const totalUnreadCount =  unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount + unreadCommunityNotificationCount;
         setTotalUnreadCount(totalUnreadCount);
-    }, [unreadMessageCount, unreadAnnouncementCount, unreadEventCount, unreadApprovalCount, unreadOrganizationAnnouncementCount , unreadCommunityNotificationCount, setTotalUnreadCount]);
+    }, [ unreadAnnouncementCount, unreadEventCount, unreadApprovalCount, unreadOrganizationAnnouncementCount , unreadCommunityNotificationCount, setTotalUnreadCount]);
 
         const toggleDropdown = () => {
             setShowDropdown(prev => {
@@ -225,25 +225,12 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
             <div className="notification-bell">
                 <h3 className='border-b-2 text-left'>Notifications</h3>
                 <div className="notification-dropdown max-h-40 overflow-auto w-full">
-                    {(unreadMessageCount + unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount + unreadCommunityNotificationCount) > 0 && (
+                    {( unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount + unreadCommunityNotificationCount) > 0 && (
                         <span className="notification-count"></span>
                     )}
-                    {(messageNotifications.length + announcementNotifications.length + eventNotifications.length + organizationAnnouncementNotifications.length+communityNotifications.length) > 0 ? (
+                    {( announcementNotifications.length + eventNotifications.length + organizationAnnouncementNotifications.length+communityNotifications.length) > 0 ? (
                         <ul>
-                            {messageNotifications.slice().reverse().map((notification, index) => (
-                                <div className="flex justify-between my-3 border-b-2 pb-2" key={index}>
-                                    <div className="avatar">
-                                        <div className="w-10 mask mask-squircle">
-                                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="avatar" />
-                                        </div>
-                                    </div>
-                                    <div className="div">
-                                        <li>
-                                            New message from {notification.senderName}: {notification.message}
-                                        </li>
-                                    </div>
-                                </div>
-                            ))}
+                            
                             {announcementNotifications.map((announcement, index) => (
                                 <div className="flex justify-between my-3" key={index}>
                                     <div className="avatar">
@@ -321,11 +308,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                         <p className=' my-2'>No new notifications</p>
                     )}
                 </div>
-                {latestMessage && (
-                    <div className="notification-popup">
-                        <p>{latestMessage}</p>
-                    </div>
-                )}
+               
                 {latestEvent && (
                     <div className="notification-popup">
                         <p>New event: {latestEvent.eventName} organized by {latestEvent.organizerName}</p>

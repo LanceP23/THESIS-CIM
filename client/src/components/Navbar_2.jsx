@@ -4,14 +4,16 @@ import {toast} from 'react-hot-toast';
 import axios from 'axios';
 import { UserContext } from '../../context/userContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faPeopleArrows,  faChartBar, faComment, faLock, faBullhorn, faAddressCard, faRightFromBracket, faCalendar, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faPeopleArrows,  faChartBar, faComment, faLock, faBullhorn, faAddressCard, faRightFromBracket, faCalendar, faCalendarCheck, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import NotificationBell from './NotificationBell';
+import MessageDropdown from './MessageDropdown'; 
 const Navbar_2 = () => {
     const { user } = useContext(UserContext);
   const adminType = user ? user.adminType : null;
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const [totalUnreadCount, setTotalUnreadCount] = useState(0); 
+  const [totalUnreadMessages, setTotalUnreadMessages] = useState(0);
   const userName = user ? user.name : '';
  
   useEffect (()=>{
@@ -201,7 +203,22 @@ const Navbar_2 = () => {
         </ul>
     </button>
     </div>
-    
+
+    <div className="indicator">
+    {totalUnreadCount > 0 && (
+        <span className="indicator-item indicator-start badge badge-secondary bg-yellow-200">{totalUnreadCount}</span>
+    )}
+    <button className="btn btn-success mx-1 dropdown dropdown-end btn-sm btn-circle">
+        <div tabIndex={0} role="button" className="indicator m-1">
+            {/* Replacing the existing SVG icon with FontAwesome message icon */}
+            <FontAwesomeIcon icon={faEnvelope} className="h-5 w-5 text-yellow-400" data-tip="Messages" />
+        </div>
+        <ul tabIndex={0} className="dropdown-content z-[1] menu p-3 mt-2 mr-0 shadow bg-base-100 rounded-box w-52">
+            <MessageDropdown setTotalUnreadCount={setTotalUnreadCount} />
+        </ul>
+    </button>
+</div>
+
     <div className="dropdown dropdown-end  ">
       
       <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">{userName}</a>
