@@ -12,7 +12,7 @@ const {postEventController,getEventsController, putEventController, deleteEventC
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
-const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers, removeMemberFromCommunity } = require('../controllers/communityController');
+const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers, removeMemberFromCommunity, getForumPostsByCommunityId, getLast5ForumPostsWithCommunityName } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
 const{getLikesDislikesandReactions,countUserReactionsByEducationLevel, countReactionsByDate, getUserReactionsWithDate} = require('../controllers/analyticsController');
 const { countCommunityTotalReactions, 
@@ -129,6 +129,8 @@ router.get('/announcements/:communityId', authenticateUser, getAnnouncementsByCo
 router.get('/random-announcements',authenticateUser, getRandomAnnouncementsByAdminCommunities);
 router.get('/member-announcements',authenticateUser, getAnnouncementCommunityMembers);
 router.delete('/community/:communityId/member/:memberId', removeMemberFromCommunity);
+router.get('/:communityId/forum-posts', getForumPostsByCommunityId);
+router.get('/recent-forum-posts', getLast5ForumPostsWithCommunityName);
 
 //notification
 router.get('/notifications', getNotifications);

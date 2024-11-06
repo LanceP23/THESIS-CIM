@@ -13,7 +13,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import moment from 'moment';
 import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarCheck, faCalendarDay, faDashboard, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck, faCalendarDay, faDashboard, faUser , faThumbsUp, faThumbsDown} from '@fortawesome/free-solid-svg-icons';
 import Navbar_2 from '../components/Navbar_2';
 import Navbar from '../components/Navbar';
 import { Carousel } from 'react-responsive-carousel';
@@ -198,38 +198,51 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                 <div className=''>
                                     <h2 className='text-3xl border-b-2 border-gray-700 py-1 text-gray-500'>My Community (Restricted)</h2>
                                     <div className="flex flex-col xl:flex-row lg:flex-row md:flex-col sm:flex-col w-auto h-auto md:w-2/4">
-                                        {recentPosts
-                                            .filter(post => post.announcement && post.community)
-                                            .slice(0, 3)
-                                            .map((post, index) => (
-                                                <div key={index} className="p-0 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-full h-full max-h-auto shadow-md rounded-2 border flex justify-center">
-                                                    <div className="flex flex-col gap-4 w-auto">
-                                                        <div className="flex gap-4 justify-center items-center h-[10rem] m-2">
-                                                            <img src={post.community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Community Logo" className="w-16 h-16 rounded-full" />
-                                                            <div className="flex flex-col gap-4">
-                                                                <h3 className="xl:text-xl text-lg font-semibold text-green-800 border-b border-yellow-400 text-left">{post.community.name}</h3>
-                                                                <p>{post.announcement.header}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            {post.announcement.mediaUrl ? (
-                                                                post.announcement.contentType?.startsWith('image/') || /\.(jpg|jpeg|png|gif)$/i.test(post.announcement.mediaUrl) ? (
-                                                                    <img src={post.announcement.mediaUrl} alt="image" className="w-auto rounded-lg" />
-                                                                ) : (
-                                                                    <video controls className="w-full h-96 rounded-lg">
-                                                                        <source src={post.announcement.mediaUrl} type={post.announcement.contentType || 'video/mp4'} />
-                                                                        Your browser does not support the video tag.
-                                                                    </video>
-                                                                )
-                                                            ) : (
-                                                                <div className="w-full h-96 flex items-center justify-center border rounded-lg">
-                                                                    <p className="text-gray-500">{post.announcement.body}</p>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                    {recentPosts
+                                        .filter(post => post.announcement && post.community)
+                                        .slice(0, 3)
+                                        .map((post, index) => (
+                                        <div key={index} className="p-0 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-full h-full max-h-auto shadow-md rounded-2 border flex justify-center">
+                                            <div className="flex flex-col gap-4 w-auto">
+                                            <div className="flex gap-4 justify-center items-center h-[10rem] m-2">
+                                                <img src={post.community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Community Logo" className="w-16 h-16 rounded-full" />
+                                                <div className="flex flex-col gap-4">
+                                                <h3 className="xl:text-xl text-lg font-semibold text-green-800 border-b border-yellow-400 text-left">{post.community.name}</h3>
+                                                <p>{post.announcement.header}</p>
                                                 </div>
-                                            ))}
+                                            </div>
+
+                                            <div>
+                                                {post.announcement.mediaUrl ? (
+                                                post.announcement.contentType?.startsWith('image/') || /\.(jpg|jpeg|png|gif)$/i.test(post.announcement.mediaUrl) ? (
+                                                    <img src={post.announcement.mediaUrl} alt="image" className="w-auto rounded-lg" />
+                                                ) : (
+                                                    <video controls className="w-full h-96 rounded-lg">
+                                                    <source src={post.announcement.mediaUrl} type={post.announcement.contentType || 'video/mp4'} />
+                                                    Your browser does not support the video tag.
+                                                    </video>
+                                                )
+                                                ) : (
+                                                <div className="w-full h-96 flex items-center justify-center border rounded-lg">
+                                                    <p className="text-gray-500">{post.announcement.body}</p>
+                                                </div>
+                                                )}
+                                            </div>
+
+                                            
+                                                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-1">
+                                                <FontAwesomeIcon icon={faThumbsUp} className="text-green-700" />
+                                                <span className="text-green-700 font-semibold">{post.announcement.likes}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <FontAwesomeIcon icon={faThumbsDown} className="text-red-600" />
+                                                <span className="text-red-600 font-semibold">{post.announcement.dislikes}</span>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             ) : (
@@ -237,39 +250,53 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                 <Link to="/community-landing" className=''>
                                     <h2 className='text-3xl border-b-2 border-gray-700 py-1 hover:text-yellow-400 hover:border-yellow-400'>My Community</h2>
                                     <div className="flex flex-col xl:flex-row lg:flex-row md:flex-col sm:flex-col w-auto h-auto md:w-2/4">
-                                        {recentPosts
-                                            .filter(post => post.announcement && post.community)
-                                            .slice(0, 3)
-                                            .map((post, index) => (
-                                                <div key={index} className="p-0 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-full h-full max-h-auto shadow-md rounded-2 border flex justify-center">
-                                                    <div className="flex flex-col gap-4 w-auto">
-                                                        <div className="flex gap-4 justify-center items-center h-[10rem] m-2">
-                                                            <img src={post.community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Community Logo" className="w-16 h-16 rounded-full" />
-                                                            <div className="flex flex-col gap-4">
-                                                                <h3 className="xl:text-xl text-lg font-semibold text-green-800 border-b border-yellow-400 text-left">{post.community.name}</h3>
-                                                                <p>{post.announcement.header}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            {post.announcement.mediaUrl ? (
-                                                                post.announcement.contentType?.startsWith('image/') || /\.(jpg|jpeg|png|gif)$/i.test(post.announcement.mediaUrl) ? (
-                                                                    <img src={post.announcement.mediaUrl} alt="image" className="w-auto rounded-lg" />
-                                                                ) : (
-                                                                    <video controls className="w-full h-96 rounded-lg">
-                                                                        <source src={post.announcement.mediaUrl} type={post.announcement.contentType || 'video/mp4'} />
-                                                                        Your browser does not support the video tag.
-                                                                    </video>
-                                                                )
-                                                            ) : (
-                                                                <div className="w-full h-96 flex items-center justify-center border rounded-lg">
-                                                                    <p className="text-gray-500">{post.announcement.body}</p>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                    {recentPosts
+                                        .filter(post => post.announcement && post.community)
+                                        .slice(0, 3)
+                                        .map((post, index) => (
+                                        <div key={index} className="p-0 my-2 md:p-5 lg:p-10 md:m-2 lg:m-5 max-w-full lg:w-full h-full max-h-auto shadow-md rounded-2 border flex justify-center">
+                                            <div className="flex flex-col gap-4 w-auto">
+                                            <div className="flex gap-4 justify-center items-center h-[10rem] m-2">
+                                                <img src={post.community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Community Logo" className="w-16 h-16 rounded-full" />
+                                                <div className="flex flex-col gap-4">
+                                                <h3 className="xl:text-xl text-lg font-semibold text-green-800 border-b border-yellow-400 text-left">{post.community.name}</h3>
+                                                <p>{post.announcement.header}</p>
                                                 </div>
-                                            ))}
+                                            </div>
+
+                                            <div>
+                                                {post.announcement.mediaUrl ? (
+                                                post.announcement.contentType?.startsWith('image/') || /\.(jpg|jpeg|png|gif)$/i.test(post.announcement.mediaUrl) ? (
+                                                    <img src={post.announcement.mediaUrl} alt="image" className="w-auto rounded-lg" />
+                                                ) : (
+                                                    <video controls className="w-full h-96 rounded-lg">
+                                                    <source src={post.announcement.mediaUrl} type={post.announcement.contentType || 'video/mp4'} />
+                                                    Your browser does not support the video tag.
+                                                    </video>
+                                                )
+                                                ) : (
+                                                <div className="w-full h-96 flex items-center justify-center border rounded-lg">
+                                                    <p className="text-gray-500">{post.announcement.body}</p>
+                                                </div>
+                                                )}
+                                            </div>
+
+                                            {/* Likes and Dislikes Section */}
+                                            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faThumbsUp} className="text-green-700" />
+                <span className="text-green-700 font-semibold">{post.announcement.likes }</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faThumbsDown} className="text-red-600" />
+                <span className="text-red-600 font-semibold">{post.announcement.dislikes }</span>
+              </div>
+            </div>
+                                            </div>
+                                        </div>
+                                        ))}
                                     </div>
+
                                 </Link>
                             )}
                         </div>

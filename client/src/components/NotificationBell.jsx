@@ -11,7 +11,6 @@ import useCommunityNotification from '../hooks/useCommunityNotification';
 import axios from 'axios';
 
 const NotificationBell = ({ setTotalUnreadCount }) => {
-    const messageNotifications = useNotifications();
     const announcementNotifications = useAnnouncementNotifications();
     const eventNotifications = useEventNotifications();
     const approvalNotifications = useApprovalNotifications();
@@ -109,9 +108,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
         latestCommunityNotification
     ]);
 
-    useEffect(() => {
-        setUnreadMessageCount(messageNotifications.length);
-    }, [messageNotifications]);
+   
 
     useEffect(() => {
         setUnreadAnnouncementCount(announcementNotifications.length);
@@ -133,14 +130,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
         setUnreadCommunityNotificationCount(communityNotifications.length); 
     }, [communityNotifications]);
 
-    useEffect(() => {
-        if (messageNotifications.length > 0) {
-            setLatestMessage(`New message from ${messageNotifications[0].senderName}: ${messageNotifications[0].message}`);
-            setTimeout(() => {
-                setLatestMessage(null);
-            }, 5000);
-        }
-    }, [messageNotifications]);
+    
 
     useEffect(() => {
         if (announcementNotifications.length > 0) {
@@ -216,6 +206,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                     setUnreadApprovalCount(0);
                     setUnreadOrganizationAnnouncementCount(0);
                     setUnreadCommunityNotificationCount(0);
+                    setTotalUnreadCount(0);
                 }
                 return !prev;
             });

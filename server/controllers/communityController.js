@@ -2,7 +2,8 @@ const Community = require('../models/community');
 const User = require('../models/user');
 const MobileUser = require('../models/mobileUser');
 const Announcement = require('../models/announcement');
-const {mongoose} = require('mongoose')
+const {mongoose} = require('mongoose');
+const { post } = require('../routes/authRouter');
 
 // Controller function to build a new community
 const buildCommunity = async (req, res) => {
@@ -268,6 +269,75 @@ const removeMemberFromCommunity = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+const getForumPostsByCommunityId = async (req, res) => { 
+  try {
+    const { communityId } = req.params;
+
+    // Construct the query to check for both ObjectId and string
+    const query = {
+      $or: [
+        { communityId: new mongoose.Types.ObjectId(communityId) }, // Match ObjectId
+        { communityId: communityId } // Match string
+      ]
+    };
+
+    // Fetch posts from 'forumposts' collection based on the constructed query
+    const forumPosts = await mongoose.connection.db.collection('forumposts')
+      .find(query)
+      .sort({ datePosted: -1 })
+      .toArray();
+
+    // Handle the case where no posts were found
+    if (forumPosts.length === 0) {
+      return res.status(404).json({ message: 'No forum posts found for this community.' });
+    }
+
+    // Return the forum posts
+    res.status(200).json(forumPosts);
+  } catch (error) {
+    console.error('Error fetching forum posts:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const getLast5ForumPostsWithCommunityName = async (req, res) => {
+  try {
+    // Fetch the last 5 forum posts
+    const forumPosts = await mongoose.connection.db.collection('forumposts')
+      .find({})
+      .sort({ datePosted: -1 })
+      .limit(5)
+      .toArray();
+
+    // If no forum posts found
+    if (forumPosts.length === 0) {
+      return res.status(404).json({ message: 'No forum posts found.' });
+    }
+
+    // Fetch the community names for each post
+    const postsWithCommunityName = await Promise.all(forumPosts.map(async (post) => {
+      const community = await Community.findById(post.communityId); // Fetch the community by ID
+      return {
+        ...post,
+        communityName: community ? community.name : 'Unknown Community', // Add community name
+        logo: community ? community.logo : null
+      };
+    }));
+    // Return the forum posts with community names
+    res.status(200).json(postsWithCommunityName);
+  } catch (error) {
+    console.error('Error fetching forum posts:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+
+
+
+
+
 
 
 
@@ -282,5 +352,7 @@ module.exports = {
   getAnnouncementsByCommunityId,
   getRandomAnnouncementsByAdminCommunities,
   getAnnouncementCommunityMembers,
-  removeMemberFromCommunity
+  removeMemberFromCommunity,
+  getForumPostsByCommunityId,
+  getLast5ForumPostsWithCommunityName
 };

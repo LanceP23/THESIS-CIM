@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import useCommunityNotification from '../hooks/useCommunityNotification';
 import axios from 'axios';
 
-const MessageDropdown = ({ setTotalUnreadCount }) => {
+const MessageDropdown = ({ setTotalUnreadMessages }) => {
     const messageNotifications = useNotifications();
     
     
@@ -53,64 +53,38 @@ const MessageDropdown = ({ setTotalUnreadCount }) => {
         // Load notification data from local storage
         const savedNotifications = JSON.parse(localStorage.getItem('notifications'));
         if (savedNotifications) {
-            // Update state with saved notification data
-            setUnreadMessageCount(savedNotifications.unreadMessageCount || 0);
-            
-            setLatestMessage(savedNotifications.latestMessage || null);
-            
+          setUnreadMessageCount(savedNotifications.unreadMessageCount || 0);
+          setLatestMessage(savedNotifications.latestMessage || null);
         }
-    }, []);
-
-    useEffect(() => {
-        // Save notification data to local storage whenever it changes
-        const notifications = {
-            unreadMessageCount,
-            latestMessage
-        
-        };
+      }, []);
+    
+      useEffect(() => {
+        const notifications = { unreadMessageCount, latestMessage };
         localStorage.setItem('notifications', JSON.stringify(notifications));
-    }, [
-        unreadMessageCount,
-        latestMessage
-    ]);
-
-    useEffect(() => {
+      }, [unreadMessageCount, latestMessage]);
+    
+      useEffect(() => {
         setUnreadMessageCount(messageNotifications.length);
-    }, [messageNotifications]);
-
-   
-
-    useEffect(() => {
+      }, [messageNotifications]);
+    
+      useEffect(() => {
         if (messageNotifications.length > 0) {
-            setLatestMessage(`New message from ${messageNotifications[0].senderName}: ${messageNotifications[0].message}`);
-            setTimeout(() => {
-                setLatestMessage(null);
-            }, 5000);
+          setLatestMessage(`New message from ${messageNotifications[0].senderName}: ${messageNotifications[0].message}`);
+          setTimeout(() => {
+            setLatestMessage(null);
+          }, 5000);
         }
-    }, [messageNotifications]);
-
-   
-
-    useEffect(() => {
-        // Calculate total unread count
-        const totalUnreadCount = unreadMessageCount;
-        setTotalUnreadCount(totalUnreadCount);
-    }, [unreadMessageCount,  setTotalUnreadCount]);
-
-    const toggleDropdown = () => {
-        setShowDropdown(prev => {
-            if (!prev) {
-                // Reset notification counts when opening the dropdown
-                setUnreadMessageCount(0);
-                setUnreadAnnouncementCount(0);
-                setUnreadEventCount(0);
-                setUnreadApprovalCount(0);
-                setUnreadOrganizationAnnouncementCount(0);
-                setUnreadCommunityNotificationCount(0);
-            }
-            return !prev;
-        });
-    };
+      }, [messageNotifications]);
+    
+      useEffect(() => {
+        const totalUnreadMessages = unreadMessageCount;
+        setTotalUnreadMessages(totalUnreadMessages);
+      }, [unreadMessageCount, setTotalUnreadMessages]);
+    
+      const toggleDropdown = () => {
+        setUnreadMessageCount(0);
+        setTotalUnreadMessages((prev) => prev - unreadMessageCount);
+      };
 
     return (
         <div className="notification-bell">
