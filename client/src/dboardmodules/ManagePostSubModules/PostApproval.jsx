@@ -114,7 +114,7 @@ export default function PostApproval({ adminType }) {
            {selectedAnnouncement.mediaUrl && (
              <div className='flex'>
                {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('image') && (
-                 <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' max-w-xl  h-full shadow-xl '  onClick={() => openModal(selectedAnnouncement.mediaUrl)} />
+                 <img src={selectedAnnouncement.mediaUrl} alt="Announcement Media" className=' max-w-xl  h-full shadow-xl cursor-pointer '  onClick={() => openModal(selectedAnnouncement.mediaUrl)} />
                )}
                {selectedAnnouncement.contentType && selectedAnnouncement.contentType.startsWith('video') && (
                  <video controls className='max-w-xl h-full'>
@@ -180,18 +180,26 @@ export default function PostApproval({ adminType }) {
        {/* Modal */}
        {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-white rounded-lg shadow-lg w-[60vw] max-h-[70vh]  p-3">
+          <div className="relative  rounded-lg shadow-lg w-[60vw] max-h-[80vh]">
             {/* Close button */}
-            <button
-              onClick={closeModal}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-900 focus:outline-none text-4xl "
-            >
-              &times;
+           
+            <button className="btn btn-circle btn-sm absolute top-2 right-2  " onClick={closeModal}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
             </button>
-
             {/* Modal image */}
             <div className=" justify-center items-center">
-              <img src={selectedImage} alt="Selected" className=" w-full h-[60vh]  rounded-md shadow-lg object-fit" />
+              <img src={selectedImage} alt="Selected" className=" w-full h-[88vh] rounded-md shadow-lg" />
             </div>
           </div>
         </div>

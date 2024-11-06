@@ -261,21 +261,17 @@ const fetchCommentsData = async () => {
   return (
   <div className="mt-16 p-1">
     <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100 hover:shadow-2xl border-2 animate-fade-in">
-      <div className="mb-6">
-        <button
-          onClick={exportData}
-          className="bg-green-500 text-white hover:bg-green-600 flex items-center px-4 py-2 rounded"
-          aria-label="Download Data"
-        >
-          <FontAwesomeIcon icon={faDownload} className="mr-2" />
-          Download
-        </button>
-      </div>
+      
   
       <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-left text-green-800">
         Online User Engagement Analytics Dashboard
       </h1>
-      <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
+      {activeTab === 'engagement' && (
+        <p className="text-gray-600 mb-4">This dashboard provides insights into user reactions and demographics.</p>
+
+
+      )}
+      
       
       {/* Tab Navigation */}
       <div className="flex mb-4">
@@ -378,9 +374,25 @@ const fetchCommentsData = async () => {
                 <p className="text-2xl text-purple-600">{likeDislikeRatio}</p>
               </div>
             </div>
+
+            <div className="flex flex-row justify-end mt-4 " >
+
+              <div className="lg:tooltip" data-tip="Download Like/Dislike data">
+                <button
+                  onClick={exportData}
+                  className="bg-green-500 text-white hover:bg-green-600 flex items-center px-4 py-2 rounded"
+                  aria-label="Download Data"
+                >
+                  <FontAwesomeIcon icon={faDownload} className="mr-2" />
+                  Download
+                </button>
+              </div>
+           </div>
+
+          
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 mt-6">
             <div className="p-4 bg-white shadow-lg rounded-lg">
               <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions by Date</h2>
               <ResponsiveContainer width="100%" height={300}>
@@ -437,17 +449,17 @@ const fetchCommentsData = async () => {
             )}
           </div>
 
-          <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100 hover:shadow-2xl border-2 animate-fade-in">
+          <div className="">
         {/* Demographics Pie Chart */}
         <div className="mb-6">
-      <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographics</h2>
+      
       {isDemographicsEmpty ? (
         <p>No demographic data available.</p>
       ) : (
         <div className="flex">
-          <div className="bg-white shadow-lg rounded-lg w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+          <div className="bg-white shadow-lg rounded-lg w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 mt-5">
             <div className="m-4 flex flex-col text-left font-semibold text-lg p-2 mx-2">
-              <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Users:</h3>
+              <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographic</h3>
               {pieData.map((entry, index) => (
                 <div key={`label-${index}`} style={{ color: entry.color }}>
                   {entry.name}: {entry.value}
