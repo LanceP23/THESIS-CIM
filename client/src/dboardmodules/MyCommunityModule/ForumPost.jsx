@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 const ForumPost = ({ communityId }) => {
   const [forumPosts, setForumPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [displayedPosts, setDisplayedPosts] = useState(5); // Number of posts to display initially
+  const [displayedPosts, setDisplayedPosts] = useState(5);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // Fetch forum posts from the API
   const fetchForumPosts = async () => {
     try {
       const response = await axios.get(`/${communityId}/forum-posts`);
@@ -21,11 +24,10 @@ const ForumPost = ({ communityId }) => {
     }
   };
 
-  // Delete a post
   const deletePost = async (postId) => {
     try {
-      await axios.delete(`/${communityId}/forum-posts/${postId}`); // Adjust the API endpoint as necessary
-      setForumPosts(forumPosts.filter(post => post._id !== postId)); // Remove post from state
+      await axios.delete(`/${communityId}/forum-posts/${postId}`);
+      setForumPosts(forumPosts.filter(post => post._id !== postId));
       toast.success('Post deleted successfully');
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -33,60 +35,24 @@ const ForumPost = ({ communityId }) => {
     }
   };
 
-  // Fetch the posts when the component mounts or communityId changes
   useEffect(() => {
     if (communityId) {
       fetchForumPosts();
     }
   }, [communityId]);
 
-  // Render media based on mediaURL
-  const renderMedia = (mediaURL) => {
-    if (!mediaURL) return null;
-  
-    // Extract file extension from the URL
-    const fileExtension = mediaURL.split('.').pop().toLowerCase();
-  
-    if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(fileExtension)) {
-      return (
-        <img
-          src={mediaURL}
-          alt="Post Media"
-          className="w-[50vw] max-h-[55vh] object-cover cursor-pointer mt-4"
-          onClick={() => openModal(mediaURL)} // Placeholder for modal function
-        />
-      );
-    }
-  
-    if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
-      return (
-        <figure className="mt-4">
-          <video controls className="max-w-xl h-full">
-            <source src={mediaURL} type={`video/${fileExtension}`} />
-          </video>
-        </figure>
-      );
-    }
-  
-    if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
-      return (
-        <audio controls className="max-w-xl h-full mt-4">
-          <source src={mediaURL} type={`audio/${fileExtension}`} />
-        </audio>
-      );
-    }
-  
-    // Default message if no valid media type is detected
-    return (
-      <p className="flex justify-center items-center border-2 border-white max-w-xl h-full mt-4">
-        No media available
-      </p>
-    );
+  const openModal = (mediaURL) => {
+    setSelectedImage(mediaURL);
+    setIsModalOpen(true);
   };
 
-  // Load more posts
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   const loadMorePosts = () => {
-    setDisplayedPosts(displayedPosts + 5); // Increase the number of displayed posts
+    setDisplayedPosts(displayedPosts + 5);
   };
 
   return (
@@ -104,15 +70,29 @@ const ForumPost = ({ communityId }) => {
                     {new Date(post.datePosted).toLocaleDateString()}
                   </span>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">{post.header}</h3>
-                <p className="text-gray-700 mt-2">{post.body}</p>
-                <img src={post.mediaURL}/>
+                <h3 className="text-xl text-left font-semibold text-gray-900">{post.header}</h3>
+                <p className="text-gray-700 mt-2 text-left">{post.body}</p>
 
-                <div className="flex justify-start items-center mt-4 space-x-4">
-                  <span className="text-gray-500 font-semibold">👍 {post.likes}</span>
-                  <span className="text-gray-500 font-semibold">👎 {post.dislikes}</span>
-                  <button 
-                    className="text-red-600 hover:underline"
+                {post.mediaURL && (
+                  <img
+                    src={post.mediaURL}
+                    alt="Post Media"
+                    className="w-[30vw] max-h-[40vh] object-cover cursor-pointer mt-4"
+                    onClick={() => openModal(post.mediaURL)}
+                  />
+                )}
+
+                <div className="flex justify-between items-center mt-4 space-x-4">
+                  <div className="space-x-2">
+                    <span className="text-gray-500 font-semibold">
+                      <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} /> {post.likes} Likes
+                    </span>
+                    <span className="text-gray-500 font-semibold">
+                      <FontAwesomeIcon className="text-red-500 text-2xl" icon={faThumbsDown} /> {post.dislikes} Dislikes
+                    </span>
+                  </div>
+                  <button
+                    className="btn-sm btn btn-error"
                     onClick={() => deletePost(post._id)}
                   >
                     Delete
@@ -122,7 +102,7 @@ const ForumPost = ({ communityId }) => {
             ))}
           </ul>
           {displayedPosts < forumPosts.length && (
-            <button 
+            <button
               className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               onClick={loadMorePosts}
             >
@@ -132,6 +112,37 @@ const ForumPost = ({ communityId }) => {
         </div>
       ) : (
         <p>No forum posts available.</p>
+      )}
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+          
+          <div className="relative  rounded-lg shadow-lg w-[60vw] max-h-[80vh] ">
+             {/* Close button */}
+           
+             <button className="btn btn-circle btn-sm absolute top-2 right-2  " onClick={closeModal}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            </button>
+
+            <div className="justify-center items-center">
+          
+            <img src={selectedImage} alt="Expanded Post Media" className="w-full h-[88vh] rounded-md shadow-lg" />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

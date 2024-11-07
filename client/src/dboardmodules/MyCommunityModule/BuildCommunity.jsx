@@ -34,6 +34,16 @@ export default function BuildCommunity() {
   const [mobileUserFilter, setMobileUserFilter] = useState('');
   const [adminUserFilter, setAdminUserFilter] = useState('');
 
+ 
+  const [isCreateDisabled, setIsCreateDisabled] = useState(true);
+
+  useEffect(() => {
+    // Enable the button only if there are selected members
+    setIsCreateDisabled(selectedMembers.length === 0);
+  }, [selectedMembers]);
+
+ 
+
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
     if (!token) {
@@ -193,7 +203,16 @@ export default function BuildCommunity() {
 
     <div className="flex flex-col w-full sm:w-full md:w-full lg:w-[75vw] xl:w-[75vw] mt-10 p-2 ">
     <div className=" bg-slate-200 my-5 rounded-xl p-3 ">
-    <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 my-2'>Build Community</h2>
+      <div className="flex flex-row justify-between ">
+         <h2 className='text-4xl text-green-800 py-2 my-2'>Build Community</h2>
+        
+        <button className="btn btn-error btn-sm  text-white font-bold py-2 px-4 rounded mt-4 " onClick={handleBack}>
+          &lt; Back
+        </button>
+      </div>
+      
+      <div className=" divider divider-warning divider-vertical"></div>
+   
       <div className="flex flex-row">
       
       <form className=" border-2 border-green-400 w-full max-w-full mt-4 bg-gradient-to-r from-white to-green-200 p-2 rounded-lg shadow-2xl text-left" onSubmit={handleSubmit}>
@@ -235,11 +254,28 @@ export default function BuildCommunity() {
             />
           </div>
         </div>
-        <button type="submit" className="btn btn-success btn-wide">Create Community</button>
+
+        {isCreateDisabled && (
+          <div className="alert alert-warning mb-4 p-3 rounded-md bg-yellow-200 border-l-4 border-yellow-500 text-yellow-700">
+            <p>Please select at least one member and instructor to enable the "Create Community" button.</p>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className={`btn btn-wide font-bold py-2 px-4 rounded ${
+            isCreateDisabled
+              ? "bg-gray-400 text-black "
+              : "btn btn-success btn-wide"
+          }`}
+          disabled={isCreateDisabled}
+        >
+          Create Community
+        </button>
       </form>
 
       
-
+      
       
       
       </div>
@@ -423,11 +459,7 @@ export default function BuildCommunity() {
 
      
 
-      <div className="flex justify-end items-end">
-      <button className="btn btn-error btn-wide  text-white font-bold py-2 px-4 rounded mt-4 " onClick={handleBack}>
-        &lt; Back
-      </button>
-      </div>
+      
 
             
     </div>

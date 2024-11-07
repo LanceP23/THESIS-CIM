@@ -640,7 +640,7 @@ export default function CreateAnnouncement() {
                     <label className="mx-2">{announcement.likes} Likes </label>
                   </div>
                   <div className="max-w-[50vw] p-3 shadow-inner">
-                    <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsDown} />
+                    <FontAwesomeIcon className="text-red-500 text-2xl" icon={faThumbsDown} />
                     <label className="mx-2">{announcement.dislikes} Dislikes </label>
                   </div>
                 </div>

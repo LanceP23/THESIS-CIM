@@ -230,14 +230,14 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                             </div>
 
                                             
-                                                                            <div className="flex items-center gap-2">
-                                            <div className="flex items-center gap-1">
+                                            <div className="grid grid-cols-2 shadow-inner">
+                                            <div className="max-w-[50vw] p-3 shadow-inner">
                                                 <FontAwesomeIcon icon={faThumbsUp} className="text-green-700" />
-                                                <span className="text-green-700 font-semibold">{post.announcement.likes}</span>
+                                                <span className="text-green-700 font-semibold"> {post.announcement.likes} Likes</span>
                                             </div>
-                                            <div className="flex items-center gap-1">
+                                            <div className="max-w-[50vw] p-3 shadow-inner">
                                                 <FontAwesomeIcon icon={faThumbsDown} className="text-red-600" />
-                                                <span className="text-red-600 font-semibold">{post.announcement.dislikes}</span>
+                                                <span className="text-red-600 font-semibold"> {post.announcement.dislikes} Dislikes</span>
                                             </div>
                                             </div>
                                             </div>
@@ -282,16 +282,16 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
                                             </div>
 
                                             {/* Likes and Dislikes Section */}
-                                            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <FontAwesomeIcon icon={faThumbsUp} className="text-green-700" />
-                <span className="text-green-700 font-semibold">{post.announcement.likes }</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FontAwesomeIcon icon={faThumbsDown} className="text-red-600" />
-                <span className="text-red-600 font-semibold">{post.announcement.dislikes }</span>
-              </div>
-            </div>
+                                            <div className="grid grid-cols-2 shadow-inner">
+                                                <div className="max-w-[50vw] p-3 shadow-inner">
+                                                    <FontAwesomeIcon icon={faThumbsUp} className="text-green-700" />
+                                                    <span className="text-green-700 font-semibold"> {post.announcement.likes } Likes</span>
+                                                </div>
+                                                <div className="max-w-[50vw] p-3 shadow-inner">
+                                                    <FontAwesomeIcon icon={faThumbsDown} className="text-red-600" />
+                                                    <span className="text-red-600 font-semibold"> {post.announcement.dislikes } Dislikes</span>
+                                                </div>
+                                                </div>
                                             </div>
                                         </div>
                                         ))}

@@ -17,6 +17,20 @@ const ViewCommunity = () => {
   const [activeView, setActiveView] = useState(null);
   const [visibleCount, setVisibleCount] = useState(5); // Number of communities to show initially
   const [forumPosts, setForumPosts] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal open state
+  const [selectedImage, setSelectedImage] = useState(''); // Selected image URL
+
+
+  const openImageModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage('');
+  };
+
 
   const getToken = () => {
     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
@@ -109,26 +123,29 @@ const ViewCommunity = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="p-3 pt-5">
+
+      <div className="bg-slate-200 my-5 rounded-xl w-full sm:w-full md:w-full lg:max-w-[72vw] xl:max-w-[72vw]  ">
       {/* Main Content */}
-      <div className="p-6 mx-auto max-w-4xl w-full lg:w-3/4">
-        <h2 className="text-4xl text-green-700 mb-4">Your Admin Communities</h2>
+
+      <div className="p-6 sm:w-full md:w-full lg:max-w-[72vw] xl:max-w-[72vw] ">
+        <h2 className="text-4xl text-green-800 mb-4 border-b border-yellow-500 ">Your Admin Communities</h2>
         {loading && <p>Loading...</p>}
         {!loading && adminCommunities.length === 0 && <p>No communities found.</p>}
         {!loading && adminCommunities.slice(0, visibleCount).map(community => (
-          <div key={community._id} className="bg-white shadow-md rounded-lg mb-5 p-6">
+          <div key={community._id} className="bg-white shadow-lg rounded-lg mb-5 p-6">
             <div className="flex items-center mb-4">
               <img src={community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Community Logo" className="w-16 h-16 rounded-full mr-4" />
               <div>
-                <h3 className="text-2xl font-semibold">{community.name}</h3>
-                <p className="text-sm text-gray-600">United States</p>
+                <h3 className="text-2xl font-semibold text-green-800  border-b border-yellow-500   ">{community.name}</h3>
+                <p className="text-sm text-left text-gray-600">United States</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <button onClick={() => handleView(community._id, 'posts')} className="btn btn-primary w-full">View Posts</button>
-              <button onClick={() => handleView(community._id, 'members')} className="btn btn-primary w-full">View Members</button>
-              <button onClick={() => handleView(community._id, 'analytics')} className="btn btn-primary w-full">View Analytics</button>
-              <button onClick={() => handleView(community._id, 'forum')} className="btn btn-primary w-full">Forum</button>
+              <button onClick={() => handleView(community._id, 'posts')} className="btn btn-info w-full">View Posts</button>
+              <button onClick={() => handleView(community._id, 'members')} className="btn btn-info  w-full">View Members</button>
+              <button onClick={() => handleView(community._id, 'analytics')} className="btn btn-info w-full">View Analytics</button>
+              <button onClick={() => handleView(community._id, 'forum')} className="btn btn-info w-full">Forum</button>
             </div>
 
             {viewCommunityId === community._id && activeView === 'members' && (
@@ -167,65 +184,68 @@ const ViewCommunity = () => {
         ))}
 
         {visibleCount < adminCommunities.length && (
-          <button onClick={handleLoadMore} className="btn btn-secondary w-full">
+          <button onClick={handleLoadMore} className="btn btn-accent w-full">
             Load More
           </button>
         )}
       </div>
 
     {/* Floating Forum Posts Display */}
-<div
-  className="fixed left-5 top-1/4 bg-white p-4 shadow-2xl rounded-2xl border border-gray-200 w-80 h-auto max-h-[70vh] overflow-y-auto hidden md:block transition-transform hover:scale-105 scrollbar-hide"
+<div className="fixed right-5 top-24 bg-slate-200  shadow-4xl rounded-2xl border border-gray-200 w-80 h-auto max-h-[70vh] hidden md:block transition-transform hover:scale-105 scrollbar-hide"
   onScroll={handleScroll}
 >
-  <h3 className="text-2xl font-bold text-gray-800 mb-6">Latest Forum Posts</h3>
+  <h3 className="text-2xl font-semibold text-green-800  border-b border-yellow-500 text-left m-2 my-3">Latest Forum Posts</h3>
 
+  <div className="overflow-y-auto h-96 p-2 my-3">
   {forumPosts.length === 0 ? (
     <p className="text-center text-gray-400">No forum posts found.</p>
   ) : (
     forumPosts.map((post) => (
-      <div
+      <div className="mb-6 pb-4 border-b border-gray-100 p-4 bg-gray-50 shadow-lg transition-colors rounded-xl"
         key={post._id}
-        className="mb-6 pb-4 border-b border-gray-100 p-4 hover:bg-gray-50 transition-colors rounded-xl"
+        
       >
         <div className="flex items-start space-x-4">
           {/* Profile Picture Placeholder */}
-          <div className="w-12 h-12 rounded-full bg-gray-300 flex-shrink-0"><img src= {post.logo}></img></div>
+          <div className="w-12 h-12  bg-gray-300 border-1 shadow-md"><img src= {post.logo}></img></div>
 
           {/* Post Content */}
           <div className="flex-1 space-y-2">
             {/* Community Name and Post Header */}
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-primary font-semibold">{post.communityName}</p>
-              <h4 className="text-sm text-gray-500">• {new Date(post.datePosted).toLocaleDateString()}</h4>
+            <div className="flex flex-col justify-start">
+              <p className="text-sm text-left text-green-800 font-semibold">{post.communityName}</p>
+              <h4 className=" text-xs text-gray-500 text-left">• {new Date(post.datePosted).toLocaleDateString()}</h4>
             </div>
-            <h4 className="text-lg font-bold text-gray-900 cursor-pointer hover:text-blue-600 transition-colors">
+            <h4 className="text-lg text-left font-bold text-gray-900 transition-colors">
               {post.header}
             </h4>
 
-            {/* Media Image */}
+            {/* Media Image with Click to Open Modal */}
             {post.mediaURL && (
-              <div className="rounded-lg overflow-hidden max-h-48">
-                <img
-                  src={post.mediaURL}
-                  alt="Post Media"
-                  className="w-full h-full object-cover transition-transform transform hover:scale-105"
-                />
-              </div>
-            )}
+                        <div
+                          className="rounded-lg overflow-hidden max-h-48 cursor-pointer"
+                          onClick={() => openImageModal(post.mediaURL)}
+                        >
+                          <img
+                            src={post.mediaURL}
+                            alt="Post Media"
+                            className="w-full h-full object-cover transition-transform transform hover:scale-105"
+                          />
+                        </div>
+                      )}
 
             {/* Post Body */}
             <p className="text-sm text-gray-700 line-clamp-3">{post.body}</p>
 
             {/* Like/Dislike with Icons */}
-            <div className="flex items-center justify-between text-gray-500 mt-4">
-              <div className="flex items-center space-x-1">
-                <FaThumbsUp className="text-blue-500 cursor-pointer hover:text-blue-600 transition-colors" />
-                <span>{post.likes}</span>
+            <div className="grid grid-cols-2 justify-start mt-4">
+              <div className="flex items-center space-x-1 ">
+                <FaThumbsUp className="text-green-500 cursor-pointer transition-colors" />
+                <span className='text-green-500'>{post.likes} Likes</span>
               </div>
-              <div className="flex items-center space-x-1">
-                <FaThumbsDown className="text-red-500 cursor-pointer hover:text-red-600 transition-colors" />
-                <span>{post.dislikes}</span>
+              <div className="flex items-center space-x-1 ">
+                <FaThumbsDown className="text-red-500 cursor-pointer transition-colors" />
+                <span className='text-red-500'>{post.dislikes} Likes</span>
               </div>
             </div>
           </div>
@@ -233,30 +253,78 @@ const ViewCommunity = () => {
       </div>
     ))
   )}
+
+ 
+  </div>
 </div>
 
 
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-10 right-10 space-y-4">
+      <div className="fixed bottom-10 right-10 flex gap-4">
+
+        <div className="">
         {/* Link to the Create Post Page */}
         <Link to="/createannouncement">
           <button 
-            className="btn btn-success text-white rounded-full p-2 shadow-lg transition-all transform hover:scale-110 hover:bg-green-600 focus:outline-none"
+            className="btn btn-neutral text-white rounded-lgp-2 shadow-lg transition-all  hover:bg-green-600 focus:outline-none"
           >
             <span className="text-xl">+</span> Post
           </button>
         </Link>
+        </div>
         
+        <div className="div">
         {/* Link to the Create Event Page */}
         <Link to="/event-calendar">
           <button 
-            className="btn btn-primary text-white rounded-full p-2 shadow-lg transition-all transform hover:scale-110 hover:bg-blue-600 focus:outline-none"
+            className="btn btn-neutral  text-white rounded-xl p-2 shadow-lg transition-all transform hover:scale-110 hover:bg-blue-600 focus:outline-none"
           >
             <span className="text-xl">+</span> Event
           </button>
         </Link>
+        </div>
       </div>
+
+      
+      </div>
+
+       {/* Modal for Expanded Image */}
+  {isModalOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={closeModal}
+          >
+            <div className="relative  rounded-lg shadow-lg w-[60vw] max-h-[80vh]">
+               {/* Close button */}
+           
+            <button className="btn btn-circle btn-sm absolute top-2 right-2  " onClick={closeModal}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            </button>
+            
+            <div className="justify-center items-center">
+              <img
+                src={selectedImage}
+                alt="Expanded Media"
+                className="w-full h-[88vh] rounded-md shadow-lg"
+              />
+             
+            </div>
+            </div>
+          </div>
+        )}
+
     </div>
   );
 };

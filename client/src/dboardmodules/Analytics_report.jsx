@@ -453,44 +453,72 @@ const fetchCommentsData = async () => {
         {/* Demographics Pie Chart */}
         <div className="mb-6">
       
-      {isDemographicsEmpty ? (
-        <p>No demographic data available.</p>
-      ) : (
-        <div className="flex">
-          <div className="bg-white shadow-lg rounded-lg w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 mt-5">
-            <div className="m-4 flex flex-col text-left font-semibold text-lg p-2 mx-2">
-              <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">User Demographic</h3>
-              {pieData.map((entry, index) => (
-                <div key={`label-${index}`} style={{ color: entry.color }}>
-                  {entry.name}: {entry.value}
-                </div>
-              ))}
-            </div>
-            <div className="bg-gray-400 rounded-xl">
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={120}
-                    fill="#8884d8"
-                    labelLine={false}
-                    label={CustomLabel} // Use custom label
-                  >
+        {isDemographicsEmpty ? (
+              <p className="text-gray-500 text-center font-medium text-lg mt-5">
+                No demographic data available.
+              </p>
+            ) : (
+              
+                <div className="bg-white shadow-lg rounded-lg  w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-5">
+
+              {/* Left side: Demographic Breakdown */}
+              <div className="p-4 bg-white shadow-lg rounded-lg flex flex-col text-left text-lg text-gray-700">
+                <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">
+                  User Demographic
+                </h3>
+                {pieData.length > 0 ? (
+                  <ul>
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <li key={`label-${index}`} className="mb-2 flex items-center">
+                        <div
+                          className="w-3 h-3 rounded-full mr-2"
+                          style={{ backgroundColor: entry.color }}
+                        ></div>
+                        <span className="font-medium">{entry.name}</span>: {entry.value}
+                      </li>
                     ))}
-                    <Tooltip />
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">No demographic data available.</p>
+                )}
+              </div>
+
+              {/* Right side: Pie Chart */}
+              <div className="p-4 bg-white shadow-lg rounded-lg flex items-center justify-center">
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={120}
+                      fill="#8884d8"
+                      label={(entry) => `${entry.name}: ${entry.value}`}
+                      labelLine={false}
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#2D3748",
+                        color: "#fff",
+                        borderRadius: "5px",
+                        padding: "8px",
+                      }}
+                      itemStyle={{ color: "#EDF2F7" }}
+                      cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          
+        )}
+
     </div>
       </div>
         </div>
