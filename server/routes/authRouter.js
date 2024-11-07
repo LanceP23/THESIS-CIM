@@ -20,6 +20,7 @@ const { countCommunityTotalReactions,
   countCommunityReactionsByDate 
 } = require('../controllers/communityAnalyticsController');
 const DailyLogin = require('../models/dailylogin'); 
+const { calculateWinRate, calculateAverageGuesses, getMostActivePlayers, getGameOutcomes, getGuessDistribution, getWinStreaks, getActivePlayersByDate, getGuessDistributionByPlayer } = require('../controllers/minigameAnalyticsController');
 
 router.use(
     cors({
@@ -147,6 +148,15 @@ router.get('/reactions-with-date/:id', getUserReactionsWithDate);
 router.get('/community/:communityId/reactions', countCommunityTotalReactions); 
 router.get('/community/:communityId/reactions/education-level', countCommunityReactionsByEducationLevel); 
 router.get('/community/:communityId/reactions/date', countCommunityReactionsByDate); 
+//minigames analytics
+router.get('/win-rate', calculateWinRate);
+router.get('/average-guesses', calculateAverageGuesses);
+router.get('/active-players', getMostActivePlayers);
+router.get('/game-outcomes', getGameOutcomes);
+router.get('/guess-distribution', getGuessDistribution);
+router.get('/win-streaks', getWinStreaks);                     
+router.get('/active-players/:date', getActivePlayersByDate);    
+router.get('/guess-distribution-player', getGuessDistributionByPlayer); 
 
 module.exports = router;
 

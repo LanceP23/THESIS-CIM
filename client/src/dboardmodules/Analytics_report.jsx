@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'; // Import toast
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPercent, faThumbsDown, faThumbsUp, faDownload } from '@fortawesome/free-solid-svg-icons';
 import {saveAs} from 'file-saver';
+import MinigameAnalytics from './MinigameAnalytics';
 
 const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
 const AnalyticsReport = () => {
@@ -530,17 +531,8 @@ const fetchCommentsData = async () => {
       {/* Mini Game Analytics Tab Content */}
       {activeTab === 'minigame' && (
         <div>
-          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Minigame Analytics</h2>
-          {/* Replace the following with actual mini game analytics content */}
-          <p className="text-gray-600 mb-4">This section provides insights into user interactions and metrics for mini games.</p>
-          {/* Example statistics */}
-          <div className="p-4 bg-white shadow-lg rounded-lg mb-4">
-            <h3 className="text-xl font-semibold text-green-800">Total Mini Games Played: <span className="text-green-600">{totalMiniGamesPlayed}</span></h3>
-            <h3 className="text-xl font-semibold text-red-800">Total Mini Game Wins: <span className="text-red-600">{totalMiniGameWins}</span></h3>
-            <h3 className="text-xl font-semibold text-blue-800">Average Score: <span className="text-blue-600">{averageScore}</span></h3>
+          <MinigameAnalytics/>
           </div>
-          {/* Additional charts and insights can be added here */}
-        </div>
       )}
       
      
