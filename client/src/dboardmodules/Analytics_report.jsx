@@ -422,32 +422,40 @@ const fetchCommentsData = async () => {
             </div>
           </div>
 
-          {/* Generate Analysis Button */}
-          <div className="mb-6">
-            <button
-              onClick={generateAnalysis}
-              disabled={loading}
-              className="btn btn-success"
-            >
-              {loading ? (<span className="loading loading-spinner loading-xs"></span>):( 'Generate An Analysis')}
-            </button>
-          </div>
-
+          
           
 
           {/* Interpretation Section */}
           <div className="mb-6 p-4 bg-white shadow-lg rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Analysis</h2>
+            <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Automated Analysis</h2>
+
+          
             {loading ? (
+               <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
               <div className="flex w-52 flex-col gap-4">
                 <span className="loading loading-dots loading-lg"></span>
                 <div className="skeleton h-4 w-28"></div>
                 <div className="skeleton h-4 w-full"></div>
                 <div className="skeleton h-4 w-full"></div>
               </div>
+              </div>
             ) : (
+              <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
               <div className='text-justify font-bold' dangerouslySetInnerHTML={{ __html: analysis }} />
+              </div>
             )}
+
+              {/* Generate Analysis Button */}
+          <div className="mb-6 text-end my-2">
+            <button
+              onClick={generateAnalysis}
+              disabled={loading}
+              className="btn btn-success "
+            >
+              {loading ? (<span className="loading loading-spinner loading-xs"></span>):( 'Generate An Analysis')}
+            </button>
+          </div>
+
           </div>
 
           <div className="">

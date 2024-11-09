@@ -4,6 +4,10 @@ import axios from 'axios';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import './MinigameAnalytics.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrophy, faMedal, faAward, faGamepad} from '@fortawesome/free-solid-svg-icons';
+
+
 const MinigameAnalytics = () => {
   const [winRate, setWinRate] = useState(null);
   const [averageGuesses, setAverageGuesses] = useState(null);
@@ -115,15 +119,15 @@ const MinigameAnalytics = () => {
   }));
 
   return (
-    <div className="minigame-analytics-container p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-xl">
-      <div className="game-indicator bg-yellow-500 p-2 rounded-full text-center text-white font-semibold mb-6">
-        CIM Wordle Analytics
+    <div className=" border  p-4 rounded-lg " >
+      <div className="game-indicator  p-2 rounded-full text-center text-white font-semibold mb-6">
+       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>CIMdle Analytics </h2> 
       </div>
 
-      <h2 className="text-2xl font-bold text-white mb-6 text-center">Minigame Analytics</h2>
+   
 
       {/* Analytics Section */}
-      <div className="charts-section grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="charts-section grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6">
         {/* Win Rate Chart */}
         {winRate && (
           <div className="chart-container p-4 bg-white rounded-lg shadow-lg">
@@ -174,51 +178,100 @@ const MinigameAnalytics = () => {
         )}
       </div>
 
-      {/* Active Players Section */}
-      <div className="active-players-container mt-6 p-4 bg-white rounded-lg shadow-lg">
-        <h3 className="text-xl font-semibold text-gray-700 mb-4">Top Active Players</h3>
-        {activePlayers.length === 0 ? (
-          <p className="text-lg text-gray-600">No active players found.</p>
-        ) : (
-          <div className="players-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {activePlayers.map((player, index) => (
-              <div key={index} className="player-card bg-gray-100 p-4 rounded-lg shadow-md">
-                <div className="flex items-center mb-4">
-                  <img
-                    src={player.user.profilePicture || 'https://via.placeholder.com/100'}
-                    alt={player.user.name}
-                    className="w-16 h-16 rounded-full mr-4"
-                  />
-                  <div>
-                    <h4 className="text-xl font-semibold text-gray-800">{player.user.name}</h4>
-                    <p className="text-sm text-gray-600">{player.user.studentemail}</p>
-                    <p className="text-sm text-gray-600">{player.user.section}</p>
-                  </div>
+<div className="active-players-container mt-6 p-4 bg-white rounded-lg shadow-lg">
+  <h3 className="text-3xl pb-2 font-semibold text-green-800 mb-4 border-b border-yellow-500">Top Active Players <FontAwesomeIcon icon={faGamepad} className="text-green-800 mr-2 text-3xl " /></h3>
+  {activePlayers.length === 0 ? (
+    <p className="text-lg text-gray-600">No active players found.</p>
+  ) : (
+    <div className="players-list grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+      {activePlayers.map((player, index) => {
+        let playerStyle = "bg-gray-100";
+        let imageSize = "w-16 h-16";
+        let nameStyle = "text-xl font-semibold text-gray-800";
+        let gamesPlayedStyle = "text-lg text-gray-800";
+
+        // Top player styles
+        if (index === 0) {
+          playerStyle = "bg-yellow-100 border-2 border-yellow-500 scale-105 shadow-xl";
+          nameStyle = "text-2xl font-bold text-gray-900";
+          gamesPlayedStyle = "text-lg font-semibold text-gray-900";
+        } else if (index === 1) {
+          playerStyle = "bg-gray-100 border border-gray-800 scale-100";
+        } else if (index === 2) {
+          playerStyle = "bg-yellow-25 border border-yellow-200 scale-100";
+        }
+
+        return (
+          <div key={index} className={`player-card p-4 rounded-lg  ${playerStyle}`}>
+            <div className="flex mb-4">
+              <img
+                src={player.user.profilePicture || 'https://via.placeholder.com/100'}
+                alt={player.user.name}
+                className={`rounded-full mr-4 ${imageSize}`}
+              />
+           
+              <div className='flex flex-row justify-between'>
+                <div className="flex flex-col text-left">
+                <h4 className={nameStyle}>{player.user.name}</h4>
+                <p className="text-sm text-gray-600 ">{player.user.studentemail}</p>
+                <p className="text-sm text-gray-600">{player.user.section}</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg text-gray-800">Games Played: {player.gamesPlayed}</p>
+                <div className="flex">
+                {index === 0 && ( // Conditionally render the trophy icon for the top player only
+                <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 mr-2 text-3xl" />
+              )}
+                </div>
+
+                <div className="flex">
+                {index === 1 && ( // Conditionally render the trophy icon for the top player only
+                <FontAwesomeIcon icon={faMedal} className="text-gray-500 mr-2 text-3xl" />
+              )}
+                </div>
+
+                <div className="flex ">
+                {index === 2 && ( // Conditionally render the trophy icon for the top player only
+                <FontAwesomeIcon icon={faAward} className="text-yellow-800 mr-2 text-3xl " />
+              )}
                 </div>
               </div>
-            ))}
+            </div>
+            <div className="text-left">
+              <p className={gamesPlayedStyle}>Games Played: {player.gamesPlayed}</p>
+            </div>
           </div>
-        )}
-      </div>
+        );
+      })}
+    </div>
+  )}
+</div>
 
-      <div className="generate-analysis-container mt-6 p-4 bg-white rounded-lg shadow-lg">
-        <h3 className="text-xl font-semibold text-gray-700 mb-4">Automated Analysis</h3>
-        <div className="text-center">
-          <button
-            onClick={generateAnalysis}
-            className="generate-btn px-6 py-2 bg-purple-500 text-white rounded-lg shadow-md"
-            disabled={loading}
-          >
-            {loading ? 'Generating...' : 'Generate Analysis'}
-          </button>
-        </div>
-        <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
-          <p className="text-lg text-gray-700">{analysis}</p>
-        </div>
-      </div>
+{loading ? 
+  <div className="generate-analysis-container mt-6 p-4 bg-white rounded-lg shadow-lg">
+    <div className="flex w-52 flex-col gap-4">
+    <span className="loading loading-dots loading-lg"></span>
+    <div className="skeleton h-4 w-28"></div>
+    <div className="skeleton h-4 w-full"></div>
+    <div className="skeleton h-4 w-full"></div>
+    </div>
+    </div>
+: 
+    <div className="generate-analysis-container mt-6 p-4 bg-white rounded-lg shadow-lg">
+            <h3 className="text-xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3">Automated Analysis</h3>
+            
+            <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
+              <p className="text-lg text-gray-700">{analysis}</p>
+            </div>
+            <div className="text-end my-3">
+              <button
+                onClick={generateAnalysis}
+                className="btn btn-success"
+                disabled={loading}
+              >
+                {loading ? 'Generating...' : 'Generate Analysis'}
+              </button>
+            </div>
+          </div>}
+          
     </div>
   );
 };
