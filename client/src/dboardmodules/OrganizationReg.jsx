@@ -296,256 +296,179 @@ export default function OrganizationReg() {
   };
 
   return (
-    <div className=' animate-fade-in p-3'>
+    <div className="animate-fade-in p-5 bg-gray-50 min-h-screen">
 
+      {adminType !== 'Organization Officer' && (
+        <div className="mt-8 rounded-2xl shadow-lg p-6 bg-white">
 
-      {adminType !== 'Organization Officer'&&(
-      <div className=" bg-slate-100 p-3 mt-16 rounded-2xl shadow-inner shadow-slate-950">
+          <h2 className="text-4xl text-green-800 flex items-center gap-2 pb-3 border-b-2 border-yellow-500">
+            <FontAwesomeIcon icon={faPeopleArrows} className="text-yellow-500" />
+            Manage Organizations
+          </h2>
 
-        <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faPeopleArrows} className=' text-yellow-500 mx-1'/>Manage Organizations</h2>
-        
-        <div className="flex flex-col">
-          <div className=" flex justify-end items-end">
-        <div className="indicator my-3 ">
-          <span className="indicator-item indicator-start badge badge-warning text-lg">+</span>
-          <button onClick={() => setShowModal(true)} className=' btn btn-wide btn-success '>Add Organization</button>
-          
-        </div>
-        </div>
-        
-      
-        {organizations.length === 0 && <p>No organizations yet.</p>}
+          <div className="my-4 flex justify-end">
+            <button
+              onClick={() => setShowModal(true)}
+              className="btn btn-success btn-wide"
+            >
+              + Add Organization
+            </button>
+          </div>
 
-        {organizations.length > 0 && (
-          <div className=" max-h-96 overflow-auto rounded-lg ">
-            <table className=" ">
-              <thead className=' sticky top-0'>
-                <tr className=' text-left'>
-                  <th className=' bg-green-700 text-white'>Organization Name</th>
-                  <th className=' bg-green-700 text-white'>School Year</th>
-                  <th className=' bg-green-700 text-white '>Semester</th>
-                  <th className=' bg-green-700 text-white'>Members</th>
-                  <th className=' bg-green-700 text-white'>Potential Members</th>
-                  
-                </tr>
-              </thead>
-              <tbody className="bg-green-100 border">
-                  {organizations.map((org, index) => (
-                    <tr
-                      key={org._id}
-                      className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}
+          {organizations.length === 0 ? (
+            <p className="text-gray-500">No organizations yet.</p>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[500px] overflow-auto">
+              {organizations.map((org) => (
+                <div key={org._id} className="card bg-green-100 shadow-lg p-4 rounded-lg">
+                  <h3 className="text-2xl text-green-800">{org.name}</h3>
+                  <p className="text-sm text-gray-600">
+                    School Year: <span className="font-semibold">{org.schoolYear}</span>
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Semester: <span className="font-semibold">{org.semester}</span>
+                  </p>
+                  <div className="mt-4 flex gap-3">
+                    <button
+                      onClick={() => handleShowMembers(org)}
+                      className="btn btn-success flex-grow"
                     >
-                      <td className=" border-r-2 ">{org.name}</td>
-                      <td className="border-r-2">{org.schoolYear}</td>
-                      <td className="border-r-2 ">{org.semester}</td>
-                      <td className="border-r-2   items-center">
-                        <button onClick={() => handleShowMembers(org)} className="btn btn-success">
-                          Show Members
-                        </button>
-                      </td>
-                      <td className=" items-center">
-                        <button onClick={() => fetchPotentialMembers(org.name, org._id)} className="btn btn-success">
-                          View Potential Members
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-
-            </table>
-          </div>
-        )}
-        </div>
-
-     
-
-        <Modal
-          isOpen={showModal}
-          onRequestClose={() => setShowModal(false)}
-          contentLabel="Create Organization Modal"
-          style={customStyles}
-          
-        >
-          <div className=" bg-gradient-to-r from-white to-customgreen_1 p-3 rounded-lg " >
-           
-            <p></p>
-            <h2 className=' my-2 text-xl font-bold border-b-2 border-black'>Create a School Organization</h2>
-            <form onSubmit={handleSubmit} className='Org_form'>
-              <div className="text-left ">
-                <label htmlFor="organizationName">Organization Name:</label>
-                <input
-                  type="text"
-                  id="organizationName"
-                  name="organizationName"
-                  value={newOrganization.organizationName}
-                  onChange={handleInputChange}
-                  required
-                  className="input input-bordered input-success input-md w-full  bg-white text-black rounded-md shadow-xl"
-                />
-              </div>
-              <div className="text-left my-1">
-                <label htmlFor="schoolYear">School Year:</label>
-                <input
-                  type="text"
-                  id="schoolYear"
-                  name="schoolYear"
-                  value={newOrganization.schoolYear}
-                  onChange={handleInputChange}
-                  required
-                  className="input input-bordered input-success input-md w-full  text-black  bg-white rounded-md shadow-xl"
-                />
-              </div>
-              <div className="text-left">
-                <label htmlFor="semester">Semester:</label>
-                <input
-                  type="text"
-                  id="semester"
-                  name="semester"
-                  value={newOrganization.semester}
-                  onChange={handleInputChange}
-                  required
-                  className="input input-bordered input-success input-md w-full  text-black  bg-white rounded-md shadow-xl"
-                />
-              </div>
-              <div className="dv">
-              <button type="submit" className='btn btn-wide btn-success float-end my-3'>Create Organization</button>
-              </div>
-            </form>
-          </div>
-        </Modal>
-
-        <Modal
-          isOpen={showPotentialMembersModal}
-          onRequestClose={handleClosePotentialMembersModal}
-          contentLabel="Potential Members Modal"
-          style={customStyles}
-        >
-          <div className="">
-            <h2 className='text-xl border-b-2'>Potential Members</h2>
-            <div className=" bg-slate-50 ">
-
-              
-            <table>
-            <thead>
-                  <tr >
-                    <th className=' bg-green-700 text-white text-left'> Member Name</th>
-                    <th className=' bg-green-700 text-white text-left'>Position</th>
-                    <th className=' bg-green-700 text-white text-left'>Approval</th>
-                  </tr>
-
-                </thead>
-                <tbody>
-              {potentialMembers.map((member, index) => (
-                
-                <tr key={member._id} className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}>
-                 <td>{member.name} </td> 
-                  <td>{member.position}</td>
-                  <td><button onClick={() => addPotentialMember(member._id, selectedOrganization)} className='btn btn-success'>Add to Organization</button></td>
-                </tr>
-                
+                      Show Members
+                    </button>
+                    <button
+                      onClick={() => fetchPotentialMembers(org.name, org._id)}
+                      className="btn btn-outline btn-success flex-grow"
+                    >
+                      Potential Members
+                    </button>
+                  </div>
+                </div>
               ))}
-             </tbody>
-            </table>
             </div>
+          )}
 
-            <div className=" flex justify-end item">
-              <button onClick={handleClosePotentialMembersModal} className='my-2 btn btn-wide btn-error float-end'>Close</button>
+          {/* Create Organization Modal */}
+          <Modal
+            isOpen={showModal}
+            onRequestClose={() => setShowModal(false)}
+            contentLabel="Create Organization Modal"
+            className="modal-container"
+          >
+            <div className="p-5 bg-gradient-to-r from-white to-green-100 rounded-lg">
+              <h2 className="text-xl font-bold mb-3">Create a School Organization</h2>
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <div>
+                  <label>Organization Name:</label>
+                  <input
+                    type="text"
+                    name="organizationName"
+                    value={newOrganization.organizationName}
+                    onChange={handleInputChange}
+                    required
+                    className="input input-bordered w-full"
+                  />
+                </div>
+                <div>
+                  <label>School Year:</label>
+                  <input
+                    type="text"
+                    name="schoolYear"
+                    value={newOrganization.schoolYear}
+                    onChange={handleInputChange}
+                    required
+                    className="input input-bordered w-full"
+                  />
+                </div>
+                <div>
+                  <label>Semester:</label>
+                  <input
+                    type="text"
+                    name="semester"
+                    value={newOrganization.semester}
+                    onChange={handleInputChange}
+                    required
+                    className="input input-bordered w-full"
+                  />
+                </div>
+                <button type="submit" className="btn btn-success w-full mt-4">
+                  Create Organization
+                </button>
+              </form>
             </div>
-         </div>
-        </Modal>
+          </Modal>
 
-        <Modal
-        isOpen={showMembersModal}
-        onRequestClose={handleCloseMembersModal}
-        contentLabel="Members Modal"
-       style={customStyles}
-      >
-        <div className=" ">
-          <h2 className='text-xl border-b-2 py-2 border-gray-700'>Members of {selectedOrganization}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th className=' bg-green-700 text-white text-left'>Name</th>
-                <th className=' bg-green-700 text-white text-left'>Email</th>
-                <th className=' bg-green-700 text-white text-left'>Position</th>
-                <th className=' bg-green-700 text-white text-left'>School Year</th>
-                <th className=' bg-green-700 text-white text-left'>Edit</th>
-                <th className=' bg-green-700 text-white text-left'>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {members.map((member, index) => (
-                <tr key={member._id} className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}>
-                  <td>
-                    {editMember === member ? (
-                      <input
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
-                      />
-                    ) : (
-                      member.name
-                    )}
-                  </td>
-                  <td>
-                    {editMember === member ? (
-                      <input
-                        value={editEmail}
-                        onChange={(e) => setEditEmail(e.target.value)}
-                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
-                      />
-                    ) : (
-                      member.studentemail
-                    )}
-                  </td>
-                  <td>
-                    {editMember === member ? (
-                      <input
-                        value={editPosition}
-                        onChange={(e) => setEditPosition(e.target.value)}
-                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
-                      />
-                    ) : (
-                      member.position
-                    )}
-                  </td>
-                  <td>
-                    {editMember === member ? (
-                      <input
-                        value={editSchoolYear}
-                        onChange={(e) => setEditSchoolYear(e.target.value)}
-                        className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
-                      />
-                    ) : (
-                      member.schoolYear
-                    )}
-                  </td>
-                  <td>
-                    {editMember === member ? (
-                      <button onClick={handleSaveMember} className='btn btn-sm btn-success'>Save</button>
-                    ) : (
-                      <button onClick={() => handleEditMember(member)} className='btn btn-xs btn-success'>Edit</button>
-                    )}
-                  </td>
-                  <td>
-                    <button onClick={() => handleDeleteMember(member._id)} className='btn btn-xs btn-error'>Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {/* Potential Members Modal */}
+          <Modal
+            isOpen={showPotentialMembersModal}
+            onRequestClose={handleClosePotentialMembersModal}
+            contentLabel="Potential Members Modal"
+            className="modal-container"
+          >
+            <div className="p-5 bg-white rounded-lg">
+              <h2 className="text-xl font-bold mb-3">Potential Members</h2>
+              <div className="space-y-3">
+                {potentialMembers.map((member) => (
+                  <div key={member._id} className="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow">
+                    <div>
+                      <p>{member.name}</p>
+                      <p className="text-sm text-gray-500">{member.position}</p>
+                    </div>
+                    <button
+                      onClick={() => addPotentialMember(member._id, selectedOrganization)}
+                      className="btn btn-success"
+                    >
+                      Add to Organization
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={handleClosePotentialMembersModal}
+                className="btn btn-error w-full mt-4"
+              >
+                Close
+              </button>
+            </div>
+          </Modal>
 
-          <div className="">
-          <button onClick={handleCloseMembersModal} className=' my-3 btn btn-wide btn-error float-end'>Close</button>
-          </div>
+          {/* Members Modal */}
+          <Modal
+            isOpen={showMembersModal}
+            onRequestClose={handleCloseMembersModal}
+            contentLabel="Members Modal"
+            className="modal-container"
+          >
+            <div className="p-5 bg-white rounded-lg">
+              <h2 className="text-xl font-bold mb-3">Members of {selectedOrganization}</h2>
+              <div className="space-y-3">
+                {members.map((member) => (
+                  <div key={member._id} className="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow">
+                    <div>
+                      <p>{member.name}</p>
+                      <p className="text-sm text-gray-500">{member.studentemail}</p>
+                      <p className="text-sm text-gray-500">{member.position}</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button onClick={() => handleEditMember(member)} className="btn btn-success btn-sm">
+                        Edit
+                      </button>
+                      <button onClick={() => handleDeleteMember(member._id)} className="btn btn-error btn-sm">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={handleCloseMembersModal} className="btn btn-error w-full mt-4">
+                Close
+              </button>
+            </div>
+          </Modal>
         </div>
-      </Modal>
-      </div>)}
-
-      {adminType==='Organization Officer'&&(
-        <OrganizationOfficerPanel/>
       )}
 
+      {adminType === 'Organization Officer' && <OrganizationOfficerPanel />}
     </div>
   );
-}
+
+};

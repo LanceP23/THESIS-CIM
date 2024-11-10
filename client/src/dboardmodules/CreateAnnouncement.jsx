@@ -61,6 +61,7 @@ export default function CreateAnnouncement() {
   const [organizationId, setOrganizationId] = useState(null);
   const [selectedMinigame, setSelectedMinigame] = useState('');
   const [minigameWord, setMinigameWord] = useState('');
+  const [activeTab, setActiveTab] = useState("create");
 
   const adminType2 = localStorage.getItem('adminType');
 
@@ -385,6 +386,7 @@ export default function CreateAnnouncement() {
   const handleOrganizationPostChange = (e) => {
     setIsOrganizationPost(e.target.checked);
   };
+  
 
   const renderVisibilityOptions = () => {
     // Check if the admin type is 'School Owner'

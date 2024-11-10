@@ -192,150 +192,126 @@ export default function OrganizationOfficerPanel() {
 
   return (
     <div className="">
-      <div className="p-3 pr-5 mt-20 w-full h-full shadow-md rounded-3 bg-white border">
-        <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>
-          <FontAwesomeIcon icon={faPeopleArrows} className=' text-yellow-500 mx-1 '/>
-          {organizationData && organizationData.organization}
-        </h2>
+     <div className="p-3 pr-5 mt-20 w-full h-full shadow-md rounded-3 bg-white border">
+  <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>
+    <FontAwesomeIcon icon={faPeopleArrows} className='text-yellow-500 mx-1 '/>
+    {organizationData && organizationData.organization}
+  </h2>
 
-        <div className="max-h-96 overflow-auto">
-          <table className="w-full bg-white shadow-2xl rounded-2xl">
-            <thead className='sticky top-0 z-10'>
-              <tr colSpan="4" className='centered-header'>
-                <th>Members</th>
-              </tr>
-              <tr className='text-left'>
-                <th className="bg-green-700 text-white">Name</th>
-                <th className="bg-green-700 text-white">Email</th>
-                <th className="bg-green-700 text-white">Position</th>
-                <th className="bg-green-700 text-white">School Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {members && members.addedMembers && members.addedMembers.map((member, index) => (
-                <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
-                  <td className="border py-2">{member.name}</td>
-                  <td className="border py-2">{member.studentemail}</td>
-                  <td className="border py-2">{member.position}</td>
-                  <td className="border py-2">{member.schoolYear}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+    {members && members.addedMembers && members.addedMembers.map((member, index) => (
+      <div key={index} className="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden transition-all transform hover:scale-105">
+        <div className="p-4 bg-green-700 text-white text-xl font-semibold">
+          {member.name}
         </div>
-        
-        <div className="flex justify-end">
-          <button onClick={() => fetchPotentialMembers(organizationData.organization)} className='btn btn-success mt-2 flex justify-float-end'>Show Potential Members</button>
+        <div className="flex flex-col p-4">
+          <p className="text-gray-800"><strong>Email:</strong> {member.studentemail}</p>
+          <p className="text-gray-800"><strong>Position:</strong> {member.position}</p>
+          <p className="text-gray-800"><strong>School Year:</strong> {member.schoolYear}</p>
         </div>
-        
-        {showPotentialMembersModal && (
-          <div ref={modalRef} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg relative">
-              <div className="flex flex-row justify-between">
-                <h2 className="text-xl font-bold mb-4 border-b border-yellow-500 text-green-800">Potential Members</h2>
-
-                <button className="btn btn-circle btn-ghost btn-xs" onClick={() => setShowPotentialMembersModal(false)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th className="bg-green-700 text-white">Name</th>
-                    <th className="bg-green-700 text-white">Email</th>
-                    <th className="bg-green-700 text-white">Position</th>
-                    <th className="bg-green-700 text-white">School Year</th>
-                    <th className="bg-green-700 text-white">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {potentialMembers.length > 0 ? (
-                    potentialMembers.map((member, index) => (
-                      <tr key={index}>
-                        <td>{member.name}</td>
-                        <td>{member.studentemail}</td>
-                        <td>{member.position}</td>
-                        <td>{member.schoolYear}</td>
-                        <td>
-                          <button onClick={() => addPotentialMember(member._id)} className="bg-blue-500 text-white px-2 py-1 rounded">
-                            Add
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="5">No potential members</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
       </div>
+    ))}
+  </div>
 
-      <div className="p-3 pr-5 mt-4 w-full h-full shadow-md rounded-3 bg-white border border-gray-300">
+  <div className="flex justify-end mt-4">
+    <button onClick={() => fetchPotentialMembers(organizationData.organization)} className='btn bg-green-600 text-white hover:bg-green-700 rounded-md px-6 py-2'>
+      Show Potential Members
+    </button>
+  </div>
+
+  {showPotentialMembersModal && (
+    <div ref={modalRef} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg relative max-w-3xl w-full">
+        <div className="flex justify-between">
+          <h2 className="text-xl font-bold mb-4 border-b border-yellow-500 text-green-800">Potential Members</h2>
+          <button className="btn btn-circle btn-ghost btn-xs" onClick={() => setShowPotentialMembersModal(false)}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {potentialMembers.length > 0 ? (
+            potentialMembers.map((member, index) => (
+              <div key={index} className="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden transition-all">
+                <div className="p-4 bg-green-700 text-white text-xl font-semibold">
+                  {member.name}
+                </div>
+                <div className="flex flex-col p-4">
+                  <p className="text-gray-800"><strong>Email:</strong> {member.studentemail}</p>
+                  <p className="text-gray-800"><strong>Position:</strong> {member.position}</p>
+                  <p className="text-gray-800"><strong>School Year:</strong> {member.schoolYear}</p>
+                </div>
+                <div className="p-4 flex justify-end">
+                  <button onClick={() => addPotentialMember(member._id)} className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                    Add
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-gray-600">No potential members</div>
+          )}
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
+{/* Announcements Section */}
+<div className="p-3 pr-5 mt-4 w-full h-full shadow-md rounded-3 bg-white border border-gray-300">
   <h2 className='text-3xl text-green-800 font-bold border-b-2 border-yellow-500 py-2 mb-3'>
     {organizationData && organizationData.organization} Posts
   </h2>
-  <div className="overflow-auto max-h-[100vh] w-full">
+  
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {announcements.length > 0 ? (
       announcements.map((announcement, index) => (
-        <div key={index} className="card lg:card-side bg-gray-50 shadow-lg mb-4 border border-gray-200 rounded-lg">
-          {announcement.mediaUrl ? (
-            <div className="p-0">
-              {announcement.contentType && announcement.contentType.startsWith("image") ? (
+        <div key={index} className="card bg-gray-50 shadow-lg rounded-lg overflow-hidden">
+          {announcement.mediaUrl && (
+            <div className="overflow-hidden">
+              {announcement.contentType.startsWith("image") ? (
                 <img
                   src={announcement.mediaUrl}
                   alt="Announcement Media"
-                  className="w-[50vw] max-h-[55vh] object-cover cursor-pointer rounded-t-lg"
-                  onClick={() => openModal(announcement.mediaUrl)} // Function to handle modal opening
+                  className="w-full max-h-64 object-cover cursor-pointer"
+                  onClick={() => openModal(announcement.mediaUrl)}
                 />
-              ) : announcement.contentType && announcement.contentType.startsWith("video") ? (
-                <figure>
-                  <video controls className="max-w-xl h-full rounded-t-lg">
-                    <source src={announcement.mediaUrl} type={announcement.contentType} />
-                  </video>
-                </figure>
-              ) : announcement.contentType && announcement.contentType.startsWith("audio") ? (
-                <audio controls className="max-w-xl h-full rounded-t-lg">
+              ) : announcement.contentType.startsWith("video") ? (
+                <video controls className="w-full max-h-64 object-cover">
+                  <source src={announcement.mediaUrl} type={announcement.contentType} />
+                </video>
+              ) : announcement.contentType.startsWith("audio") ? (
+                <audio controls className="w-full max-h-64 object-cover">
                   <source src={announcement.mediaUrl} type={announcement.contentType} />
                 </audio>
               ) : (
-                <p className="flex justify-center items-center border-2 border-gray-300 rounded-md p-2">
-                  No media available
-                </p>
+                <div className="text-center p-4">No media available</div>
               )}
             </div>
-          ) : (
-            <p className="flex justify-center items-center border-2 border-gray-300 rounded-md p-2">
-              No media available
-            </p>
           )}
-
-          <div className="card-body">
-            <h2 className="card-title text-blue-700">{announcement.header}</h2>
-            <div className="body_container p-2 w-full h-32 rounded-md text-left overflow-auto max-h-full border-2 border-gray-300">
-              <p className="text-gray-700">{announcement.body}</p>
+          
+          <div className="p-4">
+            <h3 className="text-blue-700 text-xl font-semibold">{announcement.header}</h3>
+            <p className="text-gray-700">{announcement.body}</p>
+          </div>
+          
+          <div className="flex justify-between p-4">
+            <div className="flex items-center">
+              <FontAwesomeIcon icon={faThumbsUp} className="text-green-500" />
+              <span className="ml-2">{announcement.likes} Likes</span>
             </div>
-            <div className="grid grid-cols-2 shadow-inner">
-              <div className="max-w-[50vw] p-3 shadow-inner">
-                <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} />
-                <label className="mx-2 text-gray-800">{announcement.likes} Likes</label>
-              </div>
-              <div className="max-w-[50vw] p-3 shadow-inner">
-                <FontAwesomeIcon className="text-red-500 text-2xl" icon={faThumbsDown} />
-                <label className="mx-2 text-gray-800">{announcement.dislikes} Dislikes</label>
-              </div>
+            <div className="flex items-center">
+              <FontAwesomeIcon icon={faThumbsDown} className="text-red-500" />
+              <span className="ml-2">{announcement.dislikes} Dislikes</span>
             </div>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary bg-green-600 hover:bg-green-700 text-white rounded-md">
-                View
-              </button>
-            </div>
+          </div>
+          
+          <div className="p-4 flex justify-end">
+            <button className="bg-green-600 text-white px-4 py-2 rounded-md">
+              View
+            </button>
           </div>
         </div>
       ))
@@ -345,12 +321,14 @@ export default function OrganizationOfficerPanel() {
   </div>
 </div>
 
+{/* Analytics Section */}
+<div className="p-3 pr-5 mt-4 w-full h-full shadow-md rounded-3 bg-white border">
+  <h2 className='text-3xl text-green-800 font-bold border-b-2 border-yellow-500 py-2 mb-3'>
+    {organizationData && organizationData.organization} Analytics
+  </h2>
+  {/* Analytics content */}
+</div>
 
-
-      <div className="p-3 pr-5 mt-4 w-full h-full shadow-md rounded-3 bg-white border">
-        <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>{organizationData && organizationData.organization} Analytics</h2>
-        {/* Analytics content here */}
-      </div>
     </div>
   );
 }

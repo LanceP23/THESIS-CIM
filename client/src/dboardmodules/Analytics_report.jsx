@@ -173,12 +173,32 @@ const AnalyticsReport = () => {
   });
   const reactionsByDate = filteredReactionsWithDates.reduce((acc, reaction) => {
     const date = format(parseISO(reaction.date), 'yyyy-MM-dd');
-    if (!acc[date]) acc[date] = { date, likes: 0, dislikes: 0 };
+    
+    // Initialize the date entry if it doesn't exist
+    if (!acc[date]) {
+        acc[date] = {
+            date,
+            likes: 0,
+            dislikes: 0,
+            announcements: []  // Initialize announcements array for this date
+        };
+    }
+    
+    // Accumulate likes and dislikes
     acc[date].likes += reaction.likes;
     acc[date].dislikes += reaction.dislikes;
+
+    // Ensure announcements is an array and push current announcement
+    if (Array.isArray(reaction.announcements)) {
+        acc[date].announcements.push(...reaction.announcements);
+    }
+
     return acc;
-  }, {});
-  const aggregatedReactions = Object.values(reactionsByDate);
+}, {});
+
+// Convert the accumulated reactionsByDate object to an array
+const aggregatedReactions = Object.values(reactionsByDate);
+
   const isDemographicsEmpty = Object.values(demographicsData).every(count => count === 0);
   const totalDemographics = Object.values(demographicsData).reduce((sum, value) => sum + value, 0);
   const pieData = Object.entries(demographicsData)
@@ -213,51 +233,74 @@ const fetchCommentsData = async () => {
 
 
 
-  const exportData = () => {
-    // Prepare data for Likes and Dislikes CSV
-    const likesDislikesCsvRows = [];
-    const likesDislikesHeaders = ['Date', 'Likes', 'Dislikes'];
+const exportData = () => {
+  const formatCsvField = (field) => {
+      if (typeof field === 'string') {
+          // Normalize text to remove control characters only
+          field = field.normalize("NFC").replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
 
-    // Add headers to Likes and Dislikes CSV
-    likesDislikesCsvRows.push(likesDislikesHeaders.join(','));
+          // Replace any double quotes with double double-quotes
+          field = field.replace(/"/g, '""');
 
-    // Add Likes and Dislikes data to CSV
-    aggregatedReactions.forEach(reaction => {
-        const row = [
-            reaction.date,
-            reaction.likes,
-            reaction.dislikes
-        ];
-        likesDislikesCsvRows.push(row.join(','));
-    });
+          // Wrap field in double quotes if it contains commas, newlines, or double quotes
+          if (field.includes(',') || field.includes('\n') || field.includes('"')) {
+              return `"${field}"`;
+          }
+      }
+      return field;
+  };
 
-    // Create Likes and Dislikes CSV
-    const likesDislikesCsvString = likesDislikesCsvRows.join('\n');
-    const likesDislikesBlob = new Blob([likesDislikesCsvString], { type: 'text/csv;charset=utf-8;' });
-    saveAs(likesDislikesBlob, 'likes_dislikes_data.csv');
+  const likesDislikesCsvRows = [];
+  const likesDislikesHeaders = [
+      'Date', 'Announcement ID', 'Content Type', 'Poster ID', 'Likes', 'Dislikes'
+  ];
+  likesDislikesCsvRows.push(likesDislikesHeaders.join(','));
 
-    // Prepare data for Demographics CSV
-    const demographicsCsvRows = [];
-    const demographicsHeaders = ['Grade School', 'High School', 'Senior High School', 'College', 'Admin'];
+  if (aggregatedReactions && Array.isArray(aggregatedReactions)) {
+      aggregatedReactions.forEach(reaction => {
+          const { date, likes, dislikes, announcements } = reaction;
+          if (announcements && Array.isArray(announcements)) {
+              announcements.forEach(announcement => {
+                  const row = [
+                      formatCsvField(date || ''),
+                      formatCsvField(announcement.body || ''),
+                      formatCsvField(announcement.contentType || ''),
+                      formatCsvField(announcement.posterId || ''),
+                      formatCsvField(announcement.likes || ''),
+                      formatCsvField(announcement.dislikes || ''),
+                  ];
+                  likesDislikesCsvRows.push(row.join(','));
+              });
+          }
+      });
+  }
 
-    // Add headers to Demographics CSV
-    demographicsCsvRows.push(demographicsHeaders.join(','));
+  // Add BOM to the beginning of the CSV string
+  const BOM = '\uFEFF';
+  const likesDislikesCsvString = BOM + likesDislikesCsvRows.join('\n');
+  const likesDislikesBlob = new Blob([likesDislikesCsvString], { type: 'text/csv;charset=utf-8;' });
+  saveAs(likesDislikesBlob, 'likes_dislikes_data.csv');
 
-    // Add demographic data to CSV
-    const demographicsRow = [
-        demographicsData.gradeSchool || 0,
-        demographicsData.highSchool || 0,
-        demographicsData.seniorHighSchool || 0,
-        demographicsData.college || 0,
-        demographicsData.admin || 0
-    ];
-    demographicsCsvRows.push(demographicsRow.join(','));
+  const demographicsCsvRows = [];
+  const demographicsHeaders = ['Grade School', 'High School', 'Senior High School', 'College', 'Admin'];
+  demographicsCsvRows.push(demographicsHeaders.join(','));
 
-    // Create Demographics CSV
-    const demographicsCsvString = demographicsCsvRows.join('\n');
-    const demographicsBlob = new Blob([demographicsCsvString], { type: 'text/csv;charset=utf-8;' });
-    saveAs(demographicsBlob, 'demographics_data.csv');
+  const demographicsRow = [
+      demographicsData.gradeSchool || 0,
+      demographicsData.highSchool || 0,
+      demographicsData.seniorHighSchool || 0,
+      demographicsData.college || 0,
+      demographicsData.admin || 0
+  ];
+  demographicsCsvRows.push(demographicsRow.join(','));
+
+  const demographicsCsvString = BOM + demographicsCsvRows.join('\n');
+  const demographicsBlob = new Blob([demographicsCsvString], { type: 'text/csv;charset=utf-8;' });
+  saveAs(demographicsBlob, 'demographics_data.csv');
 };
+
+
+
 
   return (
   <div className="mt-16 p-1">

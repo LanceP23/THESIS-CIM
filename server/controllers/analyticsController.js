@@ -138,7 +138,6 @@ const countReactionsByDate = async (req, res) => {
     try {
         const userId = req.params.id;
 
-        // Find the user by userId to get their name
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).send({ message: 'User not found' });
@@ -146,7 +145,6 @@ const countReactionsByDate = async (req, res) => {
 
         const userName = user.name;
 
-        // Fetch reactions from UserReactions and ArchivedAnnouncements for the specified user
         const userReactions = await UserReaction.aggregate([
             {
                 $lookup: {
@@ -165,56 +163,82 @@ const countReactionsByDate = async (req, res) => {
                 }
             },
             {
-                $unwind: {
-                    path: '$announcementDetails',
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $unwind: {
-                    path: '$archivedAnnouncementDetails',
-                    preserveNullAndEmptyArrays: true
+                $project: {
+                    reaction: 1,
+                    dateReacted: 1,
+                    announcementInfo: {
+                        $cond: {
+                            if: { $gt: [{ $size: "$announcementDetails" }, 0] },
+                            then: { $arrayElemAt: ["$announcementDetails", 0] },
+                            else: { $arrayElemAt: ["$archivedAnnouncementDetails", 0] }
+                        }
+                    }
                 }
             },
             {
                 $match: {
-                    $or: [
-                        { 'announcementDetails.postedBy': userName },
-                        { 'archivedAnnouncementDetails.postedBy': userName }
-                    ],
+                    'announcementInfo.postedBy': userName,
                     dateReacted: { $exists: true, $ne: null }
-                }
-            },
-            {
-                $project: {
-                    reaction: 1,
-                    dateReacted: 1
                 }
             }
         ]);
 
-        // Aggregate reactions by date
+        // Aggregate reactions by date and include announcement details
         const reactionsByDate = {};
 
         userReactions.forEach(reaction => {
-            const date = reaction.dateReacted.toISOString().split('T')[0]; // Format date to 'YYYY-MM-DD'
-
+            const date = reaction.dateReacted.toISOString().split('T')[0];
+            const announcementInfo = reaction.announcementInfo;
+        
             if (!reactionsByDate[date]) {
-                reactionsByDate[date] = { likes: 0, dislikes: 0 };
+                reactionsByDate[date] = { likes: 0, dislikes: 0, announcements: [] };
             }
-
+        
+            // Increment like/dislike counts
             if (reaction.reaction === 'like') {
                 reactionsByDate[date].likes += 1;
             } else if (reaction.reaction === 'dislike') {
                 reactionsByDate[date].dislikes += 1;
             }
+        
+            // Add unique announcement to the date's announcements list
+            if (announcementInfo) {
+                const announcementExists = reactionsByDate[date].announcements.some(
+                    ann => ann.announcementId.toString() === announcementInfo._id.toString()
+                );
+                if (!announcementExists) {
+                    reactionsByDate[date].announcements.push({
+                        announcementId: announcementInfo._id,
+                        header: announcementInfo.header,
+                        body: announcementInfo.body,
+                        contentType: announcementInfo.contentType,
+                        posterId: announcementInfo.postedBy,
+                        likes: 0,  // Initialize likes and dislikes
+                        dislikes: 0
+                    });
+                }
+        
+                // Update likes/dislikes for the announcement itself
+                const announcementIndex = reactionsByDate[date].announcements.findIndex(
+                    ann => ann.announcementId.toString() === announcementInfo._id.toString()
+                );
+                if (announcementIndex !== -1) {
+                    if (reaction.reaction === 'like') {
+                        reactionsByDate[date].announcements[announcementIndex].likes += 1;
+                    } else if (reaction.reaction === 'dislike') {
+                        reactionsByDate[date].announcements[announcementIndex].dislikes += 1;
+                    }
+                }
+            }
         });
+        
 
-        // Format the data for the graph
+        // Format the data for the response
         const formattedData = Object.keys(reactionsByDate).map(date => ({
             date,
             likes: reactionsByDate[date].likes,
-            dislikes: reactionsByDate[date].dislikes
+            dislikes: reactionsByDate[date].dislikes,
+            announcements: reactionsByDate[date].announcements
         }));
 
         res.status(200).send({ formattedData });
@@ -223,6 +247,8 @@ const countReactionsByDate = async (req, res) => {
         res.status(500).send({ message: 'Error counting reactions by date', error });
     }
 };
+
+
 
 
 const getUserReactionsWithDate = async (req, res) => {
