@@ -8,12 +8,17 @@ import { convertLength } from '@mui/material/styles/cssUtils';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faFacebookMessenger } from '@fortawesome/free-brands-svg-icons';
-import {faMessage}from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faFacebookMessenger, } from '@fortawesome/free-brands-svg-icons';
 
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import Slider from "react-slick";
 
 export default function Home() {
   const [recentAnnouncements, setRecentAnnouncements] = useState([]);
+  const [hoveredAnnouncement, setHoveredAnnouncement] = useState(null);
 
   useEffect(() => {
     AOS.init({
@@ -37,79 +42,168 @@ export default function Home() {
     fetchRecentAnnouncements();
   }, []);
 
+  const handleMouseEnter = (id) => {
+    setHoveredAnnouncement(id);
+  };
 
+  const handleMouseLeave = () => {
+    setHoveredAnnouncement(null);
+  };
+
+  
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 2000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,             // Enable auto-slide
+    autoplaySpeed: 5000,        // Set slide interval to 5 seconds (5000 ms)
+
+   
+    
+
+
+    
+    responsive: [
+      {
+        breakpoint: 1024, // For tablets and small laptops
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600, // For most mobile devices
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 480, // For small mobile screens
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+  
+
+  
 
   return (
     <div className=" w-full flex flex-wrap overflow-x-hidden overflow-y-hidden ">
       {/* Navbar */}
       <Navbar />
 
-      <div className=" flex w-full h-[95vh]  ">
-      {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
-    <Carousel showThumbs={false} infiniteLoop autoPlay interval={5000} className="w-full">
-      {recentAnnouncements.slice(0, 5).map((announcement) => (
-        <div
-          key={announcement._id}
-          className="pt-20 shadow-lg w-auto h-[95vh] relative bg-green-950"
-        >
-          {/* Media Section */}
-          {announcement.mediaUrl ? (
-            <div className="lg:w-full flex items-center justify-center relative flex-wrap"> {/* Centering media and making it relative */}
-              {announcement.contentType && announcement.contentType.startsWith('image') ? (
-                <>
-                  <img
-                    src={announcement.mediaUrl}
-                    alt="Announcement Media"
-                    className="w-full h-[85vh] object-cover opacity-45 "
-                  />
-                  {/* Text Overlay */}
-                  <div className="absolute bottom-5 left-0 pt-2 p-4 w-full text-center bg-black bg-opacity-50  ">
-                    <h4 className="font-semibold text-2xl mb-2 text-white border-b-2 border-yellow-500">{announcement.header}</h4>
-                    <p className="text-md text-white">{announcement.body}</p>
-                  </div>
-                </>
-              ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
-                <>
-                  <video controls className="w-screen h-[80vh] object-cover rounded-lg">
-                    <source src={announcement.mediaUrl} type={announcement.contentType} />
-                  </video>
-                  {/* Text Overlay */}
-                  <div className="absolute bottom-0 bg-black bg-opacity-50 text-white p-4 w-full">
-                    <h4 className="font-semibold text-xl mb-1">{announcement.header}</h4>
-                    <p className="text-sm">{announcement.body}</p>
-                  </div>
-                </>
-              ) : announcement.contentType && announcement.contentType.startsWith('audio') ? (
-                <audio controls className="w-full h-auto">
-                  <source src={announcement.mediaUrl} type={announcement.contentType} />
-                </audio>
-              ) : (
-                <div className="  ">
-                <p className="text-center border border-gray-200 p-6 rounded-lg just">No media available</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className=" flex justify-center items-center border border-gray-200 p-6 rounded-lg">
-              <p>No media available</p>
-            </div>
-          )}
-        </div>
-      ))}
-    </Carousel>
-  ) : (
-    <p className="text-gray-500 text-center">No recent announcements available.</p>
-  )}
-</div>
+         
+
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[80vh] flex justify-center items-center text-center relative  ">
+          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[97vh] flex justify-center items-center text-center relative  ">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70"></div>
         <div className="hero-content z-10 flex"   >
           <h1 className="text-white font-bold text-5xl md:text-6xl mb-6 " data-aos="fade-right" >Stay Connected with Campus Life</h1>
           <p className="text-white font-medium text-xl md:text-2xl" data-aos="fade-left">Discover the latest announcements and events around campus with</p>
         </div>
+      </div>
+
+      <div className=" bg-[url('/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full max-h-[90vh] flex justify-center items-center text-center relative p-4 flex-col">
+      
+      <div className="absolute inset-0 bg-black opacity-95"></div>
+      <div className="flex flex-col justify-start my-4 text-left">
+      <h1 className="text-white font-bold text-5xl border-b-2 border-white" data-aos="fade-right" >IN THE NEWS</h1>
+     
+      </div>
+
+      
+      <p className="text-white font-medium text-xl md:text-2xl" data-aos="fade-left">Latest school Announcements</p>
+       
+       {/* Announcements Slider */}
+       <div className="flex w-[95vw] h-[95vh] flex-col ">
+       
+        {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
+          <Slider {...sliderSettings} className="max-w-[95vw]">
+            {recentAnnouncements.slice(0, 5).map((announcement) => (
+              <div
+                key={announcement._id}
+                className="w-full h-full border-b border-t  p-3"
+              >
+                {/* Media Section */}
+                {announcement.mediaUrl ? (
+                  <div
+                    className="lg:w-full flex items-center justify-center relative flex-wrap"
+                    onMouseEnter={() => handleMouseEnter(announcement._id)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    {announcement.contentType && announcement.contentType.startsWith('image') ? (
+                      <div className="relative">
+                        <img
+                          src={announcement.mediaUrl}
+                          alt="Announcement Media"
+                          className="w-auto h-[50vh] object-cover transform transition-transform duration-300 ease-in-out hover:scale-105"
+                        />
+                        {/* Announcement header with smooth transition */}
+                        <div
+                          className={` w-full absolute bottom-0 left-0 pt-2 p-4  items-center text-center bg-black opacity-80 rounded-md transform transition-all duration-500 ${
+                            hoveredAnnouncement === announcement._id
+                              ? 'opacity-100 translate-y-0'
+                              : 'opacity-0 translate-y-5'
+                          }`}
+                        >
+                          <h4 className="font-semibold text-lg mb-2 text-white border-b-2 border-yellow-500">
+                            {announcement.header}
+                          </h4>
+                        </div>
+                      </div>
+                    ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
+                      <>
+                        <video controls className="w-screen h-[80vh] object-cover rounded-lg">
+                          <source src={announcement.mediaUrl} type={announcement.contentType} />
+                        </video>
+                        <div className="absolute bottom-0 bg-black bg-opacity-50 text-white p-4 w-full">
+                          <h4 className="font-semibold text-xl mb-1">{announcement.header}</h4>
+                          <p className="text-sm">{announcement.body}</p>
+                        </div>
+                      </>
+                    ) : announcement.contentType && announcement.contentType.startsWith('audio') ? (
+                      <audio controls className="w-full h-auto">
+                        <source src={announcement.mediaUrl} type={announcement.contentType} />
+                      </audio>
+                    ) : (
+                      <div className="text-center border border-gray-200 p-6 rounded-lg">
+                        <p>No media available</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center border border-gray-200 p-6 rounded-lg">
+                    <p>No media available</p>
+                  </div>
+                )}
+              </div>
+            ))}
+            </Slider>
+            
+
+            
+            ) : (
+            <p className="text-gray-500 text-center">No recent announcements available.</p>
+            )}
+            </div>
+
+
+
+     
+
+
+
       </div>
 
         {/* App Hero Section*/ }

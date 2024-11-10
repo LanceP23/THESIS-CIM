@@ -1,0 +1,21 @@
+/* Custom style for navigation dots */
+.slick-dots {
+    @apply bottom-4;
+  }
+  
+  .slick-dots li button {
+    @apply bg-white border border-green-600 rounded-full w-2 h-2;
+  }
+
+  .slick-dots li{
+    @apply bg-white border border-green-600 rounded-full w-1 h-1;
+  }
+  
+  .slick-dots li.slick-active button {
+    @apply bg-green-500 border ;
+  }
+  
+  .slick-dots li button:hover {
+    @apply bg-green-500;
+  }
+
