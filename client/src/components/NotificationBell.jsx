@@ -129,6 +129,9 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
     useEffect(() => {
         setUnreadCommunityNotificationCount(communityNotifications.length); 
     }, [communityNotifications]);
+    useEffect(() => {
+        setUnreadApprovalCount(approvalNotifications.length);
+    }, [approvalNotifications]);
 
     
 
@@ -155,10 +158,13 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
 
     useEffect(() => {
         if (approvalNotifications.length > 0) {
+            const latest = approvalNotifications[0];
             setLatestApproval({
-                message: approvalNotifications[0].message,
-                posterName: approvalNotifications[0].posterName,
-                timestamp: approvalNotifications[0].timestamp
+                status: latest.status,
+                message: latest.message,
+                posterName: latest.posterName,
+                timestamp: latest.timestamp,
+                reason: latest.status === 'rejected' ? latest.reason : null,
             });
             setTimeout(() => {
                 setLatestApproval(null);
@@ -196,21 +202,21 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
         setTotalUnreadCount(totalUnreadCount);
     }, [ unreadAnnouncementCount, unreadEventCount, unreadApprovalCount, unreadOrganizationAnnouncementCount , unreadCommunityNotificationCount, setTotalUnreadCount]);
 
-        const toggleDropdown = () => {
-            setShowDropdown(prev => {
-                if (!prev) {
-                    // Reset notification counts when opening the dropdown
-                    setUnreadMessageCount(0);
-                    setUnreadAnnouncementCount(0);
-                    setUnreadEventCount(0);
-                    setUnreadApprovalCount(0);
-                    setUnreadOrganizationAnnouncementCount(0);
-                    setUnreadCommunityNotificationCount(0);
-                    setTotalUnreadCount(0);
-                }
-                return !prev;
-            });
-        };
+       const toggleDropdown = () => {
+    // Reset counts immediately on click
+    setUnreadMessageCount(0);
+    setUnreadAnnouncementCount(0);
+    setUnreadEventCount(0);
+    setUnreadApprovalCount(0);
+    setUnreadOrganizationAnnouncementCount(0);
+    setUnreadCommunityNotificationCount(0);
+    
+    // Update the total unread count in the parent
+    setTotalUnreadCount(0);
+
+    // Toggle the dropdown visibility
+    setShowDropdown(prev => !prev);
+};
     
         return (
             <div className="notification-bell">
@@ -250,20 +256,24 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                                     </div>
                                 </div>
                             ))}
-                            {approvalNotifications.map((approval, index) => (
-                                <div className="flex justify-between my-3" key={index}>
-                                    <div className="avatar">
-                                        <div className="w-10 mask mask-squircle">
-                                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="avatar" />
-                                        </div>
-                                    </div>
-                                    <div className="div">
-                                        <li>
-                                            Announcement approved: {approval.message} by {approval.posterName} at {approval.timestamp}
-                                        </li>
+                            {approvalNotifications.map((notification, index) => (
+                            <div className="flex justify-between my-3" key={index}>
+                                <div className="avatar">
+                                    <div className="w-10 mask mask-squircle">
+                                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="avatar" />
                                     </div>
                                 </div>
-                            ))}
+                                <div className="div">
+                                    <li>
+                                    {notification.postStatus === 'approved' 
+                                            ? `Announcement approved: ${notification.message} `
+                                            : `Announcement rejected: ${notification.message} `
+                                        }
+                                        
+                                    </li>
+                                </div>
+                            </div>
+                        ))}
                             {organizationAnnouncementNotifications.map((announcement, index) => (
                                 <div className="flex justify-between my-3" key={index}>
                                     <div className="avatar">

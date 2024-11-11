@@ -63,7 +63,7 @@ const createAnnouncement = async (req, res) => {
       communityId,
       organizationId,
       minigame,        
-      minigameWord     
+      minigameWord,   
     } = req.body;
 
     let contentType = null;
@@ -254,10 +254,10 @@ const getPendingAnnouncements = async (req, res) => {
 const updateAnnouncementStatus = async (req, res) => {
   try {
     const { announcementId } = req.params;
-    const { status } = req.body;
-    console.log('Received Announcement ID:', announcementId);
-    console.log('Received Status:', status);
+    const { status, reason } = req.body;
+    
 
+    const rejectionReason = reason;
     const authToken = req.headers.authorization;
 
     // Check if the authorization header is present
@@ -286,12 +286,40 @@ const updateAnnouncementStatus = async (req, res) => {
       return res.status(404).json({ error: 'Announcement not found' });
     }
 
+    // Update announcement status
     announcement.status = status;
     await announcement.save();
 
-    if (status === 'approved') {
-      // Find the user by their email (postedBy)
-      const postingUser = await User.findOne({ studentemail: announcement.postedBy });
+    if (status === 'rejected') {
+      // Find the user who posted the announcement using posterId
+      const postingUser = await User.findById(announcement.posterId);
+      if (postingUser) {
+        const receiverSocketId = getReceiverSocketId(postingUser._id.toString());
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit('announcementRejected', {
+            type: 'announcement',
+            message: `Your announcement titled "${announcement.header}" has been rejected.`,
+            reason: rejectionReason, // Only included if rejected
+            postStatus: 'rejected',
+            announcementId: announcementId
+          });
+    
+          const newNotification = new Notification({
+            type: 'postStatus',
+            message: `Your announcement titled "${announcement.header}" has been rejected.`,
+            postStatus: 'rejected',  // Store post status as 'rejected'
+            rejectionReason: rejectionReason, // Store rejection reason
+            recipientIds: [postingUser._id],
+            posterName: postingUser.name, // Assuming 'name' is stored in the User model
+            announcementHeader: announcement.header,
+            announcementId: announcementId
+          });
+          await newNotification.save();
+        }
+      }
+    } else if (status === 'approved') {
+      // Find the user by their posterId
+      const postingUser = await User.findById(announcement.posterId);
       if (postingUser) {
         // Emit a socket event to the user who created the announcement
         const receiverSocketId = getReceiverSocketId(postingUser._id.toString());
@@ -299,21 +327,25 @@ const updateAnnouncementStatus = async (req, res) => {
           io.to(receiverSocketId).emit('announcementApproved', {
             type: 'announcement',
             message: `Your announcement titled "${announcement.header}" has been approved.`,
-            announcementId: announcementId
+            announcementId: announcementId,
+            postStatus: 'approved'
           });
-
+    
           // Store the notification in the database
           const newNotification = new Notification({
-            type: 'other',
+            type: 'postStatus',
             message: `Your announcement titled "${announcement.header}" has been approved.`,
+            postStatus: 'approved',  // Store post status as 'approved'
             recipientIds: [postingUser._id], // Note the array
-            posterName: announcement.postedBy,
+            posterName: postingUser.name, // Assuming 'name' is stored in the User model
             announcementHeader: announcement.header,
             announcementId: announcementId
           });
           await newNotification.save();
         }
       }
+    
+    
 
       // Emit and store notifications for normal announcements
       if (!announcement.organizationId && !announcement.communityId) {
@@ -332,7 +364,7 @@ const updateAnnouncementStatus = async (req, res) => {
             io.to(receiverSocketId).emit("newAnnouncement", {
               type: "announcement",
               message: "New announcement posted",
-              posterName: announcement.postedBy,
+              posterName: announcement.postedBy, // Send posterId here
               announcementHeader: announcement.header,
               timestamp: new Date().toISOString()
             });
@@ -347,7 +379,7 @@ const updateAnnouncementStatus = async (req, res) => {
           type: 'announcement',
           message: 'New announcement posted',
           recipientIds: allUserIds, // Note the array
-          posterName: announcement.postedBy,
+          posterName: announcement.postedBy, // Send posterId here
           announcementHeader: announcement.header,
           announcementId: announcement._id
         });
@@ -380,7 +412,7 @@ const updateAnnouncementStatus = async (req, res) => {
                 io.to(receiverSocketId).emit("newOrganizationAnnouncement", {
                   type: "announcement",
                   message: "New announcement posted in your organization",
-                  posterName: announcement.postedBy,
+                  posterName: announcement.postedBy, // Send posterId here
                   announcementHeader: announcement.header,
                   timestamp: new Date().toISOString()
                 });
@@ -395,7 +427,7 @@ const updateAnnouncementStatus = async (req, res) => {
               type: 'announcement',
               message: 'New announcement posted in your organization',
               recipientIds: organizationMemberIds, // Note the array
-              posterName: announcement.postedBy,
+              posterName: announcement.postedBy, // Send posterId here
               announcementHeader: announcement.header,
               announcementId: announcement._id
             });
@@ -417,7 +449,7 @@ const updateAnnouncementStatus = async (req, res) => {
                 io.to(receiverSocketId).emit("newCommunityAnnouncement", {
                   type: "announcement",
                   message: "New announcement posted in your community",
-                  posterName: announcement.postedBy,
+                  posterName: announcement.postedBy, // Send posterId here
                   announcementHeader: announcement.header,
                   timestamp: new Date().toISOString()
                 });
@@ -432,7 +464,7 @@ const updateAnnouncementStatus = async (req, res) => {
               type: 'announcement',
               message: 'New announcement posted in your community',
               recipientIds: communityMemberIds, // Note the array
-              posterName: announcement.postedBy,
+              posterName: announcement.postedBy, // Send posterId here
               announcementHeader: announcement.header,
               announcementId: announcement._id
             });
@@ -450,6 +482,7 @@ const updateAnnouncementStatus = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
@@ -573,6 +606,8 @@ const deleteComments = async (req, res) => {
     res.status(500).json({ error: 'Server error while deleting comment' });
   }
 };
+
+
 
 
 module.exports = {

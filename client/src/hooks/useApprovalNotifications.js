@@ -5,28 +5,26 @@ const useApprovalNotifications = () => {
     const { socket } = useContext(socketContext);
     const [notifications, setNotifications] = useState([]);
 
-    const handleApprovalNotification = (notification) => {
+    const handleNotification = (notification) => {
         setNotifications(prevNotifications => [...prevNotifications, notification]);
     };
 
     useEffect(() => {
         let isSubscribed = true;
 
-        if (isSubscribed) {
-            if (socket) {
-                socket.on("announcementApproved", handleApprovalNotification);
-            } else {
-                // Handle if not subscribed
-            }
+        if (isSubscribed && socket) {
+            socket.on("announcementApproved", handleNotification);
+            socket.on("announcementRejected", handleNotification); // Add listener for rejection
         }
 
         return () => {
             isSubscribed = false;
             if (socket) {
-                socket.off("announcementApproved", handleApprovalNotification);
+                socket.off("announcementApproved", handleNotification);
+                socket.off("announcementRejected", handleNotification); // Remove rejection listener
             }
         };
-    }, [socket, handleApprovalNotification]);
+    }, [socket]);
 
     return notifications;
 };

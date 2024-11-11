@@ -16,8 +16,6 @@ const Notification_module = () => {
     return token.split('=')[1];
   };
 
-  
-
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -88,16 +86,16 @@ const Notification_module = () => {
 
   return (
     <div className='animate-fade-in pt-5'>
-      <div className="bg-slate-100 p-3 m-4  h-[85vh] rounded-3xl shadow-inner shadow-slate-950 ">
+      <div className="bg-slate-100 p-3 m-4 h-[85vh] rounded-3xl shadow-inner shadow-slate-950 ">
         <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 py-2'>
-          <FontAwesomeIcon icon={faBell} className=' text-yellow-500 mx-1' />
+          <FontAwesomeIcon icon={faBell} className='text-yellow-500 mx-1' />
           Notification
         </h2>
 
         <div className="overflow-auto max-h-[70vh] overflow-x-auto">
           <table className="max-w-[80vw]">
-            <thead className=''>
-              <tr className=' '>
+            <thead>
+              <tr>
                 <th className='bg-customgreen_1 text-white text-left'>
                   <label>
                     <input type="checkbox" className="checkbox border" onClick={handleMarkAllAsRead} />
@@ -110,7 +108,7 @@ const Notification_module = () => {
                 <th className='bg-customgreen_1 text-white text-left'>Read?</th>
               </tr>
             </thead>
-            <tbody className=''>
+            <tbody>
               {notifications.map((notification, index) => (
                 <tr key={notification._id} className='hover:bg-yellow-200 border-b-2 text-left'>
                   <td>
@@ -121,7 +119,7 @@ const Notification_module = () => {
                     <div className="flex items-center gap-3">
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                          <img src="https://img.daisyui.com/tailwind-css-component-profile-2@56w.png" alt="Avatar Tailwind CSS Component" />
+                          <img src="https://img.daisyui.com/tailwind-css-component-profile-2@56w.png" alt="Avatar" />
                         </div>
                       </div>
                       <div>
@@ -157,30 +155,23 @@ const Notification_module = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-24">
             <div className=" bg-slate-200 p-3 rounded-2xl shadow-lg max-w-[80vw] max-h-[70vh] text-left overflow-y-auto ">
 
-           
               <div className="flex justify-around">
-              
-          
-              <div className="grid grid-cols-2 mb-3 mt-1">
-                <h3 className="text-lg font-bold text-green-700 border-b-4 border-yellow-500">Subject: {selectedNotification.announcementHeader}</h3>
-              
-              </div>
-              <div className="justify-end my-0">
-
-              <button onClick={closeModal} className="text-gray-600 hover:text-gray-900 text-4xl justify-end">
-                  &times;
-                </button>
+                <div className="grid grid-cols-2 mb-3 mt-1">
+                  <h3 className="text-lg font-bold text-green-700 border-b-4 border-yellow-500">Subject: {selectedNotification.announcementHeader}</h3>
+                </div>
+                <div className="justify-end my-0">
+                  <button onClick={closeModal} className="text-gray-600 hover:text-gray-900 text-4xl justify-end">
+                    &times;
+                  </button>
                 </div>
               </div>
 
-             
-             <p><strong>Type:</strong> {selectedNotification.type}</p>
+              <p><strong>Type:</strong> {selectedNotification.type}</p>
               <p className='mt-2'><strong>From:</strong> {selectedNotification.posterName}</p>
-              <p className='mt-2'><strong>Type:</strong> {selectedNotification.type}</p>
-              
+              <p className='mt-2'><strong>Timestamp:</strong> {new Date(selectedNotification.timestamp).toLocaleString()}</p>
+
               {selectedNotification.type === 'announcement' && (
                 <>
-                  <p className='mt-2'><strong>From:</strong> {selectedNotification.posterName}</p>
                   <p className='mt-2'><strong>Message:</strong> {selectedNotification.message}</p>
                   <p className='mt-2'><strong>Title:</strong> {selectedNotification.announcementHeader}</p>
                   <p className='mt-2'><strong>Description:</strong> {selectedNotification.announcementBody}</p>
@@ -194,25 +185,24 @@ const Notification_module = () => {
                   <p className='mt-2'><strong>Starts at: </strong> {new Date(selectedNotification.timeStart).toLocaleString()}</p>
                   <p className='mt-2'><strong>Ends at: </strong> {new Date(selectedNotification.timeEnd).toLocaleString()}</p>
                   <p className='mt-2'><strong>Organizer:</strong> {selectedNotification.organizerName}</p>
-
-                  
                 </>
               )}
 
+              {selectedNotification.type === 'postStatus' && (
+                <>
+                  <p><strong>Status:</strong> {selectedNotification.postStatus}</p>
+                  {selectedNotification.postStatus === "rejected" && (
+                    <p><strong>Rejection Reason:</strong> {selectedNotification.rejectionReason}</p>
+                  )}
+                </>
+              )}
 
-              <p className='mt-2'><strong>Timestamp:</strong> {new Date(selectedNotification.timestamp).toLocaleString()}</p>
-
-
-             </div>
-              
-             
-             
-           
+            </div>
           </div>
         )}
       </div>
     </div>
   );
-}
+};
 
 export default Notification_module;

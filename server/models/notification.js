@@ -8,7 +8,7 @@ const notificationSchema = new mongoose.Schema({
   }],
   type: {
     type: String,
-    enum: ['event', 'announcement', 'message', 'other'],
+    enum: ['event', 'announcement', 'message', 'other','postStatus'],
     required: true,
   },
   message: {
@@ -48,6 +48,13 @@ const notificationSchema = new mongoose.Schema({
   },
   timeEnd:{
     type: Date
+  },
+  postStatus: { 
+    type: String,
+    enum: ['approved', 'rejected'],
+  },
+  rejectionReason: { 
+    type: String,
   },
 });
 
