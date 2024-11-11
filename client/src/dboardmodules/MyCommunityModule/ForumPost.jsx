@@ -25,15 +25,25 @@ const ForumPost = ({ communityId }) => {
   };
 
   const deletePost = async (postId) => {
-    try {
-      await axios.delete(`/${communityId}/forum-posts/${postId}`);
-      setForumPosts(forumPosts.filter(post => post._id !== postId));
-      toast.success('Post deleted successfully');
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      toast.error('Failed to delete post');
+    if (window.confirm("Are you sure you want to delete this forum post?")) {
+      try {
+        // Call the DELETE API to delete the post
+        await axios.delete(`/${communityId}/forum-posts/${postId}`);
+  
+        // Update the local state to remove the deleted post
+        setForumPosts(forumPosts.filter(post => post._id !== postId));
+  
+        // Notify the user
+        toast.success('Forum post deleted successfully');
+      } catch (error) {
+        console.error('Error deleting forum post:', error);
+        toast.error('Failed to delete forum post');
+      }
     }
   };
+  
+
+  
 
   useEffect(() => {
     if (communityId) {

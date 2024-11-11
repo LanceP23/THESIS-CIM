@@ -4,7 +4,7 @@ const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser } = require('../controllers/authController');
-const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName, getOrganizationAnnouncement } = require('../controllers/organizationController');
+const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName, getOrganizationAnnouncement, deleteOrganization } = require('../controllers/organizationController');
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus, getUserAnnouncements, updateAnnouncement, deleteAnnouncement, getRecentAnnouncements, getCommentsByAnnouncementId, deleteComments } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
@@ -12,7 +12,7 @@ const {postEventController,getEventsController, putEventController, deleteEventC
 
 const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccounts} = require('../controllers/schoolSettingController');
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
-const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers, removeMemberFromCommunity, getForumPostsByCommunityId, getLast5ForumPostsWithCommunityName } = require('../controllers/communityController');
+const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers, removeMemberFromCommunity, getForumPostsByCommunityId, getLast5ForumPostsWithCommunityName, deleteCommunity, deleteForumPost } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
 const{getLikesDislikesandReactions,countUserReactionsByEducationLevel, countReactionsByDate, getUserReactionsWithDate} = require('../controllers/analyticsController');
 const { countCommunityTotalReactions, 
@@ -74,6 +74,7 @@ router.get('/organization-data/:userId',authenticateUser, fetchOrganizationData)
 router.get('/organization-id/:userId', authenticateUser, getOrganizationId);
 router.get('/organization/:organizationId/announcements', getAnnouncementsByOrganizationName);
 router.get('/organization-announcements/:userId',authenticateUser, getOrganizationAnnouncement);
+router.delete('/delete-organization/:id', deleteOrganization);
 
 
 
@@ -132,6 +133,8 @@ router.get('/member-announcements',authenticateUser, getAnnouncementCommunityMem
 router.delete('/community/:communityId/member/:memberId', removeMemberFromCommunity);
 router.get('/:communityId/forum-posts', getForumPostsByCommunityId);
 router.get('/recent-forum-posts', getLast5ForumPostsWithCommunityName);
+router.delete('/delete/:communityId', deleteCommunity);
+router.delete('/:communityId/forum-posts/:postId', deleteForumPost);
 
 //notification
 router.get('/notifications', getNotifications);

@@ -332,9 +332,58 @@ const getLast5ForumPostsWithCommunityName = async (req, res) => {
 };
 
 
+const deleteForumPost = async (req, res) => {
+  try {
+    const { communityId, postId } = req.params;
+
+    // Delete the post from the 'forumposts' collection
+    const result = await mongoose.connection.db.collection('forumposts').deleteOne({
+      _id: new mongoose.Types.ObjectId(postId),  
+      communityId: new mongoose.Types.ObjectId(communityId)  
+    });
+
+    // If no post is found or deleted
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Forum post not found or not associated with this community' });
+    }
+
+    // Respond with success
+    res.status(200).json({ message: 'Forum post deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting forum post:', error);
+    res.status(500).json({ message: 'Failed to delete forum post' });
+  }
+};
 
 
 
+
+
+
+const deleteCommunity = async (req, res) => {
+  try {
+    const { communityId } = req.params;
+
+    // Delete the community itself
+    const community = await Community.findByIdAndDelete(communityId);
+    if (!community) {
+      return res.status(404).json({ error: 'Community not found' });
+    }
+
+    // Delete associated announcements
+    await Announcement.deleteMany({ communityId });
+
+    // Delete associated forum posts
+    await mongoose.connection.db.collection('forumposts').deleteMany({ communityId });
+
+    // Add other deletion logic for related data if needed
+
+    res.status(200).json({ message: 'Community and all associated data deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting community:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 
 
@@ -354,5 +403,7 @@ module.exports = {
   getAnnouncementCommunityMembers,
   removeMemberFromCommunity,
   getForumPostsByCommunityId,
-  getLast5ForumPostsWithCommunityName
+  getLast5ForumPostsWithCommunityName,
+  deleteCommunity,
+  deleteForumPost
 };

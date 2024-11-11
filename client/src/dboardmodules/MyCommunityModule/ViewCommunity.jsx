@@ -122,6 +122,23 @@ const ViewCommunity = () => {
     }
   };
 
+  const handleDelete = async (communityId) => { 
+    if (window.confirm("Are you sure you want to delete this community?")) {
+      try {
+        // Directly make the API call here
+        await axios.delete(`/delete/${communityId}`);
+  
+        // Update the state to remove the deleted community from the list
+        setAdminCommunities(prev => prev.filter(community => community._id !== communityId));
+  
+        toast.success("Community deleted successfully");
+      } catch (error) {
+        toast.error("Failed to delete the community");
+      }
+    }
+  };
+  
+
   return (
     <div className="p-3 pt-5">
 
@@ -146,6 +163,13 @@ const ViewCommunity = () => {
               <button onClick={() => handleView(community._id, 'members')} className="btn btn-info  w-full">View Members</button>
               <button onClick={() => handleView(community._id, 'analytics')} className="btn btn-info w-full">View Analytics</button>
               <button onClick={() => handleView(community._id, 'forum')} className="btn btn-info w-full">Forum</button>
+              <button 
+  onClick={() => handleDelete(community._id)} 
+  className="w-full mt-2 py-1 px-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded"
+>
+  Delete
+</button>
+
             </div>
 
             {viewCommunityId === community._id && activeView === 'members' && (

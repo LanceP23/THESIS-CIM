@@ -10,6 +10,9 @@ import { useContext } from 'react';
 import OrganizationOfficerPanel from './OrganizationOfficerPanel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPeopleArrows } from '@fortawesome/free-solid-svg-icons';
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 const customStyles = {
   overlay: {
@@ -38,6 +41,19 @@ const customStyles = {
   },
 };
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAQZQtWzdKepDwzzhOAw_F8A4xkhtwz9p0",
+  authDomain: "cim-storage.firebaseapp.com",
+  projectId: "cim-storage",
+  storageBucket: "cim-storage.appspot.com",
+  messagingSenderId: "616767248215",
+  appId: "1:616767248215:web:b554a837f3229fdc155012",
+  measurementId: "G-YN9S75JSNB"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
+
 export default function OrganizationReg() {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
@@ -61,6 +77,8 @@ export default function OrganizationReg() {
   const [editEmail, setEditEmail] = useState('');
   const [editPosition, setEditPosition] = useState('');
   const [editSchoolYear, setEditSchoolYear] = useState('');
+  const [logoFile, setLogoFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -100,6 +118,27 @@ export default function OrganizationReg() {
     } catch (error) {
       console.error('Error fetching organizations:', error);
       toast.error('Failed to fetch organizations');
+    }
+  };
+
+  const handleDeleteOrganization = async (orgId) => {
+    try {
+      // Ask for confirmation before deleting
+      const confirmDelete = window.confirm("Are you sure you want to delete this organization?");
+      if (!confirmDelete) return;
+  
+      // Send the DELETE request to the server
+      const response = await axios.delete(`/delete-organization/${orgId}`);
+  
+      if (response.status === 200) {
+        toast.success('Organization deleted successfully');
+        fetchOrganizations(); 
+      } else {
+        toast.error('Failed to delete the organization');
+      }
+    } catch (error) {
+      console.error('Error deleting organization:', error);
+      toast.error('Error deleting the organization');
     }
   };
 
@@ -260,12 +299,41 @@ export default function OrganizationReg() {
     });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setLogoFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setMediaPreview(previewUrl); // Set preview image for the file
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Retrieve token from cookie
-      const token = getCookie('token');
-      const response = await axios.post('/create_organization', newOrganization, { headers: { Authorization: `Bearer ${token}` } });
+      const token = getCookie('token'); // Retrieve token from cookies
+      
+      // If logoFile exists, upload it to Firebase
+      let fileUrl = null;
+      if (logoFile) {
+        const storageRef = ref(storage, `logos/${logoFile.name}`); // Firebase storage path
+        const uploadTask = uploadBytes(storageRef, logoFile);
+  
+        // Wait for the upload to complete and get the file URL
+        await uploadTask;
+        fileUrl = await getDownloadURL(storageRef); // Get the file's URL after upload
+      }
+  
+      // Now submit the form data and the logo URL (if available) to the backend
+      const response = await axios.post('/create_organization', {
+        ...newOrganization,
+        logoUrl: fileUrl // If no logo, this will be undefined
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
       if (response.status === 200) {
         toast.success('Organization created successfully');
         setNewOrganization({
@@ -273,8 +341,10 @@ export default function OrganizationReg() {
           schoolYear: '',
           semester: ''
         });
+        setLogoFile(null); // Reset logo file
+        setMediaPreview(null); // Reset preview
         setShowModal(false);
-        fetchOrganizations(); // Refresh the list of organizations
+        fetchOrganizations(); // Refresh the organization list
       } else {
         toast.error('Failed to create organization');
       }
@@ -283,7 +353,7 @@ export default function OrganizationReg() {
       toast.error('Failed to create organization');
     }
   };
-
+  
   // Function to get cookie value by name
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -316,36 +386,80 @@ export default function OrganizationReg() {
           </div>
 
           {organizations.length === 0 ? (
-            <p className="text-gray-500">No organizations yet.</p>
+  <p className="text-gray-500">No organizations yet.</p>
+) : (
+  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[500px] overflow-auto">
+    {organizations.map((org) => (
+      <div key={org._id} className="card bg-green-100 shadow-lg p-4 rounded-lg">
+        <h3 className="text-2xl text-green-800">{org.name}</h3>
+        <p className="text-sm text-gray-600">
+          School Year: <span className="font-semibold">{org.schoolYear}</span>
+        </p>
+        <p className="text-sm text-gray-600">
+          Semester: <span className="font-semibold">{org.semester}</span>
+        </p>
+        
+        {/* Display Logo or Placeholder if not available */}
+        <div className="mt-4 flex justify-center">
+          {org.logoUrl ? (
+            <img
+              src={org.logoUrl}
+              alt={`${org.name} Logo`}
+              className="w-24 h-24 object-cover rounded-full"
+            />
           ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[500px] overflow-auto">
-              {organizations.map((org) => (
-                <div key={org._id} className="card bg-green-100 shadow-lg p-4 rounded-lg">
-                  <h3 className="text-2xl text-green-800">{org.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    School Year: <span className="font-semibold">{org.schoolYear}</span>
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Semester: <span className="font-semibold">{org.semester}</span>
-                  </p>
-                  <div className="mt-4 flex gap-3">
-                    <button
-                      onClick={() => handleShowMembers(org)}
-                      className="btn btn-success flex-grow"
-                    >
-                      Show Members
-                    </button>
-                    <button
-                      onClick={() => fetchPotentialMembers(org.name, org._id)}
-                      className="btn btn-outline btn-success flex-grow"
-                    >
-                      Potential Members
-                    </button>
-                  </div>
-                </div>
-              ))}
+            <div className="w-24 h-24 bg-gray-300 rounded-full flex justify-center items-center">
+              <img 
+                src="https://via.placeholder.com/150" // Placeholder image URL
+                alt="Default Logo"
+                className="w-full h-full object-cover rounded-full"
+              />
             </div>
           )}
+        </div>
+
+        <div className="mt-4 flex gap-3">
+          <button
+            onClick={() => handleShowMembers(org)}
+            className="btn btn-success flex-grow"
+          >
+            Show Members
+          </button>
+          <button
+            onClick={() => fetchPotentialMembers(org.name, org._id)}
+            className="btn btn-outline btn-success flex-grow"
+          >
+            Potential Members
+          </button>
+          
+          {/* Modern Delete Button with Icon */}
+          <button
+            onClick={() => handleDeleteOrganization(org._id)}
+            className="btn btn-error flex-grow p-2 rounded-full hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+
+
 
           {/* Create Organization Modal */}
           <Modal
@@ -357,39 +471,80 @@ export default function OrganizationReg() {
             <div className="p-5 bg-gradient-to-r from-white to-green-100 rounded-lg">
               <h2 className="text-xl font-bold mb-3">Create a School Organization</h2>
               <form onSubmit={handleSubmit} className="space-y-3">
-                <div>
-                  <label>Organization Name:</label>
-                  <input
-                    type="text"
-                    name="organizationName"
-                    value={newOrganization.organizationName}
-                    onChange={handleInputChange}
-                    required
-                    className="input input-bordered w-full"
-                  />
-                </div>
-                <div>
-                  <label>School Year:</label>
-                  <input
-                    type="text"
-                    name="schoolYear"
-                    value={newOrganization.schoolYear}
-                    onChange={handleInputChange}
-                    required
-                    className="input input-bordered w-full"
-                  />
-                </div>
-                <div>
-                  <label>Semester:</label>
-                  <input
-                    type="text"
-                    name="semester"
-                    value={newOrganization.semester}
-                    onChange={handleInputChange}
-                    required
-                    className="input input-bordered w-full"
-                  />
-                </div>
+              <div>
+    <label className="text-gray-700">Organization Name:</label>
+    <input
+      type="text"
+      name="organizationName"
+      value={newOrganization.organizationName}
+      onChange={handleInputChange}
+      required
+      className="input input-bordered w-full bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500"
+    />
+  </div>
+  <div>
+    <label className="text-gray-700">School Year:</label>
+    <input
+      type="text"
+      name="schoolYear"
+      value={newOrganization.schoolYear}
+      onChange={handleInputChange}
+      required
+      className="input input-bordered w-full bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500"
+    />
+  </div>
+  <div>
+    <label className="text-gray-700">Semester:</label>
+    <input
+      type="text"
+      name="semester"
+      value={newOrganization.semester}
+      onChange={handleInputChange}
+      required
+      className="input input-bordered w-full bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500"
+    />
+  </div>
+
+                 {/* File upload section */}
+                 <div className="space-y-3">
+  <label className="font-semibold text-lg">Upload Logo:</label>
+
+  {/* Custom File Input */}
+  <label htmlFor="logo-upload" className="cursor-pointer inline-block py-2 px-4 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 transition-colors">
+    Choose File
+    <input
+      type="file"
+      id="logo-upload"
+      accept="image/*"
+      onChange={handleFileChange}
+      className="hidden"
+    />
+  </label>
+
+  {/* Image Preview */}
+  {mediaPreview && (
+    <div className="mt-3">
+      <div className="relative inline-block">
+        <img 
+          src={mediaPreview} 
+          alt="Logo Preview" 
+          className="w-32 h-32 object-cover rounded-lg shadow-md border-2 border-green-200"
+        />
+        <button
+          type="button"
+          onClick={() => setLogoFile(null)}  // Option to remove the selected logo
+          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+
                 <button type="submit" className="btn btn-success w-full mt-4">
                   Create Organization
                 </button>

@@ -29,28 +29,32 @@ const authenticateUser = (req, res, next) => {
 
 const createOrganization = async (req, res) => {
     try {
-        const { organizationName, schoolYear, semester } = req.body;
-
-        if (!organizationName || !schoolYear || !semester) {
-            return res.status(400).json({ error: 'Name, school year, and semester are required' });
-        }
-
-        // Create a new organization in the database
-        const organization = await Organization.create({
-            name: organizationName,
-            schoolYear,
-            semester,
-            createdBy: req.user.id, // Assuming req.user has the user information
-            createdAt: new Date(),
-            members:[]
-        });
-
-        res.json(organization);
+      const { organizationName, schoolYear, semester, logoUrl } = req.body;
+  
+      // Validate required fields
+      if (!organizationName || !schoolYear || !semester) {
+        return res.status(400).json({ error: 'Name, school year, and semester are required' });
+      }
+  
+      // Create a new organization in the database, including logoUrl if it exists
+      const organization = await Organization.create({
+        name: organizationName,
+        schoolYear,
+        semester,
+        createdBy: req.user.id, 
+        createdAt: new Date(),
+        members: [],
+        logoUrl: logoUrl || null, // If no logo, set as null
+      });
+  
+      // Return the created organization as the response
+      res.json(organization);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+  };
+  
 
 const getOrganization = async (req, res) => {
     try {
@@ -329,29 +333,21 @@ const getAnnouncementsByOrganizationName = async (req, res) => {
   
 const getOrganizationAnnouncement = async (req, res) => {
     try {
-      // Retrieve user ID from the request object, set by the authenticateUser middleware
       const userId = req.params.userId; 
       if (!userId) {
         return res.status(401).json({ message: 'User not authenticated' });
       }
   
-      // Find the organization of the user based on their userId
       const userOrganization = await Organization.findOne({ members: userId });
       if (!userOrganization) {
         return res.status(404).json({ message: 'User organization not found' });
       }
   
-      // Log the user's organization ID for debugging purposes
-      console.log('User Organization ID:', userOrganization._id);
-  
-      // Fetch announcements for the organization where the organizationId matches
       const announcements = await Announcement.find({
-        organizationId: userOrganization._id,  // Use organization ID to fetch announcements
-        status: 'approved',        // Ensure the announcement visibility is approved
+        organizationId: userOrganization._id,  
+        status: 'approved',        
       });
   
-      // Log fetched announcements for debugging
-      console.log('Fetched Announcements:', announcements);
   
       // Return the announcements found
       res.status(200).json(announcements);
@@ -360,6 +356,28 @@ const getOrganizationAnnouncement = async (req, res) => {
       res.status(500).json({ message: 'An error occurred while fetching announcements' });
     }
   };
+
+  const deleteOrganization = async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Find and delete the organization
+      const organization = await Organization.findByIdAndDelete(id);
+      
+      if (!organization) {
+        return res.status(404).json({ error: 'Organization not found' });
+      }
+  
+      // Delete all announcements associated with the organization
+      await Announcement.deleteMany({ organizationId: id });
+  
+      res.status(200).json({ message: 'Organization and associated announcements deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to delete organization and announcements' });
+    }
+  };
+  
   
   
 
@@ -368,6 +386,7 @@ module.exports = {
     createOrganization,
     authenticateUser,
     getOrganization,
+    deleteOrganization,
     approveOfficer,
     getPotentialMembers,
     addPotentialMembers,

@@ -32,6 +32,10 @@ const organizationSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'MobileUser'
     }],
+    logoUrl: { 
+        type: String,
+        default: null 
+      }
 
 });
 
