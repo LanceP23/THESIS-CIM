@@ -106,11 +106,11 @@ export default function Home() {
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] bg-cover bg-no-repeat bg-center w-full h-[97vh] flex justify-center items-center text-center relative  ">
-        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70"></div>
+          <div className="hero-section bg-[url('dist/assets/CORPO_CIM/CIM-HOME-COVER-2.gif')] bg-cover bg-no-repeat bg-center w-full h-[100vh] flex justify-center items-center text-center relative  ">
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
         <div className="hero-content z-10 flex"   >
-          <h1 className="text-white font-bold text-5xl md:text-6xl mb-6 " data-aos="fade-right" >Stay Connected with Campus Life</h1>
-          <p className="text-white font-medium text-xl md:text-2xl" data-aos="fade-left">Discover the latest announcements and events around campus with</p>
+          <h1 className="text-white font-bold text-5xl md:text-6xl mb-6  " data-aos="fade-right" >Stay Connected with Campus Life</h1>
+          <p className="text-white font-medium text-xl md:text-2xl text-left" data-aos="fade-left">Discover the latest announcements and events around campus with</p>
         </div>
       </div>
 
@@ -207,7 +207,7 @@ export default function Home() {
       </div>
 
         {/* App Hero Section*/ }
-      <div className="w-full max-h-[95vh] bg-green-950 ">
+      <div className="hero-section bg-[url('dist/assets/CORPO_CIM/HOME-APP-SECTION.jpg')] bg-cover bg-no-repeat bg-center w-full h-[95vh]">
       
 
        <div className="flex flex-row ">
@@ -215,9 +215,9 @@ export default function Home() {
                  {/* Top Image (Visible on smaller screens) */}
               <div className="absolute inset-0 justify-center hidden sm:block md:block lg:block xl:block">
                 <img
-                  src="/assets/CORPO_CIM/HOME_ASSET (6).png"
+                  src="dist/assets/CORPO_CIM/HOME-APP-ASSET (5).png"
                   alt="car!"
-                  className="w-[50vw] h-full opacity-30"
+                  className="w-[50vw] h-full opacity-90"
                   data-aos="flip-right"
                 />
               </div>

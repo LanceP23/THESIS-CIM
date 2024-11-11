@@ -96,12 +96,12 @@ const Login = (  ) => {
     
 
     return (
-        <body className=" bg-[url('/assets/CORPO_CIM/gradeint_cover.gif')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
+        <body className=" bg-[url('dist/assets/CORPO_CIM/LOGIN-BG-NEW.gif')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
             <Navbar/>
            
        
     
-        <div className="login-form bg-[url('/assets/webwithLogo.png')] animate-text-reveal  ">
+        <div className="login-form bg-slate-950 bg-opacity-50 animate-text-reveal   ">
 
             <div className="flex justify-center">
 
@@ -114,7 +114,7 @@ const Login = (  ) => {
             <form onSubmit={loginAdmin} >
                 
                 <div className="text-left">
-                <label className='text-white '>Administrator email</label>
+                <label className='text-white '>Administrator E-mail</label>
                 <input
                     id="adminEmail"
                     type="text"
