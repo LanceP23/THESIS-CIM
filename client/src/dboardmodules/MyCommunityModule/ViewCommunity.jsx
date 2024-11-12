@@ -151,26 +151,38 @@ const ViewCommunity = () => {
         {!loading && adminCommunities.length === 0 && <p>No communities found.</p>}
         {!loading && adminCommunities.slice(0, visibleCount).map(community => (
           <div key={community._id} className="bg-white shadow-lg rounded-lg mb-5 p-6">
+
+            <div className="flex flex-row justify-between">
             <div className="flex items-center mb-4">
               <img src={community.logo || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Community Logo" className="w-16 h-16 rounded-full mr-4" />
-              <div>
+              <div className=''>
                 <h3 className="text-2xl font-semibold text-green-800  border-b border-yellow-500   ">{community.name}</h3>
                 <p className="text-sm text-left text-gray-600">United States</p>
+
+                
+
               </div>
             </div>
+            <div className="div">
+                <button 
+                  onClick={() => handleDelete(community._id)} 
+                  className="w-auto mt-2 py-1 px-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded"
+                >
+                  Delete
+                </button>
+                </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <button onClick={() => handleView(community._id, 'posts')} className="btn btn-info w-full">View Posts</button>
               <button onClick={() => handleView(community._id, 'members')} className="btn btn-info  w-full">View Members</button>
               <button onClick={() => handleView(community._id, 'analytics')} className="btn btn-info w-full">View Analytics</button>
               <button onClick={() => handleView(community._id, 'forum')} className="btn btn-info w-full">Forum</button>
-              <button 
-  onClick={() => handleDelete(community._id)} 
-  className="w-full mt-2 py-1 px-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded"
->
-  Delete
-</button>
+              
+             
 
             </div>
+            
 
             {viewCommunityId === community._id && activeView === 'members' && (
               <div className="mt-4">

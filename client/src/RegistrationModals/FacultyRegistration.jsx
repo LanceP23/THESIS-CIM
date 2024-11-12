@@ -96,7 +96,7 @@ const FacultyRegistration = ({ data, setData }) => {
           value={data.schoolYear}
           onChange={(e) => setData({ ...data, schoolYear: e.target.value })}
           required
-          className='input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-2xl'
+          className='input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl'
         />
         </div>
         <button type='submit' className='btn btn-success btn-wide btn-sm my-2'>Register</button>

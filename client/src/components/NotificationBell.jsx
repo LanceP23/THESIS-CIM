@@ -219,9 +219,10 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
 };
     
         return (
-            <div className="notification-bell">
-                <h3 className='border-b-2 text-left'>Notifications</h3>
-                <div className="notification-dropdown theme-controller max-h-40 overflow-auto w-full">
+            <div className="div">
+            <div className="notification-bell bg-gray-300 p-3 rounded-md "  >
+                <h3 className='border-b-2 text-left text-black'>Notifications</h3>
+                <div className="notification-dropdown max-h-40 overflow-auto w-full ">
                     {( unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount + unreadCommunityNotificationCount) > 0 && (
                         <span className="notification-count"></span>
                     )}
@@ -306,7 +307,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                             
                         </ul>
                     ) : (
-                        <p className=' my-2'>No new notifications</p>
+                        <p className=' my-2 text-black'>No new notifications</p>
                     )}
                 </div>
                
@@ -331,13 +332,18 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                         <p>New community announcement: {latestCommunityNotification.announcementHeader} by {latestCommunityNotification.posterName}</p>
                     </div>
                 )}
+                
     
-                <div className="flex flex-row justify-starts mt-1">
+                
+            </div>
+            <div className="flex flex-row justify-starts mt-1">
                     <Link to="/notif-module" className='btn-link p-0'>
                         <p className=''><FontAwesomeIcon  icon={faList} />   See Notifications</p>
                     </Link>
                 </div>
             </div>
+
+            
         );
     };
     

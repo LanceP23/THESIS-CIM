@@ -87,8 +87,9 @@ const MessageDropdown = ({ setTotalUnreadMessages }) => {
       };
 
     return (
-        <div className="notification-bell">
-            <h3 className='border-b-2 text-left'>Notifications</h3>
+        <div className="div">
+        <div className="notification-bell bg-gray-300 p-3 rounded-md">
+            <h3 className='border-b-2 text-left text-black'>Messages</h3>
             <div className="notification-dropdown max-h-40 overflow-auto w-full">
                 {(unreadMessageCount) > 0 && (
                     <span className="notification-count"></span>
@@ -102,7 +103,7 @@ const MessageDropdown = ({ setTotalUnreadMessages }) => {
                                         <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="avatar" />
                                     </div>
                                 </div>
-                                <div className="div">
+                                <div className="div text-black ">
                                     <li>
                                         New message from {notification.senderName}: {notification.message}
                                     </li>
@@ -111,7 +112,7 @@ const MessageDropdown = ({ setTotalUnreadMessages }) => {
                         ))}
                     </ul>
                 ) : (
-                    <p className=' my-2'>No new messages</p>
+                    <p className=' my-2 text-black'>No new messages</p>
                 )}
             </div>
             {latestMessage && (
@@ -120,7 +121,9 @@ const MessageDropdown = ({ setTotalUnreadMessages }) => {
                 </div>
             )}
 
-            <div className="flex flex-row justify-starts mt-1">
+           
+        </div>
+        <div className="flex flex-row justify-starts mt-1">
                 <Link to="/campcomms" className='btn-link p-0'>
                     <p className=''><FontAwesomeIcon icon={faEnvelope} /> See Messages</p> 
 

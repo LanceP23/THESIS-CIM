@@ -85,7 +85,7 @@ const Navbar_2 = () => {
               
             <FontAwesomeIcon icon={faHome} className='text-yellow-500' />  
             <div className="">   
-            <h6 className='font-bold'>Dashboard</h6>
+            <h6 className='font-bold text-white'>Dashboard</h6>
             </div>
             </Link>
           </li>
@@ -93,7 +93,7 @@ const Navbar_2 = () => {
               <Link to="/createannouncement" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='text-yellow-500' icon={faBullhorn} />  
               <div className="">
-              <h6 className='font-bold'> Post Management </h6> 
+              <h6 className='font-bold text-white'> Post Management </h6> 
               </div>
               </Link>
             </li>
@@ -101,7 +101,7 @@ const Navbar_2 = () => {
               <Link to="/event-calendar" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='text-yellow-500' icon={faCalendarCheck} />  
               <div className="">
-              <h6 className='font-bold'>Event Calendar</h6> 
+              <h6 className='font-bold text-white'>Event Calendar</h6> 
               </div>
               </Link>
             </li>
@@ -111,16 +111,16 @@ const Navbar_2 = () => {
               <Link to="/analytics-report" onClick={closeSidebar} className=''>
               <FontAwesomeIcon  className='text-yellow-500'icon={faChartBar} />  
               <div className="">
-              <h6 className='font-bold'>   Analytics Report</h6>
+              <h6 className='font-bold text-white'>   Analytics Report</h6>
               </div>
               </Link>
             </li>
             
             <li className=''>
               <Link to="/campcomms" onClick={closeSidebar} className=' '>
-              <FontAwesomeIcon className='text-yellow-500' icon={faComment} /> 
+              <FontAwesomeIcon className='text-yellow-500 ' icon={faComment} /> 
               <div className="">
-                <h6 className='font-bold'>Campus Comms </h6>  
+                <h6 className='font-bold text-white'>Campus Comms </h6>  
                 </div>
               </Link>
             </li>
@@ -133,14 +133,14 @@ const Navbar_2 = () => {
                 <Link to="/user-settings" onClick={closeSidebar} className=' '>
                 <FontAwesomeIcon className='text-yellow-500' icon={faLock} /> 
                 <div className="">
-                  <h6 className='font-bold'>Mobile User Management</h6>  
+                  <h6 className='font-bold text-white'>Mobile User Management</h6>  
                   </div>
                 </Link>
               ):<>
                 <Link to="/createorg" onClick={closeSidebar} className='' >
                 <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
                 <div className="">
-                <h6 className='font-bold'>  Organizations </h6>
+                <h6 className='font-boldtext-white'>  Organizations </h6>
                 </div>
                 </Link>        
                 </> }
@@ -154,7 +154,7 @@ const Navbar_2 = () => {
               <Link to="/register" className=''>
                 <FontAwesomeIcon  className='text-yellow-500' icon={faAddressCard} />  
                 <div className="">
-                <h6 className=' font-bold'>  Account Registration</h6>
+                <h6 className=' font-bold text-white'>  Account Registration</h6>
                 </div>
                 </Link>
             ):null}
@@ -165,7 +165,7 @@ const Navbar_2 = () => {
             <Link to="/createorg" onClick={closeSidebar} className=''> 
             <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
             <div className="">
-            <h6 className='font-bold'>  Manage Organization</h6>
+            <h6 className='font-bold text-white'>  Manage Organization</h6>
             </div>
             </Link>
             ):null}
@@ -175,7 +175,7 @@ const Navbar_2 = () => {
               <Link to="/community-landing" onClick={closeSidebar} className='' >
               <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
               <div className="">
-              <h6 className='font-bold'>   My Community</h6>
+              <h6 className='font-bold text-white'>   My Community</h6>
               </div>
               </Link>
               ):null}
@@ -230,9 +230,9 @@ const Navbar_2 = () => {
     <div className="dropdown dropdown-end  ">
       
       <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">{userName}</a>
-      <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 mr-5 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-white">
+      <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 mr-5 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-black">
         <li>
-          <div className="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+          <div className="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-black bg-gray-300">
             <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                 <path fillRule="evenodd"
@@ -247,7 +247,7 @@ const Navbar_2 = () => {
           <li></li>
           <li onClick={handleLogout} className='bg-red-600 rounded-lg flex items-center'>
                 <a>Logout 
-                  <svg className="text-white"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"> 
+                  <svg className="text-black"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"> 
                     <path stroke="none" d="M0 0h24v24H0z"/> 
                     <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /> 
                     <path d="M7 12h14l-3 -3m0 6l3 -3" /> 
