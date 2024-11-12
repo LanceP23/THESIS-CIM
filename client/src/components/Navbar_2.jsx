@@ -200,7 +200,7 @@ const Navbar_2 = () => {
             {totalUnreadCount > 0 && (
               <span className="indicator-item indicator-start badge badge-secondary bg-yellow-200">{totalUnreadCount}</span>
             )}
-            <button className="btn btn-success mx-1 dropdown dropdown-end btn-sm btn-circle"
+            <button className="btn btn-success mx-1 dropdown text-gray-500 dropdown-end btn-sm btn-circle"
             onClick={resetUnreadCount}>
               <div tabIndex={0} role="button" className="indicator m-1">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" data-tip="Notif" fill="none" viewBox="0 0 24 24" stroke="currentColor">

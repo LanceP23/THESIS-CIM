@@ -443,7 +443,7 @@ export default function CreateAnnouncement() {
                 <div>
                   <label className="label text-gray-700" htmlFor="header">Header:</label>
                   <input
-                    className="input input-bordered input-success input-md w-full text-gray-700 bg-white rounded-md shadow-xl"
+                    className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
                     type="text"
                     id="header"
                     value={header}
@@ -453,7 +453,7 @@ export default function CreateAnnouncement() {
                 <div>
                   <label className="label text-gray-700" htmlFor="body">Body:</label>
                   <textarea
-                    className="textarea textarea-success w-full text-gray-700 bg-white rounded-md shadow-xl"
+                    className="textarea textarea-success w-full dark:text-white rounded-md shadow-xl"
                     id="body"
                     value={body}
                     onChange={handleBodyChange}
@@ -464,7 +464,7 @@ export default function CreateAnnouncement() {
                   <label className="label flex justify-center items-center text-gray-700" htmlFor="media">Media:</label>
                   </div>
                   <input
-                    className="file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 bg-white rounded-md shadow-xl"
+                    className="file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs mx-5 dark:bg-white rounded-md shadow-xl"
                     type="file"
                     id="media"
                     accept="image/*, video/*, audio/*"
@@ -494,7 +494,7 @@ export default function CreateAnnouncement() {
                 <div className='flex flex-wrap justify-start my-2'>
                     <label className="label text-gray-700" htmlFor="postingDate">Posting Date:</label>
                     <input
-                      className="input input-success input-md text-white ml-2 sm:ml-2 md:ml-6 lg:ml-6 xl:ml-6 mr-1 shadow-md "
+                      className="input input-success input-md ml-2 sm:ml-2 md:ml-6 lg:ml-6 xl:ml-6 mr-1 shadow-md dark:text-white "
                       type="datetime-local"
                       id="postingDate"
                       value={postingDate}
@@ -505,7 +505,7 @@ export default function CreateAnnouncement() {
                   <div className='flex flex-wrap justify-start'>
                     <label className="label text-gray-700" htmlFor="expirationDate">Expiration Date:</label>
                     <input
-                      className="input input-success input-md text-white mx-1 shadow-md "
+                      className="input input-success input-md  mx-1 shadow-md dark:text-white "
                       type="datetime-local"
                       id="expirationDate"
                       value={expirationDate}

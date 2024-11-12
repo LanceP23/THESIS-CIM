@@ -101,7 +101,7 @@ const Login = (  ) => {
            
        
     
-        <div className="login-form bg-slate-950 bg-opacity-50 animate-text-reveal   ">
+        <div className="login-form  bg-slate-950 bg-opacity-50 animate-text-reveal   ">
 
             <div className="flex justify-center">
 
@@ -122,12 +122,12 @@ const Login = (  ) => {
                     value={data.studentemail}
                     onChange={(e) => setData({ ...data, studentemail: e.target.value })}
                     onKeyDown={handleKeyDown}
-                    className='input input-bordered input-accent w-full max-w-sm text-base-300 bg-white shadow-2xl'
+                    className='input input-bordered input-accent w-full max-w-sm  dark:text-white shadow-2xl'
                 />
                 </div>
 
                 <div className="text-left">
-                <label className='text-white '>Password</label>
+                <label className='text-white'>Password</label>
                 <input
                     id = "password"
                     type="password"
@@ -135,7 +135,7 @@ const Login = (  ) => {
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
                     onKeyDown={handleKeyDown}
-                    className='input input-bordered input-accent w-full max-w-sm text-base-300 bg-white shadow-2xl'
+                    className='input input-bordered input-accent w-full max-w-sm dark:text-white shadow-2xl'
                 />
                 </div>
                 

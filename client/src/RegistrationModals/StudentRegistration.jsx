@@ -40,7 +40,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
           value={data.name}
           onChange={(e) => setData({ ...data, name: e.target.value })}
           required
-          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
+          className='input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-2xl'
         />
         </div>
 
@@ -51,7 +51,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
           value={data.studentemail}
           onChange={(e) => setData({ ...data, studentemail: e.target.value })}
           required
-          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
+          className='input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl'
         />
         </div>
 
@@ -62,13 +62,13 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
           value={data.password}
           onChange={(e) => setData({ ...data, password: e.target.value })}
           required
-          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
+          className='input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl'
         />
         </div>
 
         <div className="flex flex-col text-left m-1">
         <label>Admin Type</label>
-        <select value={data.adminType} onChange={(e) => setData({ ...data, adminType: e.target.value })} className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'>
+        <select value={data.adminType} onChange={(e) => setData({ ...data, adminType: e.target.value })} className='select select-accent select-sm w-full max-w-full dark:text-white shadow-2xl'>
           <option value='Organization Officer'>Organization Officer</option>
           <option value='Student Government'>Student Government</option>
         </select>
@@ -84,7 +84,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
               value={data.position}
               onChange={(e) => setData({ ...data, position: e.target.value })}
               required
-              className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'
+              className='select select-accent select-sm w-full max-w-full dark:text-white shadow-2xl'
             >
               <option value=''>Select Position</option>
               <option value='President'>President</option>
@@ -108,7 +108,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
               value={data.position}
               onChange={(e) => setData({ ...data, position: e.target.value })}
               required
-              className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'
+              className='select select-accent select-sm w-full max-w-full dark:text-white shadow-2xl'
             >
               <option value=''>Select Position</option>
               <option value='President'>President</option>
@@ -129,7 +129,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
           value={data.organization}
           onChange={(e) => setData({ ...data, organization: e.target.value })}
           required
-          className='select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl'
+          className='select select-accent select-sm w-full max-w-full dark:text-white shadow-2xl'
         >
           <option value=''>Select Organization</option>
           {organizations.map((org) => (
@@ -147,7 +147,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
           value={data.schoolYear}
           onChange={(e) => setData({ ...data, schoolYear: e.target.value })}
           required
-          className='input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl'
+          className='input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl'
         />
         </div>
         <button type='submit' className=' btn btn-wide btn-success btn-sm mt-2'>Register</button>

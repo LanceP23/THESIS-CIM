@@ -61,38 +61,38 @@ const UpdateUser = ({ user, onUpdate }) => {
      
       <form onSubmit={handleSubmit}>
         <div className='flex justify-between my-1'>
-          <label className='text-base-200'>Name:</label>
+          <label className=''>Name:</label>
           <input type="text"
            value={name} 
           onChange={handleChangeName} 
-          className='input input-sm input-success text-white'
+          className='input input-sm input-success dark:text-white'
           />
         </div>
         <div className='flex justify-between'>
-          <label className='text-base-200'>Email:</label>
+          <label className=''>Email:</label>
           <input type="email" 
           value={email} 
           onChange={handleChangeEmail}
-          className='input input-sm input-success text-white' 
+          className='input input-sm input-success dark:text-white' 
           />
         </div>
         {user.adminType === 'Organization Officer' && (
           <div className="flex flex-col">
           <div className='flex justify-between my-1'>
-            <label className='text-base-200'>Position:</label>
+            <label className=''>Position:</label>
             <input type="text" 
             value={position} 
             onChange={handleChangePosition} 
-            className='input input-sm input-success text-white'
+            className='input input-sm input-success dark:text-white'
             />
             </div>
 
           <div className="flex">
-            <label className='text-base-200'>Organization:</label>
+            <label className=''>Organization:</label>
             <input type="text" 
             value={organization} 
             onChange={handleChangeOrganization} 
-            className='input input-sm input-success text-white'
+            className='input input-sm input-success dark:text-white'
             />
             </div>
             </div>
@@ -100,21 +100,21 @@ const UpdateUser = ({ user, onUpdate }) => {
         )}
         {user.adminType !== 'Staff' && (
           <div className='flex justify-between my-1 '>
-            <label className='text-base-200'>School Year:</label>
+            <label className=''>School Year:</label>
             <input type="text" 
             value={schoolYear} 
             onChange={handleChangeSchoolYear} 
-            className='input input-sm input-success text-white' 
+            className='input input-sm input-success dark:text-white' 
             />
           </div>
         )}
         {(user.adminType === 'Program Head' || user.adminType === 'Instructor') && (
           <div className='flex justify-between my-1'>
-            <label className='text-base-200'>Department:</label>
+            <label className='text-black'>Department:</label>
             <input type="text" 
             value={department} 
             onChange={handleChangeDepartment} 
-            className='input input-sm input-success text-white'
+            className='input input-sm input-success dark:text-white'
             />
           </div>
         )}

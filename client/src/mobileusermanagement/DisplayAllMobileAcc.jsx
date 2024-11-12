@@ -72,9 +72,9 @@ const UserManagement = () => {
                     placeholder="Search by name"
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className='input input-success input-sm text-white mx-4 shadow-md mb-3'
+                    className='input input-success input-sm dark:text-white mx-4 shadow-md mb-3'
                 />
-                <select value={filterOption} onChange={e => setFilterOption(e.target.value)} className='select select-success select-sm text-white w-full max-w-xs'>
+                <select value={filterOption} onChange={e => setFilterOption(e.target.value)} className='select select-success select-sm dark:text-white w-full max-w-xs'>
                     <option value="All">All</option>
                     <option value="Grade School">Grade School</option>
                     <option value="High School">High School</option>
@@ -105,7 +105,7 @@ const UserManagement = () => {
                   type="text"
                   value={editedUserData.name}
                   onChange={(e) => setEditedUserData({ ...editedUserData, name: e.target.value })}
-                  className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
+                  className='input input-bordered input-success input-sm w-full dark:text-white bg-base rounded-md shadow-xl'
                 />
               ) : (
                 user.name
@@ -118,7 +118,7 @@ const UserManagement = () => {
                   type="text"
                   value={editedUserData.studentemail}
                   onChange={(e) => setEditedUserData({ ...editedUserData, studentemail: e.target.value })}
-                  className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
+                  className='input input-bordered input-success input-sm w-full dark:text-white bg-base rounded-md shadow-xl'
                 />
               ) : (
                 user.studentemail
@@ -130,7 +130,7 @@ const UserManagement = () => {
                   type="text"
                   value={editedUserData.educationLevel}
                   onChange={(e) => setEditedUserData({ ...editedUserData, educationLevel: e.target.value })}
-                  className='input input-bordered input-success input-sm w-full text-white bg-base rounded-md shadow-xl'
+                  className='input input-bordered input-success input-sm w-full dark:text-white bg-base rounded-md shadow-xl'
                 />
               ) : (
                 user.educationLevel

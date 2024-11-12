@@ -47,11 +47,11 @@ const StaffAccounts = () => {
           <tbody>
           {staffAccounts.map((user, index) => (
               <tr key={user._id}  className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}>
-                <td className="border px-4 py-2 text-base-200">{user.name}</td>
-                <td className="border px-4 py-2 text-base-200"> {user.studentemail}</td>
-                <td className="border px-4 py-2 text-base-200">{user.adminType}</td>
+                <td className="border px-4 py-2 text-black dark:text-white">{user.name}</td>
+                <td className="border px-4 py-2 text-black dark:text-white"> {user.studentemail}</td>
+                <td className="border px-4 py-2 text-black dark:text-white">{user.adminType}</td>
                 <td className="border px-4 py-2">
-                <UpdateUser user={user} onUpdate={handleUpdateUser} />
+                <UpdateUser user={user} onUpdate={handleUpdateUser}  />
                 <DeleteUser userId={user._id} onDelete={handleDeleteUser} />
                 </td>
               </tr>

@@ -73,7 +73,7 @@ const StudentMobileUserReg = () => {
                     Name:
                     <input
                         type="text"
-                        className="input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl"
+                        className="input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-2xl"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -85,7 +85,7 @@ const StudentMobileUserReg = () => {
                     Email:
                     <input
                         type="email"
-                        className="input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl"
+                        className="input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-2xl"
                         value={studentemail}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -97,7 +97,7 @@ const StudentMobileUserReg = () => {
                     Password:
                     <input
                         type="password"
-                        className="input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl"
+                        className="input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-2xl"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -109,7 +109,7 @@ const StudentMobileUserReg = () => {
                     Section:
                     <input
                         type="text"
-                        className="input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl"
+                        className="input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl"
                         value={section}
                         onChange={(e) => setSection(e.target.value)}
                     />
@@ -123,7 +123,7 @@ const StudentMobileUserReg = () => {
                 <div className="flex flex-col text-left m-1">
                 <label>
                     Education Level:
-                    <select className="select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl" value={educationLevel} onChange={(e) => setEducationLevel(e.target.value)}>
+                    <select className="select select-accent select-sm w-full max-w-full dark:text-white  shadow-2xl" value={educationLevel} onChange={(e) => setEducationLevel(e.target.value)}>
                         <option value="">Select Education Level</option>
                         <option value="Grade School">Grade School</option>
                         <option value="High School">High School</option>
@@ -141,7 +141,7 @@ const StudentMobileUserReg = () => {
                         Grade Level:
                         <input
                             type="number"
-                            className="input_field"
+                            className="dark:text-white "
                             value={gradeLevel}
                             onChange={(e) => setGradeLevel(e.target.value)}
                         />
@@ -155,7 +155,7 @@ const StudentMobileUserReg = () => {
                         High School Year Level:
                         <input
                             type="number"
-                            className="input_field"
+                            className="dark:text-white "
                             value={highSchoolYearLevel}
                             onChange={(e) => setHighSchoolYearLevel(e.target.value)}
                         />
@@ -170,7 +170,7 @@ const StudentMobileUserReg = () => {
                             SHS Strand:
                             <input
                                 type="text"
-                                className="input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl"
+                                className="input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl"
                                 value={shsStrand}
                                 onChange={(e) => setShsStrand(e.target.value)}
                                
@@ -181,7 +181,7 @@ const StudentMobileUserReg = () => {
                         <div className="flex flex-col text-left m-1">
                         <label>
                             Senior High School Year Level:
-                            <select className="select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl" value={highSchoolYearLevel} onChange={(e) => setHighSchoolYearLevel(e.target.value)}>
+                            <select className="select select-accent select-sm w-full max-w-full dark:text-white  shadow-2xl" value={highSchoolYearLevel} onChange={(e) => setHighSchoolYearLevel(e.target.value)}>
                                 <option value="">Select Year Level</option>
                                 <option value="11">Grade 11</option>
                                 <option value="12">Grade 12</option>
@@ -197,7 +197,7 @@ const StudentMobileUserReg = () => {
                         <div className="flex flex-col text-left m-1">
                         <label>
                             College Course:
-                            <select className="select select-accent select-sm w-full max-w-full text-gray-700 bg-white shadow-2xl       " value={collegeCourse} onChange={(e) => setCollegeCourse(e.target.value)}>
+                            <select className="select select-accent select-sm w-full max-w-full dark:text-white  shadow-2xl       " value={collegeCourse} onChange={(e) => setCollegeCourse(e.target.value)}>
                                 <option value="">Select Course</option>
                                 <option value="Bachelor of Elementary Education">Bachelor of Elementary Education</option>
                                 <option value="Bachelor of Secondary Education Major in English">Bachelor of Secondary Education Major in English</option>
@@ -218,7 +218,7 @@ const StudentMobileUserReg = () => {
                             College Year Level:
                             <input
                                 type="number"
-                                className="input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl"
+                                className="input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-2xl"
                                 value={collegeYearLevel}
                                 onChange={(e) => setCollegeYearLevel(e.target.value)}
                             />
@@ -232,7 +232,7 @@ const StudentMobileUserReg = () => {
                     Subjects (comma-separated):
                     <input
                         type="text"
-                        className="input input-bordered input-success input-sm w-full text-gray-700 bg-white rounded-md shadow-2xl"
+                        className="input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-2xl"
                         value={subjects}
                         onChange={(e) => setSubjects(e.target.value)}
                     />

@@ -178,13 +178,13 @@ const ManageUserAnnouncement = () => {
             type="text"
             value={editHeader}
             onChange={(e) => setEditHeader(e.target.value)}
-            className="input input-bordered input-success input-md w-full text-gray-700 bg-white rounded-md shadow-xl mb-2"
+            className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl mb-2"
           />
           <label className="label text-red-500 opacity-50" htmlFor="expirationDate">*Body:</label>
           <textarea
             value={editBody}
             onChange={(e) => setEditBody(e.target.value)}
-            className="textarea textarea-success w-full text-gray-700 bg-white rounded-md shadow-xl mb-2"
+            className="textarea textarea-success w-full dark:text-white  rounded-md shadow-xl mb-2"
           />
           <div className="flex justify-end gap-2">
             <button onClick={() => handleUpdate(post._id)} className="btn btn-info">Update</button>

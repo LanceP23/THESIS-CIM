@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-  
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -9,31 +9,21 @@
 
   color-scheme: light dark;
   color: #333; /* Dark gray */
-  
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   background: radial-gradient(circle, rgb(124, 255, 192) 0%, rgb(0, 0, 0) 100%);
   animation: gradient 20s ease infinite;
-
-
 }
-
-
-
 
 body {
   margin: 0;
   padding: 0;
- 
-  
+
   background: radial-gradient(circle, rgb(124, 255, 192) 0%, rgb(0, 0, 0) 100%);
   background-size: 200% 200%;
   animation: gradient 20s ease infinite;
 
-
-
-  
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
@@ -45,7 +35,8 @@ h1 {
 }
 
 @keyframes gradient {
-  0%, 100% {
+  0%,
+  100% {
     background-size: 100% 100%;
     background-position: left center;
   }
@@ -54,17 +45,3 @@ h1 {
     background-position: right center;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

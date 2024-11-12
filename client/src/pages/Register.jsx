@@ -210,7 +210,7 @@ export default function Register() {
             value={academicYear}
             onChange={(e) => setAcademicYear(e.target.value)}
             placeholder="Enter academic year"
-            className='input input-bordered input-success w-full text-white'
+            className='input input-bordered input-success w-full dark:text-white'
           />
         </div>
         <div className='flex flex-col'>
@@ -221,7 +221,7 @@ export default function Register() {
             value={schoolSemester}
             onChange={(e) => setSchoolSemester(e.target.value)}
             placeholder="Enter school semester"
-            className='input input-bordered input-success w-full  text-white'
+            className='input input-bordered input-success w-full  dark:text-white'
           />
         </div>
         <div className='my-3'>

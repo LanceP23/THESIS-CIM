@@ -41,10 +41,10 @@ const StudentAccounts = () => {
     <tbody>
     {studentAccounts.map((user, index) => (
         <tr key={user._id}  className={` hover:bg-customyellow ${index % 2 === 0 ? 'bg-gray-200' : 'bg-green-100'}`}>
-          <td className="border px-4 py-2 text-base-200">{user.name}</td>
-          <td className="border px-4 py-2 text-base-200"> {user.studentemail}</td>
-          <td className="border px-4 py-2 text-base-200">{user.adminType}</td>
-          <td className="border px-4 py-2 text-base-200">
+          <td className="border px-4 py-2 text-black">{user.name}</td>
+          <td className="border px-4 py-2 text-black"> {user.studentemail}</td>
+          <td className="border px-4 py-2 text-black">{user.adminType}</td>
+          <td className="border px-4 py-2 text-black">
           {user.adminType === 'Student Government' && (
               <div>
                 <strong>Position:</strong> {user.position}
