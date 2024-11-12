@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPeopleArrows } from '@fortawesome/free-solid-svg-icons';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {  FaTrashAlt } from 'react-icons/fa';
+
 
 
 const customStyles = {
@@ -366,10 +368,11 @@ export default function OrganizationReg() {
   };
 
   return (
-    <div className="animate-fade-in p-5 bg-gray-50 min-h-screen">
+    <div className="p-3 pt-10 mt-10">
+    <div className="animate-fade-in  ">
 
       {adminType !== 'Organization Officer' && (
-        <div className="mt-8 rounded-2xl shadow-lg p-6 bg-white">
+        <div className="mt-8 rounded-2xl shadow-lg p-6 bg-white border">
 
           <h2 className="text-4xl text-green-800 flex items-center gap-2 pb-3 border-b-2 border-yellow-500">
             <FontAwesomeIcon icon={faPeopleArrows} className="text-yellow-500" />
@@ -435,22 +438,9 @@ export default function OrganizationReg() {
           {/* Modern Delete Button with Icon */}
           <button
             onClick={() => handleDeleteOrganization(org._id)}
-            className="btn btn-error flex-grow p-2 rounded-full hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="btn btn-error p-3 rounded-full  focus:outline-none focus:ring-2 focus:ring-red-500"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <FaTrashAlt />
           </button>
         </div>
       </div>
@@ -461,141 +451,181 @@ export default function OrganizationReg() {
 
 
 
-          {/* Create Organization Modal */}
-          <Modal
-            isOpen={showModal}
-            onRequestClose={() => setShowModal(false)}
-            contentLabel="Create Organization Modal"
-            className="modal-container"
-          >
-            <div className="p-5 bg-gradient-to-r from-white to-green-100 rounded-lg">
-              <h2 className="text-xl font-bold mb-3">Create a School Organization</h2>
-              <form onSubmit={handleSubmit} className="space-y-3">
-              <div>
-    <label className="text-gray-700">Organization Name:</label>
-    <input
-      type="text"
-      name="organizationName"
-      value={newOrganization.organizationName}
-      onChange={handleInputChange}
-      required
-      className="input input-bordered w-full bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-    />
-  </div>
-  <div>
-    <label className="text-gray-700">School Year:</label>
-    <input
-      type="text"
-      name="schoolYear"
-      value={newOrganization.schoolYear}
-      onChange={handleInputChange}
-      required
-      className="input input-bordered w-full bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-    />
-  </div>
-  <div>
-    <label className="text-gray-700">Semester:</label>
-    <input
-      type="text"
-      name="semester"
-      value={newOrganization.semester}
-      onChange={handleInputChange}
-      required
-      className="input input-bordered w-full bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-    />
-  </div>
-
-                 {/* File upload section */}
-                 <div className="space-y-3">
-  <label className="font-semibold text-lg">Upload Logo:</label>
-
-  {/* Custom File Input */}
-  <label htmlFor="logo-upload" className="cursor-pointer inline-block py-2 px-4 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 transition-colors">
-    Choose File
-    <input
-      type="file"
-      id="logo-upload"
-      accept="image/*"
-      onChange={handleFileChange}
-      className="hidden"
-    />
-  </label>
-
-  {/* Image Preview */}
-  {mediaPreview && (
-    <div className="mt-3">
-      <div className="relative inline-block">
-        <img 
-          src={mediaPreview} 
-          alt="Logo Preview" 
-          className="w-32 h-32 object-cover rounded-lg shadow-md border-2 border-green-200"
+<Modal
+  isOpen={showModal}
+  onRequestClose={() => setShowModal(false)}
+  contentLabel="Create Organization Modal"
+  className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+  overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+>
+  <div className="relative bg-gradient-to-r from-white to-green-100 p-6 rounded-lg shadow-lg max-w-lg w-full mx-4">
+    
+    {/* Close Button */}
+    <button
+      onClick={() => setShowModal(false)}
+      className="absolute top-4 right-4 btn btn-circle btn-sm "
+    >
+       <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
+    </button>
+    
+    <h2 className="text-2xl font-bold mb-4">Create a School Organization</h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      
+      {/* Organization Name */}
+      <div>
+        <label className="text-gray-700">Organization Name:</label>
+        <input
+          type="text"
+          name="organizationName"
+          value={newOrganization.organizationName}
+          onChange={handleInputChange}
+          required
+          className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
         />
-        <button
-          type="button"
-          onClick={() => setLogoFile(null)}  // Option to remove the selected logo
-          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
       </div>
-    </div>
-  )}
-</div>
 
+      {/* School Year */}
+      <div>
+        <label className="text-gray-700">School Year:</label>
+        <input
+          type="text"
+          name="schoolYear"
+          value={newOrganization.schoolYear}
+          onChange={handleInputChange}
+          required
+          className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
+        />
+      </div>
 
-                <button type="submit" className="btn btn-success w-full mt-4">
-                  Create Organization
-                </button>
-              </form>
-            </div>
-          </Modal>
+      {/* Semester */}
+      <div>
+        <label className="text-gray-700">Semester:</label>
+        <input
+          type="text"
+          name="semester"
+          value={newOrganization.semester}
+          onChange={handleInputChange}
+          required
+          className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
+        />
+      </div>
 
-          {/* Potential Members Modal */}
-          <Modal
-            isOpen={showPotentialMembersModal}
-            onRequestClose={handleClosePotentialMembersModal}
-            contentLabel="Potential Members Modal"
-            className="modal-container"
-          >
-            <div className="p-5 bg-white rounded-lg">
-              <h2 className="text-xl font-bold mb-3">Potential Members</h2>
-              <div className="space-y-3">
-                {potentialMembers.map((member) => (
-                  <div key={member._id} className="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow">
-                    <div>
-                      <p>{member.name}</p>
-                      <p className="text-sm text-gray-500">{member.position}</p>
-                    </div>
-                    <button
-                      onClick={() => addPotentialMember(member._id, selectedOrganization)}
-                      className="btn btn-success"
-                    >
-                      Add to Organization
-                    </button>
-                  </div>
-                ))}
-              </div>
+      {/* File Upload Section */}
+      <div>
+        <label className="font-semibold text-lg text-gray-700">Upload Logo:</label>
+        <label
+          htmlFor="logo-upload"
+          className="cursor-pointer inline-block mt-2 py-2 px-4 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 transition-colors"
+        >
+          Choose File
+          <input
+            type="file"
+            id="logo-upload"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+        </label>
+
+        {/* Image Preview */}
+        {mediaPreview && (
+          <div className="mt-3">
+            <div className="relative inline-block">
+              <img
+                src={mediaPreview}
+                alt="Logo Preview"
+                className="w-32 h-32 object-cover rounded-lg shadow-md border-2 border-green-200"
+              />
               <button
-                onClick={handleClosePotentialMembersModal}
-                className="btn btn-error w-full mt-4"
+                type="button"
+                onClick={() => setLogoFile(null)} // Remove selected logo
+                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600"
               >
-                Close
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
-          </Modal>
+          </div>
+        )}
+      </div>
 
-          {/* Members Modal */}
-          <Modal
+      {/* Submit Button */}
+      <div className="flex flex-row justify-center">
+      <button
+        type="submit"
+        className="btn btn-success px-16 my-4 size text-base justify-center items-center"
+      >
+        Create Organization
+      </button>
+      </div>
+    </form>
+  </div>
+</Modal>
+
+
+        <Modal
+          isOpen={showPotentialMembersModal}
+          onRequestClose={handleClosePotentialMembersModal}
+          contentLabel="Potential Members Modal"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+          overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+        >
+          <div className="relative p-5 bg-white rounded-lg">
+            
+           
+
+            <h2 className="text-xl font-bold mb-3">Potential Members</h2>
+            <div className="space-y-3">
+              {potentialMembers.map((member) => (
+                <div key={member._id} className="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow">
+                  <div>
+                    <p>{member.name}</p>
+                    <p className="text-sm text-gray-500">{member.position}</p>
+                  </div>
+                  <button
+                    onClick={() => addPotentialMember(member._id, selectedOrganization)}
+                    className="btn btn-success"
+                  >
+                    Add to Organization
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={handleClosePotentialMembersModal}
+              className="btn btn-error w-full mt-4"
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
+
+
+         <Modal
             isOpen={showMembersModal}
             onRequestClose={handleCloseMembersModal}
             contentLabel="Members Modal"
-            className="modal-container"
+            className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
           >
-            <div className="p-5 bg-white rounded-lg">
+            <div className="relative p-5 bg-white rounded-lg">
+              
+           
+
               <h2 className="text-xl font-bold mb-3">Members of {selectedOrganization}</h2>
-              <div className="space-y-3">
+              <div className="space-y-3 max-h-72 overflow-y-auto">
                 {members.map((member) => (
                   <div key={member._id} className="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow">
                     <div>
@@ -614,15 +644,19 @@ export default function OrganizationReg() {
                   </div>
                 ))}
               </div>
+
               <button onClick={handleCloseMembersModal} className="btn btn-error w-full mt-4">
                 Close
               </button>
+              
             </div>
           </Modal>
+
         </div>
       )}
 
       {adminType === 'Organization Officer' && <OrganizationOfficerPanel />}
+    </div>
     </div>
   );
 

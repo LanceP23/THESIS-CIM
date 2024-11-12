@@ -86,7 +86,7 @@ const Navbar_2 = () => {
               
             <FontAwesomeIcon icon={faHome} className='text-yellow-500' />  
             <div className="">   
-            <h6 className='font-bold'>Dashboard</h6>
+            <h6 className='font-bold text-white'>Dashboard</h6>
             </div>
             </Link>
           </li>
@@ -94,7 +94,7 @@ const Navbar_2 = () => {
               <Link to="/createannouncement" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='text-yellow-500' icon={faBullhorn} />  
               <div className="">
-              <h6 className='font-bold'> Post Management </h6> 
+              <h6 className='font-bold text-white'> Post Management </h6> 
               </div>
               </Link>
             </li>
@@ -102,7 +102,7 @@ const Navbar_2 = () => {
               <Link to="/event-calendar" onClick={closeSidebar} className=''>
               <FontAwesomeIcon className='text-yellow-500' icon={faCalendarCheck} />  
               <div className="">
-              <h6 className='font-bold'>Event Calendar</h6> 
+              <h6 className='font-bold text-white'>Event Calendar</h6> 
               </div>
               </Link>
             </li>
@@ -112,16 +112,16 @@ const Navbar_2 = () => {
               <Link to="/analytics-report" onClick={closeSidebar} className=''>
               <FontAwesomeIcon  className='text-yellow-500'icon={faChartBar} />  
               <div className="">
-              <h6 className='font-bold'>   Analytics Report</h6>
+              <h6 className='font-bold text-white'>   Analytics Report</h6>
               </div>
               </Link>
             </li>
             
             <li className=''>
               <Link to="/campcomms" onClick={closeSidebar} className=' '>
-              <FontAwesomeIcon className='text-yellow-500' icon={faComment} /> 
+              <FontAwesomeIcon className='text-yellow-500 ' icon={faComment} /> 
               <div className="">
-                <h6 className='font-bold'>Campus Comms </h6>  
+                <h6 className='font-bold text-white'>Campus Comms </h6>  
                 </div>
               </Link>
             </li>
@@ -134,14 +134,14 @@ const Navbar_2 = () => {
                 <Link to="/user-settings" onClick={closeSidebar} className=' '>
                 <FontAwesomeIcon className='text-yellow-500' icon={faLock} /> 
                 <div className="">
-                  <h6 className='font-bold'>Mobile User Management</h6>  
+                  <h6 className='font-bold text-white'>Mobile User Management</h6>  
                   </div>
                 </Link>
               ):<>
                 <Link to="/createorg" onClick={closeSidebar} className='' >
                 <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
                 <div className="">
-                <h6 className='font-bold'>  Organizations </h6>
+                <h6 className='font-boldtext-white'>  Organizations </h6>
                 </div>
                 </Link>        
                 </> }
@@ -155,7 +155,7 @@ const Navbar_2 = () => {
               <Link to="/register" className=''>
                 <FontAwesomeIcon  className='text-yellow-500' icon={faAddressCard} />  
                 <div className="">
-                <h6 className=' font-bold'>  Account Registration</h6>
+                <h6 className=' font-bold text-white'>  Account Registration</h6>
                 </div>
                 </Link>
             ):null}
@@ -166,7 +166,7 @@ const Navbar_2 = () => {
             <Link to="/createorg" onClick={closeSidebar} className=''> 
             <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} />   
             <div className="">
-            <h6 className='font-bold'>  Manage Organization</h6>
+            <h6 className='font-bold text-white'>  Manage Organization</h6>
             </div>
             </Link>
             ):null}
@@ -176,7 +176,7 @@ const Navbar_2 = () => {
               <Link to="/community-landing" onClick={closeSidebar} className='' >
               <FontAwesomeIcon className='text-yellow-500' icon={faPeopleArrows} /> 
               <div className="">
-              <h6 className='font-bold'>   My Community</h6>
+              <h6 className='font-bold text-white'>   My Community</h6>
               </div>
               </Link>
               ):null}

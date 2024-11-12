@@ -120,18 +120,21 @@ const MinigameAnalytics = () => {
 
   return (
     <div className=" border  p-4 rounded-lg " >
-     <div className="game-indicator p-2 rounded-full text-center text-white font-semibold mb-6 flex items-center space-x-4">
-  <img 
-    src="/assets/CORPO_CIM/CIMdle Logo.png" 
-    alt="CIMdle Logo" 
-    className="w-24 h-24" 
-  />
-  <h2 className="text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3">
-    CIMdle Analytics
-  </h2> 
-</div>
+     <div className="flex flex-row bg-gradient-to-r from-black to-green-800 rounded-md">
+      <div className="div">
+        <img 
+          src="dist/assets/CORPO_CIM/CIMdle_LOGO.png" 
+          alt="CIMdle Logo" 
+          className="h-[35vh] w-full opacity-50" 
+        />
+        </div>
+        <div className=" ">
+          
+     
+        </div>
+      </div>
 
-
+<div className="divider divider-warning"></div>
    
 
       {/* Analytics Section */}
