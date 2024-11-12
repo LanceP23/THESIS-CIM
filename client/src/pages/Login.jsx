@@ -96,7 +96,7 @@ const Login = (  ) => {
     
 
     return (
-        <body className=" bg-[url('dist/assets/CORPO_CIM/LOGIN-BG-NEW.gif')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
+        <body className=" bg-[url('/assets/CORPO_CIM/LOGIN-NEW-BG.gif')] flex justify-center absolute top-0 left-0 bg-cover bg-center w-full h-full" >
             <Navbar/>
            
        

@@ -106,7 +106,7 @@ export default function Home() {
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('dist/assets/CORPO_CIM/CIM-HOME-COVER-2.gif')] bg-cover bg-no-repeat bg-center w-full h-[100vh] flex justify-center items-center text-center relative  ">
+          <div className="hero-section bg-[url('/assets/CORPO_CIM/CIM-HOME-COVER-2.gif')] bg-cover bg-no-repeat bg-center w-full h-[100vh] flex justify-center items-center text-center relative  ">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
         <div className="hero-content z-10 flex"   >
           <h1 className="text-white font-bold text-5xl md:text-6xl mb-6  " data-aos="fade-right" >Stay Connected with Campus Life</h1>
@@ -207,7 +207,7 @@ export default function Home() {
       </div>
 
         {/* App Hero Section*/ }
-      <div className="hero-section bg-[url('dist/assets/CORPO_CIM/HOME-APP-SECTION.jpg')] bg-cover bg-no-repeat bg-center w-full h-[95vh]">
+      <div className="hero-section bg-[url('/assets/CORPO_CIM/HOME-APP-SECTION.jpg')] bg-cover bg-no-repeat bg-center w-full h-[95vh]">
       
 
        <div className="flex flex-row ">
@@ -215,7 +215,7 @@ export default function Home() {
                  {/* Top Image (Visible on smaller screens) */}
               <div className="absolute inset-0 justify-center hidden sm:block md:block lg:block xl:block">
                 <img
-                  src="dist/assets/CORPO_CIM/HOME-APP-ASSET (5).png"
+                  src="/assets/CORPO_CIM/HOME-APP-ASSET (5).png"
                   alt="car!"
                   className="w-[50vw] h-full opacity-90"
                   data-aos="flip-right"

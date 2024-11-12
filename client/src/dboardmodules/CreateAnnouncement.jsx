@@ -61,6 +61,7 @@ export default function CreateAnnouncement() {
   const [organizationId, setOrganizationId] = useState(null);
   const [selectedMinigame, setSelectedMinigame] = useState('');
   const [minigameWord, setMinigameWord] = useState('');
+  const [isValidWord, setIsValidWord] = useState(true);
   const [activeTab, setActiveTab] = useState("create");
 
   const adminType2 = localStorage.getItem('adminType');
@@ -223,8 +224,13 @@ export default function CreateAnnouncement() {
     setSelectedMinigame(e.target.value);
   };
   
-  const handleMinigameWordChange = (e) => {
-    setMinigameWord(e.target.value);
+  const handleMinigameWordChange = (event) => {
+    const input = event.target.value;
+    setMinigameWord(input);
+
+    // Check if input is exactly 5 letters and contains only alphabet characters
+    const wordRegex = /^[a-zA-Z]{5}$/;
+    setIsValidWord(wordRegex.test(input));
   };
 
   const handleSubmit = async () => {
@@ -542,31 +548,64 @@ export default function CreateAnnouncement() {
                   </div>
                 )}
 
-              <div className="flex my-3">
-                    <label className="label text-gray-700">Select Minigame:</label>
-                    <select
-                      value={selectedMinigame}
-                      onChange={handleMinigameChange}
-                      className="flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md  "
-                    >
-                      <option value="">Select a minigame</option>
-                      <option value="CIM Wordle">CIM Wordle</option>
-                      <option value="Coming Soon">Coming Soon</option>
-                    </select>
-                  </div>
-                  {selectedMinigame === 'CIM Wordle' && (
-                    <div className="flex my-3">
-                      <label className="label text-gray-700" htmlFor="minigameWord">Enter 5-Letter Word:</label>
-                      <input
-                        className="input input-bordered input-success input-md w-full text-gray-700 bg-white rounded-md shadow-xl"
-                        type="text"
-                        id="minigameWord"
-                        value={minigameWord}
-                        onChange={handleMinigameWordChange}
-                        maxLength={5}
-                      />
-                    </div>
-                  )}
+<div className="flex flex-col items-center my-3">
+      <label className="label text-gray-700">Select Minigame:</label>
+      <div className="flex space-x-4 mt-1">
+        <button
+          onClick={() => handleMinigameChange({ target: { value: 'CIM Wordle' } })}
+          className={`flex items-center space-x-2 py-2 px-3 rounded-md shadow-md 
+            ${selectedMinigame === 'CIM Wordle' ? 'bg-green-300 text-white' : 'bg-white text-gray-700 border border-green-300'}`}
+        >
+          <img 
+            src="/assets/CORPO_CIM/CIMdle Logo.png" 
+            alt="CIM Wordle Logo" 
+            className="w-10 h-10" 
+          />
+          <span>CIM Wordle</span>
+        </button>
+
+        <button
+          onClick={() => handleMinigameChange({ target: { value: 'Coming Soon' } })}
+          className={`py-2 px-3 rounded-md shadow-md 
+            ${selectedMinigame === 'Coming Soon' ? 'bg-green-300 text-white' : 'bg-white text-gray-700 border border-green-300'}`}
+        >
+          Coming Soon
+        </button>
+
+        <button
+          onClick={() => setSelectedMinigame('')}
+          className={`py-2 px-3 rounded-md shadow-md 
+            ${selectedMinigame === '' ? 'bg-red-300 text-white' : 'bg-white text-gray-700 border border-red-300'}`}
+        >
+          No Minigame
+        </button>
+      </div>
+
+      {/* Conditional Content for CIM Wordle */}
+      {selectedMinigame === 'CIM Wordle' && (
+        <div className="flex flex-col items-center my-3">
+          <img 
+            src="/assets/CORPO_CIM/CIMdle Logo.png"
+            alt="CIM Wordle Logo" 
+            className="w-20 h-20 mb-3" 
+          />
+          <label className="label text-gray-700" htmlFor="minigameWord">Enter 5-Letter Word:</label>
+          <input
+            className={`input input-bordered ${isValidWord ? 'input-success' : 'input-error'} input-md w-48 text-gray-700 bg-white rounded-md shadow-xl`}
+            type="text"
+            id="minigameWord"
+            value={minigameWord}
+            onChange={handleMinigameWordChange}
+            maxLength={5}
+          />
+          {!isValidWord && (
+            <p className="text-red-500 mt-1">Please enter a valid 5-letter word.</p>
+          )}
+        </div>
+      )}
+    </div>
+
+
                   
 
                 <div className="post_button flex justify-end">
