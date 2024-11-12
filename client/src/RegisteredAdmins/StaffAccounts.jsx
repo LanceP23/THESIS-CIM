@@ -20,8 +20,11 @@ const StaffAccounts = () => {
   };
 
   const handleUpdateUser = (updatedUser) => {
-    setStaffAccounts(staffAccounts.map(user => (user._id === updatedUser._id ? updatedUser : user)));
-  };
+    setStaffAccounts(staffAccounts.map(user => 
+        user._id === updatedUser._id ? {...user, ...updatedUser} : user
+    ));
+};
+
 
   const handleDeleteUser = (userId) => {
     setStaffAccounts(staffAccounts.filter(user => user._id !== userId));
@@ -52,7 +55,7 @@ const StaffAccounts = () => {
                 <td className="border px-4 py-2 text-black dark:text-white">{user.adminType}</td>
                 <td className="border px-4 py-2">
                 <UpdateUser user={user} onUpdate={handleUpdateUser}  />
-                <DeleteUser userId={user._id} onDelete={handleDeleteUser} />
+                <DeleteUser user={user} onDelete={handleDeleteUser} />
                 </td>
               </tr>
             ))}

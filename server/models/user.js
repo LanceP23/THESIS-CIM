@@ -43,6 +43,10 @@ const userSchema = new Schema({
             return this.adminType === 'Program Head' || this.adminType === 'Instructor'; // required for faculty
         }
     },
+    profilePicture: {
+        type: String, // URL for the profile picture (optional)
+        required: false
+    },
     notifications: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Notification'

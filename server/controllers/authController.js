@@ -12,7 +12,7 @@ const test = (req, res) =>{
 //Registration ep
 const registerUser = async (req, res) => {
     try {
-        const { name, studentemail, password, adminType, position, schoolYear,department,organization } = req.body;
+        const { name, studentemail, password, adminType, position, schoolYear,department,organization, profilePictureUrl } = req.body;
 
         if (adminType === 'School Owner' || adminType === 'President') {
             const existingUser = await User.findOne({ adminType });
@@ -136,6 +136,11 @@ const registerUser = async (req, res) => {
                 return res.status(400).json({ error: 'Invalid admin type' });
         }
 
+        if (profilePictureUrl) {
+            user.profilePicture = profilePictureUrl;
+            await user.save();
+        }
+
         return res.json(user);
     } catch (error) {
         console.log(error);
@@ -181,7 +186,13 @@ const loginUser = async (req, res) => {
 
         // Generate JWT token
         jwt.sign(
-            { email: user.studentemail, id: user._id, name: user.name, adminType: user.adminType },
+            {
+                email: user.studentemail,
+                id: user._id,
+                name: user.name,
+                adminType: user.adminType,
+                ...(user.profilePicture && { profilePicture: user.profilePicture })  // Conditionally add profilePicture
+            },
             process.env.JWT_SECRET,
             { expiresIn: '24h' },
             (err, token) => {
@@ -193,6 +204,7 @@ const loginUser = async (req, res) => {
                 res.cookie('token', token).json({ token, adminType: user.adminType });
             }
         );
+        
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal Server Error' });

@@ -20,8 +20,22 @@ const FacultyAccounts = () => {
   };
 
   const handleUpdateUser = (updatedUser) => {
-    setFacultyAccounts(facultyAccounts.map(user => (user._id === updatedUser._id ? updatedUser : user)));
-  };
+    setFacultyAccounts((prevAccounts) => 
+        prevAccounts.map((user) =>
+            user._id === updatedUser._id ? {...user, ...updatedUser} : user
+        )
+    );
+};
+
+const handlePictureUpdate = (userId, pictureUrl) => {
+  setFacultyAccounts((prevAccounts) => 
+    prevAccounts.map((user) => 
+      user._id === userId ? { ...user, profilePicture: pictureUrl } : user
+    )
+  );
+};
+
+
 
   const handleDeleteUser = (userId) => {
     setFacultyAccounts(facultyAccounts.filter(user => user._id !== userId));
@@ -55,8 +69,10 @@ const FacultyAccounts = () => {
           <td className="border px-4 py-2 text-black">{user.adminType}</td>
           <td className="border px-4 py-2 text-black">{user.department}</td>
           <td className="border px-4 py-2">
-          <UpdateUser user={user} onUpdate={handleUpdateUser} />
-          <DeleteUser userId={user._id} onDelete={handleDeleteUser} />
+          <UpdateUser user={user} 
+  onUpdate={handleUpdateUser} 
+  onPictureUpdate={handlePictureUpdate} />
+          <DeleteUser user={user} onDelete={handleDeleteUser} />
           </td>
         </tr>
       ))}

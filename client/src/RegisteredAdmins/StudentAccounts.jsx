@@ -16,8 +16,11 @@ const StudentAccounts = () => {
     }
   };
   const handleUpdateUser = (updatedUser) => {
-    setStudentAccounts(studentAccounts.map(user => (user._id === updatedUser._id ? updatedUser : user)));
-  };
+    setStudentAccounts(studentAccounts.map(user => 
+        user._id === updatedUser._id ? {...user, ...updatedUser} : user
+    ));
+};
+
   const handleDeleteUser = (userId) => {
     setStudentAccounts(studentAccounts.filter(user => user._id !== userId));
   };
@@ -61,7 +64,7 @@ const StudentAccounts = () => {
           </td>
           <td className="border px-4 py-2">
           <UpdateUser user={user} onUpdate={handleUpdateUser} />
-          <DeleteUser userId={user._id} onDelete={handleDeleteUser} />
+          <DeleteUser user={user} onDelete={handleDeleteUser} />
           </td>
         </tr>
       ))}

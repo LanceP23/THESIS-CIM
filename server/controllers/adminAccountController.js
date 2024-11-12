@@ -50,6 +50,7 @@ const updateUser = async (req, res) => {
   const deleteUser = async (req, res) => {
     try {
       const { id } = req.params;
+      console.log(id);
       await User.findByIdAndDelete(id);
       res.json({ message: 'User deleted successfully' });
     } catch (error) {

@@ -1,13 +1,42 @@
 import React from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { initializeApp } from 'firebase/app';
+import { useState } from 'react';
+import 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import './RegisterModal.css'
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAQZQtWzdKepDwzzhOAw_F8A4xkhtwz9p0",
+  authDomain: "cim-storage.firebaseapp.com",
+  projectId: "cim-storage",
+  storageBucket: "cim-storage.appspot.com",
+  messagingSenderId: "616767248215",
+  appId: "1:616767248215:web:b554a837f3229fdc155012",
+  measurementId: "G-YN9S75JSNB"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
+
 const StudentRegistration = ({ data, setData, organizations, registerAdmin }) => {
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/register', data);
+      let profilePictureUrl = null;
+
+      // Upload profile picture if provided
+      if (profilePicture) {
+        const storageRef = ref(storage, `profile_pictures/${profilePicture.name}`);
+        await uploadBytesResumable(storageRef, profilePicture);
+        profilePictureUrl = await getDownloadURL(storageRef);
+      }
+
+      const response = await axios.post('/register', { ...data, profilePictureUrl });
       if (response.data.error) {
         toast.error(response.data.error);
       } else {
@@ -15,11 +44,13 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
           name: '',
           studentemail: '',
           password: '',
-          adminType: 'Organization Officer', // Default adminType for student registration
+          adminType: 'Organization Officer',
           organization: '',
           position: '',
           schoolYear: '',
         });
+        setProfilePicture(null); // Clear profile picture
+        setProfilePictureUrl(null); // Clear preview
         toast.success('Student registration successful!');
       }
     } catch (error) {
@@ -27,12 +58,39 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
       toast.error('Failed to register student');
     }
   };
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePicture(file);
+
+    // Display preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      setProfilePictureUrl(reader.result);
+    };
+    if (file) reader.readAsDataURL(file);
+  };
+  
 
   return (
     <div>
       <h2 className='border-b-2 py-1 border-gray-800 text-lg font-semibold'>Student Registration</h2>
       <form onSubmit={handleSubmit}>
 
+        {/* Profile Picture Upload */}
+        <div className="flex flex-col text-left m-1">
+          <label>Profile Picture (optional):</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleProfilePictureChange}
+            className="file-input file-input-bordered file-input-success file-input-sm w-full rounded-md shadow-2xl"
+          />
+          {profilePictureUrl && (
+            <div className="mt-2">
+              <img src={profilePictureUrl} alt="Profile Preview" className="w-24 h-24 object-cover rounded-full mx-auto" />
+            </div>
+          )}
+        </div>
         <div className="flex flex-col text-left m-1">
         <label>Name</label>
         <input

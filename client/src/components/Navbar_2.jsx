@@ -15,6 +15,7 @@ const Navbar_2 = () => {
   const [totalUnreadCount, setTotalUnreadCount] = useState(0); 
   const [totalUnreadMessages, setTotalUnreadMessages] = useState(0);
   const userName = user ? user.name : '';
+  const profilePicture = user && user.profilePicture ? user.profilePicture : 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp';
  
   useEffect (()=>{
     setIsOpen(false);
@@ -187,37 +188,33 @@ const Navbar_2 = () => {
   </div>
   
   <div className="flex-1">
-<Link to="/dashboard" className=' btn-link '>
-  <img src='/assets/CORPO_CIM/CIM_2024.png' className='h-auto w-24 sm:28 md:32 lg:32 xl:32  mt-1 mx-0 '/>
-  </Link>
-  </div>
-  <div className="flex flex-auto justify-start relative left-10 hidden lg:block">
-  <img src='/assets/CORPO_CIM/CSCQ_PLAIN_CUT_WHITE.png' className=' h-full w-96  mt-1 mx-0 flex justify-center align-middle '/>
-  </div>
- 
-  <div className="flex flex-row">
-  <div className="indicator">
+          <Link to="/dashboard" className=' btn-link'>
+            <img src='/assets/CORPO_CIM/CIM_2024.png' className='h-auto w-24 sm:28 md:32 lg:32 xl:32 mt-1 mx-0 ' />
+          </Link>
+        </div>
+
+        <div className="flex flex-row">
+          <div className="indicator">
             {totalUnreadCount > 0 && (
               <span className="indicator-item indicator-start badge badge-secondary bg-yellow-200">{totalUnreadCount}</span>
             )}
-            <button className="btn btn-success mx-1 dropdown text-gray-500 dropdown-end btn-sm btn-circle"
-            onClick={resetUnreadCount}>
+            <button className="btn btn-success mx-1 dropdown text-gray-500 dropdown-end btn-sm btn-circle" onClick={resetUnreadCount}>
               <div tabIndex={0} role="button" className="indicator m-1">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" data-tip="Notif" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
               </div>
               <ul tabIndex={0} className="dropdown-content z-[1] menu p-3 mt-2 mr-0 shadow bg-base-100 rounded-box w-52">
-                <NotificationBell setTotalUnreadCount={setTotalUnreadCount}/>
+                <NotificationBell setTotalUnreadCount={setTotalUnreadCount} />
               </ul>
             </button>
           </div>
+
           <div className="indicator">
             {totalUnreadMessages > 0 && (
               <span className="indicator-item indicator-start badge badge-secondary bg-yellow-200">{totalUnreadMessages}</span>
             )}
-            <button className="btn btn-success mx-1 dropdown dropdown-end btn-sm btn-circle"
-            onClick={resetUnreadMessageCount}>
+            <button className="btn btn-success mx-1 dropdown dropdown-end btn-sm btn-circle" onClick={resetUnreadMessageCount}>
               <div tabIndex={0} role="button" className="indicator m-1">
                 <FontAwesomeIcon icon={faEnvelope} className="h-5 w-5 text-yellow-400" data-tip="Messages" />
               </div>
@@ -227,44 +224,36 @@ const Navbar_2 = () => {
             </button>
           </div>
 
-    <div className="dropdown dropdown-end  ">
-      
-      <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">{userName}</a>
-      <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 mr-5 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-white">
-        <li>
-          <div className="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
-            <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path fillRule="evenodd"
-                  d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                  clipRule="evenodd"></path>
-              </svg>
-            </div>
-          <span className="ml-[18px]">{adminType}</span>
-  </div>
-  </li>
-      
-          <li></li>
-          <li onClick={handleLogout} className='bg-red-600 rounded-lg flex items-center'>
-                <a>Logout 
-                  <svg className="text-white"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"> 
-                    <path stroke="none" d="M0 0h24v24H0z"/> 
-                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /> 
-                    <path d="M7 12h14l-3 -3m0 6l3 -3" /> 
-                  </svg>
-                </a>
-          </li>
-      </ul>
-    </div>
-   
-    
-  
-  </div>
-       
+          <div className="dropdown dropdown-end">
+            <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">
+              <div className="flex items-center space-x-2">
+                {/* Profile picture */}
+                <img src={profilePicture} alt="Profile" className="w-10 h-10 rounded-full border-2 border-gray-400" />
+                <div>
+                  <span className="block font-bold text-sm">{userName}</span>
+                  <span className="text-xs text-gray-300">{adminType ? adminType : 'User'}</span>
+                </div>
+              </div>
+            </a>
+            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 mr-5 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-white">
+              <li>
+                <div className="relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white">
+                  <div className="absolute top-2/4 left-1.5 h-5 w-5 -translate-y-2/4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                      <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <button onClick={handleLogout} className="inline-flex w-full items-center gap-2 rounded-lg py-1.5 pl-10 pr-4 font-medium leading-snug text-white">
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-       
-       
+      </div>
     </nav>
-  )
-}
+  );
+};
+
 export default Navbar_2
