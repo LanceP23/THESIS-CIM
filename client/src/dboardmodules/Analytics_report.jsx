@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Brush, Legend } from 'recharts';
 import { BarChart, Bar } from 'recharts';
 import { PieChart, Pie, Cell } from 'recharts';
 import { UserContext } from '../../context/userContext';
@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPercent, faThumbsDown, faThumbsUp, faDownload } from '@fortawesome/free-solid-svg-icons';
 import {saveAs} from 'file-saver';
 import MinigameAnalytics from './MinigameAnalytics';
+import CombineAnalytics from './CombinedAnalytics';
 
 const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
 const AnalyticsReport = () => {
@@ -331,6 +332,16 @@ const exportData = () => {
         >
           Minigame Analytics
         </button>
+        <button
+  className={`px-4 py-2 font-semibold ${
+    activeTab === 'combined' ? 'border-b-2 border-green-600' : 'text-gray-600'
+  } ${true ? 'bg-gray-300 cursor-not-allowed' : ''}`} // Disables the button and changes the background color
+  disabled // Makes the button non-interactive
+  title="Under Development" // Tooltip on hover
+>
+  Combined Analytics
+</button>
+
       </div>
 
       {/* User Engagement Tab Content */}
@@ -437,33 +448,48 @@ const exportData = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 mt-6">
-            <div className="p-4 bg-white shadow-lg rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions by Date</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={aggregatedReactions}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="likes" stroke="#8884d8" />
-                  <Line type="monotone" dataKey="dislikes" stroke="#ff7300" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="p-4 bg-white shadow-lg rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions Count by Date</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={aggregatedReactions}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="likes" fill="#8884d8" />
-                  <Bar dataKey="dislikes" fill="#ff7300" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+      {/* Reactions by Date (Line Chart) */}
+      <div className="p-4 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions by Date</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={aggregatedReactions}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            
+            {/* Line chart for likes and dislikes */}
+            <Line type="monotone" dataKey="likes" stroke="#8884d8" />
+            <Line type="monotone" dataKey="dislikes" stroke="#ff7300" />
+
+            {/* Brush for range selection */}
+            <Brush />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Reactions Count by Date (Bar Chart) */}
+      <div className="p-4 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions Count by Date</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={aggregatedReactions}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            
+            {/* Bar chart for likes and dislikes */}
+            <Bar dataKey="likes" fill="#8884d8" />
+            <Bar dataKey="dislikes" fill="#ff7300" />
+
+            {/* Brush for range selection */}
+            <Brush />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
 
           
           
@@ -583,6 +609,12 @@ const exportData = () => {
       {activeTab === 'minigame' && (
         <div>
           <MinigameAnalytics/>
+          </div>
+      )}
+
+{activeTab === 'combined' && (
+        <div>
+          <CombineAnalytics/>
           </div>
       )}
       

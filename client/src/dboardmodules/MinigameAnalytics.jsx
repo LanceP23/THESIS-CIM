@@ -16,6 +16,14 @@ const MinigameAnalytics = () => {
   const [winStreaks, setWinStreaks] = useState([]);
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
+  const [leaderboard, setLeaderboard] = useState([  // Fake leaderboard data for now
+    { rank: 1, playerName: 'Player 1', clawmarks: 1500 },
+    { rank: 2, playerName: 'Player 2', clawmarks: 1200 },
+    { rank: 3, playerName: 'Player 3', clawmarks: 1000 },
+    { rank: 4, playerName: 'Player 4', clawmarks: 800 },
+    { rank: 5, playerName: 'Player 5', clawmarks: 600 },
+    { rank: 6, playerName: 'Player 6', clawmarks: 500 }
+  ]);
 
   // Fetch Analytics Data
   const fetchAnalytics = async () => {
@@ -123,7 +131,7 @@ const MinigameAnalytics = () => {
      <div className="flex flex-row bg-gradient-to-r from-black to-green-800 rounded-md">
       <div className="div">
         <img 
-          src="dist/assets/CORPO_CIM/CIMdle_LOGO.png" 
+          src="/assets/CORPO_CIM/CIMdle_LOGO.png" 
           alt="CIMdle Logo" 
           className="h-[35vh] w-full opacity-50" 
         />
@@ -185,6 +193,39 @@ const MinigameAnalytics = () => {
                 <Bar dataKey="value" fill="#4bc0c0" />
               </BarChart>
             </ResponsiveContainer>
+          </div>
+        )}
+      </div>
+
+       {/* Leaderboard Section */}
+       <div className="leaderboard-section mt-6 p-4 bg-white rounded-lg shadow-lg">
+        <h3 className="text-3xl font-semibold text-green-800 mb-4 border-b border-yellow-500">Clawmarks Leaderboard <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 ml-2 text-3xl" /></h3>
+        {leaderboard.length === 0 ? (
+          <p className="text-lg text-gray-600">No leaderboard data available.</p>
+        ) : (
+          <div className="leaderboard-list">
+            <ul className="list-none">
+              {leaderboard.map((player, index) => (
+                <li key={index} className="flex items-center p-3 mb-4 border-b">
+                  {/* Rank and Trophy Icon */}
+                  <div className="flex items-center w-1/6">
+                    <span className={`rank-badge ${index === 0 ? 'bg-yellow-500 text-white' : index === 1 ? 'bg-gray-500 text-white' : index === 2 ? 'bg-yellow-300 text-gray-800' : 'bg-gray-300'}`}>
+                      {player.rank}
+                    </span>
+                    <FontAwesomeIcon 
+                      icon={index === 0 ? faTrophy : index === 1 ? faMedal : faAward} 
+                      className={`text-2xl ml-2 ${index === 0 ? 'text-yellow-500' : index === 1 ? 'text-gray-500' : 'text-yellow-800'}`} 
+                    />
+                  </div>
+                  
+                  {/* Player's name and clawmarks */}
+                  <div className="player-info flex justify-between w-5/6">
+                    <div className="player-name text-lg font-semibold text-gray-800">{player.playerName}</div>
+                    <div className="clawmarks text-xl font-bold text-green-800">{player.clawmarks} Clawmarks</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
@@ -270,7 +311,8 @@ const MinigameAnalytics = () => {
             <h3 className="text-xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3">Automated Analysis</h3>
             
             <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
-              <p className="text-lg text-gray-700">{analysis}</p>
+            <p className="text-lg text-gray-700 text-justify">{analysis}</p>
+
             </div>
             <div className="text-end my-3">
               <button
