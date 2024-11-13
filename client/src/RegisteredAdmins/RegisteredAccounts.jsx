@@ -18,7 +18,7 @@ const RegisteredAccounts = () => {
 
         <div role="tablist" className="tabs tabs-lifted ">
   <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Staff" />
-  <div role="tabpanel" className="tab-content bg-green-200 border-base-300 rounded-box p-6 text-white overflow-x-auto"><StaffAccounts /></div>
+  <div role="tabpanel" className="tab-content bg-green-200 border-base-300 rounded-box p-6  overflow-x-auto"><StaffAccounts /></div>
 
   <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Faculty" />
   <div role="tabpanel" className="tab-content bg-green-200 border-base-300 rounded-box p-6 overflow-x-auto">    <FacultyAccounts /></div>

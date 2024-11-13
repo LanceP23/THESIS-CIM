@@ -92,17 +92,17 @@ const UpdateUser = ({ user, onUpdate, onPictureUpdate }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className='flex justify-between my-1'>
-          <label>Name:</label>
+        <div className='flex justify-between my-1 '>
+          <label className=' text-black'>Name:</label>
           <input type="text" value={name} onChange={handleChangeName} className='input input-sm input-success dark:text-white' />
         </div>
         <div className='flex justify-between'>
-          <label>Email:</label>
+          <label className='text-black'>Email:</label>
           <input type="email" value={email} onChange={handleChangeEmail} className='input input-sm input-success dark:text-white' />
         </div>
         {/* Profile Picture Section */}
         <div className='flex justify-between'>
-          <label>Profile Picture:</label>
+          <label className='text-black'>Profile Picture:</label>
           <div className="flex flex-col items-center">
             {profilePicture ? (
               <div>
@@ -118,7 +118,7 @@ const UpdateUser = ({ user, onUpdate, onPictureUpdate }) => {
               </div>
             ) : (
               <div>
-                <p>No profile picture</p>
+                <p className='text-black'>No profile picture</p>
                 <label htmlFor="profilePicInput" className="btn btn-xs btn-success my-1">Add Profile Picture</label>
                 <input 
                   id="profilePicInput" 
@@ -137,11 +137,11 @@ const UpdateUser = ({ user, onUpdate, onPictureUpdate }) => {
         {user.adminType === 'Organization Officer' && (
           <div className="flex flex-col">
             <div className='flex justify-between my-1'>
-              <label>Position:</label>
+              <label className='text-black' >Position:</label>
               <input type="text" value={position} onChange={handleChangePosition} className='input input-sm input-success dark:text-white' />
             </div>
             <div className="flex">
-              <label>Organization:</label>
+              <label className='text-black'>Organization:</label>
               <input type="text" value={organization} onChange={handleChangeOrganization} className='input input-sm input-success dark:text-white' />
             </div>
           </div>
@@ -149,14 +149,14 @@ const UpdateUser = ({ user, onUpdate, onPictureUpdate }) => {
 
         {user.adminType !== 'Staff' && (
           <div className='flex justify-between my-1'>
-            <label>School Year:</label>
+            <label className='text-black'>School Year:</label>
             <input type="text" value={schoolYear} onChange={handleChangeSchoolYear} className='input input-sm input-success dark:text-white' />
           </div>
         )}
 
         {(user.adminType === 'Program Head' || user.adminType === 'Instructor') && (
           <div className='flex justify-between my-1'>
-            <label>Department:</label>
+            <label className='text-black'>Department:</label>
             <input type="text" value={department} onChange={handleChangeDepartment} className='input input-sm input-success dark:text-white' />
           </div>
         )}

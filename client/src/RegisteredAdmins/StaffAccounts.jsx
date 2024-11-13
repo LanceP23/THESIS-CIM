@@ -53,7 +53,7 @@ const StaffAccounts = () => {
                 <td className="border px-4 py-2 text-black ">{user.name}</td>
                 <td className="border px-4 py-2 text-black "> {user.studentemail}</td>
                 <td className="border px-4 py-2 text-black ">{user.adminType}</td>
-                <td className="border px-4 py-2">
+                <td className="border px-4 py-2 text-black">
                 <UpdateUser user={user} onUpdate={handleUpdateUser}  />
                 <DeleteUser user={user} onDelete={handleDeleteUser} />
                 </td>

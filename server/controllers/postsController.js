@@ -575,17 +575,35 @@ const updateAnnouncement = async (req, res) => {
   }
  }
 
- const getCommentsByAnnouncementId = async (req, res) => {
-  try {
-    const { announcementId } = req.params;    
-    const comments = await PostComments.find({ announcementId }).populate('userId', 'name'); 
+ const mongoose = require('mongoose'); // Ensure mongoose is required
 
-    res.status(200).json(comments);
+const getCommentsByAnnouncementId = async (req, res) => {
+  try {
+    const { announcementId } = req.params;  // Get announcementId from params
+    const postId = announcementId;  // Both announcementId and postId are the same, so we reuse it
+
+    // Use the 'new' keyword to create an instance of ObjectId
+    const objectId = new mongoose.Types.ObjectId(postId);  // Correct way to create ObjectId
+
+    // Query using $or to check for both postId and announcementId
+    const comments = await PostComments.find({
+      $or: [
+        { postId: objectId }, 
+        { announcementId: objectId } // Check either postId or announcementId
+      ]
+    }).populate('userId', 'name');
+    
+    console.log("Post ID:", postId);  // For debugging
+    console.log("Comments:", comments);  // For debugging
+
+    res.status(200).json(comments);  // Send the result as JSON
   } catch (error) {
     console.error('Error fetching comments:', error);
     res.status(500).json({ error: 'Server error while fetching comments' });
   }
 };
+
+
 
 const deleteComments = async (req, res) => {
   try {
