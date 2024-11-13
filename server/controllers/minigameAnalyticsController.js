@@ -180,7 +180,6 @@ const getGuessDistribution = async (req, res) => {
     } catch (error) {
       console.error("Error fetching active players by date:", error);
       res.status(500).json({ error: 'Error fetching active players by date' });
-      res.status(304).json({error:'error'})
     }
   };
   
@@ -203,6 +202,24 @@ const getGuessDistribution = async (req, res) => {
     }
   };
   
+  const getUsersWithClawMarks = async (req, res) => {
+    const User = mongoose.connection.collection('users');
+    const MobileUser = mongoose.connection.collection('mobileusers');
+  
+    try {
+      const users = await User.find({ clawMarks: { $gt: 0 } }).toArray();
+      const mobileUsers = await MobileUser.find({ clawMarks: { $gt: 0 } }).toArray();
+  
+      const allUsers = [...users, ...mobileUsers];
+  
+      const sortedUsers = allUsers.sort((a, b) => b.clawMarks - a.clawMarks);
+  
+      res.status(200).json(sortedUsers);
+    } catch (error) {
+      console.error("Error fetching users with clawMarks:", error);
+      res.status(500).json({ error: "Failed to fetch users with clawMarks" });
+    }
+  };
   
   
 
@@ -215,5 +232,5 @@ module.exports = {
   getWinStreaks,
   getActivePlayersByDate,
   getGuessDistributionByPlayer,
-
+  getUsersWithClawMarks
 };

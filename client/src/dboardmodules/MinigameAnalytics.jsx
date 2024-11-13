@@ -16,14 +16,7 @@ const MinigameAnalytics = () => {
   const [winStreaks, setWinStreaks] = useState([]);
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
-  const [leaderboard, setLeaderboard] = useState([  // Fake leaderboard data for now
-    { rank: 1, playerName: 'Player 1', clawmarks: 1500 },
-    { rank: 2, playerName: 'Player 2', clawmarks: 1200 },
-    { rank: 3, playerName: 'Player 3', clawmarks: 1000 },
-    { rank: 4, playerName: 'Player 4', clawmarks: 800 },
-    { rank: 5, playerName: 'Player 5', clawmarks: 600 },
-    { rank: 6, playerName: 'Player 6', clawmarks: 500 }
-  ]);
+  const [leaderboard, setLeaderboard] = useState([]);
 
   // Fetch Analytics Data
   const fetchAnalytics = async () => {
@@ -44,6 +37,15 @@ const MinigameAnalytics = () => {
       setWinStreaks(winStreaksRes.data.streaks);
     } catch (error) {
       console.error('Error fetching analytics:', error);
+    }
+  };
+
+  const fetchLeaderboard = async () => {
+    try {
+      const leaderboardRes = await axios.get('/leaderboard');
+      setLeaderboard(leaderboardRes.data);
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error);
     }
   };
 
@@ -109,6 +111,7 @@ const MinigameAnalytics = () => {
 
   useEffect(() => {
     fetchAnalytics();
+    fetchLeaderboard();
   }, []);
 
   const winRateData = [
@@ -198,8 +201,10 @@ const MinigameAnalytics = () => {
       </div>
 
        {/* Leaderboard Section */}
-       <div className="leaderboard-section mt-6 p-4 bg-white rounded-lg shadow-lg">
-        <h3 className="text-3xl font-semibold text-green-800 mb-4 border-b border-yellow-500">Clawmarks Leaderboard <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 ml-2 text-3xl" /></h3>
+      <div className="leaderboard-section mt-6 p-4 bg-white rounded-lg shadow-lg">
+        <h3 className="text-3xl font-semibold text-green-800 mb-4 border-b border-yellow-500">
+          Clawmarks Leaderboard <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 ml-2 text-3xl" />
+        </h3>
         {leaderboard.length === 0 ? (
           <p className="text-lg text-gray-600">No leaderboard data available.</p>
         ) : (
@@ -210,7 +215,7 @@ const MinigameAnalytics = () => {
                   {/* Rank and Trophy Icon */}
                   <div className="flex items-center w-1/6">
                     <span className={`rank-badge ${index === 0 ? 'bg-yellow-500 text-white' : index === 1 ? 'bg-gray-500 text-white' : index === 2 ? 'bg-yellow-300 text-gray-800' : 'bg-gray-300'}`}>
-                      {player.rank}
+                      {index + 1}
                     </span>
                     <FontAwesomeIcon 
                       icon={index === 0 ? faTrophy : index === 1 ? faMedal : faAward} 
@@ -220,8 +225,15 @@ const MinigameAnalytics = () => {
                   
                   {/* Player's name and clawmarks */}
                   <div className="player-info flex justify-between w-5/6">
-                    <div className="player-name text-lg font-semibold text-gray-800">{player.playerName}</div>
-                    <div className="clawmarks text-xl font-bold text-green-800">{player.clawmarks} Clawmarks</div>
+                    <div className="flex items-center">
+                      <img
+                        src={player.profilePicture || 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'}
+                        alt={player.name}
+                        className="w-10 h-10 rounded-full mr-4"
+                      />
+                      <span className="text-lg font-semibold text-gray-800">{player.name}</span>
+                    </div>
+                    <div className="text-xl font-bold text-green-800">{player.clawMarks} Clawmarks</div>
                   </div>
                 </li>
               ))}
