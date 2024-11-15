@@ -83,7 +83,7 @@ const StudentRegistration = ({ data, setData, organizations, registerAdmin }) =>
             type="file"
             accept="image/*"
             onChange={handleProfilePictureChange}
-            className="file-input file-input-bordered file-input-success file-input-sm w-full rounded-md shadow-2xl"
+            className="file-input file-input-bordered file-input-success file-input-sm w-full dark:text-white rounded-md shadow-2xl"
           />
           {profilePictureUrl && (
             <div className="mt-2">

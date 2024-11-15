@@ -81,7 +81,7 @@ const StaffRegistration = ({ data, setData }) => {
             type="file"
             accept="image/*"
             onChange={handleProfilePictureChange}
-            className="file-input file-input-bordered file-input-success file-input-sm w-full rounded-md shadow-2xl"
+            className="file-input file-input-bordered file-input-success dark:text-white file-input-sm w-full rounded-md shadow-2xl"
           />
           {profilePictureUrl && (
             <div className="mt-2">
@@ -97,7 +97,7 @@ const StaffRegistration = ({ data, setData }) => {
             value={data.name}
             onChange={(e) => setData({ ...data, name: e.target.value })}
             required
-            className='input input-bordered input-success input-sm w-full rounded-md shadow-2xl'
+            className='input input-bordered input-success dark:text-white input-sm w-full rounded-md shadow-2xl'
           />
         </div>
 
@@ -108,7 +108,7 @@ const StaffRegistration = ({ data, setData }) => {
             value={data.studentemail}
             onChange={(e) => setData({ ...data, studentemail: e.target.value })}
             required
-            className='input input-bordered input-success input-sm w-full rounded-md shadow-2xl'
+            className='input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl'
           />
         </div>
 
@@ -119,13 +119,13 @@ const StaffRegistration = ({ data, setData }) => {
             value={data.password}
             onChange={(e) => setData({ ...data, password: e.target.value })}
             required
-            className='input input-bordered input-success input-sm w-full rounded-md shadow-2xl'
+            className='input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl'
           />
         </div>
 
         <div className="flex flex-col text-left m-1">
           <label>Admin Type</label>
-          <select value={data.adminType} onChange={(e) => setData({ ...data, adminType: e.target.value })} className='select select-accent select-sm w-full max-w-full rounded-md shadow-2xl'>
+          <select value={data.adminType} onChange={(e) => setData({ ...data, adminType: e.target.value })} className='select select-accent select-sm w-full max-w-full dark:text-white rounded-md shadow-2xl'>
             <option value='School Owner'>School Owner</option>
             <option value='President'>President</option>
             <option value='School Executive Admin'>School Executive Admin</option>
@@ -140,7 +140,7 @@ const StaffRegistration = ({ data, setData }) => {
             value={data.schoolYear}
             onChange={(e) => setData({ ...data, schoolYear: e.target.value })}
             required
-            className='input input-bordered input-success input-sm w-full rounded-md shadow-2xl'
+            className='input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-2xl'
           />
         </div>
         
