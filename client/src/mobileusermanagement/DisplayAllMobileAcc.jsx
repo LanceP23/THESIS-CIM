@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast'; 
 import './UserManagement.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMobile} from '@fortawesome/free-solid-svg-icons';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -63,16 +65,17 @@ const UserManagement = () => {
     };
 
     return (
-        <div className="p-8">
+      
+        <div className=" mr-4 ml-14 mt-16 pt-2 ">
           {/* Main Container */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in">
+          <div className="bg-slate-200 rounded-2xl shadow-lg p-7 animate-fade-in  ">
             {/* Header */}
-            <h2 className="text-4xl font-semibold text-gray-900 text-center border-b-4 border-yellow-500 pb-4 mb-6">
-              Mobile User Management
+            <h2 className="text-3xl font-semibold text-green-800  border-b-4 border-yellow-500 pb-2 mb-6 text-left">
+            <FontAwesomeIcon icon={faMobile} className="text-yellow-500 ml-2 text-3xl" /> Mobile User Management
             </h2>
       
             {/* Filters Section */}
-            <div className="flex gap-6 justify-center mb-6">
+            <div className="flex gap-6 justify-center mb-6 m">
               {/* Search Input */}
               <input
                 type="text"
@@ -95,6 +98,8 @@ const UserManagement = () => {
                 <option value="College">College</option>
               </select>
             </div>
+
+            <div className="max-h-[60vh] overflow-y-auto pr-5">
       
             {/* User Cards Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -215,13 +220,13 @@ const UserManagement = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleEdit(user._id)}
-                          className="btn btn-sm btn-primary"
+                          className="btn btn-sm btn-success"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(user._id)}
-                          className="btn btn-sm btn-danger"
+                          className="btn btn-sm btn-error"
                         >
                           Delete
                         </button>
@@ -230,6 +235,7 @@ const UserManagement = () => {
                   </div>
                 </div>
               ))}
+            </div>
             </div>
           </div>
         </div>

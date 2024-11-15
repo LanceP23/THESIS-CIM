@@ -168,7 +168,7 @@ const Dashboard = ({ changeBackgroundToColor, conversations }) => {
     }, [adminType]);
 
     return (
-        <div className="dashboard animate-fade-in">
+        <div className="dashboard animate-fade-in ml-10">
             <div className="">
                 <div className=" mt-16 h-full flex xl:flex-row flex-col md:flex-col sm:flex-col ">
                     <div className="row_1 inline-flex flex-col xl:w-2/3 h-full ">

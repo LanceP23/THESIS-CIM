@@ -29,8 +29,8 @@ export default function MyCommunity() {
   };
   
   return (
-    <div className=" p-5 pt-3">
-    <div className=" bg-slate-200 rounded-xl mt-16 p-2 animate-fade-in w-full ">
+    <div className=" mt-16  ml-14 mr-3 pt-6 ">
+    <div className=" bg-slate-200 rounded-xl p-2 animate-fade-in w-full ">
       <h2 className='text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl  text-green-800 border-b-2 border-yellow-500 py-2'>Welcome to the Community Management Module</h2>
       
       <div className=" py-3 grid grid-cols-1 sm: md: lg:grid lg:grid-cols-2 xl:grid xl:grid-cols-2 justify-center justify-items-center  w-full"> 

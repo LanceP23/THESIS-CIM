@@ -87,10 +87,10 @@ const MessageDropdown = ({ setTotalUnreadMessages }) => {
       };
 
     return (
-        <div className="div">
+        <div className="">
         <div className="notification-bell bg-gray-300 p-3 rounded-md">
             <h3 className='border-b-2 text-left text-black'>Messages</h3>
-            <div className="notification-dropdown max-h-40 overflow-auto w-full">
+            <div className="notification-dropdown max-h-48 overflow-auto w-full">
                 {(unreadMessageCount) > 0 && (
                     <span className="notification-count"></span>
                 )}

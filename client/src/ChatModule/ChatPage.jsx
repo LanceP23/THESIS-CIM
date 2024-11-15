@@ -30,8 +30,8 @@ const ChatPage = () => {
     (conversation) => conversation._id === conversationId
   );
   
-  return <div className="p-1">
-  <div className=" bg-slate-100 mt-16 mx-2  rounded-lg shadow-inner animate-fade-in">
+  return <div className="p-1 mt-16 ">
+  <div className=" bg-slate-100  mr-2 ml-12 mt-2 rounded-lg shadow-inner animate-fade-in">
   
   <div className=" p-2 ">
    <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faComment} className=' text-yellow-500 mx-1'/>CampusComms</h2>

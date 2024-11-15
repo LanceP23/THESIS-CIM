@@ -202,44 +202,84 @@ const MinigameAnalytics = () => {
 
        {/* Leaderboard Section */}
       <div className="leaderboard-section mt-6 p-4 bg-white rounded-lg shadow-lg">
-        <h3 className="text-3xl font-semibold text-green-800 mb-4 border-b border-yellow-500">
+        <div className="flex flex-row justify-center items-center">
+        <img src='/assets/CORPO_CIM/CLAW_MARKS_POINTS.png' className='w-14 h-14'/>
+        <h3 className="text-3xl font-semibold text-green-800 ">
           Clawmarks Leaderboard <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 ml-2 text-3xl" />
         </h3>
+        </div>
+        <div className="divider divider-warning divider-vertical"></div>
         {leaderboard.length === 0 ? (
-          <p className="text-lg text-gray-600">No leaderboard data available.</p>
-        ) : (
-          <div className="leaderboard-list">
-            <ul className="list-none">
-              {leaderboard.map((player, index) => (
-                <li key={index} className="flex items-center p-3 mb-4 border-b">
-                  {/* Rank and Trophy Icon */}
-                  <div className="flex items-center w-1/6">
-                    <span className={`rank-badge ${index === 0 ? 'bg-yellow-500 text-white' : index === 1 ? 'bg-gray-500 text-white' : index === 2 ? 'bg-yellow-300 text-gray-800' : 'bg-gray-300'}`}>
-                      {index + 1}
-                    </span>
-                    <FontAwesomeIcon 
-                      icon={index === 0 ? faTrophy : index === 1 ? faMedal : faAward} 
-                      className={`text-2xl ml-2 ${index === 0 ? 'text-yellow-500' : index === 1 ? 'text-gray-500' : 'text-yellow-800'}`} 
-                    />
-                  </div>
-                  
-                  {/* Player's name and clawmarks */}
-                  <div className="player-info flex justify-between w-5/6">
-                    <div className="flex items-center">
-                      <img
-                        src={player.profilePicture || 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'}
-                        alt={player.name}
-                        className="w-10 h-10 rounded-full mr-4"
-                      />
-                      <span className="text-lg font-semibold text-gray-800">{player.name}</span>
-                    </div>
-                    <div className="text-xl font-bold text-green-800">{player.clawMarks} Clawmarks</div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+  <p className="text-lg text-gray-600">No leaderboard data available.</p>
+) : (
+  <div className="leaderboard-list ">
+    <ul className="list-none bg flex flex-col">
+      {leaderboard.map((player, index) => (
+        <li
+          key={index}
+          className={`flex   items-center p-3 mb-4 border-b ${
+            index === 0 ? 'bg-yellow-100 border-2 border-yellow-600 shadow-lg rounded-lg ' : ''
+          }`}
+        >
+          {/* Rank and Trophy Icon */}
+          
+          <div className="flex mr-5 items-center w-1/6">
+            <span
+              className={`rank-badge ${
+                index === 0
+                  ? 'font-bold text-yellow-500 text-3xl'
+                  : index === 1
+                  ? 'text-gray-700 font-bold text-2xl'
+                  : index === 2
+                  ? 'text-gray-800 font-bold text-2xl'
+                  : 'text-gray-500 font-bold'
+              }`}
+            >
+              {index + 1}
+            </span>
+            <FontAwesomeIcon
+              icon={index === 0 ? faTrophy : index === 1 ? faMedal : faAward}
+              className={`text-2xl ml-2 ${
+                index === 0
+                  ? 'text-yellow-500 text-3xl'
+                  : index === 1
+                  ? 'text-gray-500 text-2xl'
+                  : 'text-yellow-800 text-2xl'
+              }`}
+            />
           </div>
-        )}
+
+          {/* Player's name and clawmarks */}
+          <div className="  player-info flex flex-col justify-around sm:flex-col md:flex-row lg:flex-row xl:flex-row sm:justify-between w-5/6">
+            <div className="flex  items-center">
+              <img
+                src={
+                  player.profilePicture ||
+                  'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
+                }
+                alt={player.name}
+                className={`w-10 h-10 rounded-full mr-4 ${
+                  index === 0 ? 'ring-2 ring-yellow-500' : ''
+                }`}
+              />
+              <span
+                className={`text-lg font-semibold ${
+                  index === 0 ? 'text-yellow-600' : 'text-gray-800'
+                }`}
+              >
+                {player.name}
+              </span>
+            </div>
+            <div className=" flex flex-row justify-center items-center text-xl font-bold text-green-800">
+              <img src='/assets/CORPO_CIM/CLAW_MARKS_POINTS.png' className='w-14 h-14'/> {player.clawMarks} clawmarks
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
       </div>
 
 <div className="active-players-container mt-6 p-4 bg-white rounded-lg shadow-lg">
@@ -262,7 +302,7 @@ const MinigameAnalytics = () => {
         } else if (index === 1) {
           playerStyle = "bg-gray-100 border border-gray-800 scale-100";
         } else if (index === 2) {
-          playerStyle = "bg-yellow-25 border border-yellow-200 scale-100";
+          playerStyle = "bg-gray-100 border border-yellow-200 scale-100";
         }
 
         return (
@@ -294,6 +334,18 @@ const MinigameAnalytics = () => {
 
                 <div className="flex ">
                 {index === 2 && ( // Conditionally render the trophy icon for the top player only
+                <FontAwesomeIcon icon={faAward} className="text-yellow-800 mr-2 text-3xl " />
+              )}
+                </div>
+
+                <div className="flex ">
+                {index === 3 && ( // Conditionally render the trophy icon for the top player only
+                <FontAwesomeIcon icon={faAward} className="text-yellow-800 mr-2 text-3xl " />
+              )}
+                </div>
+
+                <div className="flex ">
+                {index === 4 && ( // Conditionally render the trophy icon for the top player only
                 <FontAwesomeIcon icon={faAward} className="text-yellow-800 mr-2 text-3xl " />
               )}
                 </div>

@@ -106,7 +106,7 @@ export default function Home() {
 
 
           {/* Hero Section */}
-          <div className="hero-section bg-[url('/assets/CORPO_CIM/CIM-HOME-COVER-2.gif')] bg-cover bg-no-repeat bg-center w-full h-[100vh] flex justify-center items-center text-center relative  ">
+          <div className="hero-section bg-[url('/assets/CORPO_CIM/HOME_PLAIN.gif')] bg-cover bg-no-repeat bg-center w-full h-[100vh] flex justify-center items-center text-center relative  ">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
         <div className="hero-content z-10 flex"   >
           <h1 className="text-white font-bold text-5xl md:text-6xl mb-6  " data-aos="fade-right" >Stay Connected with Campus Life</h1>
@@ -164,12 +164,20 @@ export default function Home() {
                       </div>
                     ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
                       <>
-                        <video controls className="w-screen h-[80vh] object-cover rounded-lg">
+                        <video controls className="w-auto h-[50vh] object-cover rounded-lg">
                           <source src={announcement.mediaUrl} type={announcement.contentType} />
                         </video>
-                        <div className="absolute bottom-0 bg-black bg-opacity-50 text-white p-4 w-full">
-                          <h4 className="font-semibold text-xl mb-1">{announcement.header}</h4>
-                          <p className="text-sm">{announcement.body}</p>
+                       {/* Announcement header with smooth transition */}
+                       <div
+                          className={` w-full absolute bottom-0 left-0 pt-2 p-4  items-center text-center bg-black opacity-80 rounded-md transform transition-all duration-500 ${
+                            hoveredAnnouncement === announcement._id
+                              ? 'opacity-100 translate-y-0'
+                              : 'opacity-0 translate-y-5'
+                          }`}
+                        >
+                          <h4 className="font-semibold text-lg mb-2 text-white border-b-2 border-yellow-500">
+                            {announcement.header}
+                          </h4>
                         </div>
                       </>
                     ) : announcement.contentType && announcement.contentType.startsWith('audio') ? (

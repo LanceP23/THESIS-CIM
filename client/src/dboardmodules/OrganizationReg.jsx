@@ -368,11 +368,11 @@ export default function OrganizationReg() {
   };
 
   return (
-    <div className="p-3 pt-10 mt-10">
+    <div className="p-3 pt-10 mt-16 ml-10">
     <div className="animate-fade-in  ">
 
       {adminType !== 'Organization Officer' && (
-        <div className="mt-8 rounded-2xl shadow-lg p-6 bg-white border">
+        <div className=" rounded-2xl shadow-lg p-6 bg-white border">
 
           <h2 className="text-4xl text-green-800 flex items-center gap-2 pb-3 border-b-2 border-yellow-500">
             <FontAwesomeIcon icon={faPeopleArrows} className="text-yellow-500" />
@@ -394,13 +394,39 @@ export default function OrganizationReg() {
   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[500px] overflow-auto">
     {organizations.map((org) => (
       <div key={org._id} className="card bg-green-100 shadow-lg p-4 rounded-lg">
+<div className="flex flex-row justify-between">
+          <div className="div">
+
+
         <h3 className="text-2xl text-green-800">{org.name}</h3>
+        </div>
+
+               <div className="div">
+              {/* Modern Delete Button with Icon */}
+              <button
+                onClick={() => handleDeleteOrganization(org._id)}
+                className="btn btn-xs btn-error rounded-md  focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                Delete
+              </button>
+              </div>
+              </div>
+        <div className="flex flex-row ">
+
+          <div className=" ">
+       
         <p className="text-sm text-gray-600">
           School Year: <span className="font-semibold">{org.schoolYear}</span>
         </p>
         <p className="text-sm text-gray-600">
           Semester: <span className="font-semibold">{org.semester}</span>
         </p>
+
+        </div>
+
+         
+        </div>
+        
         
         {/* Display Logo or Placeholder if not available */}
         <div className="mt-4 flex justify-center">
@@ -434,14 +460,7 @@ export default function OrganizationReg() {
           >
             Potential Members
           </button>
-          
-          {/* Modern Delete Button with Icon */}
-          <button
-            onClick={() => handleDeleteOrganization(org._id)}
-            className="btn btn-error p-3 rounded-full  focus:outline-none focus:ring-2 focus:ring-red-500"
-          >
-            <FaTrashAlt />
-          </button>
+       
         </div>
       </div>
     ))}

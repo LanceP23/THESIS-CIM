@@ -201,7 +201,7 @@ export default function BuildCommunity() {
 
   return (
 
-    <div className="flex flex-col w-full sm:w-full md:w-full lg:w-[75vw] xl:w-[75vw] mt-10 p-2 ">
+    <div className="flex flex-col w-full sm:w-full md:w-full lg:w-[75vw] xl:w-[75vw] mt-10 p-2 ml-12 ">
     <div className=" bg-slate-200 my-5 rounded-xl p-3 ">
       <div className="flex flex-row justify-between ">
          <h2 className='text-4xl text-green-800 py-2 my-2'>Build Community</h2>
@@ -464,28 +464,46 @@ export default function BuildCommunity() {
             
     </div>
     
-    <div className="bg-slate-200 my-5 rounded-xl p-3 shadow-xl max-h-full max-w-md fixed right-3 z-20 opacity-80">
+    <div className="bg-slate-200 my-5 rounded-xl p-3 shadow-xl max-h-full max-w-md fixed right-3 z-20 opacity-90">
          {/* Selected Members */}
       <div className="w-full max-w-lg mt-1">
-        <div className="flex flex-row justify-between">
-        <h2 className="flex text-lg font-bold mb-4 border-b border-black">Selected Members</h2>
-        <button onClick={() => setSelectedMembers([])} className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Remove All</button>
+        <div className="flex flex-row justify-between ">
+        
+        <div className="div">
+        <h2 className="flex text-lg font-bold mb-6 border-b border-yellow-500 text-green-900 ">Selected Members</h2>
+
+        </div>
+        <div className="div">
+        <button onClick={() => setSelectedMembers([])} className="btn btn-md  btn-error ">Remove All</button>
+
+        </div>
+        
         </div>
        
         
-        <div className="bg-gradient-to-r from-white to-green-500 p-2 rounded-lg max-h-96 overflow-auto">
+        <div className="bg-slate-300 p-2 rounded-lg max-h-96 overflow-auto">
         
-        <div className="bg-gradient-to-r from-white to-green-200 px-2 ">
+        <div className="bg-gradient-to-r ">
           {selectedMembers.map(userId => {
             const user = mobileUsers.find(user => user._id === userId) || adminUsers.find(user => user._id === userId);
             return (
-              <li key={userId} className="flex items-center justify-between  py-3 border-b-2 border-gray-500">
+              <li key={userId} className="flex justify-between text-left py-3 border-b-2 border-gray-500 ">
                 {user && (
-                  <div>
-                    <strong>Name:</strong> {user.name} | <strong>Admin Type:</strong> {user.adminType || "Mobile User"}
+                  <div className='flex flex-col justify-start'>
+                    <div className=" justify-start ">
+                    <strong>Name:</strong> {user.name} 
+
+                    </div>
+                    
+
+                    <div className=" italic"><strong>Type:</strong> {user.adminType || "Mobile User"}</div>
                   </div>
                 )}
-                <button onClick={(e) => { e.stopPropagation(); handleRemoveMember(userId); }} className="btn btn-sm btn-error">Remove</button>
+                <div className="flex flex-row justify-center items-center">
+                <button onClick={(e) => { e.stopPropagation(); handleRemoveMember(userId); }} className="btn btn-sm btn-error ml-2">Remove</button>
+
+                </div>
+                
               </li>
             );
           })}

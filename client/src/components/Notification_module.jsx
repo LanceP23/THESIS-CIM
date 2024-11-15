@@ -85,8 +85,8 @@ const Notification_module = () => {
   };
 
   return (
-    <div className='animate-fade-in pt-5'>
-      <div className="bg-slate-100 p-3 m-4 h-[85vh] rounded-3xl shadow-inner shadow-slate-950 ">
+    <div className='animate-fade-in  mt-16 ml-12'>
+      <div className="bg-slate-100 p-3 h-[85vh] rounded-3xl shadow-inner shadow-slate-950 ">
         <h2 className='text-3xl text-green-800 border-b-2 border-yellow-500 py-2'>
           <FontAwesomeIcon icon={faBell} className='text-yellow-500 mx-1' />
           Notification

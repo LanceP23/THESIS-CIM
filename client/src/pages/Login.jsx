@@ -141,7 +141,7 @@ const Login = (  ) => {
                 
 
                 <div className="">
-               <button id = "loginButton" onKeyDown={handleKeyDown} type="submit" className='btn btn-wide btn-accent text-white mt-2' >Login</button>
+               <button id = "loginButton" onKeyDown={handleKeyDown} type="submit" className='btn btn-wide btn-success  text-white mt-2' >Login</button>
                </div>
             </form>
             </div>

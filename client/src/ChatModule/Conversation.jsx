@@ -22,7 +22,7 @@ const Conversation = ({ conversation, lastIdx }) => {
     return (
         <>
             <div
-                className={`custom-container ${isSelected ? 'selected' : ''} `}
+                className={` px-3 custom-container ${isSelected ? 'selected' : ''} `}
                 onClick={handleClick}
             >
                 <div className={`container_1${isOnline ? ' online' : ''} `}>

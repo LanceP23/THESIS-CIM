@@ -222,7 +222,7 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
             <div className="div">
             <div className="notification-bell bg-gray-300 p-3 rounded-md "  >
                 <h3 className='border-b-2 text-left text-black'>Notifications</h3>
-                <div className="notification-dropdown max-h-40 overflow-auto w-full ">
+                <div className="dropdown dropdown-end  max-h-40 overflow-auto  ">
                     {( unreadAnnouncementCount + unreadEventCount + unreadApprovalCount + unreadOrganizationAnnouncementCount + unreadCommunityNotificationCount) > 0 && (
                         <span className="notification-count"></span>
                     )}

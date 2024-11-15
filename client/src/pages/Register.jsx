@@ -122,9 +122,10 @@ export default function Register() {
   }
 
   return (
-    <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row justify-between mt-7 p-3">
+    <div className="mt-16">
+    <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row justify-between  ml-8 p-3">
       <div className="flex flex-col">
-    <div className='  bg-slate-100 my-5 rounded-lg shadow-inner p-3 '>
+    <div className='  bg-slate-100  rounded-lg shadow-inner p-3 '>
 
     
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faAddressCard} className=' text-yellow-500 mx-1'/>Account Registration</h2>
@@ -193,14 +194,14 @@ export default function Register() {
       
     </div>
 
-    <div className="bg-slate-100 rounded-lg shadow-inner p-2">
+    <div className="bg-slate-100 rounded-lg shadow-inner p-2 my-3">
         <RegisteredAccounts />
         </div>
 
         </div>
 
-    <div className="mx-3 ">
-    <div className='flex flex-col bg-gradient-to-r from-white to-green-200 p-4 my-5 rounded-lg shadow-2xl '>
+    <div className="mr-1 ml-2 ">
+    <div className='flex flex-col bg-gradient-to-r from-white to-green-200 p-4  rounded-lg shadow-2xl '>
         
         <div className=' flex flex-col'>
           <label htmlFor="academicYear">Academic Year:</label>
@@ -230,6 +231,7 @@ export default function Register() {
       </div>
       </div>
 
+    </div>
     </div>
   );
 }

@@ -30,8 +30,10 @@ import Eventcalendar from './dboardmodules/MyCommunityModule/Eventcalendar';
 import Notification_module from './components/Notification_module'
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
+import Sidebar_2 from'./components/Sidebar2'
+import { SidebarProvider } from '../context/SidebarContext';
 
-const baseURL = process.env.REACT_APP_BACKEND_URL;
+const baseURL = "http://localhost:8000/" ;
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 
@@ -41,12 +43,14 @@ function App() {
 
   return (
     <div >
-      
+       <SidebarProvider>
     <UserContextProvider>
   
       <SocketContextProvider>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
+
       <Navbar_2/>
+      <Sidebar_2/>
       <Routes>
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/" element={<Home />} />
@@ -70,6 +74,7 @@ function App() {
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>
+    </SidebarProvider>
     </div>
   );
 }

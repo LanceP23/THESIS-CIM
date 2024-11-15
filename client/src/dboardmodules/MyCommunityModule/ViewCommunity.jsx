@@ -140,9 +140,9 @@ const ViewCommunity = () => {
   
 
   return (
-    <div className="p-3 pt-5">
+    <div className=" pl-16 mt-16 mr-0 pt-7">
 
-      <div className="bg-slate-200 my-5 rounded-xl w-full sm:w-full md:w-full lg:max-w-[72vw] xl:max-w-[72vw]  ">
+      <div className="bg-slate-200 rounded-xl w-full sm:w-full md:w-full lg:max-w-[72vw] xl:max-w-[72vw]  ">
       {/* Main Content */}
 
       <div className="p-6 sm:w-full md:w-full lg:max-w-[72vw] xl:max-w-[72vw] ">
@@ -227,7 +227,7 @@ const ViewCommunity = () => {
       </div>
 
     {/* Floating Forum Posts Display */}
-<div className="fixed right-5 top-24 bg-slate-200  shadow-4xl rounded-2xl border border-gray-200 w-80 h-auto max-h-[70vh] hidden md:block transition-transform hover:scale-105 scrollbar-hide"
+<div className=" right-0  top-16 bg-slate-200  shadow-4xl border border-gray-200 w-full sm:w-full md:w-full lg:w-full xl:w-72  h-screen hidden sm:hidden md:hidden  xl:block lg:fixed xl:fixed scrollbar-hide"
   onScroll={handleScroll}
 >
   <h3 className="text-2xl font-semibold text-green-800  border-b border-yellow-500 text-left m-2 my-3">Latest Forum Posts</h3>
@@ -237,13 +237,13 @@ const ViewCommunity = () => {
     <p className="text-center text-gray-400">No forum posts found.</p>
   ) : (
     forumPosts.map((post) => (
-      <div className="mb-6 pb-4 border-b border-gray-100 p-4 bg-gray-50 shadow-lg transition-colors rounded-xl"
+      <div className="mb-6 pb-4 border-b border-gray-100 p-4  bg-gray-50 shadow-lg transition-colors rounded-xl"
         key={post._id}
         
       >
         <div className="flex items-start space-x-4">
           {/* Profile Picture Placeholder */}
-          <div className="w-12 h-12  bg-gray-300 border-1 shadow-md"><img src= {post.logo}></img></div>
+          <div className="w-12 h-12  bg-gray-300 border-1 shadow-md "><img src= {post.logo}></img></div>
 
           {/* Post Content */}
           <div className="flex-1 space-y-2">

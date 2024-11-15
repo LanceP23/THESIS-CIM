@@ -243,13 +243,16 @@ const ManageUserAnnouncement = () => {
           {/* Comments Section */}
           <div className="comments-section mt-4">
             <h4 className="text-lg font-semibold">Comments:</h4>
-            <button onClick={() => fetchComments(post._id)} className="btn btn-sm btn-success">Load Comments</button>
+
+            
+           
+            
             {postComments[post._id] && postComments[post._id].length > 0 ? (
               <ul className="comments-list mt-2">
                 {postComments[post._id].map((comment) => (
-                  <li key={comment._id} className="bg-slate-200 p-2 mb-2 rounded shadow flex ">
+                  <li key={comment._id} className="bg-slate-200 p-2 mb-2 rounded shadow flex flex-row ">
                     <div className="div text-left">
-                    <p className="text-gray-700">{comment.text}</p>
+                    <p className="text-black font-semibold">{comment.text}</p>
                     <p className="text-sm text-gray-500">- {comment.userId.name}, {new Date(comment.createdAt).toLocaleString()}</p>
                     </div>
                     <div className="mx-3">
@@ -264,9 +267,11 @@ const ManageUserAnnouncement = () => {
                 ))}
               </ul>
             ) : (
-              <p>No comments yet.</p>
+              <span className="loading loading-spinner text-neutral"></span>
             )}
           </div>
+
+          <button onClick={() => fetchComments(post._id)} className="btn btn-sm btn-success">Load Comments</button>
 
           {/* Post Info and Edit/Delete */}
           <div className="flex justify-between items-center text-xs text-gray-600">

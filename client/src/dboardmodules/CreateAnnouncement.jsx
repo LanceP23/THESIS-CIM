@@ -429,10 +429,10 @@ export default function CreateAnnouncement() {
 
 
   return (
-    <div className=' p-4 animate-fade-in '>
-      <div className="p-3 pr-5 mt-20 w-full h-full shadow-md rounded-3 bg-white border ">
+    <div className='ml-6 p-4 mt-16 animate-fade-in '>
+      <div className="  p-3 pr-5 w-full h-full shadow-md rounded-3 bg-white border ">
       <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3'>  <FontAwesomeIcon icon={faBullhorn} className=' text-yellow-500 mx-1 '/>Post Management</h2>
-      <div role="tablist" className="tabs tabs-lifted w-full z-0">
+      <div role="tablist" className="tabs tabs-lifted max-w-full z-0">
         <input type="radio" name="my_tabs_2" role="tab" className="tab text-green-600 " aria-label="Create Announcement" />
         <div role="tabpanel" className="tab-content bg-green-100 shadow-lg rounded-md p-2  ">
           <div className="  annoucement_creation_container  p-2 w-full h-full  animate-fade-in ">
@@ -547,10 +547,12 @@ export default function CreateAnnouncement() {
                     </select>
                   </div>
                 )}
+<label className="label text-gray-700">Select Minigame:</label>
+<div className="flex flex-col mb-3">
+      
+      <div className="flex flex-row mt-1 space-y-2 space-x-1 ">
 
-<div className="flex flex-col items-center my-3">
-      <label className="label text-gray-700">Select Minigame:</label>
-      <div className="flex space-x-4 mt-1">
+        <div className="dov">
         <button
           onClick={() => handleMinigameChange({ target: { value: 'CIM Wordle' } })}
           className={`flex items-center space-x-2 py-2 px-3 rounded-md shadow-md 
@@ -564,31 +566,48 @@ export default function CreateAnnouncement() {
           <span>CIM Wordle</span>
         </button>
 
+        </div>
+
+        <div className="dov">
         <button
           onClick={() => handleMinigameChange({ target: { value: 'Coming Soon' } })}
-          className={`py-2 px-3 rounded-md shadow-md 
+          className={`flex items-center space-x-2 py-2 px-3 rounded-md shadow-md 
             ${selectedMinigame === 'Coming Soon' ? 'bg-green-300 text-white' : 'bg-white text-gray-700 border border-green-300'}`}
         >
           Coming Soon
         </button>
 
+
+        </div>
+
+        <div className="div">
         <button
           onClick={() => setSelectedMinigame('')}
-          className={`py-2 px-3 rounded-md shadow-md 
+          className={`flex items-center space-x-2 py-2 px-3 rounded-md shadow-md 
             ${selectedMinigame === '' ? 'bg-red-300 text-white' : 'bg-white text-gray-700 border border-red-300'}`}
         >
           No Minigame
         </button>
+
+        </div>
+        
+
+       
+        
       </div>
 
       {/* Conditional Content for CIM Wordle */}
       {selectedMinigame === 'CIM Wordle' && (
-        <div className="flex flex-col items-center my-3">
+        <div className="flex flex-row  my-3 ">
+          <div className="div ">
           <img 
-            src="/assets/CORPO_CIM/CIMdle Logo.png"
+            src="/assets/CORPO_CIM/CIMdle_LOGO.png"
             alt="CIM Wordle Logo" 
-            className="w-20 h-20 mb-3" 
+            className=" w-32 h-24" 
           />
+
+          </div>
+          <div className="div">
           <label className="label text-gray-700" htmlFor="minigameWord">Enter 5-Letter Word:</label>
           <input
             className={`input input-bordered ${isValidWord ? 'input-success' : 'input-error'} input-md w-48 text-gray-700 bg-white rounded-md shadow-xl`}
@@ -601,6 +620,10 @@ export default function CreateAnnouncement() {
           {!isValidWord && (
             <p className="text-red-500 mt-1">Please enter a valid 5-letter word.</p>
           )}
+
+          </div>
+          
+         
         </div>
       )}
     </div>
@@ -639,12 +662,12 @@ export default function CreateAnnouncement() {
                     <img
                       src={announcement.mediaUrl}
                       alt="Announcement Media"
-                      className=" w-[50vw] max-h-[55vh] object-cover cursor-pointer"
+                      className=" w-[50vw] h-[50vh] object-cover cursor-pointer"
                       onClick={() => openModal(announcement.mediaUrl)}
                     />
                   ) : announcement.contentType && announcement.contentType.startsWith("video") ? (
                     <figure>
-                      <video controls className="max-w-xl h-full">
+                      <video controls className="max-w-[32vw] h-[50vh]">
                         <source src={announcement.mediaUrl} type={announcement.contentType} />
                       </video>
                     </figure>
