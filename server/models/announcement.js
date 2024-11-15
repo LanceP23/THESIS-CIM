@@ -59,7 +59,7 @@ const announcementSchema = new mongoose.Schema({
   },
   minigame: {
     type: String,
-    enum: ['CIM Wordle', 'Coming Soon'], // add games nlng
+    enum: ['CIM Wordle', 'Coming Soon','Flappy CIM'], // add games nlng
     default: null
   },
   minigameWord: {

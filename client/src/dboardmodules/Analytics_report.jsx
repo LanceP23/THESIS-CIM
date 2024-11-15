@@ -78,8 +78,7 @@ const AnalyticsReport = () => {
           {
             parts: [
               {
-                text: `Analyze user engagement data:
-  
+                text: `Analyze the following user engagement data and provide a response in bullet points format:
                 * Total Likes: ${totalLikes}
                 * Total Dislikes: ${totalDislikes}
                 * Average Likes per Post: ${avgLikesPerPost}
@@ -88,7 +87,17 @@ const AnalyticsReport = () => {
   
                 * Demographic Data: ${pieData.map(data => `${data.name}: ${data.value}`).join(', ')}
   
-                Provide a concise analysis of user engagement and sentiment. Provide suggestions as well seperate it in two paragraphs, one for analysis and one for suggestions`
+                Provide a detailed analysis of user engagement and sentiment. Use the following structure:
+
+                * **Analysis:**
+                    - Highlight key points regarding user engagement metrics like likes, dislikes, and the like/dislike ratio.
+                    - Include observations about the demographic data and its implications on engagement.
+                
+                * **Suggestions:**
+                    1. Enumerate actionable recommendations based on the analysis.
+                    2. Keep each suggestion concise and clearly numbered.
+                    3. Focus on improving user engagement and targeting specific demographics.` 
+
               }
             ],
             role: 'user'  
@@ -499,21 +508,18 @@ const exportData = () => {
             <h2 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">Automated Analysis</h2>
 
           
-            {loading ? (
-               <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
-              <div className="flex w-52 flex-col gap-4">
-                <span className="loading loading-dots loading-lg"></span>
-                <div className="skeleton h-4 w-28"></div>
-                <div className="skeleton h-4 w-full"></div>
-                <div className="skeleton h-4 w-full"></div>
-              </div>
-              </div>
-            ) : (
-              <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
-              <div className='text-justify font-bold' dangerouslySetInnerHTML={{ __html: analysis }} />
-              </div>
-            )}
-
+            <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
+      {analysis.split('\n').map((line, index) => (
+        <p key={index} className="text-lg text-gray-700 text-justify mb-2">
+          {/* Check for bullet points or enumerated list patterns and render appropriately */}
+          {line.startsWith('-') || line.match(/^\d+\./) ? (
+            <li className="list-disc ml-6">{line}</li>
+          ) : (
+            <span>{line}</span>
+          )}
+        </p>
+      ))}
+    </div>
               {/* Generate Analysis Button */}
           <div className="mb-6 text-end my-2">
             <button

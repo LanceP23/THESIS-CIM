@@ -61,7 +61,7 @@ const MinigameAnalytics = () => {
           {
             parts: [
               {
-                text: `Analyze the following minigame data:
+                text: `Analyze the following minigame data and provide a response in bullet points format:
                 
                 * Win Rate: ${winRate.winRate}% 
                 * Average Guesses for Wins: ${averageGuesses.averageGuesses}
@@ -69,7 +69,14 @@ const MinigameAnalytics = () => {
                 * Win Streaks: ${winStreaks.map(streak => `Player ${streak.playerName}: ${streak.streak}`).join(', ')}
                 * Guess Distribution: ${guessDistribution.map(g => `${g._id} guesses: ${g.count}`).join(', ')}
                 
-                Provide an analysis of player performance and engagement.`
+                 Provide an analysis of player performance and engagement using the following structure:
+                
+                * **Analysis:**
+                    - Key points separated by space for clarity.
+
+                * **Suggestions:**
+                    1. Provide concise, actionable points for improvement.
+                    2. Enumerate each suggestion clearly.`
               }
             ],
             role: 'user'
@@ -98,7 +105,6 @@ const MinigameAnalytics = () => {
         .replace(/^\s*#*\s*/gm, '')
         .replace(/\*\*(.*?)\*\*/g, '$1')
         .replace(/\*(.*?)\*/g, '$1')
-        .replace(/^\s*[-*]\s*/gm, '');
 
       setAnalysis(cleanedText || 'No analysis text available.');
     } catch (error) {
@@ -372,21 +378,31 @@ const MinigameAnalytics = () => {
     </div>
 : 
     <div className="generate-analysis-container mt-6 p-4 bg-white rounded-lg shadow-lg">
-            <h3 className="text-xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3">Automated Analysis</h3>
-            
-            <div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
-            <p className="text-lg text-gray-700 text-justify">{analysis}</p>
+      <h3 className="text-xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3">Automated Analysis</h3>
 
-            </div>
-            <div className="text-end my-3">
-              <button
-                onClick={generateAnalysis}
-                className="btn btn-success"
-                disabled={loading}
-              >
-                {loading ? 'Generating...' : 'Generate Analysis'}
-              </button>
-            </div>
+{/* Render the analysis with preserved formatting */}
+<div className="analysis-result mt-6 p-4 bg-gray-100 rounded-lg">
+  {/* Split the text by newline and map each line */}
+  {analysis.split('\n').map((line, index) => (
+    <p key={index} className="text-lg text-gray-700 text-justify mb-2">
+      {/* Check for bullet points or enumerated list patterns and render appropriately */}
+      {line.startsWith('-') || line.match(/^\d+\./) ? (
+        <li className="list-disc ml-6">{line}</li>
+      ) : (
+        <span>{line}</span>
+      )}
+    </p>
+  ))}
+</div>
+<div className="text-end my-3">
+  <button
+    onClick={generateAnalysis}
+    className="btn btn-success"
+    disabled={loading}
+  >
+    {loading ? 'Generating...' : 'Generate Analysis'}
+  </button>
+</div>
           </div>}
           
     </div>

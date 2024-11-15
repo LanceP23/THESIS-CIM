@@ -570,11 +570,11 @@ export default function CreateAnnouncement() {
 
         <div className="dov">
         <button
-          onClick={() => handleMinigameChange({ target: { value: 'Coming Soon' } })}
+          onClick={() => handleMinigameChange({ target: { value: 'Flappy CIM' } })}
           className={`flex items-center space-x-2 py-2 px-3 rounded-md shadow-md 
             ${selectedMinigame === 'Coming Soon' ? 'bg-green-300 text-white' : 'bg-white text-gray-700 border border-green-300'}`}
         >
-          Coming Soon
+          Flappy CIM
         </button>
 
 
