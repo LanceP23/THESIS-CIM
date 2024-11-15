@@ -34,7 +34,7 @@ import 'aos/dist/aos.css'; // Import AOS styles
 import Sidebar_2 from'./components/Sidebar2'
 import { SidebarProvider } from '../context/SidebarContext';
 
-const baseURL = "http://localhost:8000/" ;
+const baseURL = process.env.REACT_APP_BACKEND_URL ;
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 
