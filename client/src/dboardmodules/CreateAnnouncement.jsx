@@ -550,7 +550,7 @@ export default function CreateAnnouncement() {
 <label className="label text-gray-700">Select Minigame:</label>
 <div className="flex flex-col mb-3">
       
-      <div className="flex flex-row mt-1 space-y-2 space-x-1 ">
+      <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row gap-3 mt-1 space-x-1 ">
 
         <div className="dov">
         <button
@@ -574,7 +574,12 @@ export default function CreateAnnouncement() {
           className={`flex items-center space-x-2 py-2 px-3 rounded-md shadow-md 
             ${selectedMinigame === 'Coming Soon' ? 'bg-green-300 text-white' : 'bg-white text-gray-700 border border-green-300'}`}
         >
-          Flappy CIM
+           <img 
+            src="/assets/CORPO_CIM/FLAPPY-CAT-LOGO.png" 
+            alt="CIM Wordle Logo" 
+            className="w-10 h-10" 
+          />
+          FlappyCAT
         </button>
 
 
@@ -654,15 +659,15 @@ export default function CreateAnnouncement() {
           return (
             <div
               key={announcement._id}
-              className="card bg-slate-200 shadow-2xl p-0 m-5 transition-transform duration-300 ease-in-out transform hover:scale-105 sm:card md:card-side lg:card-side xl:card-side"
+              className="card bg-slate-200 shadow-2xl p-0 mt-5 mb-5  mx-2 transition-transform duration-300 ease-in-out transform hover:scale-105 sm:card md:card-side lg:card-side xl:card-side"
             >
               {announcement.mediaUrl ? (
-                <div className="p-0">
+                <div className="p-0 flex flex-row justify-center item">
                   {announcement.contentType && announcement.contentType.startsWith("image") ? (
                     <img
                       src={announcement.mediaUrl}
                       alt="Announcement Media"
-                      className=" w-[50vw] h-[50vh] object-cover cursor-pointer"
+                      className=" w-[50vw] h-[50vh] object-cover cursor-pointer "
                       onClick={() => openModal(announcement.mediaUrl)}
                     />
                   ) : announcement.contentType && announcement.contentType.startsWith("video") ? (

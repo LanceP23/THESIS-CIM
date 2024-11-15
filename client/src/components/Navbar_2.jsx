@@ -240,7 +240,7 @@ const Navbar_2 = () => {
             <a tabIndex={0} role="button" className="btn btn-ghost btn-md text-s text-white">
               <div className="flex items-center space-x-2">
                 {/* Profile picture */}
-                <img src={profilePicture} alt="Profile" className="w-10 h-10 rounded-full border-2 border-gray-400" />
+                <img src={profilePicture} alt="Profile" className="w-10 h-10 rounded-full border-2 border-gray-400 hidden sm:hidden md:block lg:block xl:block" />
                 <div>
                   <span className="block font-bold text-sm">{userName}</span>
                   <span className="text-xs text-gray-300">{adminType ? adminType : 'User'}</span>

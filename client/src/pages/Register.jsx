@@ -151,7 +151,7 @@ export default function Register() {
         </div>
 
         <div className="div">
-        <button onClick={() => handleRegistrationType('student')} className = 'btn btn-success mx-1'>Student Registration</button>
+        <button onClick={() => handleRegistrationType('student')} className = 'btn btn-success mx-1'>Org. Officer Registration</button>
         </div>
        </div>
 

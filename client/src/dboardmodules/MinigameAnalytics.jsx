@@ -140,31 +140,29 @@ const MinigameAnalytics = () => {
 
   return (
     <div className=" border  p-4 rounded-lg " >
-     <div className="flex flex-row bg-gradient-to-r from-black to-green-800 rounded-md">
-      <div className="div">
-        <img 
-          src="/assets/CORPO_CIM/CIMdle_LOGO.png" 
-          alt="CIMdle Logo" 
-          className="h-[35vh] w-full opacity-50" 
-        />
-        </div>
-        <div className=" ">
-          
-     
-        </div>
-      </div>
-
-      <button
-          onClick={() => navigate('/minigame-shop')}
-          className="group relative flex items-center bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 focus:outline-none"
-        >
-          {/* FontAwesome Shop Icon */}
-          <FontAwesomeIcon icon={faShop} className="text-white text-xl mr-2" />
-          {/* Button text */}
-          <span className="hidden group-hover:inline-block text-sm text-white">Visit Shop Inventory</span>
-        </button>
+     <div className="flex flex-row bg-gradient-to-r from-black to-green-800 rounded-md relative">
+  <div className="div">
+    <img 
+      src="/assets/CORPO_CIM/CIMdle_LOGO.png" 
+      alt="CIMdle Logo" 
+      className="h-[35vh] w-full opacity-50" 
+    />
+  </div>
+  <div className="absolute bottom-4 right-4">
+    <button
+      onClick={() => navigate('/minigame-shop')}
+      className="group relative flex items-center bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 focus:outline-none"
+    >
+      {/* FontAwesome Shop Icon */}
+      <FontAwesomeIcon icon={faShop} className="text-white text-xl mr-2" />
+      {/* Button text */}
+      <span className=" text-sm text-white">Visit Shop Inventory</span>
+    </button>
+  </div>
+</div>
 
 
+   
 
       {/* Analytics Section */}
       <div className="charts-section grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6">

@@ -140,57 +140,74 @@ const MinigameShop = () => {
   };
 
   return (
-    <div className="minigame-shop max-w-4xl mx-auto py-10 px-6">
-      <h2 className="text-4xl font-semibold text-center text-gray-800 mb-6">Minigame Shop</h2>
+    <div className="mt-16 pt-4">
+    <div className="p-4 bg-slate-200 shadow-lg rounded-2xl mb-6 ml-14 mr-5">
+      <h2 className=" font-semibold text-4xl text-green-800 border-b-2 border-yellow-500 py-2 mb-3">Minigame Shop</h2>
 
-      {/* Button to open modal */}
-      <div className="mb-8 flex justify-center">
-        <button 
-          onClick={() => setIsModalOpen(true)} 
-          className="btn btn-primary"
-        >
-          Add New Item
-        </button>
-      </div>
+      
 
       {/* Add New Item Modal */}
       {isModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="text-2xl font-semibold text-center text-gray-800 mb-6">Add New Item</h3>
+          <div className="relative flex items-center mb-4">
+              <h3 className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-semibold text-gray-800 dark:text-white">
+                Add New Item
+              </h3>
+              <button
+                className="ml-auto btn btn-ghost btn-sm dark:text-white btn-circle"
+                onClick={() => setIsModalOpen(false)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
             <form onSubmit={handleUpload} className="space-y-6">
               {/* Item Name */}
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">Item Name</label>
+                <label className="block dark:text-white font-semibold mb-2 text-left">Item Name:</label>
                 <input
                   type="text"
                   placeholder="Enter item name"
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
-                  className="input input-bordered w-full bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg shadow-md p-3"
+                  className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
                 />
               </div>
 
               {/* Item Price */}
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">Clawmark Price</label>
+                <label className="block dark:text-white font-semibold mb-2 text-left">Clawmark Price:</label>
                 <input
                   type="number"
                   placeholder="Enter item price"
                   value={itemPrice}
                   onChange={(e) => setItemPrice(e.target.value)}
-                  className="input input-bordered w-full bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg shadow-md p-3"
+                  className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
                 />
               </div>
 
               {/* Image Upload with Preview */}
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2">Item Image</label>
+              <div className='flex flex-col justify-start'>
+                <label className="block dark:text-white font-semibold mb-2 text-left">Item Image:</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="file-input file-input-bordered w-full bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg shadow-md p-3"
+                  className="file-input file-input-bordered file-input-success file-input-sm w-full   dark:bg-white rounded-md shadow-xl"
                 />
                 {imagePreview && (
                   <div className="mt-4">
@@ -207,7 +224,7 @@ const MinigameShop = () => {
               <div>
                 <button
                   type="submit"
-                  className={`btn w-full py-3 text-white text-lg font-semibold ${isUploading ? 'bg-gray-400' : 'bg-blue-500'} rounded-lg shadow-md`}
+                  className={`btn btn-success btn-wide`}
                   disabled={isUploading}
                 >
                   {isUploading ? 'Uploading...' : 'Add Item'}
@@ -215,48 +232,63 @@ const MinigameShop = () => {
               </div>
             </form>
 
-            <div className="modal-action">
-              <button className="btn btn-ghost" onClick={() => setIsModalOpen(false)}>Close</button>
-            </div>
+            
           </div>
         </div>
       )}
 
       {/* Item List */}
-      <div className="item-list bg-white border border-gray-300 p-8 rounded-xl shadow-lg">
-        <h3 className="text-3xl font-semibold text-center text-gray-800 mb-6">Shop Inventory</h3>
-        <ul>
-          {items.map((item) => (
-            <li key={item._id} className="flex justify-between items-center py-4 border-b">
-              <div className="flex items-center">
-                <img 
-                  src={item.picture} 
-                  alt={item.name} 
-                  className="w-16 h-16 object-cover rounded-lg mr-4" 
-                />
-                <div>
-                  <h4 className="text-xl font-semibold">{item.name}</h4>
-                  <p>{item.price} Clawmarks</p>
-                </div>
-              </div>
-              <div className="flex space-x-4">
-                <button
-                  className="btn btn-warning btn-sm"
-                  onClick={() => handleUpdate(item._id)}
-                >
-                  Update
-                </button>
-                <button
-                  className="btn btn-error btn-sm"
-                  onClick={() => handleDelete(item._id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+<div className="item-list bg-white border border-gray-300 p-8 rounded-xl shadow-lg ">
+ 
+      {/* Button to open modal */}
+      <div className="mb-8 flex items-center relative">
+        <h3 className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-semibold text-gray-800">
+          Shop Inventory
+        </h3>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="btn btn-accent ml-auto"
+        >
+          Add New Item
+        </button>
       </div>
+
+
+  <div className="max-h-96 overflow-y-auto">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {items.map((item) => (
+      <div 
+        key={item._id} 
+        className="bg-white border border-gray-200 rounded-lg shadow p-4 flex flex-col items-center"
+      >
+        <img 
+          src={item.picture} 
+          alt={item.name} 
+          className="w-24 h-24 object-cover rounded-lg mb-4" 
+        />
+        <h4 className="text-xl font-semibold text-gray-800">{item.name}</h4>
+        <p className="text-gray-600">{item.price} Clawmarks</p>
+        <div className="mt-4 flex space-x-3">
+          <button
+            className="btn btn-success btn-sm"
+            onClick={() => handleUpdate(item._id)}
+          >
+            Update
+          </button>
+          <button
+            className="btn btn-error btn-sm"
+            onClick={() => handleDelete(item._id)}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+  </div>
+</div>
+
+    </div>
     </div>
   );
 };
