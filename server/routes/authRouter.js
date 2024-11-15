@@ -21,6 +21,7 @@ const { countCommunityTotalReactions,
 } = require('../controllers/communityAnalyticsController');
 const DailyLogin = require('../models/dailylogin'); 
 const { calculateWinRate, calculateAverageGuesses, getMostActivePlayers, getGameOutcomes, getGuessDistribution, getWinStreaks, getActivePlayersByDate, getGuessDistributionByPlayer, getUsersWithClawMarks } = require('../controllers/minigameAnalyticsController');
+const { getAllItems, getItemById, createItem, updateItem, deleteItem } = require('../controllers/minigameShopItemController');
 
 router.use(
     cors({
@@ -161,6 +162,13 @@ router.get('/win-streaks', getWinStreaks);
 router.get('/active-players/:date', getActivePlayersByDate);    
 router.get('/guess-distribution-player', getGuessDistributionByPlayer); 
 router.get('/leaderboard', getUsersWithClawMarks);
+
+//minigame shop 
+router.get('/items', getAllItems); 
+router.get('/items/:id',getItemById); 
+router.post('/add-item', createItem); 
+router.put('/update-item/:id', updateItem); 
+router.delete('/delete-item/:id', deleteItem);
 
 module.exports = router;
 

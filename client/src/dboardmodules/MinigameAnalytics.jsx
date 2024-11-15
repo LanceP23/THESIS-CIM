@@ -5,7 +5,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import './MinigameAnalytics.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrophy, faMedal, faAward, faGamepad} from '@fortawesome/free-solid-svg-icons';
+import { faTrophy, faMedal, faAward, faGamepad, faShop} from '@fortawesome/free-solid-svg-icons';
+import MinigameShop from './MinigameShop';
+import { useNavigate } from 'react-router-dom';
 
 
 const MinigameAnalytics = () => {
@@ -16,6 +18,7 @@ const MinigameAnalytics = () => {
   const [winStreaks, setWinStreaks] = useState([]);
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [leaderboard, setLeaderboard] = useState([]);
 
   // Fetch Analytics Data
@@ -151,8 +154,17 @@ const MinigameAnalytics = () => {
         </div>
       </div>
 
-<div className="divider divider-warning"></div>
-   
+      <button
+          onClick={() => navigate('/minigame-shop')}
+          className="group relative flex items-center bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 focus:outline-none"
+        >
+          {/* FontAwesome Shop Icon */}
+          <FontAwesomeIcon icon={faShop} className="text-white text-xl mr-2" />
+          {/* Button text */}
+          <span className="hidden group-hover:inline-block text-sm text-white">Visit Shop Inventory</span>
+        </button>
+
+
 
       {/* Analytics Section */}
       <div className="charts-section grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6">

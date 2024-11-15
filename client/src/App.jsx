@@ -27,7 +27,8 @@ import address from 'address';
 import CreateEvent from './dboardmodules/CreateEvent';
 import Analytics_report from './dboardmodules/Analytics_report';
 import Eventcalendar from './dboardmodules/MyCommunityModule/Eventcalendar';
-import Notification_module from './components/Notification_module'
+import Notification_module from './components/Notification_module';
+import MinigameShop from './dboardmodules/MinigameShop';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
 import Sidebar_2 from'./components/Sidebar2'
@@ -70,6 +71,7 @@ function App() {
         <Route path="/analytics-report" element={<Analytics_report/>} />
         <Route path="/event-calendar" element={<Eventcalendar/>} />
         <Route path="/notif-module" element={<Notification_module/>} />
+        <Route path="/minigame-shop" element={<MinigameShop />} />
 
       </Routes>
       </SocketContextProvider>
