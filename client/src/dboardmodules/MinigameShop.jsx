@@ -111,23 +111,26 @@ const MinigameShop = () => {
     );
   };
 
-  // Handle item update (PUT /update-item/:id)
   const handleUpdate = async (id) => {
     const updatedItem = {
       name: itemName,
       price: itemPrice,
       picture: imagePreview || '', // You can update this with a new image URL if it's updated
     };
-
+  
     try {
       await axios.put(`/update-item/${id}`, updatedItem);
       toast.success('Item updated successfully!');
       fetchItems(); // Refresh the item list
+      setItemName(''); // Clear form fields
+      setItemPrice('');
+      setItemImage(null);
+      setImagePreview(null); // Clear image preview after update
+      setIsModalOpen(false); // Close modal after updating
     } catch (error) {
       toast.error('Failed to update item: ' + error.message);
     }
   };
-
   // Handle item deletion (DELETE /delete-item/:id)
   const handleDelete = async (id) => {
     try {
@@ -139,6 +142,69 @@ const MinigameShop = () => {
     }
   };
 
+  const handleEdit = (item) => {
+    setItemName(item.name);
+    setItemPrice(item.price);
+    setImagePreview(item.picture); 
+    setIsModalOpen(true);
+  };
+  const handleSaveOrUpdate = async (e) => {
+    e.preventDefault();
+    if (!itemName || !itemPrice || !itemImage) {
+      alert('Please fill out all fields!');
+      return;
+    }
+  
+    setIsUploading(true);
+  
+    // If editing an existing item, update it
+    if (imagePreview !== item.picture) {
+      // Upload image to Firebase Storage if a new one is selected
+      const storageRef = ref(storage, `images/${itemImage.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, itemImage);
+  
+      uploadTask.on(
+        'state_changed',
+        null,
+        (error) => {
+          alert('Upload failed:', error.message);
+          setIsUploading(false);
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+  
+            // Send updated item data to the backend
+            await axios.put(`/update-item/${item._id}`, {
+              name: itemName,
+              price: itemPrice,
+              picture: downloadURL,
+            });
+  
+            toast.success('Item updated successfully!');
+            fetchItems();
+            setIsModalOpen(false);
+          } catch (error) {
+            toast.error('Failed to update item: ' + error.message);
+          } finally {
+            setIsUploading(false);
+          }
+        }
+      );
+    } else {
+      // If no image change, update item details without uploading
+      await axios.put(`/update-item/${item._id}`, {
+        name: itemName,
+        price: itemPrice,
+        picture: imagePreview,
+      });
+  
+      toast.success('Item updated successfully!');
+      fetchItems();
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <div className="mt-16 pt-4">
     <div className="p-4 bg-slate-200 shadow-lg rounded-2xl mb-6 ml-14 mr-5">
@@ -147,95 +213,95 @@ const MinigameShop = () => {
       
 
       {/* Add New Item Modal */}
-      {isModalOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-          <div className="relative flex items-center mb-4">
-              <h3 className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-semibold text-gray-800 dark:text-white">
-                Add New Item
-              </h3>
-              <button
-                className="ml-auto btn btn-ghost btn-sm dark:text-white btn-circle"
-                onClick={() => setIsModalOpen(false)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
 
-            <form onSubmit={handleUpload} className="space-y-6">
-              {/* Item Name */}
-              <div>
-                <label className="block dark:text-white font-semibold mb-2 text-left">Item Name:</label>
-                <input
-                  type="text"
-                  placeholder="Enter item name"
-                  value={itemName}
-                  onChange={(e) => setItemName(e.target.value)}
-                  className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
-                />
-              </div>
+{isModalOpen && (
+  <div className="modal modal-open">
+    <div className="modal-box">
+      <div className="relative flex items-center mb-4">
+        <h3 className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-semibold text-gray-800 dark:text-white">
+          {itemName ? 'Edit Item' : 'Add New Item'}
+        </h3>
+        <button
+          className="ml-auto btn btn-ghost btn-sm dark:text-white btn-circle"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
 
-              {/* Item Price */}
-              <div>
-                <label className="block dark:text-white font-semibold mb-2 text-left">Clawmark Price:</label>
-                <input
-                  type="number"
-                  placeholder="Enter item price"
-                  value={itemPrice}
-                  onChange={(e) => setItemPrice(e.target.value)}
-                  className="input input-bordered input-success input-md w-full dark:text-white  rounded-md shadow-xl"
-                />
-              </div>
-
-              {/* Image Upload with Preview */}
-              <div className='flex flex-col justify-start'>
-                <label className="block dark:text-white font-semibold mb-2 text-left">Item Image:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="file-input file-input-bordered file-input-success file-input-sm w-full   dark:bg-white rounded-md shadow-xl"
-                />
-                {imagePreview && (
-                  <div className="mt-4">
-                    <img
-                      src={imagePreview}
-                      alt="Image Preview"
-                      className="w-32 h-32 object-cover rounded-lg shadow-md"
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <div>
-                <button
-                  type="submit"
-                  className={`btn btn-success btn-wide`}
-                  disabled={isUploading}
-                >
-                  {isUploading ? 'Uploading...' : 'Add Item'}
-                </button>
-              </div>
-            </form>
-
-            
-          </div>
+      <form onSubmit={handleUpload} className="space-y-6">
+        {/* Item Name */}
+        <div>
+          <label className="block dark:text-white font-semibold mb-2 text-left">Item Name:</label>
+          <input
+            type="text"
+            placeholder="Enter item name"
+            value={itemName}
+            onChange={(e) => setItemName(e.target.value)}
+            className="input input-bordered input-success input-md w-full dark:text-white rounded-md shadow-xl"
+          />
         </div>
-      )}
+
+        {/* Item Price */}
+        <div>
+          <label className="block dark:text-white font-semibold mb-2 text-left">Clawmark Price:</label>
+          <input
+            type="number"
+            placeholder="Enter item price"
+            value={itemPrice}
+            onChange={(e) => setItemPrice(e.target.value)}
+            className="input input-bordered input-success input-md w-full dark:text-white rounded-md shadow-xl"
+          />
+        </div>
+
+        {/* Image Upload with Preview */}
+        <div className="flex flex-col justify-start">
+          <label className="block dark:text-white font-semibold mb-2 text-left">Item Image:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="file-input file-input-bordered file-input-success file-input-sm w-full dark:bg-white rounded-md shadow-xl"
+          />
+          {imagePreview && (
+            <div className="mt-4">
+              <img
+                src={imagePreview}
+                alt="Image Preview"
+                className="w-32 h-32 object-cover rounded-lg shadow-md"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Submit Button */}
+        <div>
+          <button
+            type="submit"
+            className={`btn btn-success btn-wide`}
+            disabled={isUploading}
+          >
+            {isUploading ? 'Uploading...' : itemName ? 'Update Item' : 'Save Item'}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
       {/* Item List */}
 <div className="item-list bg-white border border-gray-300 p-8 rounded-xl shadow-lg ">
@@ -271,9 +337,9 @@ const MinigameShop = () => {
         <div className="mt-4 flex space-x-3">
           <button
             className="btn btn-success btn-sm"
-            onClick={() => handleUpdate(item._id)}
+            onClick={() => handleEdit(item)}
           >
-            Update
+            Edit
           </button>
           <button
             className="btn btn-error btn-sm"

@@ -22,16 +22,13 @@ const countUserReactionsByEducationLevel = async (req, res) => {
     try {
         const userId = req.params.id;
        
-
         // Find the user by userId to get their name
         const user = await User.findById(userId);
         if (!user) {
-           
             return res.status(404).send({ message: 'User not found' });
         }
 
         const userName = user.name;
-        
 
         // Fetch all reactions where the postedBy field in Announcement matches the user's name
         const reactions = await UserReaction.aggregate([
@@ -95,13 +92,17 @@ const countUserReactionsByEducationLevel = async (req, res) => {
             admin: 0
         };
 
+        // Prepare to include section and year level info
+        const sectionYearLevelCounters = {};
+
         for (const reaction of reactions) {
             const userType = reaction.userType;
             const userDetail = reaction.userDetails;
-
+        
             if (userType === 'admin') {
                 educationLevelCounters.admin++;
             } else if (userType === 'mobile') {
+                // Count reactions by education level
                 switch (userDetail.educationLevel) {
                     case 'Grade School':
                         educationLevelCounters.gradeSchool++;
@@ -118,21 +119,50 @@ const countUserReactionsByEducationLevel = async (req, res) => {
                     default:
                         break;
                 }
+        
+                // Track reactions by section and year level, including education level
+                const sectionKey = userDetail.section;
+                let yearLevelKey;
+        
+                // Conditionally assign year level based on education level
+                if (userDetail.educationLevel === 'College') {
+                    yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.collegeYearLevel}`;
+                } else if (userDetail.educationLevel === 'Senior High School') {
+                    yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.seniorHighSchoolYearLevel}`;
+                } else if (userDetail.educationLevel === 'High School') {
+                    yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.highSchoolYearLevel}`;
+                } else if (userDetail.educationLevel === 'Grade School') {
+                    yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.gradeLevel}`;
+                } else {
+                    yearLevelKey = 'Unknown Year Level';
+                }
+                
+                // Create the combined key including both section and year level with education
+                const combinedKey = `${sectionKey} - ${yearLevelKey}`;
+        
+                if (sectionYearLevelCounters[combinedKey]) {
+                    sectionYearLevelCounters[combinedKey]++;
+                } else {
+                    sectionYearLevelCounters[combinedKey] = 1;
+                }
             }
         }
-        
 
         const allZero = Object.values(educationLevelCounters).every(count => count === 0);
         if (allZero) {
             res.status(200).send({ message: 'No reactions found for this user\'s posts.' });
         } else {
-            res.status(200).send({ educationLevelCounters });
+            res.status(200).send({
+                educationLevelCounters,
+                sectionYearLevelCounters // Include section and year level data
+            });
         }
     } catch (error) {
         console.error('Error counting user reactions by education level', error);
         res.status(500).send({ message: 'Error counting user reactions by education level', error });
     }
 };
+
 
 const countReactionsByDate = async (req, res) => {
     try {

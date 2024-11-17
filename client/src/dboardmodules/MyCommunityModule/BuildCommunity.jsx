@@ -32,7 +32,10 @@ export default function BuildCommunity() {
   const [mobileUsers, setMobileUsers] = useState([]);
   const [adminUsers, setAdminUsers] = useState([]);
   const [mobileUserFilter, setMobileUserFilter] = useState('');
+  const [sectionFilter, setSectionFilter] = useState('');
+  const [filterOption, setFilterOption] = useState('All');
   const [adminUserFilter, setAdminUserFilter] = useState('');
+  const [filteredMobileUsers, setFilteredMobileUsers] = useState([]);
 
  
   const [isCreateDisabled, setIsCreateDisabled] = useState(true);
@@ -77,13 +80,29 @@ export default function BuildCommunity() {
     fetchAdminUsers();
   }, []);
 
-  // Filter mobile users based on input value
-  const filteredMobileUsers = mobileUsers.filter(user => {
-    return (
-      user.name.toLowerCase().includes(mobileUserFilter.toLowerCase()) ||
-      user.studentemail.toLowerCase().includes(mobileUserFilter.toLowerCase())
-    );
-  });
+  useEffect(() => {
+    // Filter mobile users whenever any of the filters or mobile users change
+    const filteredUsers = mobileUsers.filter(user => {
+      // Filter by search term (name or email)
+      const matchesSearchTerm = user.name.toLowerCase().includes(mobileUserFilter.toLowerCase()) || 
+                                user.studentemail.toLowerCase().includes(mobileUserFilter.toLowerCase());
+      
+      // Filter by education level
+      const matchesFilterOption = filterOption === 'All' || user.educationLevel === filterOption;
+      
+      // Filter by section if "College" is selected
+      const matchesSection = filterOption === 'College' 
+        ? user.section.toLowerCase().includes(sectionFilter.toLowerCase()) 
+        : true;
+
+      return matchesSearchTerm && matchesFilterOption && matchesSection;
+    });
+
+    setFilteredMobileUsers(filteredUsers); // Update the filtered users
+  }, [mobileUsers, mobileUserFilter, filterOption, sectionFilter]);
+
+ 
+ 
 
   // Filter admin/users based on input value
   const filteredAdminUsers = adminUsers.filter(user => {
@@ -199,6 +218,16 @@ export default function BuildCommunity() {
     setLogoFile(file);
   };
 
+  const collegeSections = [
+    'IT101', 'IT102', 'IT103', 'IT104', 'IT105', 'IT106',
+    'BAMM101', 'BAMM102', 'TM101', 'TM102', 'TM103',
+    'ALPHA', 'BRAVO', 'CHARLIE', 'BEED101', 'BSE-ENG101',
+    'BSE-SOCSIE101', 'IT201', 'IT202', 'BAMM201', 'TM201',
+    'ALPHA201', 'BRAVO202', 'BEED201', 'BSE-ENG201', 'IT301',
+    'BAMM301', 'TM301', 'CRIM301', 'BEED301', 'BSE-ENG301',
+    'IT401', 'BAMM401', 'TM401', 'CRIM401'
+  ];
+
   return (
 
     <div className="flex flex-col w-full sm:w-full md:w-full lg:w-[75vw] xl:w-[75vw] mt-10 p-2 ml-12 ">
@@ -282,71 +311,105 @@ export default function BuildCommunity() {
 
       <div className="divider divider-warning"></div> 
       {/* Add Mobile Members */}
-      <div className="w-full  mt-8">
-        <h2 className="text-lg font-bold mb-4">Add Mobile Members</h2>
-        <input
-          type="text"
-          className="input input-bordered input-success input-md w-full text-white bg-base-100 rounded-md shadow-xl"
-          value={mobileUserFilter}
-          onChange={(e) => setMobileUserFilter(e.target.value)}
-          placeholder="Filter by name or email"
-        />
-        <div className="w-full max-h-96 overflow-auto">
-        <table className="w-full bg-white shadow-2xl rounded-2xl ">
-          {/* Table Header */}
-          <thead className='sticky top-0'>
+      <div className="w-full mt-8">
+      <h2 className="text-lg font-bold mb-4">Add Mobile Members</h2>
+      
+      {/* Search Input */}
+      <input
+        type="text"
+        className="input input-bordered input-success input-md w-full Text-gray-900 dark:text-white bg-base-100 rounded-md shadow-xl"
+        value={mobileUserFilter}
+        onChange={(e) => setMobileUserFilter(e.target.value)}
+        placeholder="Filter by name or email"
+      />
+
+      {/* Filter by Education Level */}
+      <div className="mt-4">
+        <select
+          value={filterOption}
+          onChange={(e) => {
+            setFilterOption(e.target.value);
+            setSectionFilter(''); // Reset section filter when changing education level
+          }}
+          className="select select-bordered select-md w-1/3 Text-gray-900 dark:text-white"
+        >
+          <option value="All">All</option>
+          <option value="Grade School">Grade School</option>
+          <option value="High School">High School</option>
+          <option value="Senior High School">Senior High School</option>
+          <option value="College">College</option>
+        </select>
+
+        {/* Section Filter for College */}
+        {filterOption === 'College' && (
+          <select
+            value={sectionFilter}
+            onChange={(e) => setSectionFilter(e.target.value)}
+            className="select select-bordered select-md w-1/3 mt-2 Text-gray-900 dark:text-white"
+          >
+            <option value="">Select Section</option>
+            {collegeSections.map((section, index) => (
+              <option key={index} value={section}>
+                {section}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      <div className="w-full max-h-96 overflow-auto mt-6">
+        <table className="w-full bg-white shadow-2xl rounded-2xl">
+          <thead className="sticky top-0">
             <tr>
-              
               <th className="bg-green-700 text-white">Name</th>
               <th className="bg-green-700 text-white">Email</th>
               <th className="bg-green-700 text-white">Details</th>
             </tr>
           </thead>
-          {/* Table Body */}
           <tbody>
             {filteredMobileUsers.map(user => (
               <tr key={user._id} onClick={() => handleAddMember(user._id)} className="cursor-pointer hover:bg-customyellow">
-                
                 <td className="border px-4 py-2">{user.name}</td>
                 <td className="border px-4 py-2">{user.studentemail}</td>
                 <td>
-                                {user.educationLevel === 'Grade School' && (
-                                    <div className=' '>
-                                        <h2>Grade Level: {user.gradeLevel}</h2>
-                                        <h2>Section: {user.section}</h2>
-                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
-                                    </div>
-                                )}
-                                {user.educationLevel === 'High School' && (
-                                    <div className=''>
-                                        <h2>Year Level: {user.highSchoolYearLevel}</h2>
-                                        <h2>Section: {user.section}</h2>
-                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
-                                    </div>
-                                )}
-                                {user.educationLevel === 'Senior High School' && (
-                                    <div  className=''>
-                                        <h2>Strand: {user.shsStrand}</h2>
-                                        <h2>Year Level: {user.seniorHighSchoolYearLevel}</h2>
-                                        <h2>Grade Level: {user.gradeLevel}</h2>
-                                        <h2>Section: {user.section}</h2>
-                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
-                                    </div>
-                                )}
-                                {user.educationLevel === 'College' && (
-                                    <div className=''>
-                                        <h2>Course: {user.collegeCourse}</h2>
-                                        <h2>Year Level: {user.collegeYearLevel}</h2>
-                                        <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
-                                    </div>
-                                )}
-                            </td>
+                  {user.educationLevel === 'Grade School' && (
+                    <div>
+                      <h2>Grade Level: {user.gradeLevel}</h2>
+                      <h2>Section: {user.section}</h2>
+                      <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                    </div>
+                  )}
+                  {user.educationLevel === 'High School' && (
+                    <div>
+                      <h2>Year Level: {user.highSchoolYearLevel}</h2>
+                      <h2>Section: {user.section}</h2>
+                      <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                    </div>
+                  )}
+                  {user.educationLevel === 'Senior High School' && (
+                    <div>
+                      <h2>Strand: {user.shsStrand}</h2>
+                      <h2>Year Level: {user.seniorHighSchoolYearLevel}</h2>
+                      <h2>Grade Level: {user.gradeLevel}</h2>
+                      <h2>Section: {user.section}</h2>
+                      <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                    </div>
+                  )}
+                  {user.educationLevel === 'College' && (
+                    <div>
+                      <h2>Course: {user.collegeCourse}</h2>
+                      <h2>Year Level: {user.collegeYearLevel}</h2>
+                      <h2>Section: {user.section}</h2>
+                      <h2>Subjects Enrolled: {user.subjects.join(', ')}</h2>
+                    </div>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-        </div>
       </div>
+    </div>
       
 
       <div className="divider divider-warning"></div>
