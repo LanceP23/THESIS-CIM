@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
-const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser } = require('../controllers/authController');
+const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser, bulkRegisterMobileUsers } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName, getOrganizationAnnouncement, deleteOrganization } = require('../controllers/organizationController');
 const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus, getUserAnnouncements, updateAnnouncement, deleteAnnouncement, getRecentAnnouncements, getCommentsByAnnouncementId, deleteComments } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
@@ -20,7 +20,7 @@ const { countCommunityTotalReactions,
   countCommunityReactionsByDate 
 } = require('../controllers/communityAnalyticsController');
 const DailyLogin = require('../models/dailylogin'); 
-const { calculateWinRate, calculateAverageGuesses, getMostActivePlayers, getGameOutcomes, getGuessDistribution, getWinStreaks, getActivePlayersByDate, getGuessDistributionByPlayer, getUsersWithClawMarks } = require('../controllers/minigameAnalyticsController');
+const { calculateWinRate, calculateAverageGuesses, getMostActivePlayers, getGameOutcomes, getGuessDistribution, getWinStreaks, getActivePlayersByDate, getGuessDistributionByPlayer, getUsersWithClawMarks, calculateAverageTries, getTryDistribution } = require('../controllers/minigameAnalyticsController');
 const { getAllItems, getItemById, createItem, updateItem, deleteItem } = require('../controllers/minigameShopItemController');
 
 router.use(
@@ -162,6 +162,8 @@ router.get('/win-streaks', getWinStreaks);
 router.get('/active-players/:date', getActivePlayersByDate);    
 router.get('/guess-distribution-player', getGuessDistributionByPlayer); 
 router.get('/leaderboard', getUsersWithClawMarks);
+router.get('/average-tries', calculateAverageTries);
+router.get('/try-distribution', getTryDistribution);
 
 //minigame shop 
 router.get('/items', getAllItems); 

@@ -16,10 +16,13 @@ const MinigameAnalytics = () => {
   const [activePlayers, setActivePlayers] = useState([]);
   const [guessDistribution, setGuessDistribution] = useState([]);
   const [winStreaks, setWinStreaks] = useState([]);
+  const [averageTries, setAverageTries] = useState(null);
+  const [tryDistribution, setTryDistribution] = useState([]);
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [leaderboard, setLeaderboard] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(5); 
 
   // Fetch Analytics Data
   const fetchAnalytics = async () => {
@@ -42,6 +45,19 @@ const MinigameAnalytics = () => {
       console.error('Error fetching analytics:', error);
     }
   };
+
+  const fetchFlappyCIMStats = async () => {
+    try {
+      const avgTriesRes = await axios.get('/average-tries');
+      setAverageTries(avgTriesRes.data.averageTriesPerPlayer);
+  
+      const tryDistributionRes = await axios.get('/try-distribution');
+      setTryDistribution(tryDistributionRes.data.tryDistribution);
+    } catch (err) {
+      console.error('Error fetching Flappy CIM stats:', err);
+    }
+  };
+  
 
   const fetchLeaderboard = async () => {
     try {
@@ -121,6 +137,7 @@ const MinigameAnalytics = () => {
   useEffect(() => {
     fetchAnalytics();
     fetchLeaderboard();
+    fetchFlappyCIMStats();
   }, []);
 
   const winRateData = [
@@ -134,9 +151,31 @@ const MinigameAnalytics = () => {
   }));
 
   const winStreakData = winStreaks.map(streak => ({
-    name: streak.userId, 
-    value: streak.maxStreak
+    userName: streak.userName,  // Name of the player
+    value: streak.maxStreak     // Max streak value
   }));
+  
+
+  const tryDistributionData = Array.isArray(tryDistribution)
+  ? tryDistribution.flatMap(item => 
+      item.userNames.map(userName => ({
+        name: userName,  // Use userName for the player's name
+        value: item.totalPlayers  // Assuming you want to display the totalPlayers for each user
+      }))
+    )
+  : [];
+
+  const averageTriesData = Array.isArray(averageTries)
+  ? averageTries.map(item => ({
+      name: item.userName,  // Player's name
+      value: item.averageTries  // Average tries per player
+  }))
+  : [];
+
+  const handleLoadMore = () => {
+    setVisibleCount(visibleCount + 5); 
+  };
+
 
   return (
     <div className=" border  p-4 rounded-lg " >
@@ -144,6 +183,13 @@ const MinigameAnalytics = () => {
   <div className="div">
     <img 
       src="/assets/CORPO_CIM/CIMdle_LOGO.png" 
+      alt="CIMdle Logo" 
+      className="h-[35vh] w-full opacity-50" 
+    />
+  </div>
+  <div className="div">
+    <img 
+      src="/assets/CORPO_CIM/FLAPPY-CAT-LOGO.png" 
       alt="CIMdle Logo" 
       className="h-[35vh] w-full opacity-50" 
     />
@@ -169,7 +215,7 @@ const MinigameAnalytics = () => {
         {/* Win Rate Chart */}
         {winRate && (
           <div className="chart-container p-4 bg-white rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Win Rate</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">Win Rate(All games)</h3>
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie data={winRateData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} label>
@@ -185,7 +231,7 @@ const MinigameAnalytics = () => {
 
         {/* Guess Distribution Chart */}
         <div className="chart-container p-4 bg-white rounded-lg shadow-lg">
-          <h3 className="text-xl font-semibold text-gray-700 mb-4">Guess Distribution</h3>
+          <h3 className="text-xl font-semibold text-gray-700 mb-4">Guess Distribution(CIM Wordle)</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={guessDistributionData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -201,11 +247,11 @@ const MinigameAnalytics = () => {
         {/* Win Streaks Chart */}
         {winStreaks.length > 0 && (
           <div className="chart-container p-4 bg-white rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Win Streaks</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">Win Streaks(All games)</h3>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={winStreakData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis dataKey="userName" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
@@ -216,87 +262,158 @@ const MinigameAnalytics = () => {
         )}
       </div>
 
-       {/* Leaderboard Section */}
-      <div className="leaderboard-section mt-6 p-4 bg-white rounded-lg shadow-lg">
-        <div className="flex flex-row justify-center items-center">
-        <img src='/assets/CORPO_CIM/CLAW_MARKS_POINTS.png' className='w-14 h-14'/>
-        <h3 className="text-3xl font-semibold text-green-800 ">
-          Clawmarks Leaderboard <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 ml-2 text-3xl" />
-        </h3>
-        </div>
-        <div className="divider divider-warning divider-vertical"></div>
-        {leaderboard.length === 0 ? (
-  <p className="text-lg text-gray-600">No leaderboard data available.</p>
-) : (
-  <div className="leaderboard-list ">
-    <ul className="list-none bg flex flex-col">
-      {leaderboard.map((player, index) => (
-        <li
-          key={index}
-          className={`flex   items-center p-3 mb-4 border-b ${
-            index === 0 ? 'bg-yellow-100 border-2 border-yellow-600 shadow-lg rounded-lg ' : ''
-          }`}
-        >
-          {/* Rank and Trophy Icon */}
-          
-          <div className="flex mr-5 items-center w-1/6">
-            <span
-              className={`rank-badge ${
-                index === 0
-                  ? 'font-bold text-yellow-500 text-3xl'
-                  : index === 1
-                  ? 'text-gray-700 font-bold text-2xl'
-                  : index === 2
-                  ? 'text-gray-800 font-bold text-2xl'
-                  : 'text-gray-500 font-bold'
-              }`}
-            >
-              {index + 1}
-            </span>
-            <FontAwesomeIcon
-              icon={index === 0 ? faTrophy : index === 1 ? faMedal : faAward}
-              className={`text-2xl ml-2 ${
-                index === 0
-                  ? 'text-yellow-500 text-3xl'
-                  : index === 1
-                  ? 'text-gray-500 text-2xl'
-                  : 'text-yellow-800 text-2xl'
-              }`}
-            />
-          </div>
+  {/* Average Tries Chart */}
+<div className="chart-container p-4 bg-white rounded-lg shadow-lg">
+  <h3 className="text-xl font-semibold text-gray-700 mb-4">Average Tries (Flappy Cat)</h3>
+  <ResponsiveContainer width="100%" height={200}>
+    <BarChart data={averageTriesData}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="value" fill="#ff9f40" />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
 
-          {/* Player's name and clawmarks */}
-          <div className="  player-info flex flex-col justify-around sm:flex-col md:flex-row lg:flex-row xl:flex-row sm:justify-between w-5/6">
-            <div className="flex  items-center">
-              <img
-                src={
-                  player.profilePicture ||
-                  'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
-                }
-                alt={player.name}
-                className={`w-10 h-10 rounded-full mr-4 ${
-                  index === 0 ? 'ring-2 ring-yellow-500' : ''
-                }`}
-              />
-              <span
-                className={`text-lg font-semibold ${
-                  index === 0 ? 'text-yellow-600' : 'text-gray-800'
+
+{/* Try Distribution Chart */}
+<div className="chart-container p-4 bg-white rounded-lg shadow-lg">
+  <h3 className="text-xl font-semibold text-gray-700 mb-4">Try Distribution (Flappy Cat)</h3>
+  <ResponsiveContainer width="100%" height={200}>
+    <PieChart>
+      <Pie
+        data={tryDistributionData}
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={60}
+        label
+      >
+        {tryDistributionData.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={index % 2 === 0 ? "#36a2eb" : "#ff6384"}
+          />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  </ResponsiveContainer>
+</div>
+
+
+
+
+
+      
+
+       {/* Leaderboard Section */}
+       <div className="leaderboard-section mt-6 p-4 bg-white rounded-lg shadow-lg">
+      <div className="flex flex-row justify-center items-center">
+        <img
+          src='/assets/CORPO_CIM/CLAW_MARKS_POINTS.png'
+          className='w-14 h-14'
+        />
+        <h3 className="text-3xl font-semibold text-green-800">
+          Clawmarks Leaderboard{" "}
+          <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 ml-2 text-3xl" />
+        </h3>
+      </div>
+      <div className="divider divider-warning divider-vertical"></div>
+
+      {leaderboard.length === 0 ? (
+        <p className="text-lg text-gray-600">No leaderboard data available.</p>
+      ) : (
+        <div className="leaderboard-list">
+          <ul className="list-none bg flex flex-col max-h-96 overflow-auto">
+            {/* Map only the visible players */}
+            {leaderboard.slice(0, visibleCount).map((player, index) => (
+              <li
+                key={index}
+                className={`flex items-center p-3 mb-4 border-b ${
+                  index === 0
+                    ? 'bg-yellow-100 border-2 border-yellow-600 shadow-lg rounded-lg '
+                    : ''
                 }`}
               >
-                {player.name}
-              </span>
-            </div>
-            <div className=" flex flex-row justify-center items-center text-xl font-bold text-green-800">
-              <img src='/assets/CORPO_CIM/CLAW_MARKS_POINTS.png' className='w-14 h-14'/> {player.clawMarks} clawmarks
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
+                {/* Rank and Trophy Icon */}
+                <div className="flex mr-5 items-center w-1/6">
+                  <span
+                    className={`rank-badge ${
+                      index === 0
+                        ? 'font-bold text-yellow-500 text-3xl'
+                        : index === 1
+                        ? 'text-gray-700 font-bold text-2xl'
+                        : index === 2
+                        ? 'text-gray-800 font-bold text-2xl'
+                        : 'text-gray-500 font-bold'
+                    }`}
+                  >
+                    {index + 1}
+                  </span>
+                  <FontAwesomeIcon
+                    icon={index === 0 ? faTrophy : index === 1 ? faMedal : faAward}
+                    className={`text-2xl ml-2 ${
+                      index === 0
+                        ? 'text-yellow-500 text-3xl'
+                        : index === 1
+                        ? 'text-gray-500 text-2xl'
+                        : 'text-yellow-800 text-2xl'
+                    }`}
+                  />
+                </div>
 
-      </div>
+                {/* Player's name and clawmarks */}
+                <div className="flex flex-col justify-around sm:flex-col md:flex-row lg:flex-row xl:flex-row sm:justify-between w-5/6">
+                  <div className="flex items-center">
+                    <img
+                      src={
+                        player.profilePicture ||
+                        'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
+                      }
+                      alt={player.name}
+                      className={`w-10 h-10 rounded-full mr-4 ${
+                        index === 0 ? 'ring-2 ring-yellow-500' : ''
+                      }`}
+                    />
+                    <span
+                      className={`text-lg font-semibold ${
+                        index === 0 ? 'text-yellow-600' : 'text-gray-800'
+                      }`}
+                    >
+                      {player.name}
+                    </span>
+                  </div>
+                  <div className="flex flex-row justify-center items-center text-xl font-bold text-green-800">
+                    <img
+                      src='/assets/CORPO_CIM/CLAW_MARKS_POINTS.png'
+                      className='w-14 h-14'
+                    />{' '}
+                    {player.clawMarks} clawmarks
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* Load More Button */}
+          {visibleCount < leaderboard.length && (
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={handleLoadMore}
+                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
+              >
+                Load More
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
 
 <div className="active-players-container mt-6 p-4 bg-white rounded-lg shadow-lg">
   <h3 className="text-3xl pb-2 font-semibold text-green-800 mb-4 border-b border-yellow-500">Top Active Players <FontAwesomeIcon icon={faGamepad} className="text-green-800 mr-2 text-3xl " /></h3>

@@ -117,17 +117,48 @@ const getGuessDistribution = async (req, res) => {
   const getWinStreaks = async (req, res) => {
     try {
       const minigamesCollection = mongoose.connection.collection('minigames');
-  
+      const usersCollection = mongoose.connection.collection('users');
+      const mobileUsersCollection = mongoose.connection.collection('mobileusers');
+    
       // Group by userId, and sort by playedAt to calculate streaks
       const playerGames = await minigamesCollection.aggregate([
         { $sort: { userId: 1, playedAt: 1 } },
-        { $group: { _id: "$userId", games: { $push: "$stats.result" } } }
+        { $group: { _id: "$userId", games: { $push: "$stats.result" } } },
+        {
+          $lookup: {
+            from: 'users', 
+            localField: '_id', 
+            foreignField: '_id', 
+            as: 'user' 
+          }
+        },
+        {
+          $lookup: {
+            from: 'mobileusers', 
+            localField: '_id', 
+            foreignField: '_id', 
+            as: 'mobileUser' 
+          }
+        },
+        {
+          $project: {
+            _id: 1, // Retain the userId
+            games: 1, // Retain the game results
+            userName: { 
+              $ifNull: [
+                { $arrayElemAt: ["$user.name", 0] }, 
+                { $arrayElemAt: ["$mobileUser.name", 0] } 
+              ] 
+            },
+          }
+        }
       ]).toArray();
-  
+    
+      // Calculate the streaks
       const streaks = playerGames.map(player => {
         let streak = 0;
         let maxStreak = 0;
-  
+    
         // Calculate the longest win streak for each player
         player.games.forEach(result => {
           if (result === 'win') {
@@ -137,16 +168,17 @@ const getGuessDistribution = async (req, res) => {
             streak = 0; // reset streak on a loss
           }
         });
-  
-        return { userId: player._id, maxStreak };
+    
+        return { userName: player.userName || 'Unknown', maxStreak }; // Default to 'Unknown' if name is not found
       });
-  
+    
       res.status(200).json({ streaks });
     } catch (error) {
       console.error("Error calculating win streaks:", error);
       res.status(500).json({ error: 'Error calculating win streaks' });
     }
   };
+  
   
   // Get active players by date
   const getActivePlayersByDate = async (req, res) => {
@@ -220,6 +252,160 @@ const getGuessDistribution = async (req, res) => {
       res.status(500).json({ error: "Failed to fetch users with clawMarks" });
     }
   };
+
+  const calculateAverageTries = async (req, res) => { 
+    try {
+        const minigamesCollection = mongoose.connection.collection('minigames');
+
+        // Aggregate data to calculate average tries per player and fetch user names
+        const averageTriesPerPlayer = await minigamesCollection.aggregate([
+            { 
+                $match: { 
+                    game: "Flappy CIM", 
+                    'stats.result': 'win',
+                    'stats.FlappyCIM.tries': { $exists: true }
+                } 
+            },
+            { 
+                $group: { 
+                    _id: "$userId", 
+                    totalTries: { $sum: "$stats.FlappyCIM.tries" }, 
+                    gameCount: { $sum: 1 } 
+                } 
+            },
+            { 
+                $project: { 
+                    userId: "$_id",
+                    _id: 0,
+                    averageTries: { $divide: ["$totalTries", "$gameCount"] }
+                } 
+            },
+            // Join with users collection
+            { 
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userDetails"
+                } 
+            },
+            // Join with mobileusers collection
+            { 
+                $lookup: {
+                    from: "mobileusers",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "mobileUserDetails"
+                } 
+            },
+            { 
+                $addFields: { 
+                    userName: {
+                        $cond: [
+                            { $gt: [{ $size: "$userDetails" }, 0] }, // If user found in `users`
+                            { $arrayElemAt: ["$userDetails.name", 0] },
+                            { $cond: [
+                                { $gt: [{ $size: "$mobileUserDetails" }, 0] }, // If user found in `mobileusers`
+                                { $arrayElemAt: ["$mobileUserDetails.name", 0] },
+                                "Unknown User" // Default fallback
+                            ]}
+                        ]
+                    }
+                } 
+            },
+            { 
+                $project: { 
+                    userDetails: 0,
+                    mobileUserDetails: 0
+                } 
+            },
+            { $sort: { userId: 1 } }
+        ]).toArray();
+
+        console.log("Average Tries Per Player with Names:", averageTriesPerPlayer); // Log the results
+
+        res.status(200).json({ averageTriesPerPlayer });
+    } catch (error) {
+        console.error("Error calculating average tries per player:", error);
+        res.status(500).json({ error: 'Error calculating average tries per player' });
+    }
+};
+
+
+const getTryDistribution = async (req, res) => {
+  try {
+      const minigamesCollection = mongoose.connection.collection('minigames');
+
+      const tryDistribution = await minigamesCollection.aggregate([
+          { 
+              $match: { 
+                  game: "Flappy CIM", 
+                  'stats.result': 'win',
+                  'stats.FlappyCIM.tries': { $exists: true }
+              } 
+          },
+          { 
+              $group: { 
+                  _id: {
+                      tries: "$stats.FlappyCIM.tries",
+                      userId: "$userId"
+                  }, 
+                  count: { $sum: 1 } 
+              } 
+          },
+          { 
+              $lookup: { 
+                  from: "users", 
+                  localField: "_id.userId", 
+                  foreignField: "_id", 
+                  as: "userDetails" 
+              } 
+          },
+          { 
+              $lookup: { 
+                  from: "mobileusers", 
+                  localField: "_id.userId", 
+                  foreignField: "_id", 
+                  as: "mobileUserDetails" 
+              } 
+          },
+          { 
+              $addFields: { 
+                  userName: {
+                      $cond: [
+                          { $gt: [{ $size: "$userDetails" }, 0] }, 
+                          { $arrayElemAt: ["$userDetails.name", 0] },
+                          { $cond: [
+                              { $gt: [{ $size: "$mobileUserDetails" }, 0] }, 
+                              { $arrayElemAt: ["$mobileUserDetails.name", 0] },
+                              "Unknown User"
+                          ]}
+                      ]
+                  }
+              } 
+          },
+          { 
+              $group: { 
+                  _id: "$_id.tries",
+                  userNames: { $addToSet: "$userName" }, 
+                  totalPlayers: { $sum: "$count" }
+              } 
+          },
+          { $sort: { _id: 1 } }
+      ]).toArray();
+
+      console.log("Try Distribution Data with User Names:", tryDistribution);
+
+      res.status(200).json({ tryDistribution });
+  } catch (error) {
+      console.error("Error calculating try distribution for Flappy CIM:", error);
+      res.status(500).json({ error: 'Error calculating try distribution for Flappy CIM' });
+  }
+};
+
+
+
+
   
   
 
@@ -232,5 +418,7 @@ module.exports = {
   getWinStreaks,
   getActivePlayersByDate,
   getGuessDistributionByPlayer,
-  getUsersWithClawMarks
+  getUsersWithClawMarks,
+  calculateAverageTries, 
+  getTryDistribution
 };
