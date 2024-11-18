@@ -225,7 +225,7 @@ export default function BuildCommunity() {
     'BSE-SOCSIE101', 'IT201', 'IT202', 'BAMM201', 'TM201',
     'ALPHA201', 'BRAVO202', 'BEED201', 'BSE-ENG201', 'IT301',
     'BAMM301', 'TM301', 'CRIM301', 'BEED301', 'BSE-ENG301',
-    'IT401', 'BAMM401', 'TM401', 'CRIM401'
+    'IT401', 'BAMM401', 'TM401', 'CRIM401','IT501', 'IT701'
   ];
 
   return (

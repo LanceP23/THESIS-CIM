@@ -85,8 +85,11 @@ const MinigameAnalytics = () => {
                 * Win Rate: ${winRate.winRate}% 
                 * Average Guesses for Wins: ${averageGuesses.averageGuesses}
                 * Active Players: ${activePlayers.length}
-                * Win Streaks: ${winStreaks.map(streak => `Player ${streak.playerName}: ${streak.streak}`).join(', ')}
+                * Win Streaks: ${winStreaks.map(streaks => `Player ${streaks.userName}: ${streaks.maxStreak}`).join(', ')}
                 * Guess Distribution: ${guessDistribution.map(g => `${g._id} guesses: ${g.count}`).join(', ')}
+                *Average Tries (Flappy CIM):** ${averageTries.averageTries} player: ${averageTries.userName}  
+                * ${formatTryDistributionForPrompt(tryDistribution).join('\n      ')} try distribution is for flappy cim guess is for cim wordle
+                * Create a seperate analysis for both games win rate is for all games average guesses is for CIM Wordle, Active player is for all games,  win streaks is for both games, guess distribution is for CIM Wordle. The rest is flappy cim.
                 
                  Provide an analysis of player performance and engagement using the following structure:
                 
@@ -107,7 +110,7 @@ const MinigameAnalytics = () => {
         ],
         generationConfig: {
           stopSequences: ['###'],
-          maxOutputTokens: 500,
+          maxOutputTokens: 600,
           temperature: 0.7,
           topP: 0.9,
           topK: 40,
@@ -164,6 +167,16 @@ const MinigameAnalytics = () => {
       }))
     )
   : [];
+
+  const formatTryDistributionForPrompt = (tryDistribution) => {
+    return Array.isArray(tryDistribution)
+      ? tryDistribution.map(
+          item =>
+            `${item.totalPlayers} players attempted ${item._id} tries (${item.userNames.join(', ')})`
+        )
+      : [];
+  };
+  
 
   const averageTriesData = Array.isArray(averageTries)
   ? averageTries.map(item => ({

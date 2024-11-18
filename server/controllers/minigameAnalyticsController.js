@@ -322,7 +322,7 @@ const getGuessDistribution = async (req, res) => {
             { $sort: { userId: 1 } }
         ]).toArray();
 
-        console.log("Average Tries Per Player with Names:", averageTriesPerPlayer); // Log the results
+
 
         res.status(200).json({ averageTriesPerPlayer });
     } catch (error) {
@@ -394,7 +394,7 @@ const getTryDistribution = async (req, res) => {
           { $sort: { _id: 1 } }
       ]).toArray();
 
-      console.log("Try Distribution Data with User Names:", tryDistribution);
+    
 
       res.status(200).json({ tryDistribution });
   } catch (error) {

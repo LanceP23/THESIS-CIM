@@ -572,7 +572,7 @@ export default function CreateAnnouncement() {
         <button
           onClick={() => handleMinigameChange({ target: { value: 'Flappy CIM' } })}
           className={`flex items-center space-x-2 py-2 px-3 rounded-md shadow-md 
-            ${selectedMinigame === 'Coming Soon' ? 'bg-green-300 text-white' : 'bg-white text-gray-700 border border-green-300'}`}
+            ${selectedMinigame === 'Flappy CIM' ? 'bg-green-300 text-white' : 'bg-white text-gray-700 border border-green-300'}`}
         >
            <img 
             src="/assets/CORPO_CIM/FLAPPY-CAT-LOGO.png" 
@@ -632,6 +632,20 @@ export default function CreateAnnouncement() {
         </div>
       )}
     </div>
+
+    {selectedMinigame === 'Flappy CIM' && (
+        <div className="flex flex-row  my-3 ">
+          <div className="div ">
+          <img 
+            src="/assets/CORPO_CIM/FLAPPY-CAT-LOGO.png"
+            alt="CIM Wordle Logo" 
+            className=" w-32 h-24" 
+          />
+
+          </div>
+         
+        </div>
+      )}
 
 
                   
