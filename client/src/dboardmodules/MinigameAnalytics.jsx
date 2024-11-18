@@ -179,7 +179,7 @@ const MinigameAnalytics = () => {
 
   return (
     <div className=" border  p-4 rounded-lg " >
-     <div className="flex flex-row bg-gradient-to-r from-black to-green-800 rounded-md relative">
+     <div className="flex flex-row bg-gradient-to-r from-black to-green-800 rounded-md relative mb-4">
   <div className="div">
     <img 
       src="/assets/CORPO_CIM/CIMdle_LOGO.png" 
@@ -191,7 +191,7 @@ const MinigameAnalytics = () => {
     <img 
       src="/assets/CORPO_CIM/FLAPPY-CAT-LOGO.png" 
       alt="CIMdle Logo" 
-      className="h-[35vh] w-full opacity-50" 
+      className="h-[36vh] w-full opacity-50 mx-2" 
     />
   </div>
   <div className="absolute bottom-4 right-4">

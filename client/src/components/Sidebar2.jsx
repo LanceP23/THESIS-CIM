@@ -15,7 +15,11 @@ import {
   faBullhorn,
   faAddressCard,
   faRightFromBracket,
-  faCalendarCheck
+  faCalendarCheck,
+  faGroupArrowsRotate,
+  faMobile,
+
+ 
 } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar2 = () => {
@@ -29,9 +33,15 @@ const Sidebar2 = () => {
     ? user.profilePicture 
     : 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp';
 
+  
+
+
   useEffect(() => {
     setIsOpen(false);
   }, [adminType]);
+
+
+  
 
   const handleLogout = async () => {
     try {
@@ -82,16 +92,17 @@ const Sidebar2 = () => {
           {adminType === 'School Owner' ? (
             <>
             <li className='hover:text-white transition-all duration-200 p-2 py-3  hover:bg-green-700 hover:pl-6'>
-              <SidebarLink to="/user-settings" label="Mobile User Management" icon={faLock} isSidebarOpen={isSidebarOpen}  />
+              <SidebarLink to="/user-settings" label="Mobile User Management" icon={faMobile} isSidebarOpen={isSidebarOpen}  />
               </li>
-            <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'> 
-              <SidebarLink to="/register" label="Account Registration" icon={faAddressCard} isSidebarOpen={isSidebarOpen}  />
-              </li>
+          
             <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'>
               <SidebarLink to="/createorg" label="Manage Organization" icon={faPeopleArrows} isSidebarOpen={isSidebarOpen}  />
             </li>
             <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'>
-              <SidebarLink to="/community-landing" label="My Community" icon={faPeopleArrows}  isSidebarOpen={isSidebarOpen} />
+              <SidebarLink to="/community-landing" label="My Community" icon={faGroupArrowsRotate}  isSidebarOpen={isSidebarOpen} />
+              </li>
+              <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'> 
+              <SidebarLink to="/register" label="Account Registration" icon={faAddressCard} isSidebarOpen={isSidebarOpen}  />
               </li>
             </>
           ) : (

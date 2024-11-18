@@ -389,7 +389,10 @@ export default function OrganizationReg() {
           </div>
 
           {organizations.length === 0 ? (
-  <p className="text-gray-500">No organizations yet.</p>
+  <p className="text-black"> <span className="loading loading-bars loading-xs"></span>
+  <span className="loading loading-bars loading-sm"></span>
+  <span className="loading loading-bars loading-md"></span>
+  <span className="loading loading-bars loading-lg"></span></p>
 ) : (
   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[500px] overflow-auto">
     {organizations.map((org) => (

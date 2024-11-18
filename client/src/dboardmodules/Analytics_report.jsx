@@ -152,7 +152,12 @@ const AnalyticsReport = () => {
   
   
   if (!analyticsData || !demographicsData) {
-    return <div>Loading...</div>;
+    return <div className='p-3 mt-16 mx-14  hover:shadow-2xl  animate-fade-in bg-slate-200 rounded-xl '
+    > 
+      <span className="loading loading-bars loading-xs"></span>
+    <span className="loading loading-bars loading-sm"></span>
+    <span className="loading loading-bars loading-md"></span>
+    <span className="loading loading-bars loading-lg"></span></div>;
   }
   const { formattedData } = analyticsData;
   const totalPosts = formattedData.length;
@@ -313,7 +318,7 @@ const exportData = () => {
 
 
   return (
-  <div className="mt-16  ml-8 p-1">
+  <div className="mt-16 ml-8 p-1">
     <div className="p-3 m-3 w-auto h-full shadow-md rounded-3 bg-slate-100 hover:shadow-2xl border-2 animate-fade-in">
       
   

@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import './UserManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMobile } from '@fortawesome/free-solid-svg-icons';
+import { Loading } from 'react-daisyui';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -12,6 +13,8 @@ const UserManagement = () => {
     const [sectionFilter, setSectionFilter] = useState('');
     const [editingUserId, setEditingUserId] = useState(null);
     const [editedUserData, setEditedUserData] = useState({});
+    const [isLoading, setIsLoading] = useState(false); // Loading state
+  
 
     const collegeSections = [
         'IT101', 'IT102', 'IT103', 'IT104', 'IT105', 'IT106',
@@ -28,12 +31,15 @@ const UserManagement = () => {
     }, []);
 
     const fetchUsers = async () => {
+        setIsLoading(true); // Start loading
         try {
             const response = await axios.get('/mobile-users');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
             toast.error('Failed to fetch users'); 
+        } finally {
+            setIsLoading(false); // End loading
         }
     };
 
@@ -132,7 +138,17 @@ const UserManagement = () => {
                     )}
                 </div>
 
-                <div className="max-h-[60vh] overflow-y-auto pr-5">
+                {isLoading ?(
+                    <div className="div">
+                        <span className="loading loading-bars loading-xs"></span>
+                            <span className="loading loading-bars loading-sm"></span>
+                            <span className="loading loading-bars loading-md"></span>
+                            <span className="loading loading-bars loading-lg"></span>
+                    </div>
+                ):(
+                    <div className="max-h-[60vh] overflow-y-auto pr-5">
+
+                   
                     {/* User Cards Section */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredUsers.map(user => (
@@ -245,6 +261,10 @@ const UserManagement = () => {
                         ))}
                     </div>
                 </div>
+
+                )}
+
+                
             </div>
         </div>
     );

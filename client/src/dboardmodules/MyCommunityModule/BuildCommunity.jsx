@@ -230,8 +230,8 @@ export default function BuildCommunity() {
 
   return (
 
-    <div className="flex flex-col w-full sm:w-full md:w-full lg:w-[75vw] xl:w-[75vw] mt-10 p-2 ml-12 ">
-    <div className=" bg-slate-200 my-5 rounded-xl p-3 ">
+    <div className="flex flex-col w-full sm:w-full md:w-full lg:w-[75vw] xl:w-[75vw] mt-16 p-2 ml-12 ">
+    <div className=" bg-slate-200  rounded-xl p-3 ">
       <div className="flex flex-row justify-between ">
          <h2 className='text-4xl text-green-800 py-2 my-2'>Build Community</h2>
         
