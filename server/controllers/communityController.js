@@ -339,7 +339,7 @@ const deleteForumPost = async (req, res) => {
     // Delete the post from the 'forumposts' collection
     const result = await mongoose.connection.db.collection('forumposts').deleteOne({
       _id: new mongoose.Types.ObjectId(postId),  
-      communityId: new mongoose.Types.ObjectId(communityId)  
+      communityId: communityId 
     });
 
     // If no post is found or deleted
