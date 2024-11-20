@@ -49,7 +49,7 @@ router.post('/login', loginUser);
 router.get('/check-auth', checkAuth);
 router.get('/profile', getProfile);
 router.post('/create_organization', authenticateUser, createOrganization);
-router.post('/logout', logoutUser);
+router.post('/logout', checkAuth, logoutUser);
 router.get('/admin-logins-today', async (req, res) => {
   try {
       const today = new Date(new Date().setHours(0, 0, 0, 0)); // set time to midnight of the current day

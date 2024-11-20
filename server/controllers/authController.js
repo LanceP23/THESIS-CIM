@@ -167,6 +167,8 @@ const loginUser = async (req, res) => {
         if (!passwordMatch) {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
+        user.currentToken = null;
+        await user.save();
         //count admin logged in
         if (user.adminType) {
             const today = new Date(new Date().setHours(0, 0, 0, 0)); // set time to midnight of the current day
@@ -259,29 +261,35 @@ if(token){
 }
 
 const logoutUser = async (req, res) => {
-    try{
-        const token = req.cookies.token; // Retrieve token from the client
-        if (!token) {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-
-        if (!user || user.currentToken !== token) {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
-        // Expire the token by setting its expiration time to a past date
-        res.cookie('token', '', { expires: new Date(0) });
-        
-
-        res.json({ message: 'Logout successful' });
-        
+    try {
+      const token = req.cookies.token;
+      if (!token) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+  
+      // Decode the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.id);
+  
+      if (!user || user.currentToken !== token) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+  
+      // Clear the user's current token in the database
+      user.currentToken = null;
+      await user.save();
+  
+      // Expire the cookie in the response
+      res.cookie('token', '', { expires: new Date(0), httpOnly: true });
+  
+      return res.json({ message: 'Logout successful' });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-    catch(error){
-        res.status(500).json({error: "Internal Server Error"});
-    }
-    
-}
+  };
+  
+
 
 
 //mobile Registration
@@ -364,5 +372,6 @@ module.exports = {
     checkAuth,
     getProfile,
     logoutUser,
-    registerMobileUser
+    registerMobileUser,
+    bulkRegisterMobileUsers
 }   

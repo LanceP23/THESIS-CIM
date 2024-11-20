@@ -12,7 +12,7 @@ import { SidebarContext } from '../../context/SidebarContext';
 import Sidebar2 from './Sidebar2';
 
 const Navbar_2 = () => {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
   const adminType = user ? user.adminType : null;
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -41,22 +41,30 @@ const Navbar_2 = () => {
     setIsOpen(false);
    
   }
-  const handleLogout = async () =>{
-    try{
+  const handleLogout = async () => {
+    try {
+      // Call the backend logout endpoint to invalidate the token on the server
       await axios.post('/logout');
+  
+      // Clear token from localStorage and cookie
       localStorage.removeItem('token');
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';  // Explicitly expire the cookie
+  
+      // Update user context to null
+      setUser(null);
+  
+      // Redirect to login page after logout
       toast.success('Logout Successful.');
-      
       setTimeout(() => {
         window.location.href = '/login';
       }, 500);
-      
-      
-    } catch (error){
-      console.error('Login failed: ', error);
+    } catch (error) {
+      console.error('Logout failed: ', error);
       toast.error('Logout failed.');
     }
   };
+  
+  
   const resetUnreadCount = () => {
     setTotalUnreadCount(0);
 };

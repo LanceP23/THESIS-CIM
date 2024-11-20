@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; 
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast'; 
 import './UserManagement.css';
@@ -14,6 +15,7 @@ const UserManagement = () => {
     const [editingUserId, setEditingUserId] = useState(null);
     const [editedUserData, setEditedUserData] = useState({});
     const [isLoading, setIsLoading] = useState(false); // Loading state
+    const navigate = useNavigate();
   
 
     const collegeSections = [
@@ -38,10 +40,7 @@ const UserManagement = () => {
               // If not authenticated, redirect to login
               navigate('/login');
               window.location.reload();
-            } else {
-              // If authenticated, set the admin type
-              setAdminType(localStorage.getItem('adminType'));
-            }
+            } 
           } catch (error) {
             console.error('Error checking authentication status:', error);
           }

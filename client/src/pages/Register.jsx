@@ -116,8 +116,7 @@ export default function Register() {
           navigate('/login');
           window.location.reload();
         } else {
-          // If authenticated, set the admin type
-          setAdminType(localStorage.getItem('adminType'));
+        
         }
       } catch (error) {
         console.error('Error checking authentication status:', error);
