@@ -98,9 +98,7 @@ const Sidebar2 = () => {
             <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'>
               <SidebarLink to="/createorg" label="Manage Organization" icon={faPeopleArrows} isSidebarOpen={isSidebarOpen}  />
             </li>
-            <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'>
-              <SidebarLink to="/community-landing" label="My Community" icon={faGroupArrowsRotate}  isSidebarOpen={isSidebarOpen} />
-              </li>
+            
               <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'> 
               <SidebarLink to="/register" label="Account Registration" icon={faAddressCard} isSidebarOpen={isSidebarOpen}  />
               </li>
@@ -110,6 +108,11 @@ const Sidebar2 = () => {
               <SidebarLink to="/createorg" label="Organizations" icon={faPeopleArrows} isSidebarOpen={isSidebarOpen} />
               </li>
           )}
+          {(adminType === 'School Owner' || adminType === 'Program Head') && (
+        <li className="hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6">
+          <SidebarLink to="/community-landing" label="My Community" icon={faGroupArrowsRotate} isSidebarOpen={isSidebarOpen} />
+        </li>
+      )}
         </ul>
       </div>
 

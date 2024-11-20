@@ -529,24 +529,25 @@ export default function CreateAnnouncement() {
                     </label>
                   )}
 
-                {adminType === 'School Owner'&& (
-                  <div className='flex my-3'>
-                    <label htmlFor="community" className="block text-gray-700 text-left">Select Community:</label>
-                    <select
-                      id="community"
-                      value={selectedCommunity}
-                      onChange={handleCommunityChange}
-                      className="flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md   "
-                    >
-                      <option value="">Select a community</option>
-                      {userCommunities.map((community) => (
-                        <option key={community._id} value={community._id}>
-                          {community.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+{(adminType === 'School Owner' || adminType === 'Program Head') && (
+  <div className='flex my-3'>
+    <label htmlFor="community" className="block text-gray-700 text-left">Select Community:</label>
+    <select
+      id="community"
+      value={selectedCommunity}
+      onChange={handleCommunityChange}
+      className="flex flex-row w-full mt-1 mx-3 py-2 px-3 border border-green-300 bg-white rounded-md shadow-md"
+    >
+      <option value="">Select a community</option>
+      {userCommunities.map((community) => (
+        <option key={community._id} value={community._id}>
+          {community.name}
+        </option>
+      ))}
+    </select>
+  </div>
+)}
+
 <label className="label text-gray-700">Select Minigame:</label>
 <div className="flex flex-col mb-3">
       

@@ -116,7 +116,7 @@ export default function Home() {
 
       <div className=" bg-[url('/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full max-h-[90vh] flex justify-center items-center text-center relative p-4 flex-col">
       
-      <div className="absolute inset-0 bg-black opacity-95"></div>
+      <div className="absolute inset-0 bg-black opacity-"></div>
       <div className="flex flex-col justify-start my-4 text-left">
       <h1 className="text-white font-bold text-5xl border-b-2 border-white" data-aos="fade-right" >IN THE NEWS</h1>
      
@@ -128,90 +128,81 @@ export default function Home() {
        {/* Announcements Slider */}
        <div className="flex w-[95vw] h-[95vh] flex-col ">
        
-        {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
-          <Slider {...sliderSettings} className="max-w-[95vw]">
-            {recentAnnouncements.slice(0, 5).map((announcement) => (
-              <div
-                key={announcement._id}
-                className="w-full h-full border-b border-t  p-3"
-              >
-                {/* Media Section */}
-                {announcement.mediaUrl ? (
-                  <div
-                    className="lg:w-full flex items-center justify-center relative flex-wrap"
-                    onMouseEnter={() => handleMouseEnter(announcement._id)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {announcement.contentType && announcement.contentType.startsWith('image') ? (
-                      <div className="relative">
-                        <img
-                          src={announcement.mediaUrl}
-                          alt="Announcement Media"
-                          className="w-auto h-[50vh] object-cover transform transition-transform duration-300 ease-in-out hover:scale-105"
-                        />
-                        {/* Announcement header with smooth transition */}
-                        <div
-                          className={` w-full absolute bottom-0 left-0 pt-2 p-4  items-center text-center bg-black opacity-80 rounded-md transform transition-all duration-500 ${
-                            hoveredAnnouncement === announcement._id
-                              ? 'opacity-100 translate-y-0'
-                              : 'opacity-0 translate-y-5'
-                          }`}
-                        >
-                          <h4 className="font-semibold text-lg mb-2 text-white border-b-2 border-yellow-500">
-                            {announcement.header}
-                          </h4>
-                        </div>
-                      </div>
-                    ) : announcement.contentType && announcement.contentType.startsWith('video') ? (
-                      <>
-                        <div className="relative w-auto h-[50vh]">
-                          {/* Header Overlay Above the Video */}
-                          <div
-                            className={`absolute top-0 left-0 w-full pt-2 p-4 items-center text-center bg-black opacity-80 rounded-md transform transition-all duration-500 z-20 ${
-                              hoveredAnnouncement === announcement._id
-                                ? 'opacity-100 translate-y-0'
-                                : 'opacity-0 -translate-y-5'
-                            }`}
-                          >
-                            <h4 className="font-semibold text-lg mb-2 text-white border-b-2 border-yellow-500">
-                              {announcement.header}
-                            </h4>
-                          </div>
-
-                          {/* Video Element */}
-                          <video 
-                            autoplay 
-                            muted 
-                            controls 
-                            className="w-full h-full object-cover transform transition-transform duration-300 ease-in-out hover:scale-105">
-                            <source src={announcement.mediaUrl} type={announcement.contentType} />
-                          </video>
-                        </div>
-                      </>
-                    ) : announcement.contentType && announcement.contentType.startsWith('audio') ? (
-                      <audio controls className="w-full h-auto">
-                        <source src={announcement.mediaUrl} type={announcement.contentType} />
-                      </audio>
-                    ) : (
-                      <div className="text-center border border-gray-200 p-6 rounded-lg">
-                        <p>No media available</p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex justify-center items-center border border-gray-200 p-6 rounded-lg">
-                    <p>No media available</p>
-                  </div>
-                )}
+       {Array.isArray(recentAnnouncements) && recentAnnouncements.length > 0 ? (
+  <Slider {...sliderSettings} className="max-w-[95vw]">
+    {recentAnnouncements
+      .filter(
+        (announcement) =>
+          announcement.mediaUrl &&
+          announcement.contentType &&
+          (announcement.contentType.startsWith('image') || announcement.contentType.startsWith('video'))
+      )
+      .slice(0, 5)
+      .map((announcement) => (
+        <div
+          key={announcement._id}
+          className="w-full h-full border-b border-t p-3"
+        >
+          {/* Media Section */}
+          <div
+            className="lg:w-full flex items-center justify-center relative flex-wrap"
+            onMouseEnter={() => handleMouseEnter(announcement._id)}
+            onMouseLeave={handleMouseLeave}
+          >
+            {announcement.contentType.startsWith('image') ? (
+              <div className="relative">
+                <img
+                  src={announcement.mediaUrl}
+                  alt="Announcement Media"
+                  className="w-auto h-[50vh] object-cover transform transition-transform duration-300 ease-in-out hover:scale-105"
+                />
+                {/* Announcement header with smooth transition */}
+                <div
+                  className={`w-full absolute bottom-0 left-0 pt-2 p-4 items-center text-center bg-black opacity-80 rounded-md transform transition-all duration-500 ${
+                    hoveredAnnouncement === announcement._id
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-5'
+                  }`}
+                >
+                  <h4 className="font-semibold text-lg mb-2 text-white border-b-2 border-yellow-500">
+                    {announcement.header}
+                  </h4>
+                </div>
               </div>
-            ))}
-            </Slider>
-            
+            ) : announcement.contentType.startsWith('video') ? (
+              <div className="relative w-auto h-[50vh]">
+                {/* Header Overlay Above the Video */}
+                <div
+                  className={`absolute top-0 left-0 w-full pt-2 p-4 items-center text-center bg-black opacity-80 rounded-md transform transition-all duration-500 z-20 ${
+                    hoveredAnnouncement === announcement._id
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 -translate-y-5'
+                  }`}
+                >
+                  <h4 className="font-semibold text-lg mb-2 text-white border-b-2 border-yellow-500">
+                    {announcement.header}
+                  </h4>
+                </div>
 
-            
-            ) : (
-            <p className="text-gray-500 text-center">No recent announcements available.</p>
-            )}
+                {/* Video Element */}
+                <video
+                  autoPlay
+                  muted
+                  controls
+                  className="w-full h-full object-cover transform transition-transform duration-300 ease-in-out hover:scale-105"
+                >
+                  <source src={announcement.mediaUrl} type={announcement.contentType} />
+                </video>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ))}
+  </Slider>
+) : (
+  <p className="text-gray-500 text-center">No recent announcements available.</p>
+)}
+
             </div>
 
 
