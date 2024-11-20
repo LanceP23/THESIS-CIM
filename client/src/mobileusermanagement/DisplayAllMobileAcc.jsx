@@ -30,6 +30,26 @@ const UserManagement = () => {
         fetchUsers();
     }, []);
 
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+          try {
+            const response = await axios.get('/check-auth');
+            if (!response.data.authenticated) {
+              // If not authenticated, redirect to login
+              navigate('/login');
+              window.location.reload();
+            } else {
+              // If authenticated, set the admin type
+              setAdminType(localStorage.getItem('adminType'));
+            }
+          } catch (error) {
+            console.error('Error checking authentication status:', error);
+          }
+        };
+    
+        checkAuthStatus();
+      }, [navigate]);
+
     const fetchUsers = async () => {
         setIsLoading(true); // Start loading
         try {

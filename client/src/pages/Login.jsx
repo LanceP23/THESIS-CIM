@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { SidebarContext } from '../../context/SidebarContext';
 import Navbar from '../components/Navbar';
 import './Login.css'
 import ReactModal from 'react-modal'; 
@@ -14,7 +15,24 @@ const Login = (  ) => {
         studentemail: '',
         password: '',
     });
-
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+          try {
+            const response = await axios.get('/check-auth');
+            if (!response.data.authenticated) {
+              // If not authenticated, redirect to login
+              navigate('/login');
+            } else {
+              // If authenticated, set the admin type
+              setAdminType(localStorage.getItem('adminType'));
+            }
+          } catch (error) {
+            console.error('Error checking authentication status:', error);
+          }
+        };
+    
+        checkAuthStatus();
+      }, [navigate]);
     useEffect(() => {
         const handleTabKey = (e) => {
             const allowedIds = ['adminEmail', 'password', 'loginButton'];
@@ -90,6 +108,7 @@ const Login = (  ) => {
             }
         }   
     };
+    
 
     
 

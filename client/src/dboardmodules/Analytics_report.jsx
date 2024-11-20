@@ -37,6 +37,7 @@ const AnalyticsReport = () => {
         const response = await axios.get('/check-auth');
         if (!response.data.authenticated) {
           navigate('/login');
+          window.location.reload();
         }
       } catch (error) {
         console.error('Error checking authentication status:', error);

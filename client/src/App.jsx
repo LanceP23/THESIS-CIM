@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from '../src/components/Navbar';
 import Home from '../src/pages/Home';
 import Register from './pages/Register';
@@ -34,11 +34,12 @@ import 'aos/dist/aos.css'; // Import AOS styles
 import Sidebar_2 from'./components/Sidebar2'
 import { SidebarProvider } from '../context/SidebarContext';
 
-const baseURL = process.env.REACT_APP_BACKEND_URL ;
+const baseURL = process.env.REACT_APP_BACKEND_URL  ;
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials = true;
 
 function App() {
+  const { user, authenticated } = useContext(UserContext);
 
 
 
@@ -51,7 +52,7 @@ function App() {
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
 
       <Navbar_2/>
-      <Sidebar_2/>
+      {location.pathname !== '/login' && <Sidebar_2 />} 
       <Routes>
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/" element={<Home />} />
@@ -72,7 +73,6 @@ function App() {
         <Route path="/event-calendar" element={<Eventcalendar/>} />
         <Route path="/notif-module" element={<Notification_module/>} />
         <Route path="/minigame-shop" element={<MinigameShop />} />
-
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>

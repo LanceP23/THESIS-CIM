@@ -88,6 +88,7 @@ export default function OrganizationReg() {
         if (!response.data.authenticated) {
           // If not authenticated, redirect to login
           navigate('/login');
+          window.location.reload();
         } else {
           // Set the admin type
           setAdminType(localStorage.getItem('adminType'));

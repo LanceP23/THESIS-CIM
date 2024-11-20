@@ -94,6 +94,7 @@ export default function CreateAnnouncement() {
         if (!response.data.authenticated) {
           // If not authenticated, redirect to login
           navigate('/login');
+          window.location.reload();
         } else {
           // If authenticated, set the admin type
           setAdminType(localStorage.getItem('adminType'));

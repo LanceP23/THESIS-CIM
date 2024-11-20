@@ -87,6 +87,7 @@ const CreateEvent = ({ defaultSelectable = true }) => {
         const response = await axios.get('/check-auth');
         if (!response.data.authenticated) {
           navigate('/login');
+          window.location.reload();
         } else {
           setAuthenticated(true);
           setAdminType(localStorage.getItem('adminType'));

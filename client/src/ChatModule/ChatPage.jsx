@@ -19,6 +19,7 @@ const ChatPage = () => {
             if (!response.data.authenticated) {
                 // If not authenticated, redirect to login
                 navigate('/login');
+                window.location.reload();
             } 
         } catch (error) {
             console.error('Error checking authentication status:', error);

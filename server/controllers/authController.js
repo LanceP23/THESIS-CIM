@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
             });
         }
 
-        const allowedDomains = ['gmail.com', 'example.org']; 
+        const allowedDomains = ['gmail.com', 'example.org','cscqc.edu.ph']; 
         const domain = studentemail.split('@')[1];
         if (!allowedDomains.includes(domain)) {
             return res.json({
@@ -184,23 +184,28 @@ const loginUser = async (req, res) => {
             }
         }
 
+        const tokenPayload = {
+            email: user.studentemail,
+            id: user._id,
+            name: user.name,
+            adminType: user.adminType,
+            ...(user.profilePicture && { profilePicture: user.profilePicture }) // Add profilePicture if available
+        };
+
         // Generate JWT token
         jwt.sign(
-            {
-                email: user.studentemail,
-                id: user._id,
-                name: user.name,
-                adminType: user.adminType,
-                ...(user.profilePicture && { profilePicture: user.profilePicture })  // Conditionally add profilePicture
-            },
+            tokenPayload,
             process.env.JWT_SECRET,
-            { expiresIn: '24h' },
-            (err, token) => {
+            { expiresIn: '1h' },
+            async (err, token) => {
                 if (err) {
                     console.error('Error signing JWT:', err);
                     return res.status(500).json({ error: 'Internal Server Error' });
                 }
-                // Send the token and adminType in the response
+                user.currentToken = token;
+                await user.save();
+
+               
                 res.cookie('token', token).json({ token, adminType: user.adminType });
             }
         );
@@ -211,7 +216,7 @@ const loginUser = async (req, res) => {
     }
 };
 
-const checkAuth = (req, res) => {
+const checkAuth = async (req, res) => {
     try {
         // Check if token is present in cookies
         const token = req.cookies.token;
@@ -220,11 +225,18 @@ const checkAuth = (req, res) => {
         }
 
         // Verify the token
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) {
                 return res.json({ authenticated: false });
             }
-            // If token is valid, user is authenticated
+
+            // Fetch user and validate current token
+            const user = await User.findById(decoded.id);
+            if (!user || user.currentToken !== token) {
+                return res.json({ authenticated: false });
+            }
+
+            // Token is valid and matches the active session
             return res.json({ authenticated: true });
         });
     } catch (error) {
@@ -252,7 +264,12 @@ const logoutUser = async (req, res) => {
         if (!token) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
-        
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+
+        if (!user || user.currentToken !== token) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
         // Expire the token by setting its expiration time to a past date
         res.cookie('token', '', { expires: new Date(0) });
         

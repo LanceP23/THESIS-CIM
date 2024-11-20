@@ -51,6 +51,7 @@ const userSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Notification'
       }],
+      currentToken: { type: String },
 },);
 
 const UserModel = mongoose.model('User', userSchema);
