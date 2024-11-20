@@ -373,5 +373,4 @@ module.exports = {
     getProfile,
     logoutUser,
     registerMobileUser,
-    bulkRegisterMobileUsers
 }   
