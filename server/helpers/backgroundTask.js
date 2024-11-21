@@ -3,6 +3,7 @@ const Announcement = require('../models/announcement');
 const ArchiveAnnouncement = require('../models/archiveAnnouncement');
 const MobileUser = require('../models/mobileUser');
 const User = require('../models/user');
+const Notification = require('../models/notification');
 
 const { getReceiverSocketId, io } = require('../socketManager');
 
