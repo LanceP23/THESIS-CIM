@@ -21,11 +21,11 @@ const { lastMonth, range } = generateRandomDates();
 const countUserReactionsByEducationLevel = async (req, res) => {
     try {
         const userId = req.params.id;
-       
+
         // Find the user by userId to get their name
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).send({ message: 'User not found' });
+            return res.status(404).send({ message: 'User not found, possibly deleted' });
         }
 
         const userName = user.name;
@@ -81,6 +81,15 @@ const countUserReactionsByEducationLevel = async (req, res) => {
                         }
                     }
                 }
+            },
+            // Ensure that we only process reactions for users that still exist
+            {
+                $match: {
+                    $or: [
+                        { 'adminDetails': { $ne: [] } },
+                        { 'mobileUserDetails': { $ne: [] } }
+                    ]
+                }
             }
         ]);
 
@@ -98,7 +107,7 @@ const countUserReactionsByEducationLevel = async (req, res) => {
         for (const reaction of reactions) {
             const userType = reaction.userType;
             const userDetail = reaction.userDetails;
-        
+
             if (userType === 'admin') {
                 educationLevelCounters.admin++;
             } else if (userType === 'mobile') {
@@ -119,11 +128,11 @@ const countUserReactionsByEducationLevel = async (req, res) => {
                     default:
                         break;
                 }
-        
+
                 // Track reactions by section and year level, including education level
                 const sectionKey = userDetail.section;
                 let yearLevelKey;
-        
+
                 // Conditionally assign year level based on education level
                 if (userDetail.educationLevel === 'College') {
                     yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.collegeYearLevel}`;
@@ -136,10 +145,10 @@ const countUserReactionsByEducationLevel = async (req, res) => {
                 } else {
                     yearLevelKey = 'Unknown Year Level';
                 }
-                
+
                 // Create the combined key including both section and year level with education
                 const combinedKey = `${sectionKey} - ${yearLevelKey}`;
-        
+
                 if (sectionYearLevelCounters[combinedKey]) {
                     sectionYearLevelCounters[combinedKey]++;
                 } else {
@@ -164,13 +173,15 @@ const countUserReactionsByEducationLevel = async (req, res) => {
 };
 
 
+
 const countReactionsByDate = async (req, res) => {
     try {
         const userId = req.params.id;
 
+        // Find the user by userId to get their name
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).send({ message: 'User not found' });
+            return res.status(404).send({ message: 'User not found, possibly deleted' });
         }
 
         const userName = user.name;
@@ -202,13 +213,19 @@ const countReactionsByDate = async (req, res) => {
                             then: { $arrayElemAt: ["$announcementDetails", 0] },
                             else: { $arrayElemAt: ["$archivedAnnouncementDetails", 0] }
                         }
-                    }
+                    },
+                    userId: 1 // Ensure userId is included
                 }
             },
             {
+                // Match only reactions where the user exists in 'users' or 'mobileusers'
                 $match: {
                     'announcementInfo.postedBy': userName,
-                    dateReacted: { $exists: true, $ne: null }
+                    dateReacted: { $exists: true, $ne: null },
+                    $or: [
+                        { userId: { $in: await User.distinct('_id') } },  // Check against all existing users
+                        { userId: { $in: await MobileUser.distinct('_id') } } // Check against all existing mobile users
+                    ]
                 }
             }
         ]);
@@ -219,18 +236,18 @@ const countReactionsByDate = async (req, res) => {
         userReactions.forEach(reaction => {
             const date = reaction.dateReacted.toISOString().split('T')[0];
             const announcementInfo = reaction.announcementInfo;
-        
+
             if (!reactionsByDate[date]) {
                 reactionsByDate[date] = { likes: 0, dislikes: 0, announcements: [] };
             }
-        
+
             // Increment like/dislike counts
             if (reaction.reaction === 'like') {
                 reactionsByDate[date].likes += 1;
             } else if (reaction.reaction === 'dislike') {
                 reactionsByDate[date].dislikes += 1;
             }
-        
+
             // Add unique announcement to the date's announcements list
             if (announcementInfo) {
                 const announcementExists = reactionsByDate[date].announcements.some(
@@ -247,7 +264,7 @@ const countReactionsByDate = async (req, res) => {
                         dislikes: 0
                     });
                 }
-        
+
                 // Update likes/dislikes for the announcement itself
                 const announcementIndex = reactionsByDate[date].announcements.findIndex(
                     ann => ann.announcementId.toString() === announcementInfo._id.toString()
@@ -261,7 +278,6 @@ const countReactionsByDate = async (req, res) => {
                 }
             }
         });
-        
 
         // Format the data for the response
         const formattedData = Object.keys(reactionsByDate).map(date => ({
@@ -277,6 +293,7 @@ const countReactionsByDate = async (req, res) => {
         res.status(500).send({ message: 'Error counting reactions by date', error });
     }
 };
+
 
 
 
