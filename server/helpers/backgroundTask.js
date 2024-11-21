@@ -1,6 +1,9 @@
 const cron = require('node-cron');
 const Announcement = require('../models/announcement');
 const ArchiveAnnouncement = require('../models/archiveAnnouncement');
+const MobileUser = require('../models/mobileUser');
+const User = require('../models/user');
+
 const { getReceiverSocketId, io } = require('../socketManager');
 
 // Define a function to run periodically
