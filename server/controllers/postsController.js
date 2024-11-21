@@ -72,9 +72,9 @@ const createAnnouncement = async (req, res) => {
     // Determine status based on admin type and posting date
     if (req.user.adminType === 'School Owner') {
       if (postingDate && new Date(postingDate) > new Date()) {
-        status = 'scheduled';
+        status = 'scheduled'; // Scheduled posts will be approved later by the cron job
       } else {
-        status = 'approved';
+        status = 'approved'; // Immediately approved if no posting date or posting date is now
       }
     }
 
@@ -153,28 +153,30 @@ const createAnnouncement = async (req, res) => {
     // Add target users to recipientIds
     targetUsers.forEach(user => recipientIds.add(user._id.toString()));
 
-    // Notification data template
-    const notificationDataTemplate = {
-      type: 'announcement',
-      message: 'New announcement posted',
-      posterName: req.user.name,
-      announcementHeader: header,
-      announcementBody: body,
-      timestamp: new Date().toISOString(),
-      recipientIds: Array.from(recipientIds), // Convert Set to Array
-    };
+    // If no postingDate (real-time post), send the notification right away
+    if (!postingDate || new Date(postingDate) <= new Date()) {
+      const notificationDataTemplate = {
+        type: 'announcement',
+        message: 'New announcement posted',
+        posterName: req.user.name,
+        announcementHeader: header,
+        announcementBody: body,
+        timestamp: new Date().toISOString(),
+        recipientIds: Array.from(recipientIds), // Convert Set to Array
+      };
 
-    // Create and save notification
-    const notification = new Notification(notificationDataTemplate);
-    await notification.save();
+      // Create and save notification
+      const notification = new Notification(notificationDataTemplate);
+      await notification.save();
 
-    // Emit notifications to connected users
-    targetUsers.forEach(user => {
-      const receiverSocketId = getReceiverSocketId(user._id);
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("newAnnouncement", notificationDataTemplate);
-      }
-    });
+      // Emit notifications to connected users
+      targetUsers.forEach(user => {
+        const receiverSocketId = getReceiverSocketId(user._id);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newAnnouncement", notificationDataTemplate);
+        }
+      });
+    }
 
     // Handle community-specific notifications if a communityId is provided
     if (communityId) {
@@ -228,6 +230,7 @@ const createAnnouncement = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
