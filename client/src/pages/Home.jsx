@@ -116,7 +116,7 @@ export default function Home() {
 
       <div className=" bg-[url('/assets/home_image.jpg')] bg-cover bg-no-repeat bg-center w-full max-h-[90vh] flex justify-center items-center text-center relative p-4 flex-col">
       
-      <div className="absolute inset-0 bg-black opacity-"></div>
+      <div className="absolute inset-0 bg-black opacity-85"></div>
       <div className="flex flex-col justify-start my-4 text-left">
       <h1 className="text-white font-bold text-5xl border-b-2 border-white" data-aos="fade-right" >IN THE NEWS</h1>
      

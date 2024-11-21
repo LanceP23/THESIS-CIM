@@ -26,9 +26,26 @@ const startBackgroundTasks = () => {
                 { $set: { status: 'approved' } }
             );
             console.log('Announcements approved:', result);
+            const missedAnnouncements = await Announcement.find({
+                status: 'scheduled',
+                postingDate: { $lte: now } // Catch-up logic for missed announcements
+            });
+    
+            if (missedAnnouncements.length > 0) {
+                const missedResult = await Announcement.updateMany(
+                    {
+                        _id: { $in: missedAnnouncements.map(a => a._id) },
+                        status: 'scheduled' // Ensure status is still 'scheduled'
+                    },
+                    { $set: { status: 'approved' } }
+                );
+                console.log('Missed announcements approved:', missedResult);
+            }
+            
         } catch (error) {
             console.error('Error approving announcements:', error);
         }
+
 
         try {
             // Find announcements with expiration dates that have been reached
