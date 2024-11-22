@@ -19,6 +19,13 @@ const ViewCommunity = () => {
   const [forumPosts, setForumPosts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal open state
   const [selectedImage, setSelectedImage] = useState(''); // Selected image URL
+  const [showAddMembersModal, setShowAddMembersModal] = useState(false);
+  const [mobileUsers, setMobileUsers] = useState([]);
+  const [mobileUserFilter, setMobileUserFilter] = useState('');
+  const [filterOption, setFilterOption] = useState('All');
+  const [sectionFilter, setSectionFilter] = useState('');
+  const [selectedMembers, setSelectedMembers] = useState([]);
+
 
 
   const openImageModal = (imageUrl) => {
@@ -39,6 +46,57 @@ const ViewCommunity = () => {
     }
     return token.split('=')[1];
   };
+
+  const collegeSections = [
+    'IT101', 'IT102', 'IT103', 'IT104', 'IT105', 'IT106',
+    'BAMM101', 'BAMM102', 'TM101', 'TM102', 'TM103',
+    'ALPHA', 'BRAVO', 'CHARLIE', 'BEED101', 'BSE-ENG101',
+    'BSE-SOCSIE101', 'IT201', 'IT202', 'BAMM201', 'TM201',
+    'ALPHA201', 'BRAVO202', 'BEED201', 'BSE-ENG201', 'IT301',
+    'BAMM301', 'TM301', 'CRIM301', 'BEED301', 'BSE-ENG301',
+    'IT401', 'BAMM401', 'TM401', 'CRIM401', 'IT501', 'IT701',
+  ];
+
+  // Function to fetch mobile users
+  const fetchMobileUsers = async () => {
+    try {
+      const response = await axios.get('/get-mobile-users');
+      setMobileUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching mobile users:', error);
+    }
+  };
+  useEffect(() => {
+    if (showAddMembersModal) {
+      fetchMobileUsers();
+    }
+  }, [showAddMembersModal]);
+  
+
+  const handleAddMember = async (userId, userType, communityId) => {
+    if (!selectedMembers.includes(userId)) {
+      try {
+        // Call the API to add the member to the community
+        const response = await axios.post(`/community/${communityId}/member`, {
+          userId: userId,       // The user's ID
+          userType: userType,   // The user type ("MobileUser")
+          communityId: communityId // The community ID (the one where the user is being added)
+        });
+  
+        // Update the local selectedMembers list if the API call succeeds
+        setSelectedMembers([...selectedMembers, userId]);
+        alert('Member added successfully!');
+      } catch (error) {
+        console.error('Error adding member:', error.response?.data || error.message);
+        alert('Failed to add member. Please try again.');
+      }
+    } else {
+      alert('User is already selected.');
+    }
+  };
+  
+  
+  
 
   useEffect(() => {
     const fetchCommunityData = async () => {
@@ -95,6 +153,8 @@ const ViewCommunity = () => {
       toast.error('Failed to remove member');
     }
   };
+
+  
 
   const confirmRemoveMember = (communityId, memberId) => {
     toast((t) => (
@@ -183,21 +243,140 @@ const ViewCommunity = () => {
 
             </div>
             
-
             {viewCommunityId === community._id && activeView === 'members' && (
-              <div className="mt-4">
-                <h4 className="text-xl font-semibold mb-2">Members</h4>
-                <ul>
-                  {community.members.map(member => (
-                    <li key={member.userId} className="flex items-center mb-2">
-                      <img src={member.avatar || "https://img.daisyui.com/tailwind-css-component-profile-2@56w.png"} alt="Member Avatar" className="w-10 h-10 rounded-full mr-3" />
-                      <span className="font-medium">{member.name}</span>
-                      <button onClick={() => confirmRemoveMember(community._id, member.userId)} className="ml-auto btn btn-error btn-xs">Remove</button>
-                    </li>
+        <div className="mt-4">
+          <h4 className="text-xl font-semibold mb-2">Members</h4>
+
+          <div className=" max-h-96 overflow-y-auto">
+          <ul>
+            {community.members.map((member) => (
+              <li key={member.userId} className="flex items-center mb-2">
+                <img
+                  src={member.profilePicture|| 'https://img.daisyui.com/tailwind-css-component-profile-2@56w.png'}
+                  alt="Member Avatar"
+                  className="w-10 h-10 rounded-full mr-3"
+                />
+                <span className="font-medium text-black">{member.name}</span>
+                <button
+                  onClick={() => confirmRemoveMember(community._id, member.userId)}
+                  className="ml-auto btn btn-error btn-xs"
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+          </div>
+          <button
+        onClick={() => {
+          setShowAddMembersModal(true); 
+          if (mobileUsers.length > 0) {
+            handleAddMember(mobileUsers[0].userId, 'MobileUser', viewCommunityId); 
+          }
+        }}
+        className="btn btn-success btn-sm mt-4"
+      >
+        Add Members
+      </button>
+
+        </div>
+      )}
+
+      {/* Add Members Modal */}
+      {showAddMembersModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="text-lg font-bold dark:text-white">Add Members</h3>
+
+            <div className="modal-action">
+              <button onClick={() => setShowAddMembersModal(false)} className="btn btn-error btn-sm">
+                Close
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <input
+              type="text"
+              className="input input-bordered input-success input-md w-full mt-2 Text-gray-900 dark:text-white bg-base-100 rounded-md shadow-xl"
+              value={mobileUserFilter}
+              onChange={(e) => setMobileUserFilter(e.target.value)}
+              placeholder="Filter by name or email"
+            />
+
+            {/* Filter by Education Level */}
+            <div className="mt-4">
+              <select
+                value={filterOption}
+                onChange={(e) => {
+                  setFilterOption(e.target.value);
+                  setSectionFilter(''); 
+                }}
+                className="select select-bordered select-md w-full Text-gray-900 dark:text-white"
+              >
+                <option value="All">All</option>
+                <option value="Grade School">Grade School</option>
+                <option value="High School">High School</option>
+                <option value="Senior High School">Senior High School</option>
+                <option value="College">College</option>
+              </select>
+
+              {/* Section Filter for College */}
+              {filterOption === 'College' && (
+                <select
+                  value={sectionFilter}
+                  onChange={(e) => setSectionFilter(e.target.value)}
+                  className="select select-bordered select-md w-full mt-2 Text-gray-900 dark:text-white"
+                >
+                  <option value="">All Sections</option>
+                  {collegeSections.map((section) => (
+                    <option key={section} value={section}>
+                      {section}
+                    </option>
                   ))}
-                </ul>
-              </div>
-            )}
+                </select>
+              )}
+            </div>
+
+            {/* List of Mobile Users */}
+            <div className="mt-4 max-h-60 overflow-y-auto">
+            {mobileUsers
+  .filter((user) => {
+    // Apply filters
+    const matchesNameOrEmail =
+      user.name.includes(mobileUserFilter) || user.email.includes(mobileUserFilter);
+    const matchesSection = !sectionFilter || user.section === sectionFilter;
+    const matchesEducationLevel =
+      filterOption === 'All' || user.educationLevel === filterOption;
+
+    return matchesNameOrEmail && matchesSection && matchesEducationLevel;
+  })
+  .map((user) => (
+    <div key={user._id} className="flex items-center mb-2">
+      <img
+        src={user.profilePicture || 'https://img.daisyui.com/tailwind-css-component-profile-2@56w.png'}
+        alt="User Avatar"
+        className="w-8 h-8 rounded-full mr-3"
+      />
+      <span className="font-medium dark:text-white">{user.name}</span>
+      <button
+        onClick={() => {
+          handleAddMember(user._id, 'MobileUser', viewCommunityId); 
+        }}
+        className="ml-auto btn btn-success btn-xs"
+      >
+        Add
+      </button>
+    </div>
+  ))}
+
+
+            </div>
+
+          
+          </div>
+        </div>
+      )}
+
 
             {viewCommunityId === community._id && activeView === 'posts' && (
               <div className="mt-4">

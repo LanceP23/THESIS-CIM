@@ -231,11 +231,6 @@ const NotificationBell = ({ setTotalUnreadCount }) => {
                             
                             {announcementNotifications.map((announcement, index) => (
                                 <div className="flex justify-between my-3" key={index}>
-                                    <div className="avatar">
-                                        <div className="w-10 mask mask-squircle">
-                                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="avatar" />
-                                        </div>
-                                    </div>
                                     <div className="div">
                                         <li>
                                             New announcement: {announcement.announcementHeader} by {announcement.posterName}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';  
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Treemap } from 'recharts';
 import axios from 'axios';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import './MinigameAnalytics.css';
@@ -179,11 +179,47 @@ const MinigameAnalytics = () => {
   
 
   const averageTriesData = Array.isArray(averageTries)
-  ? averageTries.map(item => ({
-      name: item.userName,  // Player's name
-      value: item.averageTries  // Average tries per player
-  }))
+  ? averageTries
+      .filter(item => item.userName && item.averageTries !== null) // Filter out invalid entries
+      .map(item => ({
+        name: item.userName,  // Player's name
+        value: item.averageTries  // Average tries per player
+      }))
   : [];
+  const MAX_ITEMS = 10; // Show top 10 players
+
+  // Sort by value descending and get top N players
+  let sortedData = [...averageTriesData].sort((a, b) => b.value - a.value);
+  if (sortedData.length > MAX_ITEMS) {
+    const othersValue = sortedData.slice(MAX_ITEMS).reduce((sum, item) => sum + item.value, 0);
+    sortedData = [...sortedData.slice(0, MAX_ITEMS), { name: "Others", value: othersValue }];
+  }
+  
+   // Data ready for visualization
+  
+
+const finalChartData = sortedData; // Data ready for visualization
+
+// Display top 10 users
+let processedTryDistribution = Array.isArray(tryDistributionData)
+  ? tryDistributionData
+      .filter(item => item.name && item.value > 0) // Filter valid data
+      .sort((a, b) => b.value - a.value) // Sort descending by value
+  : [];
+
+// If there are more than MAX_ITEMS, aggregate the rest into "Others"
+if (processedTryDistribution.length > MAX_ITEMS) {
+  const othersValue = processedTryDistribution
+    .slice(MAX_ITEMS)
+    .reduce((sum, item) => sum + item.value, 0);
+
+  processedTryDistribution = [
+    ...processedTryDistribution.slice(0, MAX_ITEMS),
+    { name: "Others", value: othersValue },
+  ];
+}
+
+
 
   const handleLoadMore = () => {
     setVisibleCount(visibleCount + 5); 
@@ -289,40 +325,6 @@ const MinigameAnalytics = () => {
     </BarChart>
   </ResponsiveContainer>
 </div>
-
-
-{/* Try Distribution Chart */}
-<div className="chart-container p-4 bg-white rounded-lg shadow-lg">
-  <h3 className="text-xl font-semibold text-gray-700 mb-4">Try Distribution (Flappy Cat)</h3>
-  <ResponsiveContainer width="100%" height={200}>
-    <PieChart>
-      <Pie
-        data={tryDistributionData}
-        dataKey="value"
-        nameKey="name"
-        cx="50%"
-        cy="50%"
-        outerRadius={60}
-        label
-      >
-        {tryDistributionData.map((entry, index) => (
-          <Cell
-            key={`cell-${index}`}
-            fill={index % 2 === 0 ? "#36a2eb" : "#ff6384"}
-          />
-        ))}
-      </Pie>
-      <Tooltip />
-      <Legend />
-    </PieChart>
-  </ResponsiveContainer>
-</div>
-
-
-
-
-
-      
 
        {/* Leaderboard Section */}
        <div className="leaderboard-section mt-6 p-4 bg-white rounded-lg shadow-lg">

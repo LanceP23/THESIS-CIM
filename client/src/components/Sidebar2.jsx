@@ -90,24 +90,27 @@ const Sidebar2 = () => {
           </li>
 
           {adminType === 'School Owner' ? (
-            <>
-            <li className='hover:text-white transition-all duration-200 p-2 py-3  hover:bg-green-700 hover:pl-6'>
-              <SidebarLink to="/user-settings" label="Mobile User Management" icon={faMobile} isSidebarOpen={isSidebarOpen}  />
-              </li>
-          
-            <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'>
-              <SidebarLink to="/createorg" label="Manage Organization" icon={faPeopleArrows} isSidebarOpen={isSidebarOpen}  />
-            </li>
-            
-              <li className='hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6'> 
-              <SidebarLink to="/register" label="Account Registration" icon={faAddressCard} isSidebarOpen={isSidebarOpen}  />
-              </li>
-            </>
-          ) : (
-            <li className='hover:text-white transition-all duration-200 p-2 py-3  hover:bg-green-700 hover:pl-6'>
-              <SidebarLink to="/createorg" label="Organizations" icon={faPeopleArrows} isSidebarOpen={isSidebarOpen} />
-              </li>
-          )}
+  <>
+    {/* School Owner Links */}
+    <li className="hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6">
+      <SidebarLink to="/user-settings" label="Mobile User Management" icon={faMobile} isSidebarOpen={isSidebarOpen} />
+    </li>
+    <li className="hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6">
+      <SidebarLink to="/createorg" label="Manage Organization" icon={faPeopleArrows} isSidebarOpen={isSidebarOpen} />
+    </li>
+    <li className="hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6">
+      <SidebarLink to="/register" label="Account Registration" icon={faAddressCard} isSidebarOpen={isSidebarOpen} />
+    </li>
+  </>
+) : adminType === 'Organization Officer' ? (
+  <>
+    {/* Organization Officer Links */}
+    <li className="hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6">
+      <SidebarLink to="/createorg" label="Organizations" icon={faPeopleArrows} isSidebarOpen={isSidebarOpen} />
+    </li>
+  </>
+) : null /* Render nothing if adminType is neither */}
+
           {(adminType === 'School Owner' || adminType === 'Program Head') && (
         <li className="hover:text-white transition-all duration-200 p-2 py-3 hover:bg-green-700 hover:pl-6">
           <SidebarLink to="/community-landing" label="My Community" icon={faGroupArrowsRotate} isSidebarOpen={isSidebarOpen} />

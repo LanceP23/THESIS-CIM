@@ -98,11 +98,6 @@ const MessageDropdown = ({ setTotalUnreadMessages }) => {
                     <ul>
                         {messageNotifications.slice().reverse().map((notification, index) => (
                             <div className="flex justify-between my-3 border-b-2 pb-2" key={index}>
-                                <div className="avatar">
-                                    <div className="w-10 mask mask-squircle">
-                                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="avatar" />
-                                    </div>
-                                </div>
                                 <div className="div text-black ">
                                     <li>
                                         New message from {notification.senderName}: {notification.message}

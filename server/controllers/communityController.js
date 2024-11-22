@@ -385,6 +385,67 @@ const deleteCommunity = async (req, res) => {
   }
 };
 
+const addMember = async (req, res) => {
+  try {
+    const { communityId, userId, userType } = req.body;
+
+    // Validate input
+    if (!communityId || !userId || !userType) {
+      return res.status(400).json({ error: 'Community ID, User ID, and User Type are required.' });
+    }
+
+    // Find the community
+    const community = await Community.findById(communityId);
+    if (!community) {
+      return res.status(404).json({ error: 'Community not found.' });
+    }
+
+    // Check if the user is already a member
+    const existingMember = community.members.find((member) => member.userId.toString() === userId);
+    if (existingMember) {
+      return res.status(400).json({ error: 'User is already a member of this community.' });
+    }
+
+    // Fetch the user details based on userType
+    let user;
+    if (userType === 'User') {
+      user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+    } else if (userType === 'MobileUser') {
+      user = await MobileUser.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'MobileUser not found.' });
+      }
+    } else {
+      return res.status(400).json({ error: 'Invalid user type.' });
+    }
+
+    // Prepare the member object to add
+    const newMember = {
+      userId: user._id,
+      name: user.name,
+      userType,
+      adminType: user.adminType || '', // Optional: Include adminType if available
+    };
+
+    // Add the member to the community
+    community.members.push(newMember);
+    await community.save();
+
+    res.status(200).json({
+      message: 'Member added successfully.',
+      communityId: community._id,
+      newMember,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 
 
@@ -405,5 +466,6 @@ module.exports = {
   getForumPostsByCommunityId,
   getLast5ForumPostsWithCommunityName,
   deleteCommunity,
-  deleteForumPost
+  deleteForumPost,
+  addMember
 };

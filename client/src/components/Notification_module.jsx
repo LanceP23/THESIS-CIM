@@ -117,14 +117,8 @@ const Notification_module = () => {
                   <td>{index + 1}</td>
                   <td>
                     <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img src="https://img.daisyui.com/tailwind-css-component-profile-2@56w.png" alt="Avatar" />
-                        </div>
-                      </div>
                       <div>
                         <div className="font-bold">{notification.posterName}</div>
-                        <div className="text-sm opacity-50">United States</div>
                       </div>
                     </div>
                   </td>
