@@ -137,17 +137,23 @@ const createAnnouncement = async (req, res) => {
       // Get all users and mobile users
       const allUsers = await User.find();
       targetUsers.push(...allUsers, ...allMobileUsers);
+    
+      // Log the names of all users being included
+      allUsers.forEach(user => console.log(`Including user: ${user.name}`));
+      allMobileUsers.forEach(user => console.log(`Including mobile user: ${user.name}`));
     } else {
       // Handle staff visibility
       if (parsedVisibility.staff) {
         const staffUsers = await User.find({
-          adminType: { $in: ['School Owner', 'School Executive Admin'] }
+          adminType: { $in: ['School Owner', 'School Executive Admin'] },
+          position: { $exists: false },
+          organization: { $exists: false },
+          department: { $exists: false }
         });
         targetUsers.push(...staffUsers);
     
-        // Optionally, add mobile staff users if applicable
-        const staffMobileUsers = await MobileUser.find({ role: 'staff' });
-        targetUsers.push(...staffMobileUsers);
+        // Log the names of staff users being included
+        staffUsers.forEach(user => console.log(`Including staff user: ${user.name}`));
       }
     
       // Handle faculty visibility
@@ -158,9 +164,8 @@ const createAnnouncement = async (req, res) => {
         });
         targetUsers.push(...facultyUsers);
     
-        // Optionally, add mobile faculty users if applicable
-        const facultyMobileUsers = await MobileUser.find({ role: 'faculty' });
-        targetUsers.push(...facultyMobileUsers);
+        // Log the names of faculty users being included
+        facultyUsers.forEach(user => console.log(`Including faculty user: ${user.name}`));
       }
     
       // Handle student visibility
@@ -171,9 +176,15 @@ const createAnnouncement = async (req, res) => {
         });
         targetUsers.push(...studentUsers);
     
-        // Optionally, add all mobile users for students
-        const allMobileUsers = await MobileUser.find({ role: 'student' });
+        // Log the names of student users being included
+        studentUsers.forEach(user => console.log(`Including student user: ${user.name}`));
+    
+        // Optionally, add all mobile users (assuming you have a separate list of mobile users for students)
+        const allMobileUsers = await MobileUser.find();
         targetUsers.push(...allMobileUsers);
+    
+        // Log the names of all mobile users being included
+        allMobileUsers.forEach(user => console.log(`Including mobile user: ${user.name}`));
       }
     }
     
