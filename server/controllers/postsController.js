@@ -128,7 +128,6 @@ const createAnnouncement = async (req, res) => {
     let targetUsers = [];
     let recipientIds = new Set(); // Use a Set to avoid duplicates
 
-
     const parsedVisibility = JSON.parse(visibility);
     const allMobileUsers = await MobileUser.find();
 
@@ -154,20 +153,19 @@ const createAnnouncement = async (req, res) => {
     // Add target users to recipientIds
     targetUsers.forEach(user => recipientIds.add(user._id.toString()));
 
-    
+    // Prepare notification data template
+    const notificationDataTemplate = {
+      type: 'announcement',
+      message: 'New announcement posted',
+      posterName: req.user.name,
+      announcementHeader: header,
+      announcementBody: body,
+      timestamp: new Date().toISOString(),
+      recipientIds: Array.from(recipientIds), // Convert Set to Array
+    };
 
     // If no postingDate (real-time post), send the notification right away
     if (!postingDate || new Date(postingDate) <= new Date()) {
-      const notificationDataTemplate = {
-        type: 'announcement',
-        message: 'New announcement posted',
-        posterName: req.user.name,
-        announcementHeader: header,
-        announcementBody: body,
-        timestamp: new Date().toISOString(),
-        recipientIds: Array.from(recipientIds), // Convert Set to Array
-      };
-
       // Create and save notification
       const notification = new Notification(notificationDataTemplate);
       await notification.save();
@@ -233,6 +231,7 @@ const createAnnouncement = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
