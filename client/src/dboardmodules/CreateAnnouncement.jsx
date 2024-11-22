@@ -401,7 +401,7 @@ export default function CreateAnnouncement() {
       return (
         <div className="flex flex-col my-3">
           <div className="label my-0 py-0">
-            <label className="label text-gray-700" htmlFor="body">Visibility:</label>
+            <label className="label text-gray-700" htmlFor="body">Notify:</label>
           </div>
           <div className="radio_buttons flex flex-wrap">
             <label className="flex justify-start mx-2">

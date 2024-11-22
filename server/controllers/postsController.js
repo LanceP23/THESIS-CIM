@@ -51,7 +51,7 @@ r
 };
 
 // Create Announcement
-const createAnnouncement = async (req, res) => {
+const createAnnouncement = async (req, res) => { 
   try {
     const {
       header,
