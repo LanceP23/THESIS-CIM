@@ -128,30 +128,60 @@ const createAnnouncement = async (req, res) => {
     let targetUsers = [];
     let recipientIds = new Set(); // Use a Set to avoid duplicates
 
+
     const parsedVisibility = JSON.parse(visibility);
     const allMobileUsers = await MobileUser.find();
 
     // Determine target users based on visibility settings
     if (parsedVisibility.everyone) {
+      // Get all users and mobile users
       const allUsers = await User.find();
       targetUsers.push(...allUsers, ...allMobileUsers);
     } else {
+      // Handle staff visibility
       if (parsedVisibility.staff) {
-        const staffUsers = await User.find({ position: { $exists: false }, organization: { $exists: false }, department: { $exists: false } });
+        const staffUsers = await User.find({
+          adminType: { $in: ['School Owner', 'School Executive Admin'] }
+        });
         targetUsers.push(...staffUsers);
+    
+        // Optionally, add mobile staff users if applicable
+        const staffMobileUsers = await MobileUser.find({ role: 'staff' });
+        targetUsers.push(...staffMobileUsers);
       }
+    
+      // Handle faculty visibility
       if (parsedVisibility.faculty) {
-        const facultyUsers = await User.find({ department: { $exists: true } });
+        const facultyUsers = await User.find({
+          adminType: { $in: ['Program Head', 'Instructor'] },
+          department: { $exists: true }
+        });
         targetUsers.push(...facultyUsers);
+    
+        // Optionally, add mobile faculty users if applicable
+        const facultyMobileUsers = await MobileUser.find({ role: 'faculty' });
+        targetUsers.push(...facultyMobileUsers);
       }
+    
+      // Handle student visibility
       if (parsedVisibility.students) {
-        const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
-        targetUsers.push(...studentUsers, ...allMobileUsers);
+        const studentUsers = await User.find({
+          position: { $exists: true },
+          organization: { $exists: true }
+        });
+        targetUsers.push(...studentUsers);
+    
+        // Optionally, add all mobile users for students
+        const allMobileUsers = await MobileUser.find({ role: 'student' });
+        targetUsers.push(...allMobileUsers);
       }
     }
+    
 
     // Add target users to recipientIds
     targetUsers.forEach(user => recipientIds.add(user._id.toString()));
+
+    
 
     // If no postingDate (real-time post), send the notification right away
     if (!postingDate || new Date(postingDate) <= new Date()) {
