@@ -9,6 +9,7 @@ const MobileUser = require('../models/mobileUser');
 const Notification = require('../models/notification');  
 const Community = require('../models/community');
 const PostComments = require('../models/postComments');
+const ArchiveAnnouncement = require('../models/archiveAnnouncement');
 
 
 
@@ -51,7 +52,7 @@ r
 };
 
 // Create Announcement
-const createAnnouncement = async (req, res) => { 
+const createAnnouncement = async (req, res) => {
   try {
     const {
       header,
@@ -138,11 +139,11 @@ const createAnnouncement = async (req, res) => {
     } else {
       if (parsedVisibility.staff) {
         const staffUsers = await User.find({ position: { $exists: false }, organization: { $exists: false }, department: { $exists: false } });
-        targetUsers.push(...staffUsers, );
+        targetUsers.push(...staffUsers);
       }
       if (parsedVisibility.faculty) {
         const facultyUsers = await User.find({ department: { $exists: true } });
-        targetUsers.push(...facultyUsers, );
+        targetUsers.push(...facultyUsers);
       }
       if (parsedVisibility.students) {
         const studentUsers = await User.find({ position: { $exists: true }, organization: { $exists: true } });
@@ -153,19 +154,18 @@ const createAnnouncement = async (req, res) => {
     // Add target users to recipientIds
     targetUsers.forEach(user => recipientIds.add(user._id.toString()));
 
-    // Prepare notification data template
-    const notificationDataTemplate = {
-      type: 'announcement',
-      message: 'New announcement posted',
-      posterName: req.user.name,
-      announcementHeader: header,
-      announcementBody: body,
-      timestamp: new Date().toISOString(),
-      recipientIds: Array.from(recipientIds), // Convert Set to Array
-    };
-
     // If no postingDate (real-time post), send the notification right away
     if (!postingDate || new Date(postingDate) <= new Date()) {
+      const notificationDataTemplate = {
+        type: 'announcement',
+        message: 'New announcement posted',
+        posterName: req.user.name,
+        announcementHeader: header,
+        announcementBody: body,
+        timestamp: new Date().toISOString(),
+        recipientIds: Array.from(recipientIds), // Convert Set to Array
+      };
+
       // Create and save notification
       const notification = new Notification(notificationDataTemplate);
       await notification.save();
@@ -173,6 +173,7 @@ const createAnnouncement = async (req, res) => {
       // Emit notifications to connected users
       targetUsers.forEach(user => {
         const receiverSocketId = getReceiverSocketId(user._id);
+       
         if (receiverSocketId) {
           io.to(receiverSocketId).emit("newAnnouncement", notificationDataTemplate);
         }
@@ -231,7 +232,6 @@ const createAnnouncement = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 
 
 
@@ -630,6 +630,92 @@ const deleteComments = async (req, res) => {
   }
 };
 
+const getArchivedAnnouncements = async (req, res) => {
+  try {
+      const { page = 1, limit = 10 } = req.query;
+      const skip = (page - 1) * limit; 
+
+      const announcements = await ArchiveAnnouncement.find()
+          .sort({ expirationDate: -1 })  // Sort by expirationDate
+          .skip(skip) 
+          .limit(parseInt(limit)); 
+
+      res.status(200).json({ success: true, data: announcements });
+  } catch (error) {
+      console.error("Error retrieving archived announcements:", error.message);
+      res.status(500).json({ success: false, message: "Server error. Unable to retrieve announcements." });
+  }
+};
+
+
+
+const updateArchivedAnnouncement = async (req, res) => {
+  try {
+      const { id } = req.params; // Get the announcement ID from params
+      const updatedData = req.body; // Data for the update
+
+      const updatedAnnouncement = await ArchiveAnnouncement.findByIdAndUpdate(
+          id,
+          updatedData,
+          { new: true } // Return the updated document
+      );
+
+      if (!updatedAnnouncement) {
+          return res.status(404).json({ success: false, message: "Announcement not found" });
+      }
+
+      res.status(200).json({ success: true, data: updatedAnnouncement });
+  } catch (error) {
+      console.error("Error updating announcement:", error.message);
+      res.status(500).json({ success: false, message: "Server error. Unable to update announcement." });
+  }
+};
+
+const repostAnnouncement = async (req, res) => {
+  try {
+      const { id } = req.params;
+
+      // Find the archived announcement by ID
+      const archivedAnnouncement = await ArchiveAnnouncement.findById(id);
+
+      if (!archivedAnnouncement) {
+          return res.status(404).json({ success: false, message: 'Announcement not found.' });
+      }
+
+      // Calculate the new expiration date (1 month from today)
+      const currentDate = new Date();
+      const expirationDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+
+      // Create a new announcement using the archived data
+      const newAnnouncement = new Announcement({
+          header: archivedAnnouncement.header,
+          body: archivedAnnouncement.body,
+          mediaUrl: archivedAnnouncement.mediaUrl,
+          contentType: archivedAnnouncement.contentType,
+          postedBy: archivedAnnouncement.postedBy,
+          posterId: archivedAnnouncement.posterId,
+          like: archivedAnnouncement.like,
+          dislike: archivedAnnouncement.dislike,
+          postingDate: new Date(),
+          expirationDate: expirationDate, // Set expiration date to 1 month from today
+          status: 'approved',
+      });
+
+      // Save the new announcement
+      await newAnnouncement.save();
+
+      // Delete from the archived announcements collection
+      await ArchiveAnnouncement.findByIdAndDelete(id);
+
+      res.status(200).json({ success: true, message: 'Announcement reposted successfully.' });
+  } catch (error) {
+      console.error('Error reposting announcement:', error);
+      res.status(500).json({ success: false, message: 'Error reposting announcement.' });
+  }
+};
+
+
+
 
 
 
@@ -644,5 +730,8 @@ module.exports = {
   deleteAnnouncement,
   getRecentAnnouncements,
   getCommentsByAnnouncementId,
-  deleteComments 
+  deleteComments,
+  getArchivedAnnouncements,
+  updateArchivedAnnouncement,
+  repostAnnouncement 
 };

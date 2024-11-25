@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast'; 
 import './ManageUserAnnouncement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -164,6 +165,9 @@ const ManageUserAnnouncement = () => {
   return (
      <div className="p-4 my-2 max-w-full h-auto rounded-2 animate-fade-in">
       <h2 className="border-b border-gray-500 py-2 font-bold mb-2">Your Announcements</h2>
+      <Link to="/archive-announcement">
+                <button className="btn btn-primary mb-4">View Archives</button>
+            </Link>
       <div className="max-h-[700px] overflow-auto" >
       {userPosts.length === 0 ? (
   <p>No announcements found.</p>

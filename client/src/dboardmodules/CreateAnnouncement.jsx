@@ -394,6 +394,15 @@ export default function CreateAnnouncement() {
     setIsOrganizationPost(e.target.checked);
   };
   
+  const getMinDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
 
   const renderVisibilityOptions = () => {
     // Check if the admin type is 'School Owner'
@@ -500,6 +509,7 @@ export default function CreateAnnouncement() {
                       id="postingDate"
                       value={postingDate}
                       onChange={handlePostingDateChange}
+                      min={getMinDateTime()}
                     />
                     <label className="label text-red-500 opacity-50 text-xs " htmlFor="expirationDate">*Not Required</label>
                   </div>
@@ -511,6 +521,7 @@ export default function CreateAnnouncement() {
                       id="expirationDate"
                       value={expirationDate}
                       onChange={handleExpirationDateChange}
+                      min={getMinDateTime()}
                     />
                      <label className="label text-red-500 opacity-50 text-xs " htmlFor="expirationDate">*Required</label>
                   </div>

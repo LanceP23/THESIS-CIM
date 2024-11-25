@@ -101,35 +101,42 @@ const startBackgroundTasks = () => {
 
 
         try {
-            // Find announcements with expiration dates that have been reached
-            const expiredAnnouncements = await Announcement.find({
-                status: 'approved', // Only consider approved announcements for expiration
-                expirationDate: { $lte: new Date() }
-            });
-
-            // Move expired announcements to the archive
-            for (const announcement of expiredAnnouncements) {
-                const archiveAnnouncement = new ArchiveAnnouncement({
-                    header: announcement.header,
-                    body: announcement.body,
-                    mediaUrl: announcement.mediaUrl,
-                    contentType: announcement.contentType,
-                    postedBy: announcement.postedBy,
-                    visibility: announcement.visibility,
-                    postingDate: announcement.postingDate,
-                    expirationDate: announcement.expirationDate
-                });
-                await archiveAnnouncement.save();
-            }
-
-            // Remove expired announcements from the main announcements collection
-            const archivedCount = await Announcement.deleteMany({
-                _id: { $in: expiredAnnouncements.map(announcement => announcement._id) }
-            });
-            console.log('Announcements archived:', archivedCount.deletedCount);
-        } catch (error) {
-            console.error('Error archiving announcements:', error);
-        }
+          // Find announcements with expiration dates that have been reached
+          const expiredAnnouncements = await Announcement.find({
+              status: 'approved', // Only consider approved announcements for expiration
+              expirationDate: { $lte: new Date() }
+          });
+      
+          // Move expired announcements to the archive
+          for (const announcement of expiredAnnouncements) {
+              const archiveAnnouncement = new ArchiveAnnouncement({
+                  _id: announcement._id, // Preserve the original announcement's ID
+                  header: announcement.header,
+                  body: announcement.body,
+                  mediaUrl: announcement.mediaUrl,
+                  contentType: announcement.contentType,
+                  postedBy: announcement.postedBy,
+                  posterId: announcement.posterId,
+                  visibility: announcement.visibility,
+                  postingDate: announcement.postingDate,
+                  expirationDate: announcement.expirationDate,
+                  likes: announcement.likes,
+                  dislikes: announcement.dislikes,
+                  minigame: announcement.minigame,
+                  minigameWord: announcement.minigameWord
+              });
+              await archiveAnnouncement.save();
+          }
+      
+          // Remove expired announcements from the main announcements collection
+          const archivedCount = await Announcement.deleteMany({
+              _id: { $in: expiredAnnouncements.map(announcement => announcement._id) }
+          });
+          console.log('Announcements archived:', archivedCount.deletedCount);
+      } catch (error) {
+          console.error('Error archiving announcements:', error);
+      }
+      
     });
 };
 

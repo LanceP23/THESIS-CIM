@@ -11,10 +11,31 @@ import toast from 'react-hot-toast'; // Import toast
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPercent, faThumbsDown, faThumbsUp, faDownload } from '@fortawesome/free-solid-svg-icons';
 import {saveAs} from 'file-saver';
+import Modal from 'react-modal';
 import MinigameAnalytics from './MinigameAnalytics';
 import CombineAnalytics from './CombinedAnalytics';
 
-const COLORS = ['#E38627', '#C13C37', '#6A2135', '#42A5F5', '#66BB6A'];
+const COLORS = [
+  "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", 
+  "#FF9F40", "#C9CBCF", "#FF6384", "#36A2EB", "#FFCE56",
+];
+const colors2 = [
+  '#FF5733', // Red-Orange
+  '#33FF57', // Green
+  '#3357FF', // Blue
+  '#FF33A1', // Magenta
+  '#FF8C00', // Dark Orange
+  '#8B00FF', // Purple
+  '#00BFFF', // Deep Sky Blue
+  '#FFD700', // Gold
+  '#FF1493', // Deep Pink
+  '#00FF7F', // Spring Green
+  '#D2691E', // Chocolate
+  '#A52A2A', // Brown
+  '#B22222', // Firebrick
+  '#4682B4', // Steel Blue
+  '#32CD32'  // Lime Green
+];
 const AnalyticsReport = () => {
   const { user } = useContext(UserContext);
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -30,6 +51,12 @@ const AnalyticsReport = () => {
   const [totalMiniGamesPlayed, setTotalMiniGamesPlayed] = useState(null);
   const [totalMiniGameWins, setTotalMiniGameWins] = useState(null);
   const [averageScore, setAverageScor] = useState(null);
+  const [selectedDateAnnouncements, setSelectedDateAnnouncements] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  
   const navigate = useNavigate();
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -53,7 +80,7 @@ const AnalyticsReport = () => {
           axios.get(`/user/${user.id}/demographics`)
         ]);
         setAnalyticsData(analyticsResponse.data);
-        setDemographicsData(demographicsResponse.data.educationLevelCounters);
+        setDemographicsData(demographicsResponse.data);
       } catch (error) {
         console.error('Error fetching analytics data:', error);
       }
@@ -317,6 +344,82 @@ const exportData = () => {
 
 
 
+const handleDateClick = (date) => {
+  // Find the clicked date's data
+  const dateData = aggregatedReactions.find((entry) => entry.date === date);
+
+  if (dateData) {
+    // Sort announcements by likes in descending order
+    const topAnnouncements = [...dateData.announcements]
+      .sort((a, b) => b.likes - a.likes)
+      .slice(0, 3); // Take the top 3
+
+    setSelectedDateAnnouncements(topAnnouncements);
+  }
+};
+
+const engagementByContentType = {};
+
+// Loop through each entry in aggregatedReactions
+aggregatedReactions.forEach(reaction => {
+    reaction.announcements.forEach(announcement => {
+        const contentType = announcement.contentType || 'text'; // Default to 'text' if no content type is provided
+        const likes = announcement.likes || 0;
+        const dislikes = announcement.dislikes || 0;
+
+        // Initialize the content type category if it doesn't exist
+        if (!engagementByContentType[contentType]) {
+            engagementByContentType[contentType] = { likes: 0, dislikes: 0 };
+        }
+
+        // Add likes and dislikes to the corresponding content type
+        engagementByContentType[contentType].likes += likes;
+        engagementByContentType[contentType].dislikes += dislikes;
+    });
+});
+
+const educationLevelData = Object.entries(demographicsData.educationLevelCounters).map(
+  ([name, value], index) => ({
+    name,
+    value,
+    color: COLORS[index % COLORS.length],
+  })
+);
+
+// Function to open modal and prepare breakdown data
+const handlePieClick = (data) => {
+  if (data && demographicsData.sectionYearLevelCounters) {
+    // Map the displayed name to abbreviations used in sectionYearLevelCounters
+    const educationLevelAbbreviations = {
+      "gradeSchool": "GS",
+      "highSchool": "HS",
+      "seniorHighSchool": "SHS",
+      "college": "College",
+    };
+
+    // Get the abbreviation corresponding to the clicked section
+    const targetAbbreviation = educationLevelAbbreviations[data.name] || "";
+
+    // Filter sections that match the target abbreviation
+    const sections = Object.entries(demographicsData.sectionYearLevelCounters).filter(([key]) => {
+      return key.includes(targetAbbreviation);
+    });
+
+    // Prepare data for breakdown
+    const breakdownData = sections.map(([section, count], index) => ({
+      name: section,
+      value: count,
+      color: COLORS[index % COLORS.length],
+    }));
+
+    setSelectedData(breakdownData);
+    setSelectedLevel(data.name);
+    setIsModalOpen(true);
+  }
+};
+
+
+
 
   return (
   <div className="mt-16 ml-8 p-1">
@@ -455,48 +558,99 @@ const exportData = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 mt-6">
-      {/* Reactions by Date (Line Chart) */}
-      <div className="p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions by Date</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={aggregatedReactions}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            
-            {/* Line chart for likes and dislikes */}
-            <Line type="monotone" dataKey="likes" stroke="#8884d8" />
-            <Line type="monotone" dataKey="dislikes" stroke="#ff7300" />
+  {/* Reactions by Date and Reactions by Content Type in the left column */}
+  <div className="p-4 bg-white shadow-lg rounded-lg">
+    {/* Reactions by Date (Line Chart) */}
+    <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">
+      Reactions by Date
+    </h2>
+    <ResponsiveContainer width="100%" height={250}>
+      <LineChart
+        data={aggregatedReactions}
+        onClick={(e) => {
+          if (e && e.activeLabel) {
+            handleDateClick(e.activeLabel);
+          }
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="date" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
 
-            {/* Brush for range selection */}
-            <Brush />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+        <Line type="monotone" dataKey="likes" stroke="#8884d8" />
+        <Line type="monotone" dataKey="dislikes" stroke="#ff7300" />
 
-      {/* Reactions Count by Date (Bar Chart) */}
-      <div className="p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">Reactions Count by Date</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={aggregatedReactions}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            
-            {/* Bar chart for likes and dislikes */}
-            <Bar dataKey="likes" fill="#8884d8" />
-            <Bar dataKey="dislikes" fill="#ff7300" />
+        <Brush />
+      </LineChart>
+    </ResponsiveContainer>
 
-            {/* Brush for range selection */}
-            <Brush />
-          </BarChart>
-        </ResponsiveContainer>
+    {/* Reactions by Content Type (Line Chart) */}
+    <div className="p-4 bg-white shadow-lg rounded-lg">
+  <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">
+    Reactions by Content Type
+  </h2>
+  <ResponsiveContainer width="100%" height={300}>
+    <PieChart>
+      <Pie
+        data={Object.keys(engagementByContentType).map((contentType, index) => ({
+          name: contentType,
+          value: engagementByContentType[contentType].likes + engagementByContentType[contentType].dislikes,
+          fill: colors2[index % colors2.length]  // Use modulo to avoid index overflow
+        }))}
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={100}
+        label
+      >
+        {/* Assign a unique color to each pie slice */}
+        {Object.keys(engagementByContentType).map((contentType, index) => (
+          <Cell key={contentType} fill={colors2[index % colors2.length]} />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  </ResponsiveContainer>
+</div>
+
+  </div>
+
+  {/* Top 3 Announcements in the right column */}
+  {selectedDateAnnouncements.length > 0 && (
+    <div className="p-4 bg-white shadow-lg rounded-lg">
+      <h3 className="text-lg font-semibold mb-4">
+        Top 3 Announcements for {selectedDateAnnouncements[0]?.date}
+      </h3>
+
+      {/* Carousel for announcements */}
+      <div className="flex overflow-x-auto space-x-6 pb-4">
+        {selectedDateAnnouncements.map((announcement) => (
+          <div
+            key={announcement.announcementId}
+            className="w-64 flex-none p-4 border rounded-lg bg-gray-50 shadow-sm"
+          >
+            <h4 className="text-sm font-semibold text-gray-800">{announcement.header}</h4>
+            <p className="mt-2 text-xs text-gray-600">{announcement.body}</p>
+            {announcement.mediaUrl && (
+              <img
+                src={announcement.mediaUrl}
+                alt={announcement.header}
+                className="w-full h-48 object-cover mt-2 rounded-lg"
+              />
+            )}
+            <p className="mt-2 text-xs text-gray-500">
+              Likes: {announcement.likes} | Dislikes: {announcement.dislikes}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
+  )}
+</div>
 
           
           
@@ -543,66 +697,139 @@ const exportData = () => {
               
                 <div className="bg-white shadow-lg rounded-lg  w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-5">
 
-              {/* Left side: Demographic Breakdown */}
-              <div className="p-4 bg-white shadow-lg rounded-lg flex flex-col text-left text-lg text-gray-700">
-                <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">
-                  User Demographic
-                </h3>
-                {pieData.length > 0 ? (
-                  <ul>
-                    {pieData.map((entry, index) => (
-                      <li key={`label-${index}`} className="mb-2 flex items-center">
-                        <div
-                          className="w-3 h-3 rounded-full mr-2"
-                          style={{ backgroundColor: entry.color }}
-                        ></div>
-                        <span className="font-medium">{entry.name}</span>: {entry.value}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-500">No demographic data available.</p>
-                )}
-              </div>
+            {/* Left side: Demographic Breakdown */}
+            <div className="p-4 bg-white shadow-lg rounded-lg flex flex-col text-left text-lg text-gray-700">
+              <h3 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">
+                User Demographic
+              </h3>
+              {Object.keys(demographicsData.educationLevelCounters).length > 0 ? (
+                <ul>
+                  {Object.entries(demographicsData.educationLevelCounters).map(([key, value], index) => (
+                    <li key={`label-${index}`} className="mb-2 flex items-center">
+                      <div
+                        className="w-3 h-3 rounded-full mr-2"
+                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                      ></div>
+                      <span className="font-medium">{key}</span>: {value}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500">No demographic data available.</p>
+              )}
+            </div>
+
 
               {/* Right side: Pie Chart */}
               <div className="p-4 bg-white shadow-lg rounded-lg flex items-center justify-center">
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={120}
-                      fill="#8884d8"
-                      label={(entry) => `${entry.name}: ${entry.value}`}
-                      labelLine={false}
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#2D3748",
-                        color: "#fff",
-                        borderRadius: "5px",
-                        padding: "8px",
-                      }}
-                      itemStyle={{ color: "#EDF2F7" }}
-                      cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+              <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={educationLevelData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={120}
+            label={(entry) => `${entry.name}: ${entry.value}`}
+            labelLine={false}
+            onClick={handlePieClick} // Handle clicks
+          >
+            {educationLevelData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#2D3748",
+              color: "#fff",
+              borderRadius: "5px",
+              padding: "8px",
+            }}
+            itemStyle={{ color: "#EDF2F7" }}
+            cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
+          />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+      
+{/* Modal for Selected Level Breakdown */}
+<Modal
+  isOpen={isModalOpen}
+  onRequestClose={() => setIsModalOpen(false)}
+  contentLabel={`${selectedLevel} Breakdown`}
+  style={{
+    content: {
+      width: "40%",
+      maxHeight: "80vh",
+      margin: "auto",
+      borderRadius: "12px",
+      padding: "20px",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      overflow: "auto",
+    },
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+  }}
+>
+  <h2 className="text-xl font-bold mb-4 text-center border-b-2 pb-2">
+    {`${selectedLevel} Breakdown`}
+  </h2>
+  <ResponsiveContainer width="100%" height={300}>
+    <PieChart>
+      <Pie
+        data={selectedData}
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={120}
+        label={(entry) => `${entry.name}: ${entry.value}`}
+        labelLine={false}
+      >
+        {selectedData?.map((entry, index) => (
+          <Cell key={`modal-cell-${index}`} fill={entry.color} />
+        ))}
+      </Pie>
+      <Tooltip />
+    </PieChart>
+  </ResponsiveContainer>
+
+  {/* Legend Inside Modal */}
+  <div className="mt-6">
+    <h4 className="text-lg font-medium mb-2 text-center">Legend</h4>
+    <ul className="flex flex-wrap gap-4 justify-center">
+      {selectedData?.map((entry, index) => (
+        <li key={`modal-legend-${index}`} className="flex items-center">
+          <div
+            className="w-4 h-4 rounded-full mr-2"
+            style={{ backgroundColor: entry.color }}
+          ></div>
+          <span className="text-sm">{entry.name}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Close Button */}
+  <div className="text-center mt-6">
+    <button
+      onClick={() => setIsModalOpen(false)}
+      className="px-4 py-2 bg-red-500 text-white rounded"
+    >
+      Close
+    </button>
+  </div>
+</Modal>
+
               </div>
             </div>
           
         )}
 
-    </div>
-      </div>
+        </div>
+         </div>
         </div>
 
         

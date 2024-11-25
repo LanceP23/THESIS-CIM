@@ -33,6 +33,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
 import Sidebar_2 from'./components/Sidebar2'
 import { SidebarProvider } from '../context/SidebarContext';
+import ArchiveAnnouncement from './dboardmodules/ArchivedAnnouncements';
 
 const baseURL = process.env.REACT_APP_BACKEND_URL  ;
 axios.defaults.baseURL = baseURL;
@@ -73,6 +74,7 @@ function App() {
         <Route path="/event-calendar" element={<Eventcalendar/>} />
         <Route path="/notif-module" element={<Notification_module/>} />
         <Route path="/minigame-shop" element={<MinigameShop />} />
+        <Route path="/archive-announcement" element={<ArchiveAnnouncement />} />
       </Routes>
       </SocketContextProvider>
     </UserContextProvider>

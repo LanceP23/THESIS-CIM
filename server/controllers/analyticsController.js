@@ -137,11 +137,11 @@ const countUserReactionsByEducationLevel = async (req, res) => {
                 if (userDetail.educationLevel === 'College') {
                     yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.collegeYearLevel}`;
                 } else if (userDetail.educationLevel === 'Senior High School') {
-                    yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.seniorHighSchoolYearLevel}`;
+                    yearLevelKey = ` SHS - Year ${userDetail.seniorHighSchoolYearLevel}`;
                 } else if (userDetail.educationLevel === 'High School') {
-                    yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.highSchoolYearLevel}`;
+                    yearLevelKey = `HS - Year ${userDetail.highSchoolYearLevel}`;
                 } else if (userDetail.educationLevel === 'Grade School') {
-                    yearLevelKey = `${userDetail.educationLevel} - Year ${userDetail.gradeLevel}`;
+                    yearLevelKey = `GS - Year ${userDetail.gradeLevel}`;
                 } else {
                     yearLevelKey = 'Unknown Year Level';
                 }
@@ -210,9 +210,18 @@ const countReactionsByDate = async (req, res) => {
                     announcementInfo: {
                         $cond: {
                             if: { $gt: [{ $size: "$announcementDetails" }, 0] },
-                            then: { $arrayElemAt: ["$announcementDetails", 0] },
-                            else: { $arrayElemAt: ["$archivedAnnouncementDetails", 0] }
+                            then: {
+                                $mergeObjects: [
+                                    { $arrayElemAt: ["$announcementDetails", 0] }
+                                ]
+                            },
+                            else: {
+                                $mergeObjects: [
+                                    { $arrayElemAt: ["$archivedAnnouncementDetails", 0] }
+                                ]
+                            }
                         }
+                    
                     },
                     userId: 1 // Ensure userId is included
                 }
@@ -259,6 +268,7 @@ const countReactionsByDate = async (req, res) => {
                         header: announcementInfo.header,
                         body: announcementInfo.body,
                         contentType: announcementInfo.contentType,
+                        mediaUrl: announcementInfo.mediaUrl,
                         posterId: announcementInfo.postedBy,
                         likes: 0,  // Initialize likes and dislikes
                         dislikes: 0
@@ -322,7 +332,7 @@ const getUserReactionsWithDate = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'archiveannouncements',
+                    from: 'archiveannouncements',//e2 oh matagal na to dito e
                     localField: 'announcementId',
                     foreignField: '_id',
                     as: 'archiveAnnouncementDetails'

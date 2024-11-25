@@ -13,6 +13,7 @@ import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-icons/font/bootstrap-icons.css' // needs additional webpack config!
 import { UserContext } from '../../context/userContext';
+import { min } from 'date-fns';
 
 const customStyles = {
   overlay: {
@@ -196,6 +197,14 @@ const CreateEvent = ({ defaultSelectable = true }) => {
 
   const handleEventTypeChange = (value) => {
     setEventType(value);
+  };
+
+  const handleLocationChange = (event) => {
+    setLocation(event.target.value);
+  };
+
+  const handleCustomLocationChange = (event) => {
+    setLocation(event.target.value); 
   };
 
   const handleCommunityChange = (event) => {
@@ -509,6 +518,16 @@ const handleSelectEvent = (event) => {
   setModalMode('details');
 };
 
+const getMinDateTime = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+const today = new Date();
 
 
 
@@ -528,6 +547,9 @@ const handleSelectEvent = (event) => {
         selectable={selectable}
         select={handleDateSelect}
         className="calendar_component z-30"
+        validRange={{
+          start: today.toISOString().split('T')[0], // Disallow dates before today
+        }}
       />
     )}
       
@@ -564,14 +586,30 @@ const handleSelectEvent = (event) => {
                       <label className='text-white'>Start Date:</label>  <label className='p-2 rounded-md text-xl  font-extrabold italic  '>{moment(selectedEvent.start).format('YYYY-MM-DD HH:mm:ss')}</label>
                     </div>
                     <div className="div mx-1 p-0 border rounded-lg shadow-2xl transition-transform duration-300 ease-in-out transform hover:scale-110">
-                      <label className='text-white'>End Date:</label> <label className='p-2 rounded-md text-xl  font-extrabold italic  '> {moment(selectedEvent.end).format('YYYY-MM-DD HH:mm:ss')}</label>
-                    </div>
+                  <label className="text-white">End Date:</label>
+                  {new Date(selectedEvent.end) < new Date() ? (
+                    <label className="p-2 rounded-md text-xl font-extrabold italic text-red-500">
+                      Invalid (Past Date)
+                    </label>
+                  ) : (
+                    <label className="p-2 rounded-md text-xl font-extrabold italic">
+                      {moment(selectedEvent.end).format("YYYY-MM-DD HH:mm:ss")}
+                    </label>
+                  )}
+                </div>;
                 </div>
             </div>
+
+            
+   
 
             <div className="bg-slate-400 border p-3 shadow-2xl rounded-sm animate-fade-in ">
       <div className="flex my-1 ">
       <label><strong className='text-white'>Event Type:</strong></label>  <label className=' '>{selectedEvent.extendedProps.eventType}</label>
+      </div>
+
+      <div className="flex my-3 mx-1 ">
+      <label><strong className='text-white'>Location: </strong></label>  <label className=' '>{selectedEvent.extendedProps.location}</label>
       </div>
 
 
@@ -597,9 +635,7 @@ const handleSelectEvent = (event) => {
       </div>
       </div>
 
-      <div className="flex my-3">
-      <p><strong className='text-white'>Location:  </strong></p> <label className=' '> {selectedEvent.extendedProps.location}</label>
-      </div>
+      
 
       <div className="flex my-3">
       <p> <strong className='text-white'>Budget:</strong></p> <label className=' '>{selectedEvent.extendedProps.budget}</label>
@@ -660,7 +696,7 @@ const handleSelectEvent = (event) => {
       <label>
          <strong>End Date:</strong>
        </label>
-         <input type="date" value={endDate}  onChange={(e) => {
+         <input type="date" min={getMinDateTime()} value={endDate}  onChange={(e) => {
            const inputtedEndDate = e.target.value;
            if (inputtedEndDate < selectedDate.start) {
              alert('End date cannot be before the start date');
@@ -683,7 +719,7 @@ const handleSelectEvent = (event) => {
        <label>
          <strong>End Time: </strong>
        </label>
-         <input type="time"  value={endTime} onChange={(e) => setEndTime(e.target.value)}  className='input input-bordered input-success input-sm dark:text-white mx-1' />
+         <input type="time"  value={endTime} onChange={(e) => setEndTime(e.target.value)} min={getMinDateTime()} className='input input-bordered input-success input-sm dark:text-white mx-1' />
          </div>
      </div>
      <div className='event_content_2'>
@@ -693,12 +729,35 @@ const handleSelectEvent = (event) => {
        </label>
      </div>
      
-     <div className='event_content_11'>
-       <label>
-         <strong>Location:</strong>
-         <input type="text" className='input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-xl' value={location} onChange={(e) => setLocation(e.target.value)} />
-       </label>
-     </div>
+     <div className="flex my-3">
+      <p>
+        <strong className="text dark:white">Location: </strong>
+      </p>
+      <div>
+        <select
+          className="border rounded px-3 py-2"
+          value={location}
+          onChange={handleLocationChange}
+        >
+          <option value="" disabled>
+            Select Location
+          </option>
+          <option value="TMJ Gymnasium">TMJ Gymnasium</option>
+          <option value="AVR(5th floor)">AVR (5th floor)</option>
+          <option value="Library">Library</option>
+          <option value="Others">Others</option>
+        </select>
+        {location === "Others" && (
+          <input
+            type="text"
+            className="border rounded px-3 py-2 mt-2"
+            placeholder="Enter custom location"
+            value={location === "Others" ? "" : location} // Show empty if Others is selected
+            onChange={handleCustomLocationChange}
+          />
+        )}
+      </div>
+    </div>
 
      <div className='event_content_9'>
        <label>

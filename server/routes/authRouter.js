@@ -5,7 +5,7 @@ const cors = require('cors');
 const fs = require('fs');
 const { test, registerUser, loginUser, getProfile, logoutUser, checkAuth, registerMobileUser, bulkRegisterMobileUsers } = require('../controllers/authController');
 const { createOrganization, authenticateUser, getOrganization, approveOfficer, getPotentialMembers, addPotentialMembers, getAddedMembers, updateOrganizationMember, deleteOrganizationMember, fetchOrganizationData, getOrganizationId,getAnnouncementsByOrganizationName, getOrganizationAnnouncement, deleteOrganization } = require('../controllers/organizationController');
-const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus, getUserAnnouncements, updateAnnouncement, deleteAnnouncement, getRecentAnnouncements, getCommentsByAnnouncementId, deleteComments } = require('../controllers/postsController');
+const { createAnnouncement, getPendingAnnouncements, updateAnnouncementStatus, getUserAnnouncements, updateAnnouncement, deleteAnnouncement, getRecentAnnouncements, getCommentsByAnnouncementId, deleteComments, getArchivedAnnouncements, updateArchivedAnnouncement, repostAnnouncement } = require('../controllers/postsController');
 const { getApprovedAnnouncements } = require('../controllers/postsController');
 const { getAllStaff, getAllFaculty, getAllStudents, updateUser, deleteUser } = require('../controllers/adminAccountController');
 const {postEventController,getEventsController, putEventController, deleteEventController} = require('../controllers/postEventController');
@@ -91,7 +91,9 @@ router.delete('/delete-post/:postId', authenticateUser,deleteAnnouncement);
 router.get('/recent-announcements', getRecentAnnouncements);
 router.get('/:announcementId/comments', getCommentsByAnnouncementId);
 router.delete('/comments/:commentId', authenticateUser, deleteComments)
-
+router.get('/archived-announcements', getArchivedAnnouncements);
+router.put('/archived-announcement/:id',updateArchivedAnnouncement);
+router.post('/repost-announcement/:id', repostAnnouncement)
 //fetchingAdminAccounts
 router.get('/staff', getAllStaff);
 router.get('/faculty', getAllFaculty);
