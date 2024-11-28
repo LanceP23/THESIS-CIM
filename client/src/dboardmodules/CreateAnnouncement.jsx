@@ -686,7 +686,7 @@ export default function CreateAnnouncement() {
           return (
             <div
               key={announcement._id}
-              className="card bg-slate-200 shadow-2xl p-0 mt-5 mb-5  mx-2 transition-transform duration-300 ease-in-out transform hover:scale-105 sm:card md:card-side lg:card-side xl:card-side"
+              className="card bg-slate-200 shadow-2xl p-0 mt-5 mb-5 mx-2 sm:card md:card-side lg:card-side xl:card-side"
             >
               {announcement.mediaUrl ? (
                 <div className="p-0 flex flex-row justify-center item">

@@ -730,12 +730,12 @@ const today = new Date();
      </div>
      
      <div className="flex my-3">
-      <p>
+      <label>
         <strong className="text dark:white">Location: </strong>
-      </p>
-      <div>
+     
+      
         <select
-          className="border rounded px-3 py-2"
+          className="flex flex-row w-full mt-1  py-2 px-3 border border-green-300 dark:text-white  rounded-md shadow-md"
           value={location}
           onChange={handleLocationChange}
         >
@@ -750,13 +750,14 @@ const today = new Date();
         {location === "Others" && (
           <input
             type="text"
-            className="border rounded px-3 py-2 mt-2"
+            className="input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-xl mt-3"
             placeholder="Enter custom location"
             value={location === "Others" ? "" : location} // Show empty if Others is selected
             onChange={handleCustomLocationChange}
           />
         )}
-      </div>
+         </label>
+      
     </div>
 
      <div className='event_content_9'>

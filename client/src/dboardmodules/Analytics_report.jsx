@@ -557,7 +557,7 @@ const handlePieClick = (data) => {
           
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 mt-6">
+          <div className="grid grid-rows-1 md:grid-cols-2 gap-6 mb-6 mt-6">
   {/* Reactions by Date and Reactions by Content Type in the left column */}
   <div className="p-4 bg-white shadow-lg rounded-lg">
     {/* Reactions by Date (Line Chart) */}
@@ -586,8 +586,11 @@ const handlePieClick = (data) => {
       </LineChart>
     </ResponsiveContainer>
 
-    {/* Reactions by Content Type (Line Chart) */}
-    <div className="p-4 bg-white shadow-lg rounded-lg">
+   
+  </div>
+
+   {/* Reactions by Content Type (Line Chart) */}
+   <div className="p-4 bg-white shadow-lg rounded-lg">
   <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">
     Reactions by Content Type
   </h2>
@@ -617,7 +620,6 @@ const handlePieClick = (data) => {
   </ResponsiveContainer>
 </div>
 
-  </div>
 
   {/* Top 3 Announcements in the right column */}
   {selectedDateAnnouncements.length > 0 && (
@@ -695,7 +697,7 @@ const handlePieClick = (data) => {
               </p>
             ) : (
               
-                <div className="bg-white shadow-lg rounded-lg  w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-5">
+                <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-1">
 
             {/* Left side: Demographic Breakdown */}
             <div className="p-4 bg-white shadow-lg rounded-lg flex flex-col text-left text-lg text-gray-700">
@@ -721,8 +723,11 @@ const handlePieClick = (data) => {
 
 
               {/* Right side: Pie Chart */}
-              <div className="p-4 bg-white shadow-lg rounded-lg flex items-center justify-center">
-              <ResponsiveContainer width="100%" height={300}>
+              <div className="p-4 bg-white shadow-lg rounded-lg flex flex-col text-left">
+              <h5 className="text-2xl font-semibold mb-4 border-b-2 border-yellow-500 text-green-800">
+                User Demographic Chart
+              </h5>
+              <ResponsiveContainer width="100%" height={500}>
         <PieChart>
           <Pie
             data={educationLevelData}
@@ -760,7 +765,7 @@ const handlePieClick = (data) => {
   contentLabel={`${selectedLevel} Breakdown`}
   style={{
     content: {
-      width: "40%",
+      width: "60%",
       maxHeight: "80vh",
       margin: "auto",
       borderRadius: "12px",
@@ -773,7 +778,7 @@ const handlePieClick = (data) => {
     },
   }}
 >
-  <h2 className="text-xl font-bold mb-4 text-center border-b-2 pb-2">
+  <h2 className="text-xl font-bold mb-4 text-center border-b-2 border-yellow-500 pb-2 text-green-900">
     {`${selectedLevel} Breakdown`}
   </h2>
   <ResponsiveContainer width="100%" height={300}>
@@ -798,7 +803,7 @@ const handlePieClick = (data) => {
 
   {/* Legend Inside Modal */}
   <div className="mt-6">
-    <h4 className="text-lg font-medium mb-2 text-center">Legend</h4>
+    <h4 className="text-lg font-semibold mb-2 text-center border-b border-yellow-500 text-green-900">Legend</h4>
     <ul className="flex flex-wrap gap-4 justify-center">
       {selectedData?.map((entry, index) => (
         <li key={`modal-legend-${index}`} className="flex items-center">
@@ -816,9 +821,20 @@ const handlePieClick = (data) => {
   <div className="text-center mt-6">
     <button
       onClick={() => setIsModalOpen(false)}
-      className="px-4 py-2 bg-red-500 text-white rounded"
+      className="btn btn-circle btn-sm absolute top-2 right-2"
     >
-      Close
+       <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
     </button>
   </div>
 </Modal>

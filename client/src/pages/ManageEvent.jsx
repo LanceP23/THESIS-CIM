@@ -10,17 +10,28 @@ const localizer = momentLocalizer(moment);
 
 const customStyles = {
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 1000, 
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)', // Slightly darker background
+    zIndex: 9999, // Ensure it's on top of everything
   },
   content: {
-    width: 'auto',
-    height: 'auto',
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)', // Center the modal
+    width: '60vw',
+    height: '60vh',
     maxWidth: 'full',
-    zIndex: 1001, 
-    margin: ' 5, 5, 5, 5', // Optional: ensure it's centered within any containing space
-    borderRadius: '8px', // Optional: add border-radius for aesthetics
-    padding: '20px', // Optional: add padding inside the modal
+    padding: '20px',
+    background: '#fff',
+    borderRadius: '10px', // Rounded corners for a modern look
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)', // Subtle shadow
+    zIndex: 10000, // Higher than the overlay
+    overflow: 'auto', // Handle overflow for smaller screens
     
   },
 };
@@ -170,7 +181,7 @@ const ManageEvent = () => {
           isOpen={isModalOpen}
           onRequestClose={closeModal}
           contentLabel="Event Details"
-          className=" z-50"
+          style={customStyles} 
           overlayClassName="modal-overlay"
 
          

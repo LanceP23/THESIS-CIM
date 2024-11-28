@@ -66,7 +66,7 @@ const AnalyticsDashboard = () => {
   const likesToDislikesRatio = totalDislikes > 0 ? (totalLikes / totalDislikes).toFixed(2) : totalLikes > 0 ? "Infinity" : "N/A";
 
   return (
-    <div className="flex flex-col md:flex-row my-5 w-full h-full animate-fade-in justify-center items-center">
+    <div className="flex flex-col md:flex-row mt-3 w-full h-full animate-fade-in justify-center items-center">
       {totalPosts === 0 ? (
         <div className="text-center w-full">
           <p className="text-red-500 text-lg">No analytics data available.</p>

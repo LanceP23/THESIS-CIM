@@ -165,9 +165,11 @@ const ManageUserAnnouncement = () => {
   return (
      <div className="p-4 my-2 max-w-full h-auto rounded-2 animate-fade-in">
       <h2 className="border-b border-gray-500 py-2 font-bold mb-2">Your Announcements</h2>
+      <div className="flex flex-row justify-end">
       <Link to="/archive-announcement">
-                <button className="btn btn-primary mb-4">View Archives</button>
+                <button className="btn btn-accent mb-4 ">View Archives Announcement</button>
             </Link>
+            </div>
       <div className="max-h-[700px] overflow-auto" >
       {userPosts.length === 0 ? (
   <p>No announcements found.</p>
@@ -233,12 +235,12 @@ const ManageUserAnnouncement = () => {
           )}
 
           {/* Likes and Dislikes */}
-          <div className="grid grid-cols-2 my-1 shadow-inner shadow-sm">
-            <div className="max-w-[50vw] p-3 shadow-inner">
+          <div className="flex justify-start space-x-4 mt-4 text-sm text-gray-600">
+            <div className="flex items-center space-x-1">
               <FontAwesomeIcon className="text-green-500 text-2xl" icon={faThumbsUp} />
               <label className="mx-2">{post.likes} Likes</label>
             </div>
-            <div className="max-w-[50vw] p-3 shadow-inner">
+            <div className="flex items-center space-x-1">
               <FontAwesomeIcon className="text-red-500 text-2xl" icon={faThumbsDown} />
               <label className="mx-2"> {post.dislikes} Dislikes</label>
             </div>
