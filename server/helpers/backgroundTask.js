@@ -99,43 +99,73 @@ const startBackgroundTasks = () => {
         
         
 
-
         try {
+          console.log('Archival process started at', new Date());
+      
           // Find announcements with expiration dates that have been reached
           const expiredAnnouncements = await Announcement.find({
               status: 'approved', // Only consider approved announcements for expiration
               expirationDate: { $lte: new Date() }
           });
       
-          // Move expired announcements to the archive
-          for (const announcement of expiredAnnouncements) {
-              const archiveAnnouncement = new ArchiveAnnouncement({
-                  _id: announcement._id, // Preserve the original announcement's ID
-                  header: announcement.header,
-                  body: announcement.body,
-                  mediaUrl: announcement.mediaUrl,
-                  contentType: announcement.contentType,
-                  postedBy: announcement.postedBy,
-                  posterId: announcement.posterId,
-                  visibility: announcement.visibility,
-                  postingDate: announcement.postingDate,
-                  expirationDate: announcement.expirationDate,
-                  likes: announcement.likes,
-                  dislikes: announcement.dislikes,
-                  minigame: announcement.minigame,
-                  minigameWord: announcement.minigameWord
-              });
-              await archiveAnnouncement.save();
+          if (expiredAnnouncements.length === 0) {
+              console.log('No expired announcements found for archival.');
+              return;
           }
       
-          // Remove expired announcements from the main announcements collection
-          const archivedCount = await Announcement.deleteMany({
-              _id: { $in: expiredAnnouncements.map(announcement => announcement._id) }
-          });
-          console.log('Announcements archived:', archivedCount.deletedCount);
+          // Archive announcements with better handling of errors
+          const archivedSuccessfully = [];
+          const failedToArchive = [];
+      
+          for (const announcement of expiredAnnouncements) {
+              try {
+                  const archiveAnnouncement = new ArchiveAnnouncement({
+                      _id: announcement._id, // Preserve original announcement's ID
+                      header: announcement.header,
+                      body: announcement.body,
+                      mediaUrl: announcement.mediaUrl,
+                      contentType: announcement.contentType,
+                      postedBy: announcement.postedBy,
+                      posterId: announcement.posterId,
+                      visibility: announcement.visibility,
+                      postingDate: announcement.postingDate,
+                      expirationDate: announcement.expirationDate,
+                      likes: announcement.likes,
+                      dislikes: announcement.dislikes,
+                      minigame: announcement.minigame,
+                      minigameWord: announcement.minigameWord
+                  });
+                  await archiveAnnouncement.save();
+                  archivedSuccessfully.push(announcement._id);
+              } catch (err) {
+                  console.error(`Failed to archive announcement with ID: ${announcement._id}`, err);
+                  failedToArchive.push(announcement._id);
+              }
+          }
+      
+          // Remove successfully archived announcements from the main announcements collection
+          if (archivedSuccessfully.length > 0) {
+              const deleteResult = await Announcement.deleteMany({
+                  _id: { $in: archivedSuccessfully }
+              });
+              console.log(`Archived and deleted ${deleteResult.deletedCount} announcements.`);
+          }
+      
+          // Log or handle any failed archival attempts for retry
+          if (failedToArchive.length > 0) {
+              console.warn(
+                  `Archival process completed with failures. Failed to archive the following IDs: ${failedToArchive.join(
+                      ', '
+                  )}`
+              );
+              // Optionally log these failures to a separate database or file for retrying
+          }
+      
+          console.log('Archival process finished at', new Date());
       } catch (error) {
-          console.error('Error archiving announcements:', error);
+          console.error('Critical error during archival process:', error);
       }
+      
       
     });
 };
