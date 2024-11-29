@@ -462,9 +462,163 @@ const getLikesDislikesandReactions = async (req, res) => {
     }
 };
 
+const getAnnouncementDemographics = async (req, res) => {
+    try {
+      const { announcementId } = req.params;
+  
+      // Fetch reactions for the specific announcement
+      const reactions = await UserReaction.aggregate([
+        {
+          $match: { announcementId: new mongoose.Types.ObjectId(announcementId) } // Use 'new' for ObjectId
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userDetails'
+          }
+        },
+        {
+          $lookup: {
+            from: 'mobileusers',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'mobileUserDetails'
+          }
+        },
+        {
+          $addFields: {
+            userDetails: {
+              $cond: {
+                if: { $gt: [{ $size: '$userDetails' }, 0] },
+                then: { $arrayElemAt: ['$userDetails', 0] },
+                else: { $arrayElemAt: ['$mobileUserDetails', 0] }
+              }
+            },
+            userType: {
+              $cond: {
+                if: { $gt: [{ $size: '$userDetails' }, 0] },
+                then: 'admin',
+                else: 'mobile'
+              }
+            }
+          }
+        },
+        {
+          $match: {
+            $or: [
+              { 'userDetails': { $ne: null } } // Ensure we have valid users
+            ]
+          }
+        }
+      ]);
+  
+      // Initialize counters for education level and section-year level
+      const educationLevelCounters = {
+        gradeSchool: 0,
+        highSchool: 0,
+        seniorHighSchool: 0,
+        college: 0,
+        admin: 0
+      };
+  
+      const sectionYearLevelCounters = {};
+      const seenUserSectionCombinations = new Set(); // Track unique combinations of user-section-year
+  
+      let likeCount = 0;
+      let dislikeCount = 0;
+  
+      // Iterate over each reaction to build counters
+      reactions.forEach(reaction => {
+        const userDetail = reaction.userDetails;
+  
+        // Only count likes and dislikes, ignoring other reactions (if there are any other types)
+        if (reaction.reaction === 'like') {
+          likeCount++;
+        } else if (reaction.reaction === 'dislike') {
+          dislikeCount++;
+        }
+  
+        // Handle reactions only for mobile users
+        if (reaction.userType === 'mobile') {
+  
+          // Count by education level
+          switch (userDetail.educationLevel) {
+            case 'Grade School':
+              educationLevelCounters.gradeSchool++;
+              break;
+            case 'High School':
+              educationLevelCounters.highSchool++;
+              break;
+            case 'Senior High School':
+              educationLevelCounters.seniorHighSchool++;
+              break;
+            case 'College':
+              educationLevelCounters.college++;
+              break;
+            default:
+              break;
+          }
+  
+          // Create a unique key for section-year level combination
+          const sectionKey = userDetail.section || 'Unknown Section';
+          let yearLevelKey;
+  
+          if (userDetail.educationLevel === 'College') {
+            yearLevelKey = `College - Year ${userDetail.collegeYearLevel}`;
+          } else if (userDetail.educationLevel === 'Senior High School') {
+            yearLevelKey = `SHS - Year ${userDetail.seniorHighSchoolYearLevel}`;
+          } else if (userDetail.educationLevel === 'High School') {
+            yearLevelKey = `HS - Year ${userDetail.highSchoolYearLevel}`;
+          } else if (userDetail.educationLevel === 'Grade School') {
+            yearLevelKey = `GS - Year ${userDetail.gradeLevel}`;
+          } else {
+            yearLevelKey = 'Unknown Year Level';
+          }
+  
+          const combinedKey = `${sectionKey} - ${yearLevelKey}`;
+  
+          // Log unique section-year combinations only
+          console.log('Unique Key:', combinedKey); // Debugging: check the unique section-year key
+  
+          // Only increment the count if this combination is unique
+          if (!seenUserSectionCombinations.has(`${userDetail._id}-${combinedKey}`)) {
+            seenUserSectionCombinations.add(`${userDetail._id}-${combinedKey}`);
+  
+            // Log when adding to counters
+            console.log('Adding to counters:', combinedKey); // Debugging: check if it's being added
+  
+            if (sectionYearLevelCounters[combinedKey]) {
+              sectionYearLevelCounters[combinedKey]++;
+            } else {
+              sectionYearLevelCounters[combinedKey] = 1;
+            }
+          } else {
+            // Log when duplicate is detected
+            console.log('Duplicate user-section-year detected:', `${userDetail._id}-${combinedKey}`); // Debugging: detect duplicates
+          }
+        }
+      });
+  
+     
+  
+      // Send the computed data back in the response
+      res.status(200).send({ likeCount, dislikeCount, educationLevelCounters, sectionYearLevelCounters });
+  
+    } catch (error) {
+      console.error('Error fetching announcement demographics', error);
+      res.status(500).send({ message: 'Error fetching announcement demographics', error });
+    }
+  };
+  
+  
+
+
 module.exports = {
     getLikesDislikesandReactions,
     countUserReactionsByEducationLevel,
     countReactionsByDate,
-    getUserReactionsWithDate
+    getUserReactionsWithDate,
+    getAnnouncementDemographics
 };

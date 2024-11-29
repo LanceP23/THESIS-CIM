@@ -79,6 +79,7 @@ const CreateEvent = ({ defaultSelectable = true }) => {
   const [viewCommunityId, setViewCommunityId] = useState(null);
   const [selectedCommunities, setSelectedCommunities] = useState([]);
   const [participantCommunities, setParticipantCommunities] = useState([]);
+  const [isCustomLocation, setIsCustomLocation] = useState(false);
 
 
   useEffect(() => {
@@ -199,12 +200,20 @@ const CreateEvent = ({ defaultSelectable = true }) => {
     setEventType(value);
   };
 
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
+  const handleLocationChange = (e) => {
+    const selectedValue = e.target.value;
+  
+    if (selectedValue === "Others") {
+      setIsCustomLocation(true);
+      setLocation(""); // Clear location for custom input
+    } else {
+      setIsCustomLocation(false);
+      setLocation(selectedValue); // Set location to dropdown value
+    }
   };
-
-  const handleCustomLocationChange = (event) => {
-    setLocation(event.target.value); 
+  
+  const handleCustomLocationChange = (e) => {
+    setLocation(e.target.value); // Directly update location with custom input
   };
 
   const handleCommunityChange = (event) => {
@@ -518,6 +527,8 @@ const handleSelectEvent = (event) => {
   setModalMode('details');
 };
 
+
+
 const getMinDateTime = () => {
   const now = new Date();
   const year = now.getFullYear();
@@ -730,35 +741,36 @@ const today = new Date();
      </div>
      
      <div className="flex my-3">
-      <label>
-        <strong className="text dark:white">Location: </strong>
-     
-      
-        <select
-          className="flex flex-row w-full mt-1  py-2 px-3 border border-green-300 dark:text-white  rounded-md shadow-md"
-          value={location}
-          onChange={handleLocationChange}
-        >
-          <option value="" disabled>
-            Select Location
-          </option>
-          <option value="TMJ Gymnasium">TMJ Gymnasium</option>
-          <option value="AVR(5th floor)">AVR (5th floor)</option>
-          <option value="Library">Library</option>
-          <option value="Others">Others</option>
-        </select>
-        {location === "Others" && (
-          <input
-            type="text"
-            className="input input-bordered input-success input-sm w-full dark:text-white  rounded-md shadow-xl mt-3"
-            placeholder="Enter custom location"
-            value={location === "Others" ? "" : location} // Show empty if Others is selected
-            onChange={handleCustomLocationChange}
-          />
-        )}
-         </label>
-      
-    </div>
+  <label>
+    <strong className="text dark:white">Location: </strong>
+
+    <select
+      className="flex flex-row w-full mt-1 py-2 px-3 border border-green-300 dark:text-white rounded-md shadow-md"
+      value={isCustomLocation ? "Others" : location} // Show "Others" if custom is selected
+      onChange={handleLocationChange}
+    >
+      <option value="" disabled>
+        Select Location
+      </option>
+      <option value="TMJ Gymnasium">TMJ Gymnasium</option>
+      <option value="AVR(5th floor)">AVR (5th floor)</option>
+      <option value="Library">Library</option>
+      <option value="Others">Others</option>
+    </select>
+
+    {isCustomLocation && (
+      <input
+        type="text"
+        className="input input-bordered input-success input-sm w-full dark:text-white rounded-md shadow-xl mt-3"
+        placeholder="Enter custom location"
+        value={location} 
+        onChange={handleCustomLocationChange}
+      />
+    )}
+  </label>
+</div>
+
+
 
      <div className='event_content_9'>
        <label>

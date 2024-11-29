@@ -55,6 +55,9 @@ const AnalyticsReport = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filter, setFilter] = useState("both");
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   
   const navigate = useNavigate();
@@ -344,38 +347,80 @@ const exportData = () => {
 
 
 
-const handleDateClick = (date) => {
-  // Find the clicked date's data
+const handleDateClick = async (date) => {
+  // Find the data for the selected date
   const dateData = aggregatedReactions.find((entry) => entry.date === date);
 
   if (dateData) {
     // Sort announcements by likes in descending order
     const topAnnouncements = [...dateData.announcements]
       .sort((a, b) => b.likes - a.likes)
-      .slice(0, 3); // Take the top 3
+      .slice(0, 10); // Get the top 3 announcements
 
-    setSelectedDateAnnouncements(topAnnouncements);
+    try {
+      // Fetch demographics for each top announcement
+      const announcementsWithDemographics = await Promise.all(
+        topAnnouncements.map(async (announcement) => {
+          const response = await axios.get(`/announcements/${announcement.announcementId}/demographics`);
+          return {
+            ...announcement,
+            demographics: response.data, // Attach demographics to the announcement
+          };
+        })
+      );
+
+      // Set the state for selectedDateAnnouncements (for listing purposes)
+      setSelectedDateAnnouncements(announcementsWithDemographics);
+    } catch (error) {
+      console.error('Error fetching demographics:', error);
+    }
   }
 };
+
+const handleViewDemographicsClick = (announcement) => {
+  // Set the selected announcement to open the modal
+  setSelectedAnnouncement(announcement);
+};
+
+
+
+
 
 const engagementByContentType = {};
 
 // Loop through each entry in aggregatedReactions
 aggregatedReactions.forEach(reaction => {
-    reaction.announcements.forEach(announcement => {
-        const contentType = announcement.contentType || 'text'; // Default to 'text' if no content type is provided
-        const likes = announcement.likes || 0;
-        const dislikes = announcement.dislikes || 0;
+  reaction.announcements.forEach(announcement => {
+    const contentType = announcement.contentType || 'text'; // Default to 'text'
+    const likes = announcement.likes || 0;
+    const dislikes = announcement.dislikes || 0;
 
-        // Initialize the content type category if it doesn't exist
-        if (!engagementByContentType[contentType]) {
-            engagementByContentType[contentType] = { likes: 0, dislikes: 0 };
-        }
+    // Initialize content type category if it doesn't exist
+    if (!engagementByContentType[contentType]) {
+      engagementByContentType[contentType] = { likes: 0, dislikes: 0 };
+    }
 
-        // Add likes and dislikes to the corresponding content type
-        engagementByContentType[contentType].likes += likes;
-        engagementByContentType[contentType].dislikes += dislikes;
-    });
+    // Aggregate likes and dislikes
+    engagementByContentType[contentType].likes += likes;
+    engagementByContentType[contentType].dislikes += dislikes;
+  });
+});
+
+// Generate data for the pie chart based on the selected filter
+const filteredData = Object.keys(engagementByContentType).map((contentType, index) => {
+  const { likes, dislikes } = engagementByContentType[contentType];
+  const value =
+    filter === "likes"
+      ? likes
+      : filter === "dislikes"
+      ? dislikes
+      : likes + dislikes; // Default to both
+
+  return {
+    name: contentType,
+    value,
+    fill: colors2[index % colors2.length], // Assign color dynamically
+  };
 });
 
 const educationLevelData = Object.entries(demographicsData.educationLevelCounters).map(
@@ -415,6 +460,30 @@ const handlePieClick = (data) => {
     setSelectedData(breakdownData);
     setSelectedLevel(data.name);
     setIsModalOpen(true);
+  }
+};
+
+const getPieChartData = (sectionYearLevelCounters) => {
+  return Object.keys(sectionYearLevelCounters).map((key, index) => ({
+    name: key,
+    value: sectionYearLevelCounters[key],
+    color: colors2[index % colors2.length], // Use colors cyclically
+  }));
+};
+
+const visibleAnnouncements = selectedDateAnnouncements.slice(currentIndex, currentIndex + 3);
+
+const handleNext = () => {
+  // Check if we are at the end of the list, if so, reset to 0
+  if (currentIndex + 3 < selectedDateAnnouncements.length) {
+    setCurrentIndex(currentIndex + 3);
+  }
+};
+
+const handlePrev = () => {
+  // Go back by 3 items
+  if (currentIndex > 0) {
+    setCurrentIndex(currentIndex - 3);
   }
 };
 
@@ -589,69 +658,227 @@ const handlePieClick = (data) => {
    
   </div>
 
-   {/* Reactions by Content Type (Line Chart) */}
-   <div className="p-4 bg-white shadow-lg rounded-lg">
-  <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">
-    Reactions by Content Type
-  </h2>
-  <ResponsiveContainer width="100%" height={300}>
-    <PieChart>
-      <Pie
-        data={Object.keys(engagementByContentType).map((contentType, index) => ({
-          name: contentType,
-          value: engagementByContentType[contentType].likes + engagementByContentType[contentType].dislikes,
-          fill: colors2[index % colors2.length]  // Use modulo to avoid index overflow
-        }))}
-        dataKey="value"
-        nameKey="name"
-        cx="50%"
-        cy="50%"
-        outerRadius={100}
-        label
-      >
-        {/* Assign a unique color to each pie slice */}
-        {Object.keys(engagementByContentType).map((contentType, index) => (
-          <Cell key={contentType} fill={colors2[index % colors2.length]} />
-        ))}
-      </Pie>
-      <Tooltip />
-      <Legend />
-    </PieChart>
-  </ResponsiveContainer>
-</div>
+   {/* Reactions by Content Type (Pie Chart) */}
+  <div className="p-4 bg-white shadow-lg rounded-lg">
+      <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">
+        Reactions by Content Type
+      </h2>
+      
+      {/* Buttons to toggle filter */}
+      <div className="flex justify-center mb-4 space-x-4">
+        <button
+          onClick={() => setFilter("both")}
+          className={`px-4 py-2 rounded ${filter === "both" ? "bg-green-500 text-white" : "bg-gray-200"}`}
+        >
+          Both
+        </button>
+        <button
+          onClick={() => setFilter("likes")}
+          className={`px-4 py-2 rounded ${filter === "likes" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+        >
+          Likes
+        </button>
+        <button
+          onClick={() => setFilter("dislikes")}
+          className={`px-4 py-2 rounded ${filter === "dislikes" ? "bg-red-500 text-white" : "bg-gray-200"}`}
+        >
+          Dislikes
+        </button>
+      </div>
+
+      {/* Render Pie Chart */}
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={filteredData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            label
+          >
+            {/* Assign a unique color to each pie slice */}
+            {filteredData.map((entry, index) => (
+              <Cell key={entry.name} fill={entry.fill} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
 
 
   {/* Top 3 Announcements in the right column */}
-  {selectedDateAnnouncements.length > 0 && (
-    <div className="p-4 bg-white shadow-lg rounded-lg">
-      <h3 className="text-lg font-semibold mb-4">
-        Top 3 Announcements for {selectedDateAnnouncements[0]?.date}
-      </h3>
+  <div className="relative">
+      {/* Carousel Container */}
+      <div className="overflow-hidden">
+      <h2 className="text-2xl font-semibold mb-4 text-green-800 border-b-2 border-yellow-500">
+       Most Liked Posts
+      </h2>
+        <div className="flex transition-transform duration-500 ease-in-out">
+          {visibleAnnouncements.map((announcement) => (
+            <div
+              key={announcement.announcementId}
+              className="w-full sm:w-64 mx-auto p-6 border border-gray-200 rounded-lg bg-white shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
+            >
+              <h4 className="text-lg font-semibold text-gray-800 truncate">{announcement.header}</h4>
+              <p className="mt-2 text-sm text-gray-600 truncate">{announcement.body}</p>
 
-      {/* Carousel for announcements */}
-      <div className="flex overflow-x-auto space-x-6 pb-4">
-        {selectedDateAnnouncements.map((announcement) => (
-          <div
-            key={announcement.announcementId}
-            className="w-64 flex-none p-4 border rounded-lg bg-gray-50 shadow-sm"
-          >
-            <h4 className="text-sm font-semibold text-gray-800">{announcement.header}</h4>
-            <p className="mt-2 text-xs text-gray-600">{announcement.body}</p>
-            {announcement.mediaUrl && (
-              <img
-                src={announcement.mediaUrl}
-                alt={announcement.header}
-                className="w-full h-48 object-cover mt-2 rounded-lg"
-              />
-            )}
-            <p className="mt-2 text-xs text-gray-500">
-              Likes: {announcement.likes} | Dislikes: {announcement.dislikes}
-            </p>
-          </div>
-        ))}
+              {announcement.mediaUrl && (
+                <img
+                  src={announcement.mediaUrl}
+                  alt={announcement.header}
+                  className="w-full h-48 object-cover mt-4 rounded-lg"
+                />
+              )}
+
+              <p className="mt-4 text-sm text-gray-500">
+                Likes: {announcement.likes} | Dislikes: {announcement.dislikes}
+              </p>
+
+              {/* Button to open the demographics modal */}
+              <button
+                className="mt-4 text-blue-600 hover:underline"
+                onClick={() => handleViewDemographicsClick(announcement)} // Open modal for the clicked announcement
+              >
+                View Demographics
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
+
+      {/* Navigation Buttons */}
+      <button
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-blue-500 p-2 rounded-full hover:bg-blue-700 focus:outline-none"
+        onClick={handlePrev}
+        disabled={currentIndex === 0} // Disable the Prev button when we're at the start
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+        >
+          <path d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <button
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white bg-blue-500 p-2 rounded-full hover:bg-blue-700 focus:outline-none"
+        onClick={handleNext}
+        disabled={currentIndex + 3 >= selectedDateAnnouncements.length} // Disable the Next button when we're at the end
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+        >
+          <path d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </div>
-  )}
+
+
+
+{/* Demographics Modal */}
+{/* Demographics Modal */}
+{selectedAnnouncement && (
+  <Modal
+    isOpen={true}
+    onRequestClose={() => setSelectedAnnouncement(null)} // Close the modal
+    contentLabel={`Demographics for "${selectedAnnouncement.header}"`}
+    style={{
+      content: {
+        width: "60%",
+        maxHeight: "80vh",
+        margin: "auto",
+        borderRadius: "12px",
+        padding: "20px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        overflow: "auto",
+      },
+      overlay: {
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+      },
+    }}
+  >
+    <h2 className="text-xl font-bold mb-4 text-center border-b-2 border-yellow-500 pb-2 text-green-900">
+      {`Demographics for "${selectedAnnouncement.header}"`}
+    </h2>
+
+    {/* Pie Chart */}
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={getPieChartData(selectedAnnouncement.demographics.sectionYearLevelCounters)} // Get data for the pie chart
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={120}
+          label={(entry) => `${entry.name}: ${entry.value}`}
+          labelLine={false}
+        >
+          {getPieChartData(selectedAnnouncement.demographics.sectionYearLevelCounters).map((entry, index) => (
+            <Cell key={`modal-cell-${index}`} fill={entry.color} />
+          ))}
+        </Pie>
+        <Tooltip />
+      </PieChart>
+    </ResponsiveContainer>
+
+    {/* Legend Inside Modal */}
+    <div className="mt-6">
+      <h4 className="text-lg font-semibold mb-2 text-center border-b border-yellow-500 text-green-900">Legend</h4>
+      <ul className="flex flex-wrap gap-4 justify-center">
+        {getPieChartData(selectedAnnouncement.demographics.sectionYearLevelCounters).map((entry, index) => (
+          <li key={`modal-legend-${index}`} className="flex items-center">
+            <div
+              className="w-4 h-4 rounded-full mr-2"
+              style={{ backgroundColor: entry.color }}
+            ></div>
+            <span className="text-sm">{entry.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Close Button */}
+    <div className="text-center mt-6">
+      <button
+        onClick={() => setSelectedAnnouncement(null)} // Close the modal
+        className="btn btn-circle btn-sm absolute top-2 right-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  </Modal>
+)}
+
+
+
+
 </div>
 
           

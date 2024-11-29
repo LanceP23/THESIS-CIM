@@ -14,7 +14,7 @@ const{updateAcademicSettingsAndArchiveAccounts, archiveAccounts, unarchiveAccoun
 const { getMobileUserById, getAllMobileUsers, updateMobileUserById, deleteMobileUserById } = require('../controllers/mobileUserController');
 const { buildCommunity, fetchMobileUsers, fetchUsers, getAllCommunities, getCommunityById, getCommunityForRP, getCommunityNamesForRP, getCommunityName, getAnnouncementsByCommunityId, getRandomAnnouncementsByAdminCommunities, getAnnouncementCommunityMembers, removeMemberFromCommunity, getForumPostsByCommunityId, getLast5ForumPostsWithCommunityName, deleteCommunity, deleteForumPost, addMember } = require('../controllers/communityController');
 const{getNotifications, getNotificationDetails, markNotificationAsRead, markAllNotificationsAsRead}  = require('../controllers/notificationController');
-const{getLikesDislikesandReactions,countUserReactionsByEducationLevel, countReactionsByDate, getUserReactionsWithDate} = require('../controllers/analyticsController');
+const{getLikesDislikesandReactions,countUserReactionsByEducationLevel, countReactionsByDate, getUserReactionsWithDate, getAnnouncementDemographics} = require('../controllers/analyticsController');
 const { countCommunityTotalReactions, 
   countCommunityReactionsByEducationLevel, 
   countCommunityReactionsByDate 
@@ -151,6 +151,7 @@ router.get('/announcements/:id/details', getLikesDislikesandReactions);
 router.get('/user/:id/demographics',countUserReactionsByEducationLevel);
 router.get('/count-reactions-date/:id', countReactionsByDate);
 router.get('/reactions-with-date/:id', getUserReactionsWithDate);
+router.get('/announcements/:announcementId/demographics', getAnnouncementDemographics);
 // community analytics 
 router.get('/community/:communityId/reactions', countCommunityTotalReactions); 
 router.get('/community/:communityId/reactions/education-level', countCommunityReactionsByEducationLevel); 

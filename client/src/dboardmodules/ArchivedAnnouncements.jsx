@@ -209,12 +209,12 @@ const ArchiveAnnouncement = () => {
                                 <div className="flex items-center space-x-1">
                                     <ThumbUpIcon className="w-5 h-5 text-blue-500" />
                                     <span className="font-semibold">Likes:</span>
-                                    <span>{announcement.like || 0}</span>
+                                    <span>{announcement.likes || 0}</span>
                                 </div>
                                 <div className="flex items-center space-x-1">
                                     <ThumbDownIcon className="w-5 h-5 text-red-500" />
                                     <span className="font-semibold">Dislikes:</span>
-                                    <span>{announcement.dislike || 0}</span>
+                                    <span>{announcement.dislikes || 0}</span>
                                 </div>
                             </div>
 
