@@ -3,18 +3,31 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-
+import StaffRegistration from '../RegistrationModals/StaffRegistration'; 
+import FacultyRegistration from '../RegistrationModals/FacultyRegistration';
+import StudentRegistration from '../RegistrationModals/StudentRegistration';
+import StudentMobileUserReg from '../RegistrationModals/StudentMobileUser';
+import Sidebar from '../components/Sidebar'; 
+import RegisteredAccounts from '../RegisteredAdmins/RegisteredAccounts';
+import './Register.css'
+import UserManagement from '../mobileusermanagement/DisplayAllMobileAcc';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 export default function Register() {
   const navigate = useNavigate();
   const [data, setData] = useState({
     name: '',
     studentemail: '',
     password: '',
-    adminType: 'School Owner',
-    organization: '', // New field for organization name
-    position: '', // New field for position in the organization
+    adminType: 'School Owner', // Set adminType as 'School Owner'
+    organization: '',
+    position: '',
   });
   const [organizations, setOrganizations] = useState([]);
+  const [registrationType, setRegistrationType] = useState(null); 
+  const [academicYear, setAcademicYear] = useState('');
+  const [schoolSemester, setSchoolSemester] = useState('');
+  const [archivedAccounts, setArchivedAccounts] = useState([]);
 
   useEffect(() => {
     fetchOrganizations();
@@ -22,12 +35,23 @@ export default function Register() {
 
   const fetchOrganizations = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/organization');
+      const response = await axios.get('/organization');
       setOrganizations(response.data);
     } catch (error) {
       console.error('Error fetching organizations:', error);
       toast.error('Failed to fetch organizations');
     }
+  };
+
+  const resetData = () => {
+    setData({
+      name: '',
+      studentemail: '',
+      password: '',
+      adminType: 'School Owner',
+      organization: '',
+      position: '',
+    });
   };
 
   const registerAdmin = async (e) => {
@@ -47,14 +71,7 @@ export default function Register() {
       if (data.error) {
         toast.error(data.error);
       } else {
-        setData({
-          name: '',
-          studentemail: '',
-          password: '',
-          adminType: 'School Owner',
-          organization: '',
-          position: '',
-        });
+        resetData(); // Clear fields after successful registration
         toast.success('Registration Successful!');
         navigate('/login');
       }
@@ -64,80 +81,176 @@ export default function Register() {
   };
 
   const handleAdminTypeChange = (e) => {
+    resetData(); // Clear fields when admin type changes
     setData({ ...data, adminType: e.target.value });
   };
 
+  const handleRegistrationType = (type) => {
+    resetData(); // Clear fields when registration type changes
+    setRegistrationType(type);
+  };
+
+  const updateSchoolSetting = async ()=>{
+    try{
+      const response = await axios.put('/route', {
+        academicYear,
+        schoolSemester,
+      });
+      if(response.data.success){
+        toast.success('School setting updated succesfully!');
+      } else{
+        toast.error('Failed to update school setting');
+      }
+    } catch(error){
+      console.error('Error updating school setting: ', error);
+      toast.error('Failed to update school setting');
+    }
+  }
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await axios.get('/check-auth');
+        if (!response.data.authenticated) {
+          // If not authenticated, redirect to login
+          navigate('/login');
+          window.location.reload();
+        } else {
+        
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+      }
+    };
+
+    checkAuthStatus();
+  }, [navigate]);
+
+  const archiveAccounts = async () =>{
+    try{
+      const response =  await axios.post('/placeholdermuna');
+      if(response.data.success){
+        toast.success('Accounts archived successfully!');
+      } else{
+        toast.error('Failed to archive accounts');
+      }
+    }catch(error){
+      console.error('Error archiving accounts: ', error);
+      toast.error('Failed to archive accounts');
+    }
+  }
+
   return (
-    <div className='register-form'>
-      <Navbar />
-      <form onSubmit={registerAdmin}>
-        <label>Name</label>
-        <input
-          type='text'
-          placeholder='Enter Full Name...'
-          value={data.name}
-          onChange={(e) => setData({ ...data, name: e.target.value })}
-        />
-        <label>Admin Email</label>
-        <input
-          type='text'
-          placeholder='Enter Admin Email...'
-          value={data.studentemail}
-          onChange={(e) => setData({ ...data, studentemail: e.target.value })}
-        />
-        <label>Password</label>
-        <input
-          type='password'
-          placeholder='Enter Your Password'
-          value={data.password}
-          onChange={(e) => setData({ ...data, password: e.target.value })}
-        />
-        <label>Admin Type</label>
-        <select value={data.adminType} onChange={handleAdminTypeChange}>
-          <option value='School Owner'>School Owner</option>
-          <option value='President'>President</option>
-          <option value='School Executive Admin'>School Executive Admin</option>
-          <option value='School Executive Dean'>School Executive Dean</option>
-          <option value='Program Head'>Program Head</option>
-          <option value='Student Government'>Student Government</option>
-          <option value='Organization Officer'>Organization Officer</option>
-        </select>
-        {data.adminType === 'Organization Officer' && (
-          <>
-            <label>Organization Name</label>
-            <select
-              value={data.organization}
-              onChange={(e) => setData({ ...data, organization: e.target.value })}
-            >
-              <option value=''>Select Organization</option>
-              {organizations.map((org) => (
-                <option key={org._id} value={org.name}>
-                  {org.name}
-                </option>
-              ))}
-            </select>
-            <label>Position</label>
-            <select
-              value={data.position}
-              onChange={(e) => setData({ ...data, position: e.target.value })}
-            >
-              <option value=''>Select Position</option>
-              <option value='President'>President</option>
-              <option value='Vice President'>Vice President</option>
-              <option value='Secretary'>Secretary</option>
-              <option value='Treasurer'>Treasurer</option>
-              <option value='Public Relations Officer'>Public Relations Officer</option>
-              <option value='Auditor'>Auditor</option>
-              <option value='1st Year Representative'>1st Year Representative</option>
-              <option value='2nd Year Representative'>2nd Year Representative</option>
-              <option value='3rd Year Representative'>3rd Year Representative</option>
-              <option value='4th Year Representative'>4th Year Representative</option>
-              <option value='Member'>Member</option>
-            </select>
-          </>
+    <div className="mt-16">
+    <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row justify-between  ml-8 p-3">
+      <div className="flex flex-col">
+    <div className='  bg-slate-100  rounded-lg shadow-inner p-3 '>
+
+    
+      <h2 className='text-4xl text-green-800 border-b-2 border-yellow-500 py-2'>  <FontAwesomeIcon icon={faAddressCard} className=' text-yellow-500 mx-1'/>Account Registration</h2>
+
+      <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
+      <div className="bg-gradient-to-r from-white to-green-200 p-4 m-4 rounded-lg shadow-2xl">
+      <StudentMobileUserReg/>
+      </div>
+
+     
+      
+      <div className="divider lg:divider-horizontal divider-warning my-3"></div> 
+
+       <div className="register_form_container">
+
+       <div className="flex flex-row my-2">
+        <div className="div">
+        <button onClick={() => handleRegistrationType('staff')} className = 'btn btn-success mx-1'>Staff Registration</button>
+        </div>
+
+        <div className="div">
+        <button onClick={() => handleRegistrationType('faculty')} className = 'btn btn-success mx-1'>Faculty Registration</button>
+        </div>
+
+        <div className="div">
+        <button onClick={() => handleRegistrationType('student')} className = 'btn btn-success mx-1'>Org. Officer Registration</button>
+        </div>
+       </div>
+
+      <div className='bg-gradient-to-r from-white to-green-200 p-2 rounded-md shadow-2xl'>
+
+     
+
+        {registrationType === 'staff' && (
+          <StaffRegistration
+            data={data}
+            setData={setData}
+            organizations={organizations}
+            registerAdmin={registerAdmin}
+            handleAdminTypeChange={handleAdminTypeChange}
+          />
         )}
-        <button type='submit'>Register</button>
-      </form>
+        {registrationType === 'faculty' && (
+          <FacultyRegistration
+            data={data}
+            setData={setData}
+          />
+        )}
+        {registrationType === 'student' && (
+          <StudentRegistration
+            data={data}
+            setData={setData}
+            organizations={organizations}
+            registerAdmin={registerAdmin}
+          />
+        )}
+        
+        
+      </div>
+      </div>
+
+      </div>
+      
+     
+
+      
+    </div>
+
+    <div className="bg-slate-100 rounded-lg shadow-inner p-2 my-3">
+        <RegisteredAccounts />
+        </div>
+
+        </div>
+
+    <div className="mr-1 ml-2 ">
+    <div className='flex flex-col bg-gradient-to-r from-white to-green-200 p-4  rounded-lg shadow-2xl '>
+        
+        <div className=' flex flex-col'>
+          <label htmlFor="academicYear">Academic Year:</label>
+          <input
+            type="text"
+            id="academicYear"
+            value={academicYear}
+            onChange={(e) => setAcademicYear(e.target.value)}
+            placeholder="Enter academic year"
+            className='input input-bordered input-success w-full dark:text-white'
+          />
+        </div>
+        <div className='flex flex-col'>
+          <label htmlFor="schoolSemester">School Semester:</label>
+          <input
+            type="text"
+            id="schoolSemester"
+            value={schoolSemester}
+            onChange={(e) => setSchoolSemester(e.target.value)}
+            placeholder="Enter school semester"
+            className='input input-bordered input-success w-full  dark:text-white'
+          />
+        </div>
+        <div className='my-3'>
+          <button onClick={updateSchoolSetting} className='btn btn-success'>Update School Setting</button>
+        </div>
+      </div>
+      </div>
+
+    </div>
     </div>
   );
 }

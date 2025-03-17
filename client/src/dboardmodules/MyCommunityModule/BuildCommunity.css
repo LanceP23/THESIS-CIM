@@ -1,0 +1,118 @@
+/* Overall container styling */
+.build-community-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+/* Form group */
+.form-group {
+  grid-column: span 2;
+}
+
+/* Form label */
+.form-label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Input fields */
+.input-field {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Create button */
+.create-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-button:hover {
+  background-color: #0056b3;
+}
+
+/* Filter section, Members list, Selected members */
+.filter-section,
+.members-list,
+.selected-members {
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Filter input */
+.filter-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Members table */
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.members-table th,
+.members-table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.members-table th {
+  background-color: #f2f2f2;
+}
+
+.members-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Selected members list */
+.selected-members-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Selected member item */
+.selected-member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.selected-member-item:last-child {
+  border-bottom: none;
+}
+
+/* Remove button */
+.remove-button,
+.remove-all-button {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.remove-button:hover,
+.remove-all-button:hover {
+  color: #0056b3;
+}

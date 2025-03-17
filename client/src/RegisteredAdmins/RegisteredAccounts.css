@@ -1,0 +1,25 @@
+.account_tabs{
+    height: 300px;
+    overflow-y: auto;
+    
+   
+}
+.registered_account_container{
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    text-align: left;
+}
+
+.custom_tabs .nav-link{
+    color: green !important; /* Default text color */
+    border-color: green !important; /* Border color */
+   
+}
+
+.custom_tabs .nav-link.active, 
+.custom_tabs .nav-link:hover {
+  background-color: rgba(0, 128, 0, 0.541) !important; /* Green background color when clicked or hovered */
+  color: #fff !important; /* Text color when clicked or hovered */
+}

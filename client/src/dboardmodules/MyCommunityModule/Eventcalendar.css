@@ -1,0 +1,55 @@
+.fc .fc-col-header-cell{
+    
+ 
+}
+
+
+
+.fc .fc-col-header-cell {
+    /* Yellow background */
+    color: black; /* Black text color */
+    font-weight: bold; /* Bold text */
+  }
+
+  /* Change the color of the date numbers */
+.fc .fc-daygrid-day-number {
+    color: yellowgreen; /* Example: Orange color */
+    font-weight: bold; /* Optional: Make the date numbers bold */
+    padding-right: 15px;
+  }
+  
+  /* Optional: Change color on hover */
+  .fc .fc-daygrid-day-number:hover {
+    color: gold; /* Darker shade of orange on hover */
+  }
+
+  .fc .fc-daygrid-day-top{
+    cursor: pointer;
+  }
+
+.fc .fc-daygrid-day-events{
+    cursor: pointer;
+}
+
+th{
+ background-color: yellowgreen; 
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+

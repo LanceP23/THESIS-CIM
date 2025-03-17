@@ -24,6 +24,18 @@ const organizationSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    members: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    mobileMembers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'MobileUser'
+    }],
+    logoUrl: { 
+        type: String,
+        default: null 
+      }
 
 });
 

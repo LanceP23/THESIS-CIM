@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast';
 import axios from 'axios';
+import './Sidebar.css'
+import { UserContext } from '../../context/userContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDashboard, faPeopleArrows,  faChartBar, faComment, faLock, faBullhorn, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 
-export default function Sidebar({adminType}) {
+
+export default function Sidebar() {
+  const { user } = useContext(UserContext);
+  const adminType = user ? user.adminType : null;
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
 
   useEffect (()=>{
     setIsOpen(false);
@@ -23,8 +29,8 @@ export default function Sidebar({adminType}) {
   const handleLogout = async () =>{
     try{
       await axios.post('/logout');
-      localStorage.removeItem('token');
       toast.success('Logout Successful.');
+      localStorage.removeItem('token');
       navigate('/login');
     } catch (error){
       console.error('Login failed: ', error);
@@ -32,32 +38,87 @@ export default function Sidebar({adminType}) {
     }
   }
 
+  
+
   return (
     <div>
-      <button className="toggle-btn" onClick={toggleSidebar}>
-        ☰
-      </button>
+      <button className="toggle-btn_open" onClick={toggleSidebar}>☰</button>
+
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-content">
+
+          <div className='profile_container'>
+            <button className="toggle-btn_close" onClick={toggleSidebar}>☰</button>
+            <h2>MENU</h2>
+            <div className='profile_image'>
+
+            </div>
+
+            <h3>{adminType}</h3>
+
+          </div>
+          
           <ul>
-            <li>
-              <Link to="/dashboard" onClick={closeSidebar}>Dashboard</Link>
-            </li>
-            {adminType !== 'Organization Officer'&&(
-            <li>
-              <Link to="/createorg" onClick={closeSidebar}>Manage Organization</Link>
-            </li>
-            )}
+            <li className='fa-fa' >
             
+
+              <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button  ' >
+              <FontAwesomeIcon icon={faDashboard} className='sidebar_icons' />     Dashboard
+              </Link>
+
+            </li>
+            
+            <li>
+
+              <Link to="/createorg" onClick={closeSidebar} className='sidebar_button'> 
+              <FontAwesomeIcon className='sidebar_icons' icon={faPeopleArrows} />     Manage Organization
+              </Link>
+            </li>
+
+    
+            
+              <li>
+                <Link to="/community-landing" onClick={closeSidebar} className='sidebar_button ' >
+                <FontAwesomeIcon className='sidebar_icons' icon={faPeopleArrows} />    My Community
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/campcomms" onClick={closeSidebar} className='sidebar_button  '>
+                <FontAwesomeIcon className='sidebar_icons' icon={faComment} />     Campus Comms
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/dashboard" onClick={closeSidebar} className='sidebar_button  '>
+                <FontAwesomeIcon  className='sidebar_icons'icon={faChartBar} />     Analytics Report
+                </Link>
+              </li>
+              <li>
+                <Link to="/user-settings" onClick={closeSidebar} className='sidebar_button  '>
+                <FontAwesomeIcon className='sidebar_icons' icon={faLock} />     User Settings
+                </Link>
+              </li>
+              <li>
+                <Link to="/createannouncement" onClick={closeSidebar} className='sidebar_button  '>
+                <FontAwesomeIcon className='sidebar_icons' icon={faBullhorn} />    Post Management
+                </Link>
+              </li>
+              <li>
+              {adminType === 'School Owner'?(
+                <Link to="/register" className='sidebar_button  '>
+                  <FontAwesomeIcon  className='sidebar_icons' icon={faAddressCard} />    Account Registration
+                  </Link>
+              ):null}
+            </li>
           </ul>
-        </div>
+        
         <div className="logout-container">
-          <button onClick={handleLogout}>
-            <span role ="img" aria-label="logout">
-            🚪
-            </span>{' '}
+          <button onClick={handleLogout} className='logout_button'>
+            <span role="img" aria-label="logout"> 🚪 </span>{' '}
             Logout
           </button>
+        </div>
         </div>
       </div>
     </div>

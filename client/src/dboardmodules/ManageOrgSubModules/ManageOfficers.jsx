@@ -12,7 +12,7 @@ export default function ManageOfficers() {
 
   const fetchOfficers = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/officers/pending');
+      const response = await axios.get('/officers/pending');
       setOfficers(response.data);
       setLoading(false);
     } catch (error) {
@@ -24,7 +24,7 @@ export default function ManageOfficers() {
 
   const handleApproveOfficer = async (officerId) => {
     try {
-      await axios.put(`http://localhost:8000/approve_officer/${officerId}`);
+      await axios.put(`/approve_officer/${officerId}`);
       setOfficers(officers.filter(officer => officer._id !== officerId));
       toast.success('Officer approved successfully');
     } catch (error) {
@@ -34,7 +34,12 @@ export default function ManageOfficers() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <div>
+       <span className="loading loading-bars loading-xs"></span>
+    <span className="loading loading-bars loading-sm"></span>
+    <span className="loading loading-bars loading-md"></span>
+    <span className="loading loading-bars loading-lg"></span>
+    </div>;
   }
 
   return (
@@ -45,7 +50,7 @@ export default function ManageOfficers() {
           <li key={officer._id}>
             {officer.name} - {officer.position} - {officer.status}
             <div>
-              <button onClick={() => handleApproveOfficer(officer._id)}>Approve</button>
+              <button onClick={() => handleApproveOfficer(officer._id)} className='approve_button'>Approve</button>
             </div>
           </li>
         ))}

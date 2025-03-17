@@ -1,0 +1,277 @@
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid #888;
+}
+
+.close {
+  color: #aaa;
+
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Styles for the organization table */
+.organization-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: black 2px;
+}
+
+.organization-table th,
+.organization-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.organization-table th {
+  background-color: #388e3ca9;
+  font-weight: bold;
+  text-align: left;
+  width: auto;
+  color: whitesmoke;
+  white-space: nowrap;
+}
+
+.organization-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.organization-table tr:hover {
+  background-color: #f6e8295b;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #dbffd0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.org_button {
+  padding: 10px;
+  background-color: #4caf50;
+  color: #252525;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.org_button:hover {
+  padding: 10px;
+  background-color: green;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.create_org_button :hover {
+  background-color: green;
+  color: #fff;
+  border: none;
+
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+/* Modal container */
+.modal {
+  display: none; /* Hide modal by default */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.925); /* Semi-transparent background */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-field,
+.textarea-field,
+.button,
+.file-field {
+  margin: 10px 0;
+}
+
+.org_form {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-approval-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.org_table_container {
+  background-color: #ddd;
+  height: 300px;
+  overflow-y: auto;
+}
+
+.Manage_org_container {
+  background-color: whitesmoke;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.377);
+}
+.add_button {
+  margin: 50px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #4caf50;
+  color: #252525;
+}
+
+.add_button:hover {
+  margin: 50px;
+  padding: 10px;
+  border-radius: px;
+  background-color: green;
+  color: white;
+}
+
+._button {
+  padding: 10px;
+  border-radius: 5 px;
+  background-color: #4caf50;
+  color: #252525;
+}
+
+._button:hover {
+  padding: 10px;
+  border-radius: 5 px;
+  background-color: green;
+  color: white;
+}
+
+/* Adjust the position of the modals */
+.ReactModal__Overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black; /* Semi-transparent black background */
+}
+
+.ReactModal__Content {
+  position: relative;
+  z-index: 1000; /* Ensure modal is above other content */
+  background-color: whitesmoke;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* Style for the close button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* Style for the modal title */
+.Modal h2 {
+  margin-bottom: 20px;
+}
+
+/* Style for the form fields */
+.Org_form {
+  display: flex;
+  flex-direction: column;
+}
+
+.Org_name_field {
+  margin-bottom: 10px;
+}
+
+.Org_name_field label {
+  margin-bottom: 5px;
+}
+
+.Org_name_field input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: white;
+}
+
+/* Style for the buttons */
+
+/* Style for the potential members modal */
+.Potential_Members_Modal {
+  width: 400px;
+}
+
+.Potential_Members_Modal ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.Potential_Members_Modal li {
+  margin-bottom: 5px;
+}
+
+.centered-header {
+  text-align: center;
+}
+
+._manag_org_title {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-style: italic;
+  margin-left: 20px;
+}

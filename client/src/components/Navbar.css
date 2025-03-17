@@ -1,0 +1,64 @@
+nav {
+  background: radial-gradient(circle, rgba(0,191,99,1) 0%, rgba(0,191,99,1) 50%, rgb(15, 15, 15) 100%);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 80px;
+    display: flex;
+
+    
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  nav a:first-child {
+    margin-left: 0;
+  }
+  
+  nav a:last-child {
+    margin-right: 0;
+  }
+  
+  nav a:hover {
+    background-color: #8fbc8f; /* Dark sea green */
+  }
+
+  
+  .register-form,
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #8fbc8fb4; /* Light yellow */
+}
+
+
+.register-form input[type="text"],
+.register-form input[type="password"],
+.login-form input[type="text"],
+.login-form input[type="password"] {
+
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+  

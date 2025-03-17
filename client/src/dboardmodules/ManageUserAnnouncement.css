@@ -1,0 +1,127 @@
+/* ManageUserAnnouncement.css */
+
+/* Container for all announcements */
+.manage-announcements-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* Individual announcement card */
+  .announcement-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+ 
+  
+  /* Header of the announcement */
+  .announcement-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Body text of the announcement */
+  .announcement-body {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  /* Media within the announcement */
+  .announcement-media img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .announcement-media video {
+    width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  /* Footer with date and status */
+  .announcement-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #888;
+  }
+  
+  /* Edit and Delete buttons */
+  .announcement-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2px;
+  }
+  
+  .announcement-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .announcement-actions .btn-edit {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .announcement-actions .btn-edit:hover {
+    background-color: #0056b3;
+  }
+  
+  .announcement-actions .btn-delete {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .announcement-actions .btn-delete:hover {
+    background-color: #c82333;
+  }
+  
+  .edit-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .edit-input,
+  .edit-textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .btn-update {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-cancel {
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
