@@ -54,7 +54,5 @@ export default {
       mono: ['Menlo', 'monospace'],
     },
   },
-  plugins: [("daisyui")
-  
-  ], 
+  plugins: [daisyui], 
 }
