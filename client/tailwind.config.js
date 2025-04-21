@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+import daisyui from 'daisyui';
+
 export default {
   darkMode: 'media', // or 'class' if you toggle dark mode manually
   content: [
